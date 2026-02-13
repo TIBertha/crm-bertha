@@ -1,0 +1,37 @@
+@import "@fortawesome/fontawesome-free/css/all.min.css";
+@import "bootstrap/scss/bootstrap";
+@import "bertha_styles.scss";
+@import "custom.scss";
+@import "margin.scss";
+@import "padding.scss";
+@import "text.scss";
+@import "navbar.scss";
+@import "search_sidebar.scss";
+@import url("https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css");
+
+body{
+    font-family:"Roboto", sans-serif !important;
+    background-color: $gray_bertha;
+    min-height: 100vh !important;
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10+ and Edge */
+    user-select: none; /* Standard syntax */
+}
+
+.login-div{
+    background-color: $white_bertha;
+    border-radius: 0.625rem;
+    padding: 2rem 1rem;
+
+    .logo{
+        text-align: center;
+        img{
+            width: 220px;
+        }
+    }
+
+    
+}
+
+
+

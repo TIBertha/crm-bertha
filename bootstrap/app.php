@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Middleware\Authenticate;
+use App\Http\Middleware\PreventBack;
+use App\Http\Middleware\RedirectIfAuthenticated;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -11,8 +14,24 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware
+        ->redirectGuestsTo('/login')
+        ->redirectUsersTo('/postulantes')
+        /*->prependToGroup('auth', [
+            Authenticate::class,
+        ])*/
+        ->prependToGroup('guest', [
+            RedirectIfAuthenticated::class,
+        ])
+        ->prependToGroup('prevent-back', [
+            PreventBack::class,
+        ])
+        ->prependToGroup('auth', [
+            Authenticate::class,
+        ]);
+        
     })
+    
     ->withExceptions(function (Exceptions $exceptions): void {
         //
     })->create();

@@ -1,0 +1,57 @@
+.position-relative {
+    position: relative !important;
+}
+
+.search-sidebar{
+    position: fixed;
+    top: 0;
+    right: -310px;
+    width: 310px;
+    bottom: 0;
+    z-index: 1040;
+    border: none;
+    background: #fff;
+    box-shadow: 0 28px 28px rgba(0, 0, 0, 0.07);
+    //transition: all 0.4s ease;
+    transition: all 0.3s ease-in-out;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+
+
+    &.collapsed{
+        right: 0;
+        transition: all 0.3s ease-in-out;
+        -webkit-transition: all 0.3s ease-in-out;
+        -moz-transition: all 0.3s ease-in-out;
+    }
+
+    .slimScrollDivSearch {
+        position: relative;
+        overflow: scroll;
+        width: auto;
+        height: 100%;
+    }
+
+    .panel{
+        padding: 20px;
+
+        .title-area{
+            display: flex;
+            justify-content: space-between;
+            color: $black_bertha;
+            align-items: center;
+
+            .title{
+                font-weight: bold;
+                font-size: 1rem;
+            }
+            .close-button{
+                font-size: 1.25rem;
+                &, &:hover, &:active, &:focus{
+                    color: $black_bertha;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}
