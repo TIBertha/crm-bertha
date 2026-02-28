@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {Modal, ModalBody, ModalTitle} from "react-bootstrap";
 import ModalHeader from "react-bootstrap/ModalHeader";
-import DomicilioModalForm from "./DomicilioModalForm";
+import DomicilioModalForm from "./domicilioModalForm.jsx";
 
 export default function DomicilioModal({ show, close, dataEdit, add, edit }) {
     return (
