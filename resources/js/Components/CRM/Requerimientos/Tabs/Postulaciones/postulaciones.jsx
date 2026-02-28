@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Swal from "sweetalert2";
-import global from "../../../../helpers/constantes";
+import global from "../../../../Helpers/constantes.js";
 import {
     ajaxPostulacionesSelectWhatsapp,
     ajaxActionAddPostulante, ajaxListaPostulantesAdd, ajaxGetPostulaciones,
