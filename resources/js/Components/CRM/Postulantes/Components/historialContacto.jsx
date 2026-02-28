@@ -1,5 +1,5 @@
 import React from "react";
-import VerHistorialContacto from "../Modals/VerHistorialContacto";
+import VerHistorialContacto from "../Modals/verHistorialContacto.jsx";
 import {getStatusContact} from "../../../Helpers/postulantes.js";
 
 export default function HistorialContacto({historial, handleContactado, trabajador}) {
