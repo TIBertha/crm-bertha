@@ -10,7 +10,7 @@ import {showAlert} from "../../../../Helpers/alerts.js";
 import {speechPostuladosPC} from "../../../../Helpers/strings.js";
 import CardPostulante from "../../../Components/cardPostulante.jsx";
 import ModalAgregar from "./modalAgregar.jsx";
-import PostulantesAntiguasMostradas from "../../Modals/PostulantesAntiguasMostradas";
+import PostulantesAntiguasMostradas from "../../Modals/postulantesAntiguasMostradas.jsx";
 import NewCopyButton from "../../../Components/newCopyButton.jsx";
 
 export default function Postulaciones({data, requerimientoid, empleador}) {
