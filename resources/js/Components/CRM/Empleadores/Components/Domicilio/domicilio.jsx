@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import DomicilioModal from 'domicilioModal.jsx';
+import DomicilioModal from './domicilioModal.jsx';
 
 export default function Domicilio({ domicilios, add, edit, delete: deleteItem }) {
     const [dataEdit, setDataEdit] = useState('');
