@@ -1,5 +1,46 @@
+$input_background_disabled: hsl(0,0%,95%);
+$input_border_disabled: hsl(0,0%,90%);
+$input_text_disable: hsl(0,0%,60%);
+
+hr {
+	margin-top:20px;
+	margin-bottom:20px;
+	border-top: 1px solid #eaecec;
+	&.hr-2 {
+		border-width: 2px!important;
+	}
+	&.hr-3 {
+		border-width: 3px!important;
+	}
+}
+
+.ffqHfU{
+    border-color: $pink_bertha !important;
+}
+
+.icon-question{
+    cursor: pointer;
+}
+
 .form-group {
   margin-bottom: 1rem;
+}
+
+.alert{
+    border: none!important;
+}
+
+.text-success{
+    color: $green_bertha !important;
+}
+
+.font-weight-bold{
+    font-weight: bold;
+}
+
+label {
+    margin-bottom: 10px;
+    color: #324148;
 }
 
 /*Align*/
@@ -132,11 +173,11 @@ input[type=button].btn-block {
 
 .navbar-menu-modal{
   max-width: 95vw !important;
-  
+
   .modal-content{
     height: 95vh !important;
   }
-  
+
 }
 
 .flyer-style{
@@ -225,17 +266,7 @@ input[type=button].btn-block {
     box-shadow: unset !important;
 }
 
-hr {
-	margin-top:20px;
-	margin-bottom:20px;
-	border-top: 1px solid #eaecec;
-	&.hr-2 {
-		border-width: 2px!important;
-	}
-	&.hr-3 {
-		border-width: 3px!important;
-	}
-}
+
 
 .icon-action, .icon-action-sm, .icon-action-md, .icon-action-lg{
     color: black;
@@ -267,7 +298,7 @@ hr {
 }
 
 .icon-green{
-    color: $success !important;
+    color: $green_bertha !important;
 }
 
 .icon-green-dark{
@@ -540,8 +571,513 @@ hr {
 	}
 }
 
+.border-circled-white{
+    border: solid 2px white;
+    border-radius: 0.25rem;
+}
+
 .pagination .page-item.active .page-link {
     background: $pink_bertha;
     border-color: $pink_bertha;
     color: #fff;
+}
+
+.verificacion-section{
+    h5{
+        color: #324148 !important;
+        font-weight: 500 !important;
+    }
+}
+
+.isLoadingArea{
+    font-size: 30px;
+    text-align: center;
+    padding: 2rem 0;
+}
+
+.react-tel-input .form-control{
+    text-underline-position: under !important;
+}
+
+.tooltip-tc .tooltip-inner {
+    max-width: 450px;
+    color: white;
+    text-align: left;
+    background: $purple_bertha;
+    padding: 0.5rem 0.7rem;
+    font-size: 0.9rem;
+    box-shadow: 0 1rem 3rem rgba(0,0,0,.175)!important;
+    border-radius: 0.625rem;
+}
+
+.tooltip-gray .tooltip-inner {
+    max-width: 450px;
+    color: white;
+    text-align: left;
+    background: rgba(108,117,125,.5);
+    padding: 0.5rem 0.7rem;
+    font-size: 0.8rem;
+    box-shadow: 0 1rem 3rem rgba(0,0,0,.175)!important;
+    border-radius: 0.625rem;
+}
+
+.tooltip-tc-expanded .tooltip-inner {
+    max-width: 750px;
+    color: white;
+    text-align: left;
+    background: $purple_bertha;
+    padding: 0.5rem 0.7rem;
+    font-size: 0.9rem;
+    box-shadow: 0 1rem 3rem rgba(0,0,0,.175)!important;
+    border-radius: 0.625rem;
+}
+
+.tooltip-ph .tooltip-inner {
+    max-width: 450px;
+    color: white;
+    text-align: left;
+    background: $pink_bertha;
+    padding: 0.5rem 0.7rem;
+    font-size: 0.9rem;
+    box-shadow: 0 1rem 3rem rgba(0,0,0,.175)!important;
+    border-radius: 0.625rem;
+}
+
+.react-datepicker-time__header{
+    color: white !important;
+}
+
+.react-datepicker-wrapper {
+    display: block !important;
+
+    .react-datepicker__input-container {
+        position: relative;
+        display: block !important;
+    }
+}
+
+.react-datepicker__header{
+    background-color: $purple_bertha !important;
+
+    .react-datepicker__year-select, .react-datepicker__current-month, .react-datepicker__month-select{
+        color: white !important;
+    }
+
+    .react-datepicker__month-select, .react-datepicker__year-select{
+        option{
+            color: black !important;
+        }
+
+        option:hover{
+            background-color: $pink_bertha !important;
+        }
+    }
+}
+
+.modal-title{
+    h6{
+        font-weight: bold !important;
+        margin-bottom: 0 !important;
+    }
+}
+
+.badge{
+    font-weight: bold !important;
+}
+
+/*-React Input tag-*/
+
+div.ReactTags__tags {
+    position: relative;
+}
+
+/* Styles for the input */
+div.ReactTags__tagInput {
+    width: 200px;
+    border-radius: 2px;
+    display: inline-block;
+    margin: 0 10px 5px 0;
+    font-size: 1rem;
+}
+div.ReactTags__tagInput input.ReactTags__tagInputField{
+    margin: 0;
+    font-size: 1rem;
+    width: 100%;
+    border: 2px solid $purple_bertha;
+    border-radius: 0.25rem;
+    padding: 5px;
+}
+
+div.ReactTags__tagInput input.ReactTags__tagInputField:focus{
+    border-bottom: 2px solid purple;
+
+}
+
+/* Styles for selected tags */
+div.ReactTags__selected span.ReactTags__tag {
+    border: 2px solid #ced4da;
+    border-radius: 0.25rem;
+    background:none;
+    display: inline-block;
+    padding: 5px;
+    margin: 0 10px 5px 0;
+    font-size: 1rem;
+    cursor: move;
+}
+div.ReactTags__selected a.ReactTags__remove {
+    color: #aaa;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+/* Styles for suggestions */
+div.ReactTags__suggestions {
+    position: absolute;
+}
+div.ReactTags__suggestions ul {
+    list-style-type: none;
+    box-shadow: .05em .01em .5em rgba(0,0,0,.2);
+    background: white;
+    width: 200px;
+}
+div.ReactTags__suggestions li {
+    border-bottom: 1px solid #ddd;
+    padding: 5px 10px;
+    margin: 0;
+}
+div.ReactTags__suggestions li mark {
+    text-decoration: underline;
+    background: none;
+    font-weight: 600;
+}
+div.ReactTags__suggestions ul li.ReactTags__activeSuggestion {
+    background: #b7cfe0;
+    cursor: pointer;
+}
+
+/*------------*/
+
+/*Form*/
+.form-control-textarea {
+    width: 100%;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 2px solid $light_15;
+    border-radius: 0.25rem;
+    padding: .375rem .75rem !important;
+    height: calc(2.25rem + 4px);
+    &:focus {
+        box-shadow:none;
+        border-color:$dark_40;
+    }
+    &.square-input {
+        border-radius:0;
+    }
+    &:disabled {
+        background-color: $input_background_disabled;
+        border-color:$input_border_disabled;
+        color:$input_text_disable;
+        opacity: 1;
+    }
+    &[readonly] {
+        background-color: $white;
+        border-color:$light_20;
+    }
+    &.filled-input {
+        background:$light;
+        border:none;
+        &:focus {
+            background:$light_10;
+            border:none;
+            box-shadow: none;
+        }
+        &:disabled {
+            background:$light;
+        }
+        &[readonly] {
+            background-color: $light_20;
+        }
+    }
+    &.outline-input {
+        background:transparent;
+    }
+    &.transparent-input {
+        background:transparent;
+        border:none;
+        &:focus {
+            background:transparent;
+            border:none;
+            box-shadow: none;
+        }
+    }
+    &.rounded-input {
+        border-radius:50px;
+    }
+    &::-webkit-input-placeholder {
+        color:$light_30;
+    }
+    &:-moz-placeholder {
+        color:$light_30;
+    }
+    &::-moz-placeholder {
+        color:$light_30;
+    }
+    &:-ms-input-placeholder {
+        color:$light_30;
+    }
+}
+.form-control-lg,
+.custom-select-lg {
+    font-size: 1.1rem;
+    padding: .5rem 1rem;
+    height: calc(2.875rem + 4px);
+}
+.form-control-sm,
+.custom-select-sm {
+    font-size: 0.875rem;
+    padding: .25rem .5rem;
+    height: calc(1.8125rem + 4px);
+}
+.custom-select {
+    padding-right:1.75rem;
+}
+/*Inut group*/
+.input-group-prepend {
+    margin-right: -2px;
+}
+.input-group-append {
+    margin-left: -2px;
+}
+.input-group-append .btn+.btn, .input-group-append .btn+.input-group-text, .input-group-append .input-group-text+.btn, .input-group-append .input-group-text+.input-group-text, .input-group-prepend .btn+.btn, .input-group-prepend .btn+.input-group-text, .input-group-prepend .input-group-text+.btn, .input-group-prepend .input-group-text+.input-group-text {
+    margin-left: -2px;
+}
+.input-group > .custom-file + .custom-file, .input-group > .custom-file + .custom-select, .input-group > .custom-file + .form-control, .input-group > .custom-select + .custom-file, .input-group > .custom-select + .custom-select, .input-group > .custom-select + .form-control, .input-group > .form-control + .custom-file, .input-group > .form-control + .custom-select, .input-group > .form-control + .form-control {
+    margin-left: -2px;
+}
+.input-group-text {
+    border-color:$light_10;
+    background-color: $light;
+    border-width: 2px;
+}
+label {
+    margin-bottom: 10px;
+    color:$dark;
+}
+.custom-control-input:disabled ~ .custom-control-label {
+    color: $smoke;
+}
+.custom-file-label {
+    color: $dark;
+    border: 2px solid $light_10;
+    height: calc(2.25rem + 4px);
+    &:after {
+        border-left:0;
+        background:$light;
+    }
+}
+/*Form validation*/
+.custom-select.is-valid, .form-control.is-valid, .was-validated .custom-select:valid, .was-validated .form-control:valid {
+    border-color: $green;
+}
+.custom-select.is-invalid, .form-control.is-invalid, .was-validated .custom-select:invalid, .was-validated .form-control:invalid {
+    border-color: $red_light_1;
+}
+.valid-feedback {
+    color: $green;
+}
+.invalid-feedback {
+    color: $red_light_1;
+}
+.custom-control-input.is-valid ~ .custom-control-label, .was-validated .custom-control-input:valid ~ .custom-control-label {
+    color: $green;
+}
+.custom-control-input.is-invalid ~ .custom-control-label, .was-validated .custom-control-input:invalid ~ .custom-control-label {
+    color: $red_light_1;
+}
+.custom-control-input.is-invalid ~ .custom-control-label::before, .was-validated .custom-control-input:invalid ~ .custom-control-label::before {
+    background-color: $red_light_1;
+}
+.custom-control-input.is-valid ~ .custom-control-label::before, .was-validated .custom-control-input:valid ~ .custom-control-label::before {
+    background-color: $green;
+}
+.custom-control-input.is-valid:checked ~ .custom-control-label::before, .was-validated .custom-control-input:valid:checked ~ .custom-control-label::before {
+    background-color: $green;
+}
+.custom-control-input.is-invalid:focus ~ .custom-control-label::before, .was-validated .custom-control-input:invalid:focus ~ .custom-control-label::before {
+    box-shadow: none;
+}
+.custom-control-input.is-valid:focus ~ .custom-control-label::before, .was-validated .custom-control-input:valid:focus ~ .custom-control-label::before {
+    box-shadow: none;
+}
+.custom-select.is-valid:focus, .form-control.is-valid:focus, .was-validated .custom-select:valid:focus, .was-validated .form-control:valid:focus {
+    border-color:$green;
+    box-shadow: none;
+}
+.custom-select.is-invalid:focus, .form-control.is-invalid:focus, .was-validated .custom-select:invalid:focus, .was-validated .form-control:invalid:focus {
+    border-color: $red_light_1;
+    box-shadow: none;
+}
+.custom-file-input.is-invalid ~ .custom-file-label, .was-validated .custom-file-input:invalid ~ .custom-file-label {
+    border-color: $red_light_1;
+}
+.custom-file-input.is-valid ~ .custom-file-label, .was-validated .custom-file-input:valid ~ .custom-file-label {
+    border-color: $green;
+}
+.custom-file-input.is-valid:focus ~ .custom-file-label, .was-validated .custom-file-input:valid:focus ~ .custom-file-label {
+    box-shadow: none;
+    border-color: $green;
+}
+.custom-file-input.is-invalid:focus ~ .custom-file-label, .was-validated .custom-file-input:invalid:focus ~ .custom-file-label {
+    box-shadow: none;
+    border-color: $red_light_1;
+}
+.valid-tooltip {
+    background:$green;
+}
+.invalid-tooltip {
+    background:$red_light_1;
+}
+/*Select2*/
+.select2-container--default.select2-container--open.select2-container--below .select2-selection--single,
+.select2-container--default.select2-container--open.select2-container--below .select2-selection--multiple {
+
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+
+}
+.select2-dropdown {
+    border-color:$light_10;
+}
+.select2-container {
+    width:100%!important;
+}
+.select2-container--default {
+    .select2-selection--single,
+    .select2-selection--multiple {
+        display: block;
+        width: 100%;
+        height: calc(2.25rem + 4px);
+        padding: .375rem .75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        color: $dark;
+        background-color: #fff;
+        border: 2px solid $light_10;
+        border-radius: .25rem;
+        transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+        &:focus {
+            border-color:$sky;
+        }
+        .select2-selection__arrow {
+            height: calc(2.25rem + 4px);
+            top: 0;
+            right: 6px;
+        }
+        .select2-selection__rendered {
+            color:$dark;
+            line-height: inherit;
+        }
+    }
+    .select2-search--dropdown .select2-search__field {
+        border-color: $light_10;
+    }
+    &.select2-container--focus .select2-selection--multiple {
+        border: solid $sky 2px;
+    }
+    &.select2-container--open {
+        .select2-selection--single {
+            border-color:$sky;
+        }
+        &.select2-container--below {
+            .select2-selection--single,
+            .select2-selection--multiple {
+                border-radius: .25rem;
+            }
+
+        }
+    }
+    .select2-results__option--highlighted[aria-selected] {
+        background-color: $sky;
+    }
+    .select2-results__option[aria-selected="true"] {
+        background-color: $light;
+        color:$dark;
+    }
+    .select2-selection--multiple {
+        height:auto;
+        min-height:calc(2.25rem + 4px);
+        .select2-selection__choice {
+            background-color: $sky;
+            border: none;
+            color: $white;
+            margin-right: 6px;
+            margin-top: 6px;
+            padding: 1px 7px;
+            .select2-selection__choice__remove {
+                color: $white;
+                font-weight: 600;
+                margin-left: 6px;
+                float: right;
+                font-size: 14px;
+                opacity: 0.5;
+                padding-top:1px;
+                &:hover {
+                    opacity:1;
+                }
+            }
+        }
+        .select2-selection__rendered {
+            padding: 0 6px;
+        }
+
+    }
+}
+
+.input-countrycode{
+    color: $dark !important;
+    border-width: 2px !important;
+    border-color: $light_15 !important;
+    padding: .375rem 3rem !important;
+    height: calc(2.25rem + 4px) !important;
+}
+
+.reactTag-remove{
+
+    &, &:hover{
+        margin-left: 0.5rem !important;
+        background-color: white !important;
+        font-weight: bold !important;
+        border: solid 3px $pink_bertha !important;
+        border-radius: 0.25rem !important;
+        color: white !important;
+    }
+
+    svg{
+        fill: $pink_bertha;
+    }
+}
+
+.main__block__profile {
+    text-align: center;
+    width: 90px;
+    position: relative;
+    margin: auto;
+
+    .main__block__image {
+        width: 90px;
+        height: 90px;
+        margin: 2.5rem auto 0;
+        border-radius: 50%;
+    }
+
+    .icon {
+        font-size: 24px;
+        position: absolute;
+        bottom: 6px;
+        right: 6px;
+        color: $green_bertha;
+        border-radius: 50%;
+    }
+
 }

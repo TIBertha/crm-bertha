@@ -25,7 +25,7 @@ export default function CopyNombrePostulante({ nombres, flagEmoji }) {
                 data-toggle="tooltip"
                 data-placement="top"
                 title={"Copiar nombre en Google"}
-                className={iconCopy + " icon-action-sm ml-1"}
+                className={iconCopy + " icon-action-sm ms-1"}
             ></i>
             <Toaster position="top-right" reverseOrder={false} />
         </>

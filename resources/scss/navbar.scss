@@ -17,7 +17,7 @@ $Top_Navbar_Height: 60px;
         border: solid 2px $dkgray_bertha;
         padding: .3755rem;
         border-radius: 0.25rem;
-        
+
         &:hover, &:active, &:focus{
             cursor: pointer;
         }
@@ -45,7 +45,7 @@ $navbaropen:240px;
 }
 
 .main-content {
-  margin-top: 0px;
+  margin-top: 60px;
   margin-left: 0;
   padding: 20px 20px 0px 20px;
   /*&.sidebar-collapsed{
@@ -104,9 +104,9 @@ $navbaropen:240px;
       color: $dkgray_hover_bertha;
     }
 
-    .items.selected, .arrow.selected{
+    .label-link.selected, .items.selected, .arrow.selected{
       border-radius: .5rem;
-      background-color: $pink_bertha;
+      background-color: $pink_bertha !important;
       color: $white_bertha;
       font-weight: bold;
     }
@@ -116,7 +116,7 @@ $navbaropen:240px;
       align-items: center;
       justify-content: space-between;
       cursor: pointer;
-      
+
       .arrow{
         display: block;
         margin-right: 10px;
@@ -148,12 +148,12 @@ $navbaropen:240px;
     .navbar-primary-menu{
         margin-top: 1rem;
 
-        .items:hover, .label-link:hover{
+        .label-link.selected, .items:hover, .label-link:hover{
           background-color: $white_hover_bertha;
           color: $dkgray_hover_bertha;
         }
 
-        .items.selected, .arrow.selected{
+        .label-link.selected, .items.selected, .arrow.selected{
           background-color: $pink_bertha;
           color: $white_bertha;
           font-weight: bold;
@@ -174,7 +174,7 @@ $navbaropen:240px;
           align-items: center;
           justify-content: space-between;
           cursor: pointer;
-          
+
           .arrow{
             display: block;
             margin-right: 10px;

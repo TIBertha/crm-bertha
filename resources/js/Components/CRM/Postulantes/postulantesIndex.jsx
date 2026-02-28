@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import ReactDOM from "react-dom/client";
 import IndexButton from "../Components/indexButton";
 import ButtonAccess from "../Layouts/SubComponents/buttonAccess";
 import PostulantesSearchSideBar from "./postulantesSearchSideBar";
@@ -10,10 +9,13 @@ import {
 import Flyer from "../Components/flyer";
 import NoDataLabel from "../Components/noDatalabel";
 import ReactPaginate from "react-paginate";
-import global from "../../Helpers/constantes";
-import { showAlert, showAlertConfirmRedirect } from "../../Helpers/alerts";
+import global from "../../Helpers/constantes.js";
+import { showAlert, showAlertConfirmRedirect } from "../../Helpers/alerts.js";
 import CardPostulante from "../Components/cardPostulante";
 import LoadingScreen from "../Components/loadingScreen";
+import { ajaxSearchDistrito } from "../../Functions/General.jsx";
+import CalculadoraBeneficio from "./Modals/CalculadoraBeneficio/calculadoraBeneficio.jsx";
+import RegistrarUsuario from "./Modals/RegistrarUsuario/registrarUsuario.jsx";
 
 //PostulantesIndex
 
@@ -383,7 +385,6 @@ export default class PostulantesIndex extends Component {
         this.setState({
             sideBar: condition,
         });
-        console.log(this.state.sideBar);
     }
 
     onChangePage({ selected }) {
@@ -497,130 +498,114 @@ export default class PostulantesIndex extends Component {
             RUN: "https://consulta.servel.cl",
         };
 
+        if(isLoading) return <LoadingScreen load={isLoading} classStyle={'bg-purple-bertha'}/>;
+
         return (
-            <>
-                {isLoading == true ? (
-                    <LoadingScreen
-                        load={isLoading}
-                        classStyle={"bg-purple-bertha"}
+            <section>
+                <PostulantesSearchSideBar
+                    data={this.state}
+                    sideBar={sideBar}
+                    handleOpenSideBar={this.openSideBar}
+                    handleChange={this.handleChange}
+                    buscar={this.buscar}
+                    limpiar={this.limpiar}
+                    loadDistritoOptions={this.loadDistritoOptions}
+                />
+
+                <div className="row mx-0 pt-4">
+                    <IndexButton
+                        type={"search"}
+                        handleOpenSideBar={this.openSideBar}
                     />
-                ) : (
-                    <section>
-                        <PostulantesSearchSideBar
-                            data={this.state}
-                            sideBar={sideBar}
-                            handleOpenSideBar={this.openSideBar}
+
+                    <IndexButton
+                        type={"create"}
+                        route={"/postulantes/new"}
+                    />
+
+                    <div className="col-12 col-md-auto px-1 my-2 my-md-0">
+                        <ButtonAccess
+                            url={links.ElDNI}
+                            buttonColor={"green"}
+                            icon={"far fa-id-card"}
+                            title={"Buscar por DNI peruano"}
                         />
+                    </div>
 
-                        <div className="row mx-0 pt-4">
-                            <IndexButton
-                                type={"search"}
-                                handleOpenSideBar={this.openSideBar}
-                            />
+                    <div className="col-12 col-md-auto px-1 my-2 my-md-0">
+                        <CalculadoraBeneficio />
+                    </div>
 
-                            <IndexButton
-                                type={"create"}
-                                route={"/postulantes/new"}
-                            />
+                    {access == true && (
+                        <div className="col-12 col-md-auto px-1 my-2 my-md-0">
+                            <RegistrarUsuario />
+                        </div>
+                    )}
+                </div>
 
-                            <div className="col-12 col-md-auto px-1 my-2 my-md-0">
-                                <ButtonAccess
-                                    url={links.ElDNI}
-                                    buttonColor={"green"}
-                                    icon={"far fa-id-card"}
-                                    title={"Buscar por DNI peruano"}
-                                />
-                            </div>
+                <section className="fichas">
+                    <div className="container-fluid pb-5 mt-4">
+                        <div className="d-flex row mb-4 mx-0">
+                            <Flyer
+                                content={totalpostulantes + " postulantes listados"}
+                            ></Flyer>
                         </div>
 
-                        <section className="fichas">
-                            <div className="container-fluid pb-5 mt-4">
-                                <div className="d-flex row mb-4 mx-0">
-                                    <Flyer
-                                        content={
-                                            totalpostulantes +
-                                            " postulantes listados"
-                                        }
-                                    ></Flyer>
+                        <>
+                            {postulantes.length ? (
+                                <div className="d-flex flex-wrap">
+                                    {postulantes.map((p, key) => (
+                                        <CardPostulante
+                                            url={url}
+                                            access={access}
+                                            data={p}
+                                            modelCard={1}
+                                            refreshPostulantes={this.refreshPostulantes}
+                                            handleContactado={this.contactado}
+                                            handleNoDisponible={this.noDisponible}
+                                            handlePorColocar={this.colocar}
+                                            handleEliminarFicha={this.eliminar}
+                                            handlePorCompletar={this.completar}
+                                            handlePorVerificar={this.porVerificar}
+                                        />
+                                    ))}
+                                    <div className="pt-4 pe-2 pb-4 col-12 text-center">
+                                        <nav aria-label="Page navigation">
+                                            <ReactPaginate
+                                                pageCount={Math.ceil((totalpostulantes? totalpostulantes : 0) / 9,)}
+                                                initialPage={0}
+                                                forcePage={0}
+                                                marginPagesDisplayed={2}
+                                                pageRangeDisplayed={2}
+                                                previousLabel={"Previo"}
+                                                nextLabel={"Siguiente"}
+                                                containerClassName="pagination pagination-sm pagination-seleccion"
+                                                breakClassName="page-item"
+                                                breakLinkClassName="page-link"
+                                                pageClassName="page-item"
+                                                previousClassName="page-item"
+                                                nextClassName="page-item"
+                                                pageLinkClassName="page-link"
+                                                previousLinkClassName="page-link"
+                                                nextLinkClassName="page-link"
+                                                activeClassName="active"
+                                                disableInitialCallback={true}
+                                                onPageChange={(data) =>
+                                                    this.onChangePage(
+                                                        data,
+                                                    )
+                                                }
+                                            />
+                                        </nav>
+                                    </div>
                                 </div>
-
-                                <>
-                                    {postulantes.length ? (
-                                        <div className="d-flex flex-wrap">
-                                            {postulantes.map((p, key) => (
-                                                <CardPostulante
-                                                    url={url}
-                                                    access={access}
-                                                    data={p}
-                                                    modelCard={1}
-                                                    refreshPostulantes={
-                                                        this.refreshPostulantes
-                                                    }
-                                                    handleContactado={
-                                                        this.contactado
-                                                    }
-                                                    handleNoDisponible={
-                                                        this.noDisponible
-                                                    }
-                                                    handlePorColocar={
-                                                        this.colocar
-                                                    }
-                                                    handleEliminarFicha={
-                                                        this.eliminar
-                                                    }
-                                                    handlePorCompletar={
-                                                        this.completar
-                                                    }
-                                                    handlePorVerificar={
-                                                        this.porVerificar
-                                                    }
-                                                />
-                                            ))}
-                                            <div className="pt-4 pl-2 pb-4 col-12 text-center">
-                                                <nav aria-label="Page navigation">
-                                                    <ReactPaginate
-                                                        pageCount={Math.ceil(
-                                                            (totalpostulantes
-                                                                ? totalpostulantes
-                                                                : 0) / 9,
-                                                        )}
-                                                        initialPage={0}
-                                                        forcePage={0}
-                                                        marginPagesDisplayed={2}
-                                                        pageRangeDisplayed={2}
-                                                        previousLabel={"Previo"}
-                                                        nextLabel={"Siguiente"}
-                                                        containerClassName="pagination pagination-sm pagination-seleccion"
-                                                        breakClassName="page-item"
-                                                        breakLinkClassName="page-link"
-                                                        pageClassName="page-item"
-                                                        previousClassName="page-item"
-                                                        nextClassName="page-item"
-                                                        pageLinkClassName="page-link"
-                                                        previousLinkClassName="page-link"
-                                                        nextLinkClassName="page-link"
-                                                        activeClassName="active"
-                                                        disableInitialCallback={
-                                                            true
-                                                        }
-                                                        onPageChange={(data) =>
-                                                            this.onChangePage(
-                                                                data,
-                                                            )
-                                                        }
-                                                    />
-                                                </nav>
-                                            </div>
-                                        </div>
-                                    ) : (
-                                        <NoDataLabel msj={textoresultados} />
-                                    )}
-                                </>
-                            </div>
-                        </section>
-                    </section>
-                )}
-            </>
+                            ) : (
+                                <NoDataLabel msj={textoresultados} />
+                            )}
+                        </>
+                    </div>
+                </section>
+            </section>
         );
     }
 }

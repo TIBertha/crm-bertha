@@ -1,0 +1,25 @@
+.inputfile {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+.inputfile + label {
+    font-size: 1.25em;
+    font-weight: bold;
+    color: $purple_bertha;
+    display: inline-block;
+    text-decoration: underline;
+}
+
+.inputfile + label {
+    cursor: pointer;
+}
+
+.inputfile-upload + label{
+    font-size: 0.9rem !important;
+    margin-bottom: 0px;
+}

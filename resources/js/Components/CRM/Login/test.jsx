@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom/client";
 import logo from "../../../../../public/img/logo.png";
-import { showAlert } from "../../Helpers/alerts";
+import { showAlert } from "../../Helpers/alerts.js";
 import { ajaxPostLogin, ajaxPostMailGeo } from "../../Functions/Login";
 
 export default function Test({ url }) {
@@ -13,7 +13,7 @@ export default function Test({ url }) {
     let showPasswordConf = {
         able: false,
         icon: "",
-        style: "btn btn-pink-webexperta font-weight-bold font h-100 w-100 btn-sm text-white",
+        style: "btn bertha-pink-button font-weight-bold font h-100 w-100 btn-sm text-white",
         toolTip: "",
         type: "",
     };
@@ -118,7 +118,7 @@ export default function Test({ url }) {
                     </div>
 
                     <button
-                        className="btn btn-purple-webexperta btn-block font-weight-bold"
+                        className="btn bertha-purple-button btn-block font-weight-bold"
                         type="submit"
                     >
                         {isLoading && (

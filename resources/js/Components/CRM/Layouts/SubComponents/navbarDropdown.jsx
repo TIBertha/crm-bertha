@@ -16,20 +16,15 @@ export default function NavbarDropdown({
     return (
         <li>
             <div
-                className={"label-link"}
+                className={"label-link" + (path.includes(includedPath) ? " selected" : "")}
                 onClick={(e) => setIsOpen((prev) => !prev)}
             >
-                <a
-                    className={
-                        buttonStyle +
-                        (path.includes(includedPath) ? " selected" : "")
-                    }
-                >
+                <a className={buttonStyle + (path.includes(includedPath) ? " selected" : "")}>
                     <i className={icon + iconStyle}></i>
                     <span className={labelStyle}>{label}</span>
                 </a>
                 <i
-                    class={
+                    className={
                         "fa-solid fa-angle-down arrow" +
                         (isOpen == true ? " rotate" : " close") +
                         (path.includes(includedPath) ? " selected" : "")

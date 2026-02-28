@@ -95,7 +95,7 @@ export default function BajasPostulante({
                 >
                     <ModalTitle>
                         <h6>
-                            <i className={modal.icon + " mr-2"}></i>
+                            <i className={modal.icon + " me-2"}></i>
                             {modal.titleModal}
                         </h6>
                     </ModalTitle>
@@ -119,7 +119,7 @@ export default function BajasPostulante({
                                         className="alert alert-secondary mb-40"
                                         role="alert"
                                     >
-                                        <i className="fas fa-info-circle mr-2"></i>{" "}
+                                        <i className="fas fa-info-circle me-2"></i>{" "}
                                         Seleccione el motivo de baja, guarde y
                                         automaticamente el postulante pasara de
                                         baja el tiempo escogido en el motivo.
@@ -191,7 +191,7 @@ export default function BajasPostulante({
                                                                 </div>
                                                                 <div>
                                                                     <a
-                                                                        className="btn btn-sm btn-pink-webexperta"
+                                                                        className="btn btn-sm bertha-pink-button"
                                                                         href={
                                                                             url
                                                                         }
@@ -202,7 +202,7 @@ export default function BajasPostulante({
                                                             </div>
                                                         ) : (
                                                             <a
-                                                                className="btn btn-lg btn-purple-webexperta"
+                                                                className="btn btn-lg bertha-purple-button"
                                                                 onClick={(e) =>
                                                                     aplicarSancion(
                                                                         e,

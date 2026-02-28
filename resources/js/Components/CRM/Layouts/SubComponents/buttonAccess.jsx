@@ -19,7 +19,7 @@ export default function ButtonAccess({ url, title, icon, buttonColor }) {
             href={url}
             target={"_blank"}
         >
-            <i className={icon + " icon-question"}></i>
+            <i className={icon + " icon-question text-white"}></i>
             {responsive == true ? <span className={"ms-2"}>{title}</span> : ""}
         </a>
     );

@@ -1,25 +1,12 @@
-import React, { useEffect, useState } from "react";
-import ReactDOM from "react-dom/client";
+import React from "react";
 import { IMaskInput } from "react-imask";
 import Select from "react-select";
 import AsyncSelect from "react-select/async";
 
-export default function PostulantesSearchSideBar({
-    data,
-    sideBar,
-    handleChange,
-    handleOpenSideBar,
-    loadDistritoOptions,
-    buscar,
-    limpiar,
-}) {
+export default function PostulantesSearchSideBar({ data, sideBar, handleChange, handleOpenSideBar, buscar, limpiar, loadDistritoOptions}) {
     return (
         <div onKeyPress={(e) => handleChange(e, "keypress")}>
-            <div
-                className={
-                    "search-sidebar" + (sideBar == true ? " collapsed" : "")
-                }
-            >
+            <div className={"search-sidebar" + (sideBar == true ? " collapsed" : "")} >
                 <div className="slimScrollDivSearch">
                     <div className="nicescroll-bar position-relative">
                         <form method="POST" onSubmit={(e) => buscar(e)}>
@@ -29,13 +16,8 @@ export default function PostulantesSearchSideBar({
                                         Filtros de búsqueda
                                     </span>
                                     <span>
-                                        <a
-                                            onClick={(e) =>
-                                                handleOpenSideBar(e, false)
-                                            }
-                                            className="close-button"
-                                        >
-                                            <i class="fa-solid fa-xmark"></i>
+                                        <a onClick={(e) => handleOpenSideBar(e, false) } className="close-button" >
+                                            <i className="fa-solid fa-xmark"></i>
                                         </a>
                                     </span>
                                 </div>
@@ -44,12 +26,7 @@ export default function PostulantesSearchSideBar({
 
                                 <div className="layout-form-search-side">
                                     <div className="col-12 form-group">
-                                        <select
-                                            className="form-control form-control-sm"
-                                            name="paispostulacion"
-                                            value={data.paispostulacion}
-                                            onChange={(e) => handleChange(e)}
-                                        >
+                                        <select className="form-control form-control-sm" name="paispostulacion" value={data.paispostulacion} onChange={(e) => handleChange(e)} >
                                             <option key="0" value="">
                                                 Seleccione País postulación
                                             </option>
@@ -125,9 +102,6 @@ export default function PostulantesSearchSideBar({
                                             value={data.telefono}
                                             onChange={(e) => handleChange(e)}
                                             name="telefono"
-                                            mask="9999999999999999999999999999999999999999999999"
-                                            maskChar=""
-                                            maskPlaceholder=""
                                         />
                                     </div>
 
@@ -139,9 +113,6 @@ export default function PostulantesSearchSideBar({
                                             value={data.telefonorecomendacion}
                                             onChange={(e) => handleChange(e)}
                                             name="telefonorecomendacion"
-                                            mask="9999999999999999999999999999999999999999999999"
-                                            maskChar=""
-                                            maskPlaceholder=""
                                         />
                                     </div>
 
@@ -231,18 +202,6 @@ export default function PostulantesSearchSideBar({
                                         />
                                     </div>
 
-                                    {/*
-                                        <div className="col-12 form-group">
-                                            <input
-                                                className="form-control form-control-sm"
-                                                placeholder="Lugar Nacimiento"
-                                                name="departamentonac"
-                                                value={data.departamentonac}
-                                                onChange={(e) => handleChange(e)}
-                                            />
-                                        </div>
-                                    */}
-
                                     <div className="col-12 form-group">
                                         <select
                                             className="form-control form-control-sm"
@@ -286,6 +245,7 @@ export default function PostulantesSearchSideBar({
                                         </button>
                                     </div>
                                 </div>
+
                             </div>
                         </form>
                     </div>

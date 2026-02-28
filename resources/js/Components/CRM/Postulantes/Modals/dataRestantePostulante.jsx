@@ -161,7 +161,7 @@ export default function DataRestantePostulante({
                 >
                     <ModalTitle>
                         <h6>
-                            <i className={modal.icon + " mr-2"}></i>
+                            <i className={modal.icon + " me-2"}></i>
                             {modal.titleModal}
                         </h6>
                     </ModalTitle>
@@ -180,7 +180,7 @@ export default function DataRestantePostulante({
                                     </div>
                                     <div>
                                         <a
-                                            className="btn btn-sm btn-pink-webexperta"
+                                            className="btn btn-sm bertha-pink-button"
                                             href={url}
                                         >
                                             Listo
@@ -359,7 +359,7 @@ export default function DataRestantePostulante({
 
                                     <div className={"form-group col-12"}>
                                         <a
-                                            className="btn btn-lg btn-block btn-purple-webexperta"
+                                            className="btn btn-lg btn-block bertha-purple-button"
                                             onClick={(e) => save(e)}
                                         >
                                             Guardar

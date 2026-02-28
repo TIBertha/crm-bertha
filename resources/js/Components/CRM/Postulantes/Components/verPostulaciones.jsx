@@ -12,7 +12,7 @@ export default function VerPostulaciones({
     return (
         <>
             <span
-                className="badge badge-success badge-custom"
+                className="badge text-bg-success"
                 role="button"
                 onClick={(e) => setShow(true)}
             >
@@ -32,7 +32,7 @@ export default function VerPostulaciones({
                 <ModalHeader className="border-0" closeButton>
                     <ModalTitle>
                         <h6>
-                            <i className="fas fa-portrait mr-2"></i>
+                            <i className="fas fa-portrait me-2"></i>
                             {"Postulaciones de " + postulante}
                         </h6>
                     </ModalTitle>

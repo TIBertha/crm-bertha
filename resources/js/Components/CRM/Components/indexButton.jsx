@@ -21,7 +21,7 @@ export default function IndexButton({
         downloadIcon: "fas fa-file-download me-2",
     };
 
-    if (type == "search") {
+    if (type === "search") {
         return (
             <div className={conf.div}>
                 <a
@@ -34,7 +34,7 @@ export default function IndexButton({
         );
     }
 
-    if (type == "create") {
+    if (type === "create") {
         return (
             <div className={conf.div}>
                 <Link
@@ -47,7 +47,7 @@ export default function IndexButton({
         );
     }
 
-    if (type == "handleSearch") {
+    if (type === "handleSearch") {
         return (
             <div className={conf.div}>
                 <a
@@ -60,7 +60,7 @@ export default function IndexButton({
         );
     }
 
-    if (type == "handleCreate") {
+    if (type === "handleCreate") {
         return (
             <div className={conf.div}>
                 <a
@@ -73,7 +73,7 @@ export default function IndexButton({
         );
     }
 
-    if (type == "print") {
+    if (type === "print") {
         return (
             <div className={conf.div}>
                 <a

@@ -71,7 +71,7 @@ export default function SessionMenu({ url, profilename, profilepic }) {
                         </div>
 
                         <div className="options">
-                            <a className="btn bertha-purple-button">
+                            <a className="btn bertha-purple-button" href={url + '/logout'}>
                                 Cerrar Sesión
                             </a>
                         </div>

@@ -26,11 +26,11 @@ export default class PostulantesApp extends Component {
                         />
                         <Route
                             path="/postulantes/edit/:id"
-                            element={<PostulantesNew url={url} />}
+                            element={<PostulantesEdit url={url} show={false}/>}
                         />
                         <Route
                             path="/postulantes/new"
-                            element={<PostulantesEdit url={url} />}
+                            element={<PostulantesNew url={url}/>}
                         />
                     </Routes>
                 </div>

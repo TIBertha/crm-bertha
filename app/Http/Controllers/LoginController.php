@@ -39,7 +39,7 @@ class LoginController extends Controller
                 if(Hash::check($credenciales['password'], $user->password)){
 
                     $exito = Auth::login($user);
-                    
+
                     // THIS is the missing piece
                     $request->session()->regenerate();
 
@@ -61,5 +61,12 @@ class LoginController extends Controller
             return response()->json(['code' => 600, 'msj' => 'Usuario no registrado' ]);
         }
 
+    }
+
+    public function logout(Request $request){
+
+        $this->auth->logout();
+
+        return redirect()->route('login');
     }
 }

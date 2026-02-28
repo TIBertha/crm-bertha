@@ -115,6 +115,16 @@ export function ajaxSearchUser(search) {
     });
 }
 
+export function changeDateFormat2(inputDate) {
+    // expects Y-m-d
+    let splitDate = inputDate.split("-");
+    if (splitDate.count == 0) {
+        return null;
+    }
+
+    return splitDate[2] + "/" + splitDate[1] + "/" + splitDate[0];
+}
+
 export function isResponsive(width) {
     const [windowSize, setWindowSize] = useState(getWindowSize());
     useEffect(() => {
@@ -145,9 +155,115 @@ export function mobileDesktop() {
     return windowSize.innerWidth <= 1200 ? "mobile" : "desktop";
 }
 
+export function getDisplayHeight() {
+    const [windowSize, setWindowSize] = useState(getWindowSize());
+    useEffect(() => {
+        function handleWindowResize() {
+            setWindowSize(getWindowSize());
+        }
+        window.addEventListener("resize", handleWindowResize);
+        return () => {
+            window.removeEventListener("resize", handleWindowResize);
+        };
+    }, []);
+
+    return windowSize.innerHeight;
+}
+
 export function getWindowSize() {
     const { innerWidth, innerHeight } = window;
     return { innerWidth, innerHeight };
+}
+
+export function toPesos(mount) {
+    let valor = mount.toString();
+
+    const sanitizedValue = valor.replace(/,/g, '');
+
+    return  parseFloat(sanitizedValue);
+}
+
+export function toPesos3(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+export function toPesos2(mount) {
+    let valor = mount.toString();
+
+    return  Number(valor).toLocaleString();
+}
+
+export function executeCalcularTiempo(fechaI, fechaF) {
+    if (fechaI && fechaF) {
+        let a = moment(fechaF);
+        let b = moment(fechaI);
+        let dias = "";
+        let anios = "";
+        let meses = "";
+
+        let years = a.diff(b, "year");
+        b.add(years, "years");
+
+        if (years > 0) {
+            if (years > 1) {
+                anios = years + " AÑOS";
+            } else {
+                anios = years + " AÑO";
+            }
+        } else {
+            anios = 0;
+        }
+
+        let months = a.diff(b, "months");
+        b.add(months, "months");
+
+        if (months > 0) {
+            if (months > 1) {
+                meses = months + " MESES";
+            } else {
+                meses = months + " MES";
+            }
+        } else {
+            meses = 0;
+        }
+
+        let days = a.diff(b, "days");
+        b.add(days, "days");
+
+        if (days > 0) {
+            if (days > 1) {
+                dias = days + " DIAS";
+            } else {
+                dias = days + " DIA";
+            }
+        } else {
+            dias = 0;
+        }
+
+        let enunciado = "";
+
+        if (days === 0) {
+            if (years > 0 && months > 0) {
+                enunciado = anios + " Y " + meses;
+            } else if (years > 0 && months === 0) {
+                enunciado = anios;
+            } else if (years === 0 && months > 0) {
+                enunciado = meses;
+            }
+        } else {
+            if (years > 0 && months > 0) {
+                enunciado = anios + ", " + meses + " Y " + dias;
+            } else if (years > 0 && months === 0) {
+                enunciado = anios + " Y " + dias;
+            } else if (years === 0 && months > 0) {
+                enunciado = meses + " Y " + dias;
+            } else if (years === 0 && months === 0) {
+                enunciado = dias;
+            }
+        }
+
+        return enunciado;
+    }
 }
 
 export function formButtons(
@@ -162,13 +278,13 @@ export function formButtons(
             {contratoID && (
                 <div className={"col-12 py-2"}>
                     <div
-                        className="alert alert-success alert-report-beneficios"
+                        className="alert alert-success reporte-beneficios-alert"
                         role="alert"
                     >
                         El documento fue generado con exito. Puedes descargarlo
                         en el siguiente enlace:{" "}
                         <a
-                            className="link-reporte"
+                            className="link-green"
                             href={"/contratos/impresion/" + contratoID}
                             target="_blank"
                         >
@@ -182,31 +298,31 @@ export function formButtons(
                 {!contratoID && (
                     <button
                         type="submit"
-                        className="btn btn-purple-webexperta btn-action"
+                        className="btn bertha-purple-button btn-action"
                     >
                         {isLoading && (
-                            <i className="fas fa-sync fa-spin ms-1"></i>
+                            <i className="fas fa-sync fa-spin me-2"></i>
                         )}
-                        {submitButton == "new" && "Guardar"}
-                        {submitButton == "edit" && "Actualizar"}
+                        {submitButton === "new" && "Guardar"}
+                        {submitButton === "edit" && "Actualizar"}
                     </button>
                 )}
 
-                {contratoID && submitButton == "edit" && (
+                {contratoID && submitButton === "edit" && (
                     <button
                         type="submit"
-                        className="btn btn-purple-webexperta btn-action"
+                        className="btn bertha-purple-button btn-action"
                     >
                         {isLoading && (
-                            <i className="fas fa-sync fa-spin ms-1"></i>
+                            <i className="fas fa-sync fa-spin me-2"></i>
                         )}
-                        {submitButton == "edit" && "Actualizar"}
+                        {submitButton === "edit" && "Actualizar"}
                     </button>
                 )}
 
                 {handleCancelar && (
                     <a
-                        className="btn btn-purple-webexperta btn-action text-white"
+                        className="btn bertha-pink-button btn-action text-white"
                         onClick={handleCancelar}
                     >
                         {"Cancelar"}
@@ -215,7 +331,7 @@ export function formButtons(
 
                 {route && (
                     <Link
-                        className="btn btn-purple-webexperta btn-action"
+                        className="btn bertha-pink-button btn-action"
                         to={route}
                     >
                         {"Volver"}
@@ -224,4 +340,20 @@ export function formButtons(
             </div>
         </div>
     );
+}
+
+export function ajaxGetPaises(paisID) {
+    return axios.post('/ajax-get-paises', {paisID} )
+        .then(res => {
+            let r = res.data;
+            return r;
+        });
+}
+
+export function ajaxSaveEstado(paisID, newEstado) {
+    return axios.post('/ajax-save-estado', {paisID, newEstado} )
+        .then(res => {
+            let r = res.data;
+            return r;
+        });
 }

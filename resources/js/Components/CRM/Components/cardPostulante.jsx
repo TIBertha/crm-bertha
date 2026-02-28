@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import {format, parseISO} from 'date-fns';
 import { isResponsive } from "../../Functions/General";
 import ModalHistorialContactoCardPostulante from "./modalHistorialContactoCardPostulante";
 import {
@@ -163,20 +164,20 @@ export default function CardPostulante({
                                 : d.trabajador}
                         </>
                     ) : (
-                        <span className="badge badge-info d-inline">
+                        <span className="badge text-bg-info d-inline">
                             SIN NOMRBRE
                         </span>
                     )}
                 </>
                 <i
-                    className={"fas fa-id-card-alt ml-1 " + documento.iconColor}
+                    className={"fas fa-id-card-alt ms-1 " + documento.iconColor}
                     data-toggle="tooltip"
                     data-placement="bottom"
                     title={documento.msj}
                 ></i>
                 <NewCopyIcon
                     icon={"fas fa-user-tag"}
-                    additonalClass={"icon-action-sm px-0 ml-1"}
+                    additonalClass={"icon-action-sm px-0 ms-1"}
                     copyText={modelCard == 1 ? d.nombres : d.trabajador}
                     tooltipText={"Copiar nombre postulante"}
                     successMsj={"Nombre(s) copiado"}
@@ -187,7 +188,7 @@ export default function CardPostulante({
                 />
                 <>
                     {d.videointroduccion && !d.video_introduccion_youtube ? (
-                        <i className="fas fa-video ml-1"></i>
+                        <i className="fas fa-video ms-1"></i>
                     ) : (
                         ""
                     )}
@@ -195,7 +196,7 @@ export default function CardPostulante({
                 <>
                     {d.video_introduccion_youtube ? (
                         <i
-                            className="fab fa-youtube ml-1"
+                            className="fab fa-youtube ms-1"
                             style={{ color: "red" }}
                         ></i>
                     ) : (
@@ -227,7 +228,7 @@ export default function CardPostulante({
                                 title={
                                     "No cuenta con certificado único laboral"
                                 }
-                                className="fas fa-portrait text-secondary ml-1"
+                                className="fas fa-portrait text-secondary ms-1"
                             ></i>
                         )}
                     </>
@@ -241,7 +242,7 @@ export default function CardPostulante({
                                     firstNamePost(d.nombres) +
                                     " tiene una cuenta registrada. Solicitar su certificado único laboral"
                                 }
-                                className="fas fa-portrait text-warning ml-1"
+                                className="fas fa-portrait text-warning ms-1"
                             ></i>
                         ) : (
                             <>
@@ -250,7 +251,7 @@ export default function CardPostulante({
                                         data-toggle="tooltip"
                                         data-placement="top"
                                         title={"Tiene reporte Mak Consulting"}
-                                        className="fas fa-file-user text-success ml-1"
+                                        className="fas fa-file-user text-success ms-1"
                                     ></i>
                                 ) : (
                                     <>
@@ -258,7 +259,7 @@ export default function CardPostulante({
                                             data-toggle="tooltip"
                                             data-placement="top"
                                             title={"No cuenta con antecedentes"}
-                                            className="fas fa-portrait text-secondary ml-1"
+                                            className="fas fa-portrait text-secondary ms-1"
                                         ></i>
                                     </>
                                 )}
@@ -358,11 +359,11 @@ export default function CardPostulante({
                 <>
                     <>Identidad:</>
                     {d.tipodocumento ? (
-                        <span className={"font-weight-bold ml-1 text-black"}>
+                        <span className={"font-weight-bold ms-1 text-black"}>
                             {d.tipodocumento}
                         </span>
                     ) : (
-                        <span className={"ml-1"}>-</span>
+                        <span className={"ms-1"}>-</span>
                     )}
                 </>
 
@@ -374,16 +375,16 @@ export default function CardPostulante({
                         <>
                             <span
                                 className={
-                                    "font-weight-bold ml-1 text-" +
+                                    "font-weight-bold ms-1 text-" +
                                     COVID.tieneVacunaColor
                                 }
                             >
                                 {COVID.tieneVacuna}
                             </span>
-                            {/*<i className={'far fa-id-card ml-2 text-' + COVID.tieneVacunaIconColor} data-toggle="tooltip" data-placement="bottom" title={COVID.tieneVacunaIconTitle}></i>*/}
+                            {/*<i className={'far fa-id-card ms-2 text-' + COVID.tieneVacunaIconColor} data-toggle="tooltip" data-placement="bottom" title={COVID.tieneVacunaIconTitle}></i>*/}
                         </>
                     ) : (
-                        <span className={"ml-1"}>-</span>
+                        <span className={"ms-1"}>-</span>
                     )}
                 </>
             </>
@@ -701,7 +702,7 @@ export default function CardPostulante({
                     title={paisData.name}
                 >
                     <div className={"mx-2"}>
-                        <span className={"mr-1 align-middle"}>Vive en</span>
+                        <span className={"me-1 align-middle"}>Vive en</span>
                         <span
                             className={
                                 "flag-icon flag-icon-" +
@@ -786,8 +787,8 @@ export default function CardPostulante({
     if (data.select_emp == 1) {
         etiquetaSelectEmp = (
             <div className="pt-2 text-center">
-                <span className="badge font-badge badge-warning white-text">
-                    <i className="fas fa-crown mr-2"></i>Cliente Web
+                <span className="badge font-badge badgetext-bg-warning white-text">
+                    <i className="fas fa-crown me-2"></i>Cliente Web
                 </span>
             </div>
         );
@@ -797,8 +798,8 @@ export default function CardPostulante({
     if (data.fue_tra == 1) {
         etiquetaFueTra = (
             <div className="pt-2 text-center">
-                <span className="badge font-badge badge-secondary white-text">
-                    <i className="fas fa-user-times mr-2"></i>Fue Trabajadora
+                <span className="badge font-badge text-bg--secondary white-text">
+                    <i className="fas fa-user-times me-2"></i>Fue Trabajadora
                 </span>
             </div>
         );
@@ -808,8 +809,8 @@ export default function CardPostulante({
     if (data.select_wp == 1) {
         etiquetaSelectWp = (
             <div className="pt-2 text-center">
-                <span className="badge font-badge badge-success white-text">
-                    <i className="fas fa-crown mr-2"></i>Cliente WhatsApp
+                <span className="badge font-badge text-bg--success white-text">
+                    <i className="fas fa-crown me-2"></i>Cliente WhatsApp
                 </span>
             </div>
         );
@@ -921,7 +922,7 @@ export default function CardPostulante({
                                 ) : (
                                     <span
                                         className={
-                                            "badge badge-danger d-inline"
+                                            "badge badgetext-bg-danger d-inline"
                                         }
                                     >
                                         SIN ACTIVIDADES
@@ -954,7 +955,7 @@ export default function CardPostulante({
                                 ) : (
                                     <span
                                         className={
-                                            "badge badge-warning d-inline"
+                                            "badge text-bg-warning d-inline"
                                         }
                                     >
                                         SIN MODALIDADES
@@ -971,12 +972,12 @@ export default function CardPostulante({
                             <div className={"rowDistrito card-text ficha-text"}>
                                 <>Distrito:</>
                                 {data.distrito ? (
-                                    <strong className={"text-dark ml-1"}>
+                                    <strong className={"text-dark ms-1"}>
                                         {data.distrito}
                                     </strong>
                                 ) : (
                                     <span
-                                        className={"badge badge-dark d-inline"}
+                                        className={"badge text-bg-dark d-inline"}
                                     >
                                         SIN DISTRITO
                                     </span>

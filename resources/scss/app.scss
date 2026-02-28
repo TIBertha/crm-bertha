@@ -7,6 +7,9 @@
 @import "text.scss";
 @import "navbar.scss";
 @import "search_sidebar.scss";
+@import "upload_inputs.scss";
+@import "ficha_postulante.scss";
+@import "contrato.scss";
 @import url("https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css");
 
 body{
@@ -30,8 +33,22 @@ body{
         }
     }
 
-    
+
 }
 
+ul {
+    list-style: none;
+    padding-left: 0;
+}
 
+.btn-action{
+    margin-right: 10px;
+}
+
+.switch-icon{
+    color: white;
+    cursor: pointer;
+    margin-right: 0.5rem;
+    font-size: 20px;
+}
 

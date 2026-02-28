@@ -18,7 +18,7 @@ export default function TooltipPorDias(props) {
             delay={{ show: 250, hide: 400 }}
             overlay={renderTooltip(props)}
         >
-            <i className="fas fa-calendar-alt icon-question ml-1"></i>
+            <i className="fas fa-calendar-alt icon-question ms-1"></i>
         </OverlayTrigger>
     );
 }

@@ -1,12 +1,9 @@
 import React, { useState } from "react";
 import { Modal, ModalBody, ModalTitle, ModalHeader } from "react-bootstrap";
-import { getStatusContact } from "../../Functions/Postulantes";
+import { getStatusContact } from "../../Helpers/postulantes.js";
 import { isResponsive } from "../../Functions/General";
 
-export default function ModalHistorialContactoCardPostulante({
-    historial,
-    trabajador,
-}) {
+export default function ModalHistorialContactoCardPostulante({ historial, trabajador,}) {
     const [show, setShow] = useState(false);
     let conf = { m: "15px", title: "Historial de contacto de " + trabajador };
     let responsive = isResponsive();
@@ -42,11 +39,9 @@ export default function ModalHistorialContactoCardPostulante({
                 data-placement="bottom"
                 title={
                     lastContact
-                        ? lastContact.diasPasados == 0
+                        ? lastContact.diasPasados === 0
                             ? "Hoy fue contactada la trabajadora"
-                            : "La trabajadora fue contactada hace " +
-                              lastContact.diasPasados +
-                              " día(s)"
+                            : `La trabajadora fue contactada hace ${lastContact.diasPasados} día(s)`
                         : "La trabajadora aún no es contactada"
                 }
             >

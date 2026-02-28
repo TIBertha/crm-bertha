@@ -103,7 +103,7 @@ export default function EliminarPostulante({
                         <h5>
                             {"Se encontraron " + vinculos.total + " registros:"}
                         </h5>
-                        <div className={"pt-3 pl-2"}>
+                        <div className={"pt-3 pe-2"}>
                             {vinculos.antecedentes != 0 ? (
                                 <p>
                                     {"- "}
@@ -272,7 +272,7 @@ export default function EliminarPostulante({
                 {deleted == true && noData == false && (
                     <a
                         className={
-                            "btn btn-sm btn-block btn-purple-webexperta font-weight-700 my-2"
+                            "btn btn-sm btn-block bertha-purple-button font-weight-700 my-2"
                         }
                         href={url + "/postulantes"}
                     >
@@ -309,7 +309,7 @@ export default function EliminarPostulante({
                 >
                     <ModalTitle>
                         <h6>
-                            <i className={modal.icon + " mr-2"}></i>
+                            <i className={modal.icon + " me-2"}></i>
                             {modal.title}
                         </h6>
                     </ModalTitle>

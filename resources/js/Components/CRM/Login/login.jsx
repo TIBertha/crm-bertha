@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom/client";
 import logo from "../../../../../public/img/logo.png";
-import { showAlert } from "../../Helpers/alerts";
+import { showAlert } from "../../Helpers/alerts.js";
 import { ajaxPostLogin, ajaxPostMailGeo } from "../../Functions/Login";
 
 export default function Login({ url }) {

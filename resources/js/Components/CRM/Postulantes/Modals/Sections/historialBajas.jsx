@@ -161,7 +161,7 @@ export default function HistorialBajas({ historialbajas }) {
                                         return (
                                             <a
                                                 className={
-                                                    "btn btn-sm btn-green-webexperta"
+                                                    "btn btn-sm bertha-green-button"
                                                 }
                                                 onClick={(e) => avedView(e, 2)}
                                             >
@@ -190,7 +190,7 @@ export default function HistorialBajas({ historialbajas }) {
                                                 />
                                                 <a
                                                     className={
-                                                        "btn btn-sm btn-green-webexperta"
+                                                        "btn btn-sm bertha-green-button"
                                                     }
                                                     onClick={(e) =>
                                                         updatePagoBaja(e)
@@ -217,7 +217,7 @@ export default function HistorialBajas({ historialbajas }) {
                                                 {tbMsjText}{" "}
                                                 <i
                                                     className={
-                                                        tbMsjIcon + " mr-2"
+                                                        tbMsjIcon + " me-2"
                                                     }
                                                 ></i>
                                             </strong>

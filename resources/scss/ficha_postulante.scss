@@ -1,0 +1,373 @@
+.book{
+    page-break-after: always;
+}
+
+.logo-experta{
+    max-width: 147px;
+    height: 50px;
+    width: 75%;
+    display: block;
+}
+
+
+
+.padding-data-ficha{
+    padding-left: 1.9rem !important;
+
+    p{
+        margin-bottom: 0.5rem;
+    }
+}
+
+.titulo-seccion {
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: solid $purple_bertha;
+
+    h6 {
+        margin: unset;
+        font-weight: bold;
+    }
+}
+
+.table1 td{
+    -webkit-print-color-adjust: exact;
+    background-color: #CEDBFA;
+    -webkit-print-color-adjust: exact;
+}
+
+.table2{
+    background-color: #FEFEFE;
+}
+
+.contenedor-tabla-recomendacion{
+    padding: 0 1rem;
+}
+
+.tabla-recomendacion{
+    width: 100%;
+    margin-top: 1.5rem;
+
+    thead{
+        tr,th{
+            border-bottom: 1px solid $purple_bertha;
+            padding-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+    }
+
+    tbody{
+        tr{
+            border-bottom: 1px solid $purple_bertha;
+            padding-bottom: 1rem;
+
+            &:last-child{
+                border-bottom: unset;
+                padding-bottom: 1rem;
+            }
+        }
+    }
+
+    td{
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
+
+    a{
+        font-size: 1.125rem;
+        color: black;
+        cursor: pointer;
+    }
+}
+
+.pie-pagina-ficha {
+    text-align: center;
+
+    a{
+        &, &:hover,&:focus, &:active{
+            color: black;
+            text-decoration: underline;
+        }
+    }
+}
+
+.aviso{
+    ul{
+        list-style-type: decimal !important;
+        padding-inline-start: 40px !important;
+    }
+}
+
+.datos-postulante{
+    text-align: center;
+    font-weight: bold;
+    margin: 1rem 0;
+
+    p{
+        li {
+            font-size: 1rem;
+        }
+    }
+}
+
+.new-page {
+    padding: 15mm 15mm 2mm 15mm !important;
+}
+
+.page-ficha {
+    width: fit-content;
+    height: fit-content;
+    padding: 4mm;
+    border-radius: 5px;
+    background: white;
+}
+
+@page {
+    size: A4;
+    margin: 0;
+}
+
+@media print {
+
+    .ficha-foto-perfil{
+        width: 202px;
+        height: 202px;
+        border: solid 1px rgba(0, 0, 0, 0.2);
+
+        img{
+            width: 200px;
+            height: 200px;
+            padding: 0.15rem;
+        }
+    }
+
+    .tabla-recomendacion{
+        font-size: 0.75rem !important;
+
+        thead{
+            tr,th{
+                font-size: 0.75rem !important;
+            }
+        }
+
+        tbody{
+            tr{
+                padding-bottom: 0.5rem;
+
+                &:last-child{
+                    padding-bottom: 0.5rem;
+                }
+            }
+        }
+    }
+
+    @page {
+        size: A4;
+        margin: 0;
+    }
+
+
+    html, body {
+        width: 210mm;
+        height: 297mm;
+        margin: 0;
+        padding: 0;
+    }
+
+    .page {
+        //width: 2.30mm;
+        //height: 297mm;
+        width: 240mm;
+        height: 339mm;
+        //padding: 0 !important;
+        padding: 2rem !important;
+        //margin: unset;
+        margin: 0 !important;
+        //border-radius: 5px;
+    }
+
+    .subpage-ficha-post {
+        height: 297mm;
+        padding: 0;
+    }
+
+    .titulo-seccion {
+
+        h6 {
+            font-size: 0.9rem !important;
+        }
+    }
+
+    .subpage-ficha {
+        padding: 0;
+        page-break-after: always;
+    }
+
+    .cut-page-ficha{
+        page-break-after: always;
+    }
+
+    span{page-break-before: auto;}
+
+    .page-ficha {
+        width: fit-content;
+        height: fit-content;
+        padding: 4mm !important;
+        border-radius: 5px;
+        background: red;
+    }
+
+    .textualic p,li{
+        font-size: 0.75rem !important;
+    }
+
+    .textualic td{
+        font-size: 0.75rem !important;
+    }
+
+    .titulo h3{
+        font-size: 1rem !important;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .subtitulo h4{
+        font-weight: bold;
+        text-align: left;
+        font-size: 1rem !important;
+    }
+    .firma p{
+        text-align: center;
+    }
+    .lista{
+        padding-inline-start: 5rem;
+    }
+    .lista-compromiso{
+        padding-inline-start: 0;
+    }
+    .titulo{
+        text-align: center;
+    }
+    .font1 p{
+        font-size: 0.75rem;
+    }
+    .desc{
+        font-size: 0.75rem;
+    }
+    .lista li{
+        font-size: 1rem;
+    }
+    .lista-compromiso li{
+        font-size: 1rem;
+    }
+
+    .s1-ficha{
+        margin-left: 0.55cm;
+    }
+
+    .instruccion{
+        padding: 2rem 0;
+    }
+
+    .instruccion .col-8{
+        padding-right: 1.5rem;
+    }
+
+    .manual-list{
+        padding: 1.5rem 5rem 0 4rem;
+    }
+    .button-div{
+        margin-top: 2.2rem;
+        text-align: center;
+    }
+
+}
+
+@media screen {
+
+    .ficha-foto-perfil{
+        width: 232px;
+        height: 232px;
+        border: solid 1px rgba(0, 0, 0, 0.2);
+
+        img{
+            width: 230px;
+            height: 230px;
+            padding: 0.25rem;
+        }
+    }
+
+    .instruccion{
+        padding: 0.8rem 0;
+    }
+    .button-div{
+        margin-top: 0.5rem;
+        text-align: center;
+    }
+
+    .page {
+        width: 240mm;
+        min-height: 450mm;
+        padding: 10mm;
+        margin: 10mm auto;
+        border: 1px #D3D3D3 solid;
+        border-radius: 5px;
+        background: white;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .page-ficha {
+        width: 210mm;
+        min-height: 297mm;
+        padding: 4mm;
+        margin: 10mm auto;
+        border: 1px #D3D3D3 solid;
+        border-radius: 5px;
+        background: white;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .titulo h3{
+        font-size: 1.8rem;
+        font-weight: bold;
+    }
+
+    .textualic p,li{
+        font-size: 1rem !important;
+    }
+
+    .textualic td{
+        font-size: 0.85rem !important;
+    }
+
+    .titulo{
+        text-align: center;
+    }
+
+    .subtitulo h4{
+        font-weight: bold;
+        text-align: left;
+        font-size: 1.5rem;
+    }
+    .firma p{
+        text-align: center;
+    }
+    .lista{
+        padding-inline-start: 5rem;
+    }
+    .lista-compromiso{
+        padding-inline-start: 0;
+    }
+    .font1 p{
+        font-size: 1rem;
+    }
+    .desc{
+        font-size: 1rem;
+    }
+    .lista li{
+        font-size: 1rem;
+    }
+    .lista-compromiso li{
+        font-size: 1rem;
+    }
+}

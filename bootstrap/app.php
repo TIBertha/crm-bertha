@@ -14,7 +14,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware
+        $middleware->alias([
+            'S3Uploader' => \App\Facades\S3Uploader::class,
+        ])
         ->redirectGuestsTo('/login')
         ->redirectUsersTo('/postulantes')
         /*->prependToGroup('auth', [
@@ -29,9 +31,9 @@ return Application::configure(basePath: dirname(__DIR__))
         ->prependToGroup('auth', [
             Authenticate::class,
         ]);
-        
+
     })
-    
+
     ->withExceptions(function (Exceptions $exceptions): void {
         //
     })->create();

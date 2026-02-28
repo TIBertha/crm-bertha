@@ -42,23 +42,16 @@
             <!-- Container -->
             <div class="display-area">
                 @yield('content')
+                <!-- /Container -->
             </div>
-            <!-- /Container -->
+
+            <!-- Footer -->
             @include('Layouts.footer')
+            <!-- /Footer -->
         </div>
         <!-- /Main Content -->
 
-        <!-- Footer -->
-        <div class="container d-none d-md-block d-lg-block">
-            <footer class="footer">
-                <div class="row">
-                    <div class="col-md-12 col-sm-12 text-center">
-                        <p class="text-white">{{ config('webexperta.footer') }}</p>
-                    </div>
-                </div>
-            </footer>
-        </div>
-        <!-- /Footer -->
+
 
     </section>
     <!-- /HK Wrapper -->
