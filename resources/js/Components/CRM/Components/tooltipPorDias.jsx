@@ -1,6 +1,5 @@
 import React from "react";
-import Tooltip from "react-bootstrap/tooltip";
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import { Tooltip, OverlayTrigger } from "react-bootstrap";
 
 export default function TooltipPorDias(props) {
     function renderTooltip(props) {
