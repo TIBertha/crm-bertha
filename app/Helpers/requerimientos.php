@@ -1,6 +1,18 @@
 <?php
 
+use App\Models\Comprobante;
 use App\Models\DiaSemana;
+use App\Models\Pais;
+use App\Models\TipoDescanso;
+use App\Models\Requerimiento;
+use App\Models\Trabajador;
+use App\Models\RequerimientoPostulacion;
+use App\Models\Domicilio;
+use App\Models\Views\EmpleadorView;
+use App\Models\Views\DistritoView;
+use App\Models\Views\RequerimientoPostulacionView;
+use App\Models\Views\RequerimientoView;
+use App\Models\Views\TrabajadorView;
 use Carbon\Carbon;
 
 function getCopyDetallesCrearContrato($d, $tipo = null){
@@ -8,7 +20,7 @@ function getCopyDetallesCrearContrato($d, $tipo = null){
     $domicilioMapa = '';
     $domicilioDistrito = '';
 
-    $empleadorData = \App\Models\Views\EmpleadorView::find($d->empleadorid);
+    $empleadorData = EmpleadorView::find($d->empleadorid);
     $empleadorNombres = '';
     $empleadorDocumento = '';
     $empleadorFechaNacimiento = '';
@@ -55,7 +67,7 @@ function getCopyDetallesCrearContrato($d, $tipo = null){
     }
 
     if ($d->domicilioid){
-        $dom = \App\Models\Domicilio::find($d->domicilioid);
+        $dom = Domicilio::find($d->domicilioid);
         $dist = findDistrito($dom->distrito_id);
         $viewDom = str_replace(' ', '%20',generateLinkGoogleMapCopy( $dom->direccion, $dist['distritos']));
 
@@ -458,7 +470,7 @@ function getCopyDetalles($d, $tipo = null, $actExt = null, $actidExt = null, $mo
             }
         }
 
-        $lll = \App\Models\Views\DistritoView::find($ll);
+        $lll = DistritoView::find($ll);
 
         $distrito = '' . $disTitle . ': ' . $lll->distritostres . "\r\n" ;
     }
@@ -560,10 +572,6 @@ function getCopyDetalles($d, $tipo = null, $actExt = null, $actidExt = null, $mo
 
     if ($mod == 1/*Cama Adentro*/){
 
-        /*if ($d->tiempo_cuarentena){
-            $tipodescanso = 'Tipo Descanso: ' . \App\Models\TipoDescanso::find($d->tiempo_cuarentena)->nombre . "\r\n" ;
-        }*/
-
         if ($d->dia_salida){
             $diasalida = 'Día de salida: ' . DiaSemana::find($d->dia_salida)->nombre . "\r\n" ;
         }
@@ -632,7 +640,7 @@ function getPostulantesPorColocar($requerimientoid, $filtro){
 
     $bds = getQueryPostulaciones($requerimientoid, $filtro);
     foreach ($bds->get() as $bd){
-        $f = \App\Models\Views\TrabajadorView::find($bd->trabajador_id);
+        $f = TrabajadorView::find($bd->trabajador_id);
 
         $d = [
             'nombres'           => mb_convert_case($f['nombres'], MB_CASE_TITLE, "UTF-8") ,
@@ -654,7 +662,7 @@ function countPostulaciones($requerimientoid){
     $result = 0;
 
     if ($requerimientoid){
-        $result = \App\Models\Views\RequerimientoPostulacionView::borrado(false)->where('requerimiento_id', $requerimientoid)->where('activo', true)->count();
+        $result = RequerimientoPostulacionView::borrado(false)->where('requerimiento_id', $requerimientoid)->where('activo', true)->count();
     }
 
     return $result;
@@ -664,13 +672,13 @@ function processDataPostulaciones($data){
     $result = [];
     if ($data){
         foreach ($data as $a){
-            $tra = \App\Models\Views\TrabajadorView::find($a->trabajador_id);
+            $tra = TrabajadorView::find($a->trabajador_id);
 
             $urlWeb = config('webexperta.url-web');
             $linkform  = $urlWeb . '/registro-postulante/'. $tra->token;
             $diasTrabajoPorDias = $tra->estatus_por_dias == 1 ? getdiasTrabajo($tra->dias_contratados_por_dias) : null;
             $estatusAnterior = getEstatusAnterior($tra->id, $tra->estadoid);
-            $distrito = \App\Models\Views\DistritoView::find($tra->distrito_id);
+            $distrito = DistritoView::find($tra->distrito_id);
             $n = explode(" ", $tra->nombres);
             $daysPast = $tra->certificado_antecedente_fecha ? getDaysPast($tra->certificado_antecedente_fecha) : null;
 
@@ -748,7 +756,7 @@ function processDataPostulaciones($data){
 }
 
 function getQueryPostulaciones($requerimientoid, $filtro){
-    return \App\Models\Views\RequerimientoPostulacionView::where('requerimiento_id', $requerimientoid)
+    return RequerimientoPostulacionView::where('requerimiento_id', $requerimientoid)
         ->where('activo', $filtro)
         ->orderBy('select_emp', 'desc')
         ->orderBy('fecha_postulacion', 'desc');
@@ -793,36 +801,26 @@ function saveFormatSeguimiento($data){
 
 function getNewRequerimientos($fastsearch = false){
 
-    $data = [];
+    $query = RequerimientoView::query()
+        ->with([
+            'distritoView',
+            'tipoDescanso',
+            'diaSalida',
+            'diaRetorno'
+        ])
+        ->whereIn('estatusrequerimientoid', [1,4]);
 
-    if($fastsearch){
-
-        if($fastsearch == 'H'){
-            $data = \App\Models\Views\RequerimientoView::
-            whereDate('fechaentrevista', \Carbon\Carbon::now() )
-                ->whereIn('estatusrequerimientoid', [1,4])
-                ->orderBy('fechaentrevista', 'desc')
-                ->orderBy('horaentrevistaformat', 'desc')
-                ->limit(20);
-        }else if($fastsearch == 'T'){
-            $data = \App\Models\Views\RequerimientoView::
-            whereIn('estatusrequerimientoid', [1,4])
-                ->where('fechaentrevista', '>=', \Carbon\Carbon::now()->subDays(5) )
-                ->orderBy('fechaentrevista', 'desc')
-                ->orderBy('horaentrevistaformat', 'desc')
-                ->limit(20);
-        }
-
-    }else{
-        $data = \App\Models\Views\RequerimientoView::
-        where('actualizado', '>=', \Carbon\Carbon::now()->subDays(7) )
-            ->whereIn('estatusrequerimientoid', [1,4])
-            ->orderBy('fechaentrevista', 'desc')
-            ->orderBy('horaentrevistaformat', 'desc')
-            ->limit(20);
+    if ($fastsearch == 'H') {
+        $query->whereDate('fechaentrevista', Carbon::now());
+    } elseif ($fastsearch == 'T') {
+        $query->where('fechaentrevista', '>=', Carbon::now()->subDays(5));
+    } else {
+        $query->where('actualizado', '>=', Carbon::now()->subDays(7));
     }
 
-    return $data;
+    return $query->orderBy('fechaentrevista', 'desc')
+        ->orderBy('horaentrevistaformat', 'desc')
+        ->limit(20);
 }
 
 function getDataRequerimientos($lista, $offset){
@@ -834,147 +832,99 @@ function getDataRequerimientos($lista, $offset){
 
 function processDataRequerimiento($data){
 
+    if (!$data) return [];
+
+    // Preload catálogos
+    $paises = Pais::all()->keyBy('id');
+    $tiposDescanso = TipoDescanso::all()->keyBy('id');
+    $diasSemana = DiaSemana::all()->keyBy('id');
+
     $result = [];
 
-    if($data){
+    foreach ($data as $d) {
 
-        foreach ($data as $d) {
+        $newTerms1711 = isNewTerms1711($d->creado);
+        $contract = validateNewContrato($d, $d->paispedido_id);
 
-            $newTerms1711  = isNewTerms1711($d->creado);
-            $contract = validateNewContrato($d, $d->paispedido_id);
+        $dist = $d->distritoView; // eager loaded
 
-            $fechaEntrevista = '';
-
-            if ($d->fechaentrevista){
-                $fechaEntrevista = getFormatFechaEntrevista($d->fechaentrevista);
-            }
-
-            $dataAnuncio = [];
-
-            if ($d->estatusrequerimientoid == 1){
-
-                $divisa = 'S/ ';
-
-                $newModalidad = $d->modalidad;
-
-                if($d->paispedido_id == 11){
-                    $divisa = 'CLP $';
-                }else if($d->paispedido_id == 49){
-                    $divisa = 'MXN $';
-                }else if($d->paispedido_id == 54){
-                    $nem = \App\Models\Modalidad::find($d->modalidadid);
-                    $newModalidad = $nem->nombre_ch;
-                }
-
-                $dist = \App\Models\Views\DistritoView::find($d->distrito_domicilioid);
-
-                $dataAnuncio = [
-                    'paispedido'            => $d->paispedido_id,
-                    'actividad'             => ($d->actividad),
-                    'modalidad'             => ($newModalidad),
-                    'modalidadid'           => $d->modalidadid,
-                    'fechaentrevista'       => fechaCompletaSpanish(Carbon::parse($d->fechaentrevista)),
-                    'sueldo'                => in_array($d->modalidadid, [1,2,4,5]) ? ($divisa . number_format($d->sueldo)) : null,
-                    'sueldopordia'          => in_array($d->modalidadid, [3]) ? ($divisa . $d->valor_dia_frecuencia . ' x día') : null,
-                    'frecuencia'            => in_array($d->modalidadid, [3]) ? ($d->frecuenciaservicio_id . ' ve' . ($d->frecuenciaservicio_id == 1 ? 'z': 'ces') .' x semana') : null,
-                    'horarioPD'             => in_array($d->modalidadid, [3]) ? setHorarioPorDias($d->horarios) : null,
-                    'horarioCF'             => in_array($d->modalidadid, [2,4,5]) ? setHorarioCamaAfuera($d->horarios) : null,
-                    'horarioCD'             => in_array($d->modalidadid, [1]) ? setHorarioCamaAdentro($d) : null,
-                    'distrito'              => $d->distrito_domicilioid ? mb_convert_case( $dist->distritostres, MB_CASE_TITLE, "UTF-8") : null,
-                    'domicilioid'           => $d->domicilioid,
-                    'referencia'            => $d->referencia ? mb_convert_case( $d->referencia, MB_CASE_TITLE, "UTF-8") : null,
-                    'referenciacanvas'      => $d->referenciacanvas ? mb_convert_case( $d->referenciacanvas, MB_CASE_TITLE, "UTF-8") : null,
-                ];
-            }
-
-            if ($d->paispedido_id){
-                if ($d->paispedido_id == 54){
-                    $divisa = 'S/';
-                    $tooltipdivisa = 'NUEVOS SOLES - PERÚ';
-                }else{
-                    $divisa = $d->codigo_iso_divisa_paispedido;
-                    $tooltipdivisa =  $d->divisa_paispedido . ' - ' . $d->paispedido;
-                }
-            }else{
-                $divisa = null;
-                $tooltipdivisa = 'No hay sueldo';
-            }
-            $n = explode(" ", $d->empleadornombres);
-
-
-            $result[] = [
-                'tipocomision'              => $d->tipocomision,
-                'monto_comision'            => $d->monto_comision,
-                'contact_name'              => $n[0] . ' ' . $d->empleadorapellidos ,
-                'empleador_contact_data'    => getEmpleadorContactData($d->empleadorid),
-                'paises'                    => \App\Models\Pais::get(),
-                'pais_pedido'               => getDataPaisPedido($d->paispedido_id),
-                'id'                        => $d->id,
-                'paisData'                  => setPaisData($d->distrito_pais_id),
-                'empleador'                 => getNombreCorto($d->empleadornombres,$d->empleadorapellidos),
-                'data_anuncio'              => $dataAnuncio,
-                'postulados'                => getPostulados($d->id),
-                'newTerms1711'              => $newTerms1711,
-                'comprobanteadelanto'       => findComprobanteAdelanto($d->id),
-                'confirmacion_adelanto'     => $d->confirmacion_adelanto,
-                'isdataempleador'           => true,
-                'adjunto_adelanto'          => $d->adjunto_adelanto,
-                'fecha'                     => $d->creado ? Carbon::parse($d->creado)->format('d/m/Y') : ' - ',
-                'actualizado'               => $d->actualizado ? Carbon::parse($d->actualizado)->format('d/m/Y') : ' - ',
-                'estatusempleadorid'        => $d->estatusempleadorid,
-                'telefono'                  => $d->telefono,
-                'modalidadid'               => $d->modalidadid,
-                'modalidad'                 => $d->modalidad,
-                'actividadid'               => $d->actividadid,
-                'actividad'                 => $d->actividad,
-                'nacionalidad'              => $d->nacionalidad,
-                'distrito'                  => $d->distrito,
-                'edades'                    => $d->rangoedadid ? armarRangoEdad($d->rangoedadid) : ' - ',
-                'divisa'                    => $divisa,
-                'tooltip_divisa'            => $tooltipdivisa,
-                'sueldo'                    => $d->modalidadid == 3 ?  numberToCommas((int)$d->sueldo_por_dias) : numberToCommas((int)$d->sueldo),
-                'sueldobase'                => numberToCommas((int)$d->sueldo),
-                'observaciones'             => $d->observaciones ? $d->observaciones : ' - ',
-                'num_pisos'                 => $d->num_pisos ? $d->num_pisos : ' - ',
-                'num_mascotas'              => $d->num_mascotas >= 0 ? $d->num_mascotas : ' - ',
-                'num_adultos'               => $d->num_adultos ? $d->num_adultos : ' - ',
-                'num_bebes'                 => $d->num_bebes ? $d->num_bebes : ' - ',
-                'num_ninos'                 => $d->num_ninos ? $d->num_ninos : ' - ',
-                'num_persona_atender'       => $d->num_persona_atender ? $d->num_persona_atender : ' - ',
-                'edad_bebe'                 => $d->edad_bebe ? getListaEdades($d->edad_bebe) : ' - ',
-                'edad_nino'                 => $d->edad_nino ? getListaEdades($d->edad_nino) : ' - ',
-                'edad_adulto'               => $d->edad_adulto ? getListaEdades($d->edad_adulto) : ' - ',
-                'diagnostico'               => $d->diagnostico ? $d->diagnostico : ' - ',
-                'disponibleentrevista'      => $d->disponibleentrevista ? $d->disponibleentrevista : null,
-                'fechaentrevista'           => $fechaEntrevista,
-                'horaentrevista'            => $d->horaentrevista ? Carbon::parse($d->horaentrevista)->format('h:i A') : '',
-                'tipobeneficio'             => $d->tipobeneficio ? $d->tipobeneficio: ' - ',
-                'tipocontratoid'            => $contract['tipocontratodefault'],
-                'tipocontrato'              => $contract['tipocontratonombre'],
-                'estadoid'                  => $d->estatusrequerimientoid,
-                'estado'                    => (($d->estatusrequerimiento)),
-                'usuariointerno'            => $d->usuariointerno ? getNombre($d->usuariointerno) : ' - ',
-                'usuariointernoid'          => $d->usuariointernoid,
-                'referido'                  => $d->referido ? true : false,
-                'frecuenciaservicio_id'     => $d->frecuenciaservicio_id,
-                'frecuenciaservicio'        => $d->frecuenciaservicio,
-                'valor_dia_frecuencia'      => $d->valor_dia_frecuencia,
-                'horarios'                  => $d->horarios,
-                'tiempo_cuarentena'         => $d->tiempo_cuarentena,
-                'tipodescanso_id'           => $d->tiempo_cuarentena,
-                'tipodescanso'              => $d->tiempo_cuarentena ? \App\Models\TipoDescanso::find($d->tiempo_cuarentena)->nombre : ' - ',
-                'diasalida'                 => $d->dia_salida ? DiaSemana::find($d->dia_salida)->nombre : ' - ',
-                'horasalida'                => $d->hora_salida ? Carbon::parse($d->hora_salida)->format('h:i A') : ' - ',
-                'diaretorno'                => $d->dia_ingreso ? DiaSemana::find($d->dia_ingreso)->nombre : ' - ',
-                'horaretorno'               => $d->hora_ingreso ? Carbon::parse($d->hora_ingreso)->format('h:i A') : ' - ',
-                'domicilio'                 => ($d->latitud_domicilio && $d->longitud_domicilio) ? getMapLink($d->latitud_domicilio, $d->longitud_domicilio, 'link') : '',
-            ];
+        // Divisa
+        if ($d->paispedido_id == 54) {
+            $divisa = 'S/';
+            $tooltipdivisa = 'NUEVOS SOLES - PERÚ';
+        } else {
+            $divisa = $d->codigo_iso_divisa_paispedido;
+            $tooltipdivisa = $d->divisa_paispedido . ' - ' . $d->paispedido;
         }
 
+        $n = explode(" ", $d->empleadornombres);
+
+        $result[] = [
+            'tipocomision' => $d->tipocomision,
+            'monto_comision' => $d->monto_comision,
+            'contact_name' => $n[0] . ' ' . $d->empleadorapellidos,
+            'empleador_contact_data' => getEmpleadorContactData($d->empleadorid),
+            'paises' => $paises,
+            'pais_pedido' => getDataPaisPedido($d->paispedido_id),
+            'id' => $d->id,
+            'paisData' => setPaisData($d->distrito_pais_id),
+            'empleador' => getNombreCorto($d->empleadornombres, $d->empleadorapellidos),
+            'postulados' => getPostulados($d->id),
+            'newTerms1711' => $newTerms1711,
+            'comprobanteadelanto' => findComprobanteAdelanto($d->id),
+            'confirmacion_adelanto' => $d->confirmacion_adelanto,
+            'fecha' => $d->creado ? Carbon::parse($d->creado)->format('d/m/Y') : ' - ',
+            'actualizado' => $d->actualizado ? Carbon::parse($d->actualizado)->format('d/m/Y') : ' - ',
+            'estatusempleadorid' => $d->estatusempleadorid,
+            'telefono' => $d->telefono,
+            'modalidadid' => $d->modalidadid,
+            'modalidad' => $d->modalidad,
+            'actividadid' => $d->actividadid,
+            'actividad' => $d->actividad,
+            'nacionalidad' => $d->nacionalidad,
+            'distrito' => $d->distrito,
+            'edades' => $d->rangoedadid ? armarRangoEdad($d->rangoedadid) : ' - ',
+            'divisa' => $divisa,
+            'tooltip_divisa' => $tooltipdivisa,
+            'sueldo' => numberToCommas((int)$d->sueldo),
+            'sueldobase' => numberToCommas((int)$d->sueldo),
+            'observaciones' => $d->observaciones ?: ' - ',
+            'num_pisos' => $d->num_pisos ?: ' - ',
+            'num_mascotas' => $d->num_mascotas >= 0 ? $d->num_mascotas : ' - ',
+            'num_adultos' => $d->num_adultos ?: ' - ',
+            'num_bebes' => $d->num_bebes ?: ' - ',
+            'num_ninos' => $d->num_ninos ?: ' - ',
+            'num_persona_atender' => $d->num_persona_atender ?: ' - ',
+            'edad_bebe' => $d->edad_bebe ? getListaEdades($d->edad_bebe) : ' - ',
+            'edad_nino' => $d->edad_nino ? getListaEdades($d->edad_nino) : ' - ',
+            'edad_adulto' => $d->edad_adulto ? getListaEdades($d->edad_adulto) : ' - ',
+            'diagnostico' => $d->diagnostico ?: ' - ',
+            'disponibleentrevista' => $d->disponibleentrevista,
+            'fechaentrevista' => $d->fechaentrevista ? getFormatFechaEntrevista($d->fechaentrevista) : '',
+            'horaentrevista' => $d->horaentrevista ? Carbon::parse($d->horaentrevista)->format('h:i A') : '',
+            'tipobeneficio' => $d->tipobeneficio ?: ' - ',
+            'tipocontratoid' => $contract['tipocontratodefault'],
+            'tipocontrato' => $contract['tipocontratonombre'],
+            'estadoid' => $d->estatusrequerimientoid,
+            'estado' => $d->estatusrequerimiento,
+            'usuariointerno' => $d->usuariointerno ? getNombre($d->usuariointerno) : ' - ',
+            'usuariointernoid' => $d->usuariointernoid,
+            'referido' => $d->referido ? true : false,
+            'frecuenciaservicio_id' => $d->frecuenciaservicio_id,
+            'frecuenciaservicio' => $d->frecuenciaservicio,
+            'valor_dia_frecuencia' => $d->valor_dia_frecuencia,
+            'horarios' => $d->horarios,
+            'tiempo_cuarentena' => $d->tiempo_cuarentena,
+            'tipodescanso' => $tiposDescanso[$d->tiempo_cuarentena]->nombre ?? ' - ',
+            'diasalida' => $diasSemana[$d->dia_salida]->nombre ?? ' - ',
+            'horasalida' => $d->hora_salida ? Carbon::parse($d->hora_salida)->format('h:i A') : ' - ',
+            'diaretorno' => $diasSemana[$d->dia_ingreso]->nombre ?? ' - ',
+            'horaretorno' => $d->hora_ingreso ? Carbon::parse($d->hora_ingreso)->format('h:i A') : ' - ',
+            'domicilio' => ($d->latitud_domicilio && $d->longitud_domicilio) ? getMapLink($d->latitud_domicilio, $d->longitud_domicilio, 'link') : '',
+        ];
     }
 
     return $result;
-
 }
 
 
@@ -982,7 +932,7 @@ function findComprobanteAdelanto($idReq){
     $result = null;
 
     if ($idReq) {
-        $comprobante = \App\Models\Comprobante::where('mediofacturacion', $idReq)->where('tipomediofacturacion_id', 3)->where('estatuscomprobante_id', 1)->first();
+        $comprobante = Comprobante::where('mediofacturacion', $idReq)->where('tipomediofacturacion_id', 3)->where('estatuscomprobante_id', 1)->first();
 
         if ($comprobante){
             $result = [
@@ -998,7 +948,7 @@ function findComprobanteAdelanto($idReq){
 function getDiasNormalSemanaMS(){
 
     $result = [];
-    $data = \App\Models\DiaSemana::borrado(false)->where('normal', true)->get();
+    $data = DiaSemana::borrado(false)->where('normal', true)->get();
 
     if($data){
 
@@ -1047,7 +997,7 @@ function getReqDetails($d){
 
     $observaciones = null;
 
-    $r = \App\Models\Views\RequerimientoView::find($d->id);
+    $r = RequerimientoView::find($d->id);
 
     $arregloRangoEdad = extractRangoEdad($r->rangoedadid);
 
@@ -1225,8 +1175,6 @@ function getReqDetails($d){
             $horaretorno = 'Hora de retorno: ' . Carbon::parse($r->hora_ingreso)->format('h:i A');
         }
 
-    }else if ($mod == 2/*Cama Afuera*/){
-
     }else if($mod == 3/*Por Dias*/) {
 
         $frecuencia = 'Frecuencia: ' . ($r->frecuenciaservicio ? $r->frecuenciaservicio : ' - ') . "";
@@ -1277,7 +1225,7 @@ function getReqDetails($d){
 function getEmpleadorMS($id){
 
     $result = '';
-    $data = \App\Models\Views\EmpleadorView::find($id);
+    $data = EmpleadorView::find($id);
 
     if($data){
 
@@ -1296,7 +1244,7 @@ function actualizarActivPostulante($Postulante){
     $dataPost = [
         'actualizado'               => Carbon::now(),
     ];
-    $e = \App\Models\Trabajador::where('id', $Postulante)->update($dataPost);
+    $e = Trabajador::where('id', $Postulante)->update($dataPost);
 }
 
 function getListaIDPostulantesActivos($requerimientoid){
@@ -1305,7 +1253,7 @@ function getListaIDPostulantesActivos($requerimientoid){
 
     if($requerimientoid){
 
-        $listapostulantesactivos = \App\Models\RequerimientoPostulacion::borrado(false)->activo(true)->where('requerimiento_id', $requerimientoid)->get();
+        $listapostulantesactivos = RequerimientoPostulacion::borrado(false)->activo(true)->where('requerimiento_id', $requerimientoid)->get();
 
         if($listapostulantesactivos){
 
@@ -1346,14 +1294,14 @@ function getIdList($data){
 
 function getPostulacionesPrevias($idEmpleador, $idReqActual){
 
-    $reqs = \App\Models\Requerimiento::where('empleador_id', $idEmpleador)->whereNotIn('id', array($idReqActual));
+    $reqs = Requerimiento::where('empleador_id', $idEmpleador)->whereNotIn('id', array($idReqActual));
     $res = [];
 
     if ($reqs->count() != 0){
         foreach ($reqs->get() as $d){
-            $postulaciones = \App\Models\RequerimientoPostulacion::where('requerimiento_id', $d->id)->where('activo', 2);
+            $postulaciones = RequerimientoPostulacion::where('requerimiento_id', $d->id)->where('activo', 2);
             foreach ($postulaciones->get() as $p){
-                $tra = \App\Models\Views\TrabajadorView::find($p->trabajador_id);
+                $tra = TrabajadorView::find($p->trabajador_id);
 
                 $res[] = [
                     'idPostulante'          => $tra->id,

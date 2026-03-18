@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import ReactDOM from "react-dom/client";
+import React, {useState } from "react";
 import imgLogo from "../../../../../public/img/logo.png";
 import SessionMenu from "./sessionMenu";
 import NavbarDropdown from "./SubComponents/navbarDropdown";

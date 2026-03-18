@@ -1051,11 +1051,11 @@ export default function CardPostulante({
                         <div className={"d-flex mx-2 mb-1"}>
                             {/*modelCard => ['1'-> PostulantesView || '2'-> ModalPostulaciones || '3'-> FormularioRequerimiento ]*/}
 
-                            {modelCard == 1 && optionsPostulante(data)}
+                            {modelCard === 1 && optionsPostulante(data)}
 
-                            {modelCard == 2 && optionsModalPostulados(data)}
+                            {modelCard === 2 && optionsModalPostulados(data)}
 
-                            {modelCard == 3 && optionsPostulacionesReq(data)}
+                            {modelCard === 3 && optionsPostulacionesReq(data)}
                         </div>
                     </div>
                 </div>

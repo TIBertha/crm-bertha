@@ -125,19 +125,21 @@ export function changeDateFormat2(inputDate) {
     return splitDate[2] + "/" + splitDate[1] + "/" + splitDate[0];
 }
 
-export function isResponsive(width) {
+export function isResponsive(width = 768) {
+    const getWindowSize = () => ({
+        innerWidth: window.innerWidth,
+        innerHeight: window.innerHeight
+    });
+
     const [windowSize, setWindowSize] = useState(getWindowSize());
+
     useEffect(() => {
-        function handleWindowResize() {
-            setWindowSize(getWindowSize());
-        }
-        window.addEventListener("resize", handleWindowResize);
-        return () => {
-            window.removeEventListener("resize", handleWindowResize);
-        };
+        const handleResize = () => setWindowSize(getWindowSize());
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
     }, []);
 
-    return windowSize.innerWidth <= (width ? width : 768) ? true : false;
+    return windowSize.innerWidth <= width;
 }
 
 export function mobileDesktop() {

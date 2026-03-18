@@ -6,15 +6,6 @@ import "bootstrap";
 
 /*Due the use of Laravel 12 and ReactJSX with vite, this is the new nomenclature*/
 
-/*---test.jsx---*/
-
-import Test from "../js/Components/CRM/Login/test.jsx";
-const testJSX = document.getElementById("test");
-if (testJSX) {
-    const url = testJSX.dataset.url;
-    ReactDOM.createRoot(testJSX).render(<Test url={url} />);
-}
-
 /*---login.jsx---*/
 import Login from "./Components/CRM/Login/login.jsx";
 const loginJSX = document.getElementById("login");
