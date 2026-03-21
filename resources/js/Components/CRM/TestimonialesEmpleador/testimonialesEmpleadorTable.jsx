@@ -21,9 +21,8 @@ export default function TestimonialesEmpleadorTable({data, changePagination, act
                 <Thead>
                     <Tr className={'table-titulo pink-bg'}>
                         {responsive ? '' : <Th className="align-middle"  width='5%'>N°</Th>}
-                        <Th className="align-middle"  width='10%'>FECHA</Th>
-                        <Th className="align-middle"  width='22%'>CLIENTE</Th>
-                        <Th className="align-middle"  width='12%'>TESTIMONIO</Th>
+                        <Th className="align-middle"  width='16%'>FECHA</Th>
+                        <Th className="align-middle"  width='28%'>CLIENTE</Th>
                         <Th className="align-middle"  width='7%'>AUTOR</Th>
                         <Th className="align-middle"  width='11%'>VISIBILIDAD</Th>
                         <Th className="align-middle"  width='8%'>ESTADO</Th>
@@ -50,7 +49,6 @@ export default function TestimonialesEmpleadorTable({data, changePagination, act
                                 {responsive ? '' : <Td className={'align-middle'}>{data.contadorDecimal + (index + 1)}</Td>}
                                 <Td className={'align-middle'}>{t.fecha}</Td>
                                 <Td className={'align-middle'}>{(t.empleador_nombres && t.empleador_apellidos) ? (t.empleador_nombres + ' ' + t.empleador_apellidos) : (t.nombre_cliente)}</Td>
-                                <Td className={'align-middle'}>{t.testimonial ? str_limit(t.testimonial, 40) : '-'}</Td>
                                 <Td className={'align-middle'}>{t.usuariointerno_nombres ? getPrimerNombre(t.usuariointerno_nombres) : '-'}</Td>
                                 <Td className={'align-middle'}>
                                     {t.disp_pe == true ? <label className={'label-pe'}>Perú</label> : null}

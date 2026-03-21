@@ -1316,10 +1316,28 @@ $pink_add:#E663C3;
 
 .notificacionPostulante-button{
     border-radius: 0.625rem;
+
+    &, &:hover, &:active, &:focus{
+        text-decoration: none !Important;
+    }
 }
 
 .notificacionPostulante-mobileBadge{
     padding: 1px 3px !important;
+}
+
+.notificacionPostulanciones{
+    background-color: $pink_bertha;
+    padding: 5px;
+    border-radius: 0.625rem;
+
+    span{
+
+    }
+
+    &, i{
+        color: white !important;
+    }
 }
 
 @media (max-width: 640px) {

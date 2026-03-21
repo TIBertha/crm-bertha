@@ -168,12 +168,19 @@ class TestimonialEmpleadorController extends Controller
         $offset = $request->input('offset');
 
         $lista = getNewTestimonialesEmpleador();
+
         $cantidad = $lista->count();
+
+        //$start = microtime(true);
+
         $data = getDataTestimonialesEmpleador($lista, $offset);
+
+        //dd((microtime(true) - $start));
+
         $page = 0;
 
         return response()->json(['code' => 200,
-            'testimoniales' => $data,
+            'testimoniales' => getTestimonialesEmpleador($data),
             'page' => $page,
             'total' => $cantidad,
             'textoresultados' => $cantidad ? '' : 'No existen testimoniales',

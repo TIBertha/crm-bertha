@@ -2,12 +2,15 @@
 
 use App\Models\Requerimiento;
 use App\Models\TipoDocumento;
+use App\Models\Antecedente;
+use App\Models\Views\PaisView;
+use App\Models\Views\TrabajadorView;
+use App\Models\Views\EmpleadorView;
+use App\Models\Views\DistritoView;
 use Carbon\Carbon;
 
-
-
 function getDivisaDetails($countryID){
-    $pais = \App\Models\Views\PaisView::find($countryID);
+    $pais = PaisView::find($countryID);
     return [
         'valor'     => $pais->codigo_iso_divisa,
         'tooltip'   => $pais->divisa . ' - ' . $pais->nombre,
@@ -92,7 +95,7 @@ function convertToFormatMultiselectPostulantes($data){
 
     if($data){
         foreach(json_decode($data) as $d){
-            $dat = \App\Models\Views\TrabajadorView::find($d);
+            $dat = TrabajadorView::find($d);
             $result[] = [
                 'label' => ((($dat->nombres . ' ' .$dat->apellidos))),
                 'value' => $dat->id
@@ -207,7 +210,7 @@ function formatMultiselectTrabajador($data, $multi = true){
 
     $result = [];
 
-    $emp = \App\Models\Views\TrabajadorView::find($data);
+    $emp = TrabajadorView::find($data);
 
     if($multi){
 
@@ -251,7 +254,7 @@ function formatMultiselectEmpleadores($data){
 }
 
 function getDataTrabajadorContrato($trabajador){
-    $data = \App\Models\Views\TrabajadorView::find($trabajador);
+    $data = TrabajadorView::find($trabajador);
 
     $result = [
         'nombres'                       => $data->nombres,
@@ -269,7 +272,7 @@ function getAntecedentesTrabajadorColocado($contrato){
 
     if ($contrato){
 
-        $trabajador = \App\Models\Views\TrabajadorView::find($contrato->trabajadorid);
+        $trabajador = TrabajadorView::find($contrato->trabajadorid);
 
         if ($trabajador->antecedente_pdf){
 
@@ -365,7 +368,7 @@ function getTrabajadorContactData($trabajadorID){
     $result = null;
 
     if ($trabajadorID){
-        $trabajador = \App\Models\Views\TrabajadorView::find($trabajadorID);
+        $trabajador = TrabajadorView::find($trabajadorID);
 
         if($trabajador){
             $result = [
@@ -412,7 +415,7 @@ function formatRequerimientosContratos($data){
 
 function formatMultiselectEmpleador($data){
 
-    $emp = \App\Models\Views\EmpleadorView::find($data);
+    $emp = EmpleadorView::find($data);
 
     $result = [
         'label' => ((($emp->nombres. ' ' .$emp->apellidos))),
@@ -980,7 +983,7 @@ function convertVerificacionesToObject($data){
 
             if($d['distrito']){
 
-                $distrito = \App\Models\Views\DistritoView::find($d['distrito']);
+                $distrito = DistritoView::find($d['distrito']);
 
                 $distritoObject = [
                     'label' => ($distrito->distritostres),
@@ -1116,7 +1119,7 @@ function convertDistritoToObject($data){
 
     if($data){
 
-        $distritoView = \App\Models\Views\DistritoView::find($data);
+        $distritoView = DistritoView::find($data);
 
         return [
             'label' => $distritoView->distritostres,
@@ -1254,7 +1257,7 @@ function setHorarioCamaAfuera($horario){
 function getEmpleadorContactData($empleadorID){
 
     if ($empleadorID){
-        $empleador = \App\Models\Views\EmpleadorView::find($empleadorID);
+        $empleador = EmpleadorView::find($empleadorID);
 
         return [
             'id'                       => $empleadorID,

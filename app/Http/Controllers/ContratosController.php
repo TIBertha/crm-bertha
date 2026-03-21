@@ -61,7 +61,6 @@ class ContratosController extends Controller
 
         return response()->json([
             'code' => 200,
-            //'contratos' => armarContratosAndHistorial($data),
             'contratos' => processDataContrato($data),
             'page' => $page,
             'total' => $cantidad,

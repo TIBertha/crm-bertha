@@ -13,7 +13,7 @@ export default function ModalPostulados({idReq, empleador, postuladosCantidad}) 
     const [show, setShow] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [postulados, setPostulados] = useState([]);
-    let conf = {icon: 'fas fa-user'};
+    let conf = {icon: 'fa-solid fa-user'};
     let responsive = isResponsive();
 
     function viewLoading(){
@@ -49,9 +49,9 @@ export default function ModalPostulados({idReq, empleador, postuladosCantidad}) 
                         <span className='badge badge-light notificacionPostulante-mobileBadge me-1'>{postuladosCantidad}</span> Postulados <i className={conf.icon + '  ml-1'}></i>
                     </>
                     :
-                    <div>
-                        <i className={conf.icon + '-plus notificacionPostulante'}></i>
-                        <span className={'notification-badge'}>{postuladosCantidad}</span>
+                    <div className={'notificacionPostulanciones'}>
+                        <span className={'npBadge'}>{postuladosCantidad}</span>
+                        <i className={conf.icon + ' notificacionPostulante'}></i>
                     </div>
                 }
             </a>

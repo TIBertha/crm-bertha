@@ -5,6 +5,8 @@ use App\Models\DiaSemana;
 use App\Models\Pais;
 use App\Models\TipoDescanso;
 use App\Models\Requerimiento;
+use App\Models\Contrato;
+use App\Models\TipoContrato;
 use App\Models\Trabajador;
 use App\Models\RequerimientoPostulacion;
 use App\Models\Domicilio;
@@ -662,7 +664,7 @@ function countPostulaciones($requerimientoid){
     $result = 0;
 
     if ($requerimientoid){
-        $result = RequerimientoPostulacionView::borrado(false)->where('requerimiento_id', $requerimientoid)->where('activo', true)->count();
+        $result = RequerimientoPostulacion::borrado(false)->where('requerimiento_id', $requerimientoid)->where('activo', true)->count();
     }
 
     return $result;
@@ -682,7 +684,6 @@ function processDataPostulaciones($data){
             $n = explode(" ", $tra->nombres);
             $daysPast = $tra->certificado_antecedente_fecha ? getDaysPast($tra->certificado_antecedente_fecha) : null;
 
-
             $result[]=[
                 'diaspasadoscertificadoantecedente' => $daysPast,
                 'contact_name'                  => mb_convert_case(($n[0] . ' ' . $tra->apellidos), MB_CASE_UPPER, "UTF-8"),
@@ -694,25 +695,25 @@ function processDataPostulaciones($data){
                 'antecedentes_pdf'              => $tra->antecedente_pdf,
                 'requerimiento_id'              => $a->requerimiento_id,
                 'trabajador_id'                 => $a->trabajador_id,
-                'trabajador'                    => mb_convert_case(($a->trabajador), MB_CASE_UPPER, "UTF-8"),
-                'token'                         => $a->token,
-                'nombres'                       => $a->nombres ? $a->nombres : 'NO DATA',
-                'apellidos'                     => $a->apellidos ? $a->apellidos : 'NO DATA',
-                'genero_id'                     => $a->genero_id,
-                'genero'                        => $a->genero ? $a->genero : 'NO DATA',
-                'tipodocumento_id'              => $a->tipodocumento_id,
-                'tipodocumento'                 => findDocumentAcronym($a->tipodocumento_id),
-                'numero_documento'              => $a->numero_documento,
-                'correo'                        => $a->correo,
-                'cama_adentro'                  => $a->cama_adentro,
-                'cama_afuera'                   => $a->cama_afuera,
-                'por_horas'                     => $a->por_horas,
-                'telefono'                      => $a->telefono,
-                'telefono_whatsapp'             => $a->telefono_whatsapp,
-                'estatus_postulante_id'         => $a->estatus_postulante_id,
-                'estatus_postulante'            => $a->estatus_postulante,
-                'foto'                          => $a->foto,
-                'usuario_id'                    => $a->usuario_id,
+                'trabajador'                    => mb_convert_case(($tra->trabajador), MB_CASE_UPPER, "UTF-8"),
+                'token'                         => $tra->token,
+                'nombres'                       => $tra->nombres ? $tra->nombres : 'NO DATA',
+                'apellidos'                     => $tra->apellidos ? $tra->apellidos : 'NO DATA',
+                'genero_id'                     => $tra->genero_id,
+                'genero'                        => $tra->genero ? $tra->genero : 'NO DATA',
+                'tipodocumento_id'              => $tra->tipodocumento_id,
+                'tipodocumento'                 => findDocumentAcronym($tra->tipodocumento_id),
+                'numero_documento'              => $tra->numero_documento,
+                'correo'                        => $tra->correo,
+                'cama_adentro'                  => $tra->cama_adentro,
+                'cama_afuera'                   => $tra->cama_afuera,
+                'por_horas'                     => $tra->por_horas,
+                'telefono'                      => $tra->telefono,
+                'telefono_whatsapp'             => $tra->telefono_whatsapp,
+                'estatus_postulante_id'         => $tra->estadoid,
+                'estatus_postulante'            => $tra->estado,
+                'foto'                          => $tra->foto,
+                'usuario_id'                    => $tra->usuario_id,
                 'fecha_postulacion'             => $a->fecha_postulacion,
                 'activo'                        => $a->activo,
                 'borrado'                       => $a->borrado,
@@ -735,9 +736,9 @@ function processDataPostulaciones($data){
                 'link_form'                     => 'Dale clic a este link ' . $linkform . "\r\n" . "Vas a llenar TODO lo que te pedimos. Hazlo con calma, hazlo bien, de este currículo depende que te contraten.",
                 'tuvo_covid'                    => $tra->tuvo_covid ? $tra->tuvo_covid : null,
                 'tiene_vacuna'                  => $tra->tiene_vacuna,
-                'cartilla_verificada'           => $tra->cartilla_verificada ? boolval($tra->cartilla_verificada) : false,
+                'cartilla_verificada'           => (bool) $tra->cartilla_verificada,
                 'adjunto_cartilla'              => $tra->adjunto_cartilla_vacuna ? 'SI' : 'NO',
-                'tiene_video'                   => $tra->video_introduccion_youtube ? true : false,
+                'tiene_video'                   => (bool) $tra->video_introduccion_youtube,
                 'videointroduccion'             => $tra->videointroduccion,
                 'video_introduccion_youtube'    => $tra->video_introduccion_youtube,
                 'distrito'                      => $tra->distrito_id ? $distrito->distritostres : ' - ',
@@ -756,7 +757,7 @@ function processDataPostulaciones($data){
 }
 
 function getQueryPostulaciones($requerimientoid, $filtro){
-    return RequerimientoPostulacionView::where('requerimiento_id', $requerimientoid)
+    return RequerimientoPostulacion::where('requerimiento_id', $requerimientoid)
         ->where('activo', $filtro)
         ->orderBy('select_emp', 'desc')
         ->orderBy('fecha_postulacion', 'desc');
@@ -801,26 +802,27 @@ function saveFormatSeguimiento($data){
 
 function getNewRequerimientos($fastsearch = false){
 
-    $query = RequerimientoView::query()
+    $query = RequerimientoView::query();
+
+    if ($fastsearch == 'H') {
+        $query->whereDate('fechaentrevista', Carbon::now());
+    } elseif ($fastsearch == 'T') {
+        $query->where('fechaentrevista', '>=', Carbon::now()->subDays(3));
+    } else {
+        $query->where('actualizado', '>=', Carbon::now()->subDays(3));
+    }
+
+    $query->whereIn('estatusrequerimientoid', [1,4])
         ->with([
             'distritoView',
             'tipoDescanso',
             'diaSalida',
             'diaRetorno'
-        ])
-        ->whereIn('estatusrequerimientoid', [1,4]);
-
-    if ($fastsearch == 'H') {
-        $query->whereDate('fechaentrevista', Carbon::now());
-    } elseif ($fastsearch == 'T') {
-        $query->where('fechaentrevista', '>=', Carbon::now()->subDays(5));
-    } else {
-        $query->where('actualizado', '>=', Carbon::now()->subDays(7));
-    }
+        ]);
 
     return $query->orderBy('fechaentrevista', 'desc')
         ->orderBy('horaentrevistaformat', 'desc')
-        ->limit(20);
+        ->limit(10);
 }
 
 function getDataRequerimientos($lista, $offset){
@@ -833,20 +835,58 @@ function getDataRequerimientos($lista, $offset){
 function processDataRequerimiento($data){
 
     if (!$data) return [];
+    $ids = $data->pluck('id');
+    $empleadorIds = $data->pluck('empleadorid');
+    $paisIds = $data->pluck('paispedido_id');
 
-    // Preload catálogos
-    $paises = Pais::all()->keyBy('id');
-    $tiposDescanso = TipoDescanso::all()->keyBy('id');
-    $diasSemana = DiaSemana::all()->keyBy('id');
+    $empleadores = EmpleadorView::whereIn('id', $empleadorIds)
+        ->get()
+        ->mapWithKeys(function($e){
+            return [
+                $e->id => [
+                    'id' => $e->id,
+                    'nombres' => $e->empleador,
+                    'flag_emoji' => $e->pais_pedido_id == 11 ? '🇨🇱' : '🇵🇪',
+                    'telefono' => $e->telefono,
+                ]
+            ];
+        });
+
+
+    $paises = Pais::whereIn('id', $paisIds)->get()->keyBy('id');
+
+    $postulados = RequerimientoPostulacion::whereIn('requerimiento_id', $ids)
+        ->where('activo', 1)
+        ->selectRaw('requerimiento_id, COUNT(*) as total')
+        ->groupBy('requerimiento_id')
+        ->get()
+        ->keyBy('requerimiento_id');
+
+    $comprobantes = Comprobante::whereIn('mediofacturacion', $ids)
+        ->where('tipomediofacturacion_id', 3)
+        ->where('estatuscomprobante_id', 1)
+        ->get()
+        ->keyBy('mediofacturacion');
+
+    $contratosGroup = Contrato::borrado(false)
+        ->activo(true)
+        ->whereIn('requerimiento_id', $ids)
+        ->orderBy('creado', 'desc')
+        ->get()
+        ->groupBy('requerimiento_id');
+
+    $tiposcontratosAll = TipoContrato::borrado(false)
+        ->orderBy('nombre', 'asc')
+        ->get()
+        ->keyBy('id');
+
 
     $result = [];
 
     foreach ($data as $d) {
 
         $newTerms1711 = isNewTerms1711($d->creado);
-        $contract = validateNewContrato($d, $d->paispedido_id);
-
-        $dist = $d->distritoView; // eager loaded
+        $contract = validateNewContrato($d, $d->paispedido_id, $contratosGroup, $tiposcontratosAll);
 
         // Divisa
         if ($d->paispedido_id == 54) {
@@ -860,67 +900,38 @@ function processDataRequerimiento($data){
         $n = explode(" ", $d->empleadornombres);
 
         $result[] = [
-            'tipocomision' => $d->tipocomision,
-            'monto_comision' => $d->monto_comision,
-            'contact_name' => $n[0] . ' ' . $d->empleadorapellidos,
-            'empleador_contact_data' => getEmpleadorContactData($d->empleadorid),
-            'paises' => $paises,
-            'pais_pedido' => getDataPaisPedido($d->paispedido_id),
-            'id' => $d->id,
-            'paisData' => setPaisData($d->distrito_pais_id),
+
+            'postulados' => $postulados[$d->id]->total ?? 0,
+            'empleador_contact_data' => $empleadores[$d->empleadorid] ?? null,
+            'pais_pedido' => $paises[$d->paispedido_id] ?? null,
+            'comprobanteadelanto' => $comprobantes[$d->id] ?? null,
+
+
+            'edades' => $d->rangoedadid ? armarRangoEdad($d->rangoedadid) : ' - ',
+            'fechaentrevista' => $d->fechaentrevista ? getFormatFechaEntrevista($d->fechaentrevista) : '',
+            'sueldo' => numberToCommas((int)$d->sueldo),
             'empleador' => getNombreCorto($d->empleadornombres, $d->empleadorapellidos),
-            'postulados' => getPostulados($d->id),
-            'newTerms1711' => $newTerms1711,
-            'comprobanteadelanto' => findComprobanteAdelanto($d->id),
-            'confirmacion_adelanto' => $d->confirmacion_adelanto,
-            'fecha' => $d->creado ? Carbon::parse($d->creado)->format('d/m/Y') : ' - ',
-            'actualizado' => $d->actualizado ? Carbon::parse($d->actualizado)->format('d/m/Y') : ' - ',
+
+            'id' => $d->id,
+            'contact_name' => $n[0] . ' ' . $d->empleadorapellidos,
+            'horaentrevista' => $d->horaentrevista ? Carbon::parse($d->horaentrevista)->format('h:i A') : '',
             'estatusempleadorid' => $d->estatusempleadorid,
-            'telefono' => $d->telefono,
-            'modalidadid' => $d->modalidadid,
-            'modalidad' => $d->modalidad,
-            'actividadid' => $d->actividadid,
             'actividad' => $d->actividad,
+            'modalidad' => $d->modalidad,
             'nacionalidad' => $d->nacionalidad,
             'distrito' => $d->distrito,
-            'edades' => $d->rangoedadid ? armarRangoEdad($d->rangoedadid) : ' - ',
-            'divisa' => $divisa,
-            'tooltip_divisa' => $tooltipdivisa,
-            'sueldo' => numberToCommas((int)$d->sueldo),
-            'sueldobase' => numberToCommas((int)$d->sueldo),
-            'observaciones' => $d->observaciones ?: ' - ',
-            'num_pisos' => $d->num_pisos ?: ' - ',
-            'num_mascotas' => $d->num_mascotas >= 0 ? $d->num_mascotas : ' - ',
-            'num_adultos' => $d->num_adultos ?: ' - ',
-            'num_bebes' => $d->num_bebes ?: ' - ',
-            'num_ninos' => $d->num_ninos ?: ' - ',
-            'num_persona_atender' => $d->num_persona_atender ?: ' - ',
-            'edad_bebe' => $d->edad_bebe ? getListaEdades($d->edad_bebe) : ' - ',
-            'edad_nino' => $d->edad_nino ? getListaEdades($d->edad_nino) : ' - ',
-            'edad_adulto' => $d->edad_adulto ? getListaEdades($d->edad_adulto) : ' - ',
-            'diagnostico' => $d->diagnostico ?: ' - ',
-            'disponibleentrevista' => $d->disponibleentrevista,
-            'fechaentrevista' => $d->fechaentrevista ? getFormatFechaEntrevista($d->fechaentrevista) : '',
-            'horaentrevista' => $d->horaentrevista ? Carbon::parse($d->horaentrevista)->format('h:i A') : '',
             'tipobeneficio' => $d->tipobeneficio ?: ' - ',
+            'tipocomision' => $d->tipocomision,
+            'divisa' => $divisa,
+            'monto_comision' => $d->monto_comision,
+            'tooltip_divisa' => $tooltipdivisa,
+            'newTerms1711' => $newTerms1711,
             'tipocontratoid' => $contract['tipocontratodefault'],
             'tipocontrato' => $contract['tipocontratonombre'],
+            'confirmacion_adelanto' => $d->confirmacion_adelanto,
             'estadoid' => $d->estatusrequerimientoid,
             'estado' => $d->estatusrequerimiento,
-            'usuariointerno' => $d->usuariointerno ? getNombre($d->usuariointerno) : ' - ',
-            'usuariointernoid' => $d->usuariointernoid,
-            'referido' => $d->referido ? true : false,
-            'frecuenciaservicio_id' => $d->frecuenciaservicio_id,
-            'frecuenciaservicio' => $d->frecuenciaservicio,
-            'valor_dia_frecuencia' => $d->valor_dia_frecuencia,
-            'horarios' => $d->horarios,
-            'tiempo_cuarentena' => $d->tiempo_cuarentena,
-            'tipodescanso' => $tiposDescanso[$d->tiempo_cuarentena]->nombre ?? ' - ',
-            'diasalida' => $diasSemana[$d->dia_salida]->nombre ?? ' - ',
-            'horasalida' => $d->hora_salida ? Carbon::parse($d->hora_salida)->format('h:i A') : ' - ',
-            'diaretorno' => $diasSemana[$d->dia_ingreso]->nombre ?? ' - ',
-            'horaretorno' => $d->hora_ingreso ? Carbon::parse($d->hora_ingreso)->format('h:i A') : ' - ',
-            'domicilio' => ($d->latitud_domicilio && $d->longitud_domicilio) ? getMapLink($d->latitud_domicilio, $d->longitud_domicilio, 'link') : '',
+            'disponibleentrevista' => $d->disponibleentrevista,
         ];
     }
 

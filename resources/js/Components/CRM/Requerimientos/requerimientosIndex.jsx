@@ -375,7 +375,7 @@ class RequerimientosIndex extends Component{
     }
 
     render() {
-        let {url, sideBar, access, requerimientos, isLoading, fastsearch, totalrequerimientos, codigo, empleador, empleadortelefono, fecha, fechaentrevista, actividad, modalidad, estado, actividades, modalidades, estados, distrito, responsable, responsables, page, busqueda, textoresultados, fechaHoy} = this.state;
+        let {url, sideBar, access, requerimientos, isLoading, totalrequerimientos, page, busqueda, textoresultados} = this.state;
 
         let mapas = [
             {name: 'Lima - Perú', flag: 'pe', img: 'https://adjuntosexperta.s3.amazonaws.com/Adjuntos/mapa-lima.jpg', size: 'lg'},
@@ -438,7 +438,6 @@ class RequerimientosIndex extends Component{
                                 <RequerimientosTable
                                     url={url}
                                     handleEliminarRequerimiento={this.eliminarRequerimiento}
-                                    access={access}
                                     busqueda={busqueda}
                                     requerimientos={requerimientos}
                                     total={totalrequerimientos}

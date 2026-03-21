@@ -412,6 +412,8 @@ class RequerimientosController extends Controller
             $postPC = getPostulantesPorColocar($requerimientoid, $filtro);
         }
 
+        //$start = microtime(true);
+        //dd((microtime(true) - $start));
         //$postPC = getPostulantesPorColocar($requerimientoid, 2);
 
         return response()->json([
@@ -504,10 +506,10 @@ class RequerimientosController extends Controller
 
         $fastsearch = $request->input('fastsearch');
         $offset = $request->input('offset');
-
         $lista = getNewRequerimientos($fastsearch);
         $cantidad = $lista->count();
         $data = getDataRequerimientos($lista, $offset);
+
         $page = 0;
         $fechaHoy = Carbon::now()->toDateString();
 

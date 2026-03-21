@@ -11,7 +11,7 @@ import CopysRequerimiento from "./Modals/copysRequerimiento.jsx";
 import CrearAnuncioRequerimiento from "./Modals/crearAnuncioRequerimiento.jsx";
 import DuplicarRequerimiento from "./Modals/duplicarRequerimiento.jsx";
 
-export default function RequerimientosTable({url, access, requerimientos, total, page, changePagination, paginationSearch, busqueda, changeEstadoRequerimiento, habilitarEntrevista, handleEliminarRequerimiento}) {
+export default function RequerimientosTable({url, requerimientos, total, page, changePagination, paginationSearch, busqueda, changeEstadoRequerimiento, habilitarEntrevista, handleEliminarRequerimiento}) {
     let responsive = isResponsive();
 
     let cantidadPaginas = Math.ceil( (total ? total : 0) / (responsive ? 15 : 15) );
@@ -147,8 +147,7 @@ export default function RequerimientosTable({url, access, requerimientos, total,
                 <Thead>
 
                     <Tr className={'table-titulo pink-bg'}>
-                        <Th className="vertical-align-middle" width='4%'>{responsive ? 'PROCEDENCIA DEL PEDIDO' : null}</Th>
-                        <Th className="vertical-align-middle" width='6%'>{responsive ? 'DETALLES' : null}</Th>
+                        <Th className="vertical-align-middle" width='10%'>{responsive ? 'DETALLES' : null}</Th>
                         <Th className="vertical-align-middle" width='6%'>ENTREVISTA</Th>
 
                         <Th className="vertical-align-middle" width='14%'>EMPLEADOR / TELEFONO</Th>
@@ -172,23 +171,6 @@ export default function RequerimientosTable({url, access, requerimientos, total,
 
                         return(
                             <Tr className={'table-filas hover-column'}>
-                                <Td className={'vertical-align-middle'}>
-                                    {paisData ?
-                                        <>
-                                            {responsive ?
-                                                <span className={'font-weight-700'}>{paisData.name}</span>
-                                                :
-                                                <span
-                                                    className={'flag-icon flag-icon-' + (paisData.code) +' flag-icon-squared flag-style'}
-                                                    style={{width: m,height: m, backgroundSize: '' + m + ' ' + m + ''}}
-                                                    data-toggle="tooltip" data-placement="bottom" title={paisData.name}>
-                                                </span>
-                                            }
-                                        </>
-                                        :
-                                        ''
-                                    }
-                                </Td>
                                 <Td className={'notificacionPostulante-badge vertical-align-middle text-center' + (responsive ? '' : ' p-0 my-auto')}>
 
                                     {parseInt(postulados) > 0 ?
@@ -213,7 +195,7 @@ export default function RequerimientosTable({url, access, requerimientos, total,
                                     <div className="row mx-0">
                                         <NewCopyIcon icon={'fas fa-user-tag'} additonalClass={'col-auto px-1 my-auto icon-action align-self-center'} copyText={data.empleador_contact_data.nombres} tooltipText={'Copiar nombre empleador'} successMsj={'Nombre empleador copiado'}/>
                                         <NewCopyIcon icon={'fas fa-copy'} additonalClass={'col-auto px-1 my-auto icon-action align-self-center'} copyText={'CL ' + data.empleador_contact_data.nombres + ' ' + data.empleador_contact_data.flag_emoji } tooltipText={'Copiar nombre en Google'} successMsj={'Nombre en google copiado'}/>
-                                        <div className={"col-auto px-1 my-auto " + ((data.isdataempleador && data.estatusempleadorid == 2) ? '' : 'text-red') }>{data.empleador}</div>
+                                        <div className={"col-auto px-1 my-auto " + ((data.estatusempleadorid === 2) ? '' : 'text-red') }>{data.empleador}</div>
                                     </div>
                                     <div className="row mx-0">
                                         <a className="col-auto px-1 my-auto" href={'tel:' + data.empleador_contact_data.telefono}><TelefonoInternacional numero={data.empleador_contact_data.telefono} paddingLeft={true} /></a>
@@ -233,7 +215,7 @@ export default function RequerimientosTable({url, access, requerimientos, total,
 
                                 </Td>
                                 <Td className={'vertical-align-middle'}><span>{data.tipobeneficio + ' / '}</span><span className={'font-weight-bold'}>{'COMISION ' + (data.tipocomision ? (data.tipocomision + ' (' + data.divisa + ' ' + data.monto_comision + ')') : 'NO TIENE')}</span></Td>
-                                <Td className={'vertical-align-middle'}> <span data-toggle="tooltip" data-placement="bottom" title={data.tooltip_divisa}>{ data.divisa + ' ' + data.sueldo}</span> {data.newTerms1711 == true ? <i data-toggle="tooltip" data-placement="top" title="Nuevo requerimiento con los TC" className="fas fa-star text-warning"></i> : null} </Td>
+                                <Td className={'vertical-align-middle'}> <span data-toggle="tooltip" data-placement="bottom" title={data.tooltip_divisa}>{ data.divisa + ' ' + data.sueldo}</span> {data.newTerms1711 === true ? <i data-toggle="tooltip" data-placement="top" title="Nuevo requerimiento con los TC" className="fas fa-star text-warning"></i> : null} </Td>
                                 <Td className={'vertical-align-middle'}>{columnTipoContrato(data)}</Td>
                                 <Td className={'vertical-align-middle'}>{columnEstatus(data)}</Td>
                                 <Td className={'vertical-align-middle'}>{columnAcciones(data, changeEstadoRequerimiento, habilitarEntrevista)}</Td>

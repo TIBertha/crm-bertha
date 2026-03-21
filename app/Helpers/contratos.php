@@ -17,7 +17,7 @@ function isCambioAplicable($contrato){
 
 function getNewContratos(){
 
-    $data = \App\Models\Views\ContratoView::where('creadooriginal', '>=', \Carbon\Carbon::now()->subDays(7) )->orderBy('actualizadooriginal', 'desc');
+    $data = \App\Models\Views\ContratoView::where('creadooriginal', '>=', \Carbon\Carbon::now()->subDays(2) )->orderBy('actualizadooriginal', 'desc');
 
     return $data;
 }
