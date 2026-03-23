@@ -36,7 +36,7 @@ export default function CopyCredencial({copyText, colorStyle, successMsj = "Cred
         color: textButton,
     };
 
-    function handleCopy(e) {
+    /*function handleCopy(e) {
         navigator.clipboard.writeText(copyText);
 
         toast(successMsj, { icon: "✅" });
@@ -47,7 +47,39 @@ export default function CopyCredencial({copyText, colorStyle, successMsj = "Cred
         setTimeout(() => {
             setTextButton(txtColor); // restore original
         }, 1500);
+    }*/
+
+    function handleCopy(e) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(copyText)
+                .then(() => {
+                    toast(successMsj, { icon: "✅" });
+                })
+                .catch(() => fallbackCopy(copyText));
+        } else {
+            fallbackCopy(copyText);
+        }
+
+        setTextButton(darken(txtColor));
+
+        setTimeout(() => {
+            setTextButton(txtColor);
+        }, 1500);
     }
+
+    function fallbackCopy(text) {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textarea);
+
+        toast(successMsj, { icon: "✅" });
+    }
+
 
     return(
         <>
