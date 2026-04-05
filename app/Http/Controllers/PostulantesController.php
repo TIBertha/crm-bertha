@@ -627,12 +627,30 @@ class PostulantesController extends Controller
             });
         }
 
-        $total = $query->count();
-        $items =$query->limit($limit)->offset($offset)->get();
+        $total = (clone $query)->count();
+
+        $items = $query
+            ->with([
+                'distrito',
+                'postulacionesActivas.requerimiento',
+                'contratosActivos.requerimiento',
+                'bajas',
+                'pais',
+                'cambiosEstatus',
+            ])
+            ->limit($limit)
+            ->offset($offset)
+            ->get();
+
+        $postulantes = formatDataPostulante($items);
+        unset($items);
+        $query = null;
+        gc_collect_cycles();
+
 
         return response()->json([
             'code' => 200,
-            'postulantes' => formatDataPostulante($items),
+            'postulantes' => $postulantes,
             'total' => $total,
             'textoresultados' => $total ? '' : ( 'No existen postulantes'),
             'accessCom' => getAccessFunctions()

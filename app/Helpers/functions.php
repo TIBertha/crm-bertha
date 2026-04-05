@@ -253,6 +253,13 @@ function showModalidades($modalidades){
 
 function showActividades($actividades, $limit = '', $paisPostulando = 54){
 
+    static $cacheActividades = null;
+
+    // Cargar todas las actividades una sola vez
+    if ($cacheActividades === null) {
+        $cacheActividades = \App\Models\Actividad::all()->keyBy('id');
+    }
+
     $result = '';
 
     if($actividades){
@@ -263,33 +270,33 @@ function showActividades($actividades, $limit = '', $paisPostulando = 54){
 
             if($d == 10){
                 $nameAct = 'CUIDADO ADULTO';
-            }else{
-                $act = \App\Models\Actividad::find($d);
-                $n = $act->nombre;
+            } else {
+
+                // Obtener la actividad desde el cache (0 queries)
+                $act = $cacheActividades[$d] ?? null;
+
+                if (!$act) continue;
+
                 if($paisPostulando == 11){
-                    $n = $act->nombre_ch;
-                }else if($paisPostulando == 49){
-                    $n = $act->nombre_mx;
+                    $nameAct = $act->nombre_ch;
+                } else if($paisPostulando == 49){
+                    $nameAct = $act->nombre_mx;
+                } else {
+                    $nameAct = $act->nombre;
                 }
-                $nameAct = $n;
             }
 
             $r[] = $nameAct;
         }
 
-        $newArray = $r;
+        $newArray = $limit ? array_slice($r, 0, $limit) : $r;
 
-        if($limit){
-            $newArray = array_slice($r, 0, $limit);
-        }
-
-        return implode(' | ',$newArray);
-
+        return implode(' | ', $newArray);
     }
 
     return $result;
-
 }
+
 
 function checkEstadoCertificadoAntecedente($certificado, $fechacertificado){
     if (!$certificado || !$fechacertificado) {
@@ -327,48 +334,59 @@ function configVerificaciones($verificaciones){
 }
 
 
-function getDataPostulacion($data){
+function getDataPostulacion($data)
+{
     $result = [];
 
-    if ($data) {
+    if (!$data || $data->isEmpty()) {
+        return $result;
+    }
 
-        foreach ($data as $d){
+    foreach ($data as $d) {
 
-            $req = \App\Models\Views\RequerimientoView::find($d->requerimiento_id);
+        $req = $d->requerimiento; // relación precargada
 
-            $fechaNuevosTerminos1711 = new \DateTime('17-11-2021');
-            $formatCreado = new \DateTime(str_replace("/","-",$d->creado));
-
-            if ($formatCreado > $fechaNuevosTerminos1711){
-                $newTerms1711 = true;
-            }else{
-                $newTerms1711 = false;
-            }
-
-            $fechaEntrevista = '';
-
-            if ($d->fechaentrevistaformat){
-                $f = formatFecha($d->fechaentrevistaformat);
-                $fechaEntrevista = ( mb_convert_case($f['nombreDia'], MB_CASE_TITLE, "UTF-8") . ' ' . $f['numeroDia'] . '/' . $f['numeroMes']);
-            }
-
-            $result[] = [
-                'idReq' => $d->requerimiento_id ?? null,
-                'empleador' => $d->empleador ? mb_convert_case( $d->empleador , MB_CASE_TITLE, "UTF-8") : '',
-                'fechaentrevista' => $fechaEntrevista,
-                'horaentrevista' => $d->horaentrevista ? Carbon::parse($d->horaentrevista)->format('h:i A') : '',
-                'actividad' => $req->actividad ? mb_convert_case( $req->actividad , MB_CASE_TITLE, "UTF-8") : '',
-                'modalidad' => $req->modalidad ? mb_convert_case( $req->modalidad , MB_CASE_TITLE, "UTF-8") : '',
-                'sueldo' => $req->sueldo ?? null,
-                'distritoDomicilio' => $req->distrito_domicilio ?? null,
-                'copyRequerimiento' => getCopyDetalles($req, null, null, null, null, null, null, null, false, $newTerms1711 , true, false),
-            ];
+        // Seguridad: si no existe el requerimiento, saltamos
+        if (!$req) {
+            continue;
         }
 
+        // Nuevos términos
+        $fechaNuevosTerminos1711 = new DateTime('2021-11-17');
+        $formatCreado = new DateTime(str_replace("/", "-", $d->creado));
+        $newTerms1711 = $formatCreado > $fechaNuevosTerminos1711;
+
+        // Fecha entrevista
+        $fechaEntrevista = '';
+        if ($d->fechaentrevistaformat) {
+            $f = formatFecha($d->fechaentrevistaformat);
+            $fechaEntrevista = mb_convert_case($f['nombreDia'], MB_CASE_TITLE, "UTF-8")
+                . ' ' . $f['numeroDia'] . '/' . $f['numeroMes'];
+        }
+
+        $result[] = [
+            'idReq'             => $d->requerimiento_id,
+            'empleador'         => $d->empleador ? mb_convert_case($d->empleador, MB_CASE_TITLE, "UTF-8") : '',
+            'fechaentrevista'   => $fechaEntrevista,
+            'horaentrevista'    => $d->horaentrevista ? Carbon::parse($d->horaentrevista)->format('h:i A') : '',
+            'actividad'         => $req->actividad ? mb_convert_case($req->actividad, MB_CASE_TITLE, "UTF-8") : '',
+            'modalidad'         => $req->modalidad ? mb_convert_case($req->modalidad, MB_CASE_TITLE, "UTF-8") : '',
+            'sueldo'            => $req->sueldo,
+            'distritoDomicilio' => $req->distrito_domicilio,
+            'copyRequerimiento' => getCopyDetalles(
+                $req,
+                null, null, null, null, null, null, null,
+                false,
+                $newTerms1711,
+                true,
+                false
+            ),
+        ];
     }
 
     return $result;
 }
+
 
 function configEstudios($estudios){
 

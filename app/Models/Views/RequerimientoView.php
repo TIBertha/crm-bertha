@@ -35,4 +35,10 @@ class RequerimientoView extends Model
         return $this->belongsTo(DiaSemana::class, 'dia_ingreso', 'id');
     }
 
+    public function requerimiento()
+    {
+        return $this->belongsTo(RequerimientoView::class, 'requerimiento_id');
+    }
+
+
 }

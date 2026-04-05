@@ -12,4 +12,9 @@ class RequerimientoPostulacionView extends Model
         return $query->where('borrado', $flag);
     }
 
+    public function requerimiento()
+    {
+        return $this->belongsTo(RequerimientoView::class, 'requerimiento_id');
+    }
+
 }

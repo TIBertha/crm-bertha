@@ -22,24 +22,25 @@ function formatDataPostulante($data){
             $linkficha = $urlWeb . '/ficha-postulante/'. $d->token;
             $linkform  = $urlWeb . '/registro-postulante/'. $d->token;
             $linkfichaverificacion = $urlWeb . '/ficha-postulante/'. $d->token;
-
-            $fechaHoy = (new DateTime(\Carbon\Carbon::now()->format('Y-m-d')))->format('Y-m-d H:i:s');
-
-            $postulaciones = RequerimientoPostulacionView::where('trabajador_id', $d->id)->where('fechaentrevistaformat', '>=', $fechaHoy )->get();
-
-
+            $postulaciones = $d->postulacionesActivas;
             $diasTrabajoPorDias = null;
 
-            if ($d->estatus_por_dias == 1){
-                $findContratosDias = \App\Models\Views\ContratoView::where('trabajadorid', $d->id)->where('culminado',false);
 
-                $diasTrabajoPorDias = $findContratosDias->count() > 0 ? getDiasTrabajoPD($findContratosDias->get()) : null;
+
+            if ($d->estatus_por_dias == 1){
+                $findContratosDias = $d->contratosActivos;
+
+                $diasTrabajoPorDias = $findContratosDias->isNotEmpty()
+                    ? getDiasTrabajoPD($findContratosDias)
+                    : null;
             }
-            $distrito = DistritoView::find($d->distrito_id);
-            $estatusAnterior = getEstatusAnterior($d->id);
+
+            $distrito = $d->distrito;
+
             $nullFoto = asset('img/user_icon.svg');
             $n = explode(" ", $d->nombres);
             $daysPast = $d->certificado_antecedente_fecha ? getDaysPast($d->certificado_antecedente_fecha) : null;
+            $postulacionesData = getDataPostulacion($postulaciones);
 
             $result[] = [
                 'tiene_antecedentes'         => !empty($d->antecedente_pdf),
@@ -86,18 +87,18 @@ function formatDataPostulante($data){
                 'tuvo_covid'                 => $d->tuvo_covid ?? null,
                 'estatus_por_dias'           => $d->estatus_por_dias,
                 'dias_contratados_por_dias'  => $diasTrabajoPorDias,
-                'estatus_anterior'           => $estatusAnterior,
+                'estatus_anterior'           => getEstatusAnteriorOptimizado($d),
                 'tiene_vacuna'               => $d->tiene_vacuna,
                 'cartilla_verificada'        => !empty($d->cartilla_verificada),
                 'adjunto_cartilla'           => ($d->adjunto_cartilla_vacuna || $d->adjunto_cartilla_vacuna_pdf) ? 'SI' : 'NO',
                 'nodisponible'               => $d->nodisponible,
-                'postulaciones'              => getDataPostulacion($postulaciones),
-                'totalPostulaciones'         => $postulaciones ? count(getDataPostulacion($postulaciones)) : 0,
-                'vecesBajas'                 => getBajasLength($d->id),
+                'postulaciones'              => $postulacionesData,
+                'totalPostulaciones'         => count($postulacionesData),
+                'vecesBajas'                 => getBajasLengthOptimizado($d),
                 'documento_vigente'          => $d->documento_vigente,
                 'foto_documento_delantera'   => $d->foto_documento_delantera,
                 'educacion'                  => configEstudios($d->adjunto_educacion),
-                'paisData'                   => setPaisData($d->distrito_pais_id),
+                'paisData'                   => setPaisData($d),
                 'historialContacto'          => convertHistorialContacto($d->historial_contacto),
             ];
         }
@@ -108,7 +109,44 @@ function formatDataPostulante($data){
 
 }
 
-function getBajasLength($idTrabajador){
+function getBajasLengthOptimizado($trabajador){
+    $result = [];
+
+    foreach ($trabajador->bajas as $b) {
+        $result[] = [
+            'id'                            => $b->id,
+            'usuario_id'                    => $b->usuario_id,
+            'trabajador_id'                 => $b->trabajador_id,
+            'trabajador'                    => mb_convert_case($b->trabajador, MB_CASE_UPPER, "UTF-8"),
+            'trabajadornombres'             => mb_convert_case($b->trabajadornombres, MB_CASE_UPPER, "UTF-8"),
+            'trabajadorapellidos'           => mb_convert_case($b->trabajadorapellidos, MB_CASE_UPPER, "UTF-8"),
+            'trabajadorcorreo'              => $b->trabajadorcorreo,
+            'trabajadortelefono'            => $b->trabajadortelefono,
+            'trabajadortelefonowhatsapp'    => $b->trabajadortelefonowhatsapp,
+            'tipobaja_id'                   => $b->tipobaja_id,
+            'tipobajanombre'                => $b->tipobajanombre,
+            'penalizacion_dias'             => $b->penalizacion_dias,
+            'baja_id'                       => $b->baja_id,
+            'bajanombre'                    => $b->bajanombre,
+            'fecha_inicio_sancion'          => $b->fecha_inicio_sancion,
+            'fecha_fin_sancion'             => $b->fecha_fin_sancion,
+            'fecha_inicio_sancion_format'   => $b->fecha_inicio_sancion_format,
+            'fecha_fin_sancion_format'      => $b->fecha_fin_sancion_format,
+            'culminado'                     => $b->culminado,
+            'creado_format'                 => $b->creado_format,
+            'creado'                        => $b->creado,
+            'actualizado'                   => $b->actualizado,
+            'pagado'                        => boolval($b->pagado),
+            'monto_pagado'                  => $b->monto_pagado,
+            'fecha_pago_monto'              => $b->fecha_pago_monto_format,
+        ];
+    }
+
+    return $result;
+}
+
+
+/*function getBajasLength($idTrabajador){
     $result = [];
     $bajas = TransaccionBajaView::where('trabajador_id', $idTrabajador)->orderBy('creado', 'desc')->get();
 
@@ -143,7 +181,7 @@ function getBajasLength($idTrabajador){
     }
 
     return $result;
-}
+}*/
 
 function getDaysPast($fecha){
     $today = new DateTime(Carbon::now());
@@ -185,6 +223,29 @@ function getEstatusAnterior($id){
     }
 
 }
+
+function getEstatusAnteriorOptimizado($trabajador)
+{
+    $cambios = $trabajador->cambiosEstatus;
+
+    // 1. Si alguna vez tuvo estatus 1 (por colocar)
+    if ($cambios->where('estatuspostulante_id', 1)->isNotEmpty()) {
+        return "1";
+    }
+
+    // 2. Tomar el estatus anterior (el segundo registro más reciente)
+    $estatusAnterior = $cambios->skip(1)->first();
+
+    if ($estatusAnterior && $estatusAnterior->estatuspostulante_id == 8) {
+        return "8";
+    }
+
+    // 3. Si no hay historial suficiente, usar datos del trabajador
+    $est = ($trabajador->foto && $trabajador->firma && $trabajador->foto_documento_delantera) ? 1 : 7;
+
+    return (string) $est;
+}
+
 
 function generateTokenFicha($nombres, $apellidos){
 

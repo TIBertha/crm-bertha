@@ -576,19 +576,18 @@ function convertDataMultiSelect($data){
 
 }
 
-function setPaisData($paisID){
-     $result = null;
-     if ($paisID){
-         $p = \App\Models\Pais::find($paisID);
-         $result = [
-             'id'       => $paisID,
-             'code'     => strtolower($p->country_code),
-             'name'     => ucfirst($p->nombre),
-         ];
-     }
+function setPaisData($trabajador){
+    if (!$trabajador->pais) {
+        return null;
+    }
 
-     return $result;
+    return [
+        'id'   => $trabajador->pais_id,
+        'code' => strtolower('PE'),
+        'name' => ucfirst($trabajador->pais),
+    ];
 }
+
 
 function getValueSelectSingle($data){
 
@@ -891,45 +890,41 @@ function getListaEdades($edades){
     return $result;
 }
 
-function getDiasTrabajoPD($data){
+function getDiasTrabajoPD($contratos)
+{
+    if (!$contratos || $contratos->isEmpty()) {
+        return null;
+    }
+
     $result = [];
 
-    if ($data){
+    foreach ($contratos as $index => $contrato) {
 
-        foreach (json_decode($data) as $key =>  $d){
+        $req = $contrato->requerimiento;
 
-            $req = Requerimiento::find($d->requerimientoid);
+        if (!$req || !$req->horarios) {
+            continue;
+        }
 
-            if ($req->horarios){
+        $dias = [];
 
-                $res = [];
+        foreach (json_decode($req->horarios, true) as $h) {
 
-                foreach (json_decode($req->horarios, true) as $h){
-                    if (!$h['isDescanso']){
-
-                        $day = \App\Models\DiaSemana::find($h['id']);
-
-                        /*$s = ['label' => ((($dat->nombre))), 'value' => $dat->id];*/
-
-                        $res[] = $day->nombre;
-
-                    }
-                }
-
-                $res =  implode(' - ', $res);
-
-                $title = 'CONTRATO ' . ($key + 1) . ': ';
-
-                $title2 = $title . $res;
-
-                $result[] = ((($title2)));
+            if (!$h['isDescanso']) {
+                // El nombre del día viene en el JSON
+                $dias[] = $h['nombreDia'] ?? $h['nombre'] ?? 'Día';
             }
         }
 
-        $result = implode(' | ', $result);
+        if (!empty($dias)) {
+            $result[] = 'CONTRATO ' . ($index + 1) . ': ' . implode(' - ', $dias);
+        }
     }
-    return $result;
+
+    return implode(' | ', $result);
 }
+
+
 
 function formatMultiselect($data){
 
