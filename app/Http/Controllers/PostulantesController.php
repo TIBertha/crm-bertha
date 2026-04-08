@@ -498,7 +498,7 @@ class PostulantesController extends Controller
         $query = Trabajador::query();
 
         if ($sinFiltros) {
-            $query->where('actualizado', '>=', now()->subDays(1))
+            $query->where('actualizado', '>=', now()->subDays(6))
                 ->whereIn('estatuspostulante_id', [1])
                 ->orderBy('actualizado', 'DESC');
         } else {
