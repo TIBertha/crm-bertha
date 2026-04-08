@@ -15,17 +15,12 @@ function formatDataPostulante($data){
     if($data){
 
         foreach ($data as $d) {
-
             $urlWeb = config('webexperta.url-web');
 
-            $linkfirma = getLinkFirma($d->id);
-            $linkficha = $urlWeb . '/ficha-postulante/'. $d->token;
-            $linkform  = $urlWeb . '/registro-postulante/'. $d->token;
-            $linkfichaverificacion = $urlWeb . '/ficha-postulante/'. $d->token;
+
+
             $postulaciones = $d->postulacionesActivas;
             $diasTrabajoPorDias = null;
-
-
 
             if ($d->estatus_por_dias == 1){
                 $findContratosDias = $d->contratosActivos;
@@ -35,14 +30,33 @@ function formatDataPostulante($data){
                     : null;
             }
 
+            $linkfirma = getLinkFirma($d->id);
+            $linkficha = $urlWeb . '/ficha-postulante/'. $d->token;
+            $linkform  = $urlWeb . '/registro-postulante/'. $d->token;
+            $linkfichaverificacion = $urlWeb . '/ficha-postulante/'. $d->token;
+
+            $daysPast = $d->certificado_antecedente_fecha ? getDaysPast($d->certificado_antecedente_fecha) : null;
+
             $distrito = $d->distrito;
 
             $nullFoto = asset('img/user_icon.svg');
             $n = explode(" ", $d->nombres);
-            $daysPast = $d->certificado_antecedente_fecha ? getDaysPast($d->certificado_antecedente_fecha) : null;
-            $postulacionesData = getDataPostulacion($postulaciones);
 
             $result[] = [
+                'dias_contratados_por_dias'  => $diasTrabajoPorDias,
+
+                'tipodocumento'              => findDocumentAcronym($d->tipodocumento_id),
+                'telefono_tarjeta'           => separateNumber($d->usuario->telefono),
+                'telefono_tarjeta_whatsapp'  => separateNumber($d->usuario->telefono_whatsapp),
+                'actividades'                => showActividades($d->actividad_id, 2, $d->postulando_pais_id),
+                'modalidades'                => showTiposModalidades($d->cama_adentro, $d->cama_afuera, $d->por_horas, $d->postulando_pais_id),
+                'certificado_antecedente'    => checkEstadoCertificadoAntecedente($d->certificado_antecedente, $d->certificado_antecedente_fecha),
+                'verificaciones_laborales'   => ($d->verificaciones_laborales && $d->verificaciones_laborales != "[]") ? configVerificaciones($d->verificaciones_laborales) : null,
+                'estatus_anterior'           => getEstatusAnteriorOptimizado($d),
+                'vecesBajas'                 => getBajasLengthOptimizado($d),
+                'educacion'                  => configEstudios($d->adjunto_educacion),
+                'historialContacto'          => convertHistorialContacto($d->historial_contacto),
+
                 'tiene_antecedentes'         => !empty($d->antecedente_pdf),
                 'diaspasadoscertificadoantecedente' => $daysPast,
                 'contact_name'               => $n[0] . ' ' . $d->apellidos ,
@@ -52,54 +66,43 @@ function formatDataPostulante($data){
                 'antecedentes_pdf'           => $d->antecedente_pdf,
                 'tiene_cuenta'               => $d->tiene_cuenta,
                 'foto'                       => $d->foto ? $d->foto : $nullFoto,
-                'nombres'                    => $d->trabajador,
+
+                'nombres'                    => $d->usuario->nombres . ' ' . $d->usuario->apellidos,
+
                 'nacionalidad'               => $d->nacionalidad,
-                'tipodocumento'              => findDocumentAcronym($d->tipodocumento_id),
                 'tipodocumento_id'           => $d->tipodocumento_id,
                 'nacionalidadid'             => $d->nacionalidad_id,
-                'edad'                       => $d->edad ? $d->edad : '',
-                'telefono_tarjeta'           => separateNumber($d->telefono),
+
+                'edad'                       => $d->usuario && $d->usuario->fecha_nacimiento ? \Carbon\Carbon::parse($d->usuario->fecha_nacimiento)->age : '',
+
                 'telefono'                   => $d->telefono,
                 'distrito'                   => $d->distrito_id ? $distrito->distritostres : ' - ',
-                'telefono_tarjeta_whatsapp'  => separateNumber($d->telefono_whatsapp),
                 'telefono_whatsapp'          => $d->telefono_whatsapp,
                 'actividadid'                => $d->actividad_id,
-                'actividades'                => showActividades($d->actividad_id, 2, $d->postulando_pais_id),
-                'modalidades'                => showTiposModalidades($d->cama_adentro, $d->cama_afuera, $d->por_horas, $d->postulando_pais_id),
                 'cama_adentro'               => $d->cama_adentro,
                 'cama_afuera'                => $d->cama_afuera,
                 'por_horas'                  => $d->por_horas,
-                'lugarnacimiento'            => $d->lugarnacimiento,
-                'certificado_antecedente'    => checkEstadoCertificadoAntecedente($d->certificado_antecedente, $d->certificado_antecedente_fecha),
-                'videointroduccion'          => $d->videointroduccion,
+                'lugarnacimiento'            => $d->usuario->lugar_nacimiento,
+                'videointroduccion'          => $d->video_introduccion,
                 'video_introduccion_youtube' => $d->video_introduccion_youtube,
-                'estadoid'                   => $d->estadoid,
-                'estado'                     => $d->estado,
+                'estadoid'                   => $d->estatuspostulante_id,
+                'estado'                     => $d->estatusPostulante ? $d->estatusPostulante->nombre : '',
                 'creado'                     => $d->creado,
                 'actualizado'                => $d->actualizado,
                 'firma'                      => $d->firma,
                 'linkfirma'                  => $d->firma ? null : $linkfirma,
                 'resultado_covid'            => $d->resultado_covid,
-                'verificaciones_laborales'   => ($d->verificaciones_laborales && $d->verificaciones_laborales != "[]") ? configVerificaciones($d->verificaciones_laborales) : null,
                 'token'                      => $d->estadoid == 5 ? null : $linkficha,
                 'link_form'                  => 'Dale clic a este link ' . $linkform . "\r\n" . "Vas a llenar *TODO* lo que te pedimos. Hazlo bien y lo más antes posible, tenemos trabajo para ti y de este currículo depende que te contraten.",
                 'token_privado'              => $d->estadoid == 5 ? null : $linkfichaverificacion,
                 'tuvo_covid'                 => $d->tuvo_covid ?? null,
                 'estatus_por_dias'           => $d->estatus_por_dias,
-                'dias_contratados_por_dias'  => $diasTrabajoPorDias,
-                'estatus_anterior'           => getEstatusAnteriorOptimizado($d),
                 'tiene_vacuna'               => $d->tiene_vacuna,
                 'cartilla_verificada'        => !empty($d->cartilla_verificada),
                 'adjunto_cartilla'           => ($d->adjunto_cartilla_vacuna || $d->adjunto_cartilla_vacuna_pdf) ? 'SI' : 'NO',
                 'nodisponible'               => $d->nodisponible,
-                'postulaciones'              => $postulacionesData,
-                'totalPostulaciones'         => count($postulacionesData),
-                'vecesBajas'                 => getBajasLengthOptimizado($d),
                 'documento_vigente'          => $d->documento_vigente,
                 'foto_documento_delantera'   => $d->foto_documento_delantera,
-                'educacion'                  => configEstudios($d->adjunto_educacion),
-                'paisData'                   => setPaisData($d),
-                'historialContacto'          => convertHistorialContacto($d->historial_contacto),
             ];
         }
 
@@ -117,17 +120,17 @@ function getBajasLengthOptimizado($trabajador){
             'id'                            => $b->id,
             'usuario_id'                    => $b->usuario_id,
             'trabajador_id'                 => $b->trabajador_id,
-            'trabajador'                    => mb_convert_case($b->trabajador, MB_CASE_UPPER, "UTF-8"),
-            'trabajadornombres'             => mb_convert_case($b->trabajadornombres, MB_CASE_UPPER, "UTF-8"),
-            'trabajadorapellidos'           => mb_convert_case($b->trabajadorapellidos, MB_CASE_UPPER, "UTF-8"),
-            'trabajadorcorreo'              => $b->trabajadorcorreo,
-            'trabajadortelefono'            => $b->trabajadortelefono,
-            'trabajadortelefonowhatsapp'    => $b->trabajadortelefonowhatsapp,
+            'trabajador'                    => mb_convert_case($trabajador->usuario->nombres . ' ' . $trabajador->usuario->apellidos, MB_CASE_UPPER, "UTF-8"),
+            'trabajadornombres'             => mb_convert_case($trabajador->usuario->nombres, MB_CASE_UPPER, "UTF-8"),
+            'trabajadorapellidos'           => mb_convert_case($trabajador->usuario->apellidos, MB_CASE_UPPER, "UTF-8"),
+            'trabajadorcorreo'              => $trabajador->usuario->correo,
+            'trabajadortelefono'            => $trabajador->usuario->telefono,
+            'trabajadortelefonowhatsapp'    => $trabajador->usuario->telefono_whatsapp,
             'tipobaja_id'                   => $b->tipobaja_id,
-            'tipobajanombre'                => $b->tipobajanombre,
+            'tipobajanombre'                => $b->tipoBaja ? $b->tipoBaja->nombre : '',
             'penalizacion_dias'             => $b->penalizacion_dias,
             'baja_id'                       => $b->baja_id,
-            'bajanombre'                    => $b->bajanombre,
+            'bajanombre'                    => $b->baja ? $b->baja->nombre : '',
             'fecha_inicio_sancion'          => $b->fecha_inicio_sancion,
             'fecha_fin_sancion'             => $b->fecha_fin_sancion,
             'fecha_inicio_sancion_format'   => $b->fecha_inicio_sancion_format,

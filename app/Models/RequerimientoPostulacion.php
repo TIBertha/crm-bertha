@@ -23,4 +23,9 @@ class RequerimientoPostulacion extends Model
         return $query->where('borrado', $flag);
     }
 
+    public function requerimiento()
+    {
+        return $this->belongsTo(\App\Models\Requerimiento::class, 'requerimiento_id', 'id');
+    }
+
 }

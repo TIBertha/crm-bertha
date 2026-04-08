@@ -468,11 +468,11 @@ class PostulantesController extends Controller
         ]);
     }
 
-    public function ajaxRefreshPostulantes(Request $request){
-
-        $limit = 9;
-        $offset  = $request->input('offset');
-        $data = $request->input('data');
+    public function ajaxRefreshPostulantes(Request $request)
+    {
+        $limit  = 9;
+        $offset = $request->input('offset');
+        $data   = $request->input('data');
 
         $trabajadorid     = $data['trabajadorid'];
         $token            = $data['token'];
@@ -490,173 +490,94 @@ class PostulantesController extends Controller
         $tuvocovid        = $data['tuvocovid'];
         $telefonorecomendacion = $data['telefonorecomendacion'];
 
-        if($estado == NULL AND $trabajadorid == NULL AND $actividad == NULL AND $nacionalidad == NULL AND $modalidad == NULL AND $distrito == NULL AND $nombre == NULL AND $telefono == NULL AND $documento == NULL AND $departamentonac == NULL AND $paispostulacion == NULL AND $resultadocovid == NULL AND $tuvocovid == NULL AND $token == NULL AND $telefonorecomendacion == NULL){
-            $query = TrabajadorView::where('actualizado', '>=', \Carbon\Carbon::now()->subDays(7) )->whereIn('estadoid', [1,6,7,8])->orderBy('actualizado', 'DESC');
-        }else{
-            $query = TrabajadorView::orderBy('estadoid', 'asc')->orderBy('actualizado', 'DESC');
+        // Detectar si no hay filtros
+        $sinFiltros = !$estado && !$trabajadorid && !$actividad && !$nacionalidad && !$modalidad &&
+            !$distrito && !$nombre && !$telefono && !$documento && !$departamentonac &&
+            !$paispostulacion && !$resultadocovid && !$tuvocovid && !$token && !$telefonorecomendacion;
+
+        $query = Trabajador::query();
+
+        if ($sinFiltros) {
+            $query->where('actualizado', '>=', now()->subDays(1))
+                ->whereIn('estatuspostulante_id', [1])
+                ->orderBy('actualizado', 'DESC');
+        } else {
+            $query->orderBy('estatuspostulante_id', 'asc')
+                ->orderBy('actualizado', 'DESC');
         }
 
-        if($trabajadorid){
+        // Filtros exactos
+        $query->when($trabajadorid, fn($q) => $q->where('id', $trabajadorid));
+        $query->when($token, fn($q) => $q->where('token', $token));
+        $query->when($paispostulacion, fn($q) => $q->where('postulando_pais_id', $paispostulacion));
+        $query->when($estado, fn($q) => $q->where('estatuspostulante_id', $estado));
+        $query->when(in_array($nacionalidad, [1,2]), fn($q) => $q->where('nacionalidad_id', $nacionalidad));
+        $query->when($resultadocovid, fn($q) => $q->where('resultado_covid', $resultadocovid));
+        $query->when($tuvocovid, fn($q) => $q->where('tuvo_covid', $tuvocovid));
 
-            $query->where(function ($q) use ( $trabajadorid ){
-                $q->where('id', $trabajadorid);
+        // Modalidad
+        $query->when($modalidad == 1, fn($q) => $q->where('cama_adentro', true));
+        $query->when($modalidad == 2, fn($q) => $q->where('cama_afuera', true));
+        $query->when($modalidad == 3, fn($q) => $q->where('por_horas', true));
+
+        // Distrito
+        $query->when($distrito, function ($q) use ($distrito) {
+            $dir = getDistritosSearch($distrito);
+            if ($dir) $q->whereIn('distrito_id', $dir);
+        });
+
+        // LIKE filters
+        $query->when($nombre, fn($q) => $q->where('trabajador', 'like', "%$nombre%"));
+        $query->when($departamentonac, fn($q) => $q->where('lugarnacimiento', 'like', "%$departamentonac%"));
+        $query->when($documento, fn($q) => $q->where('numero_documento', 'like', "%$documento%"));
+        $query->when($telefonorecomendacion, fn($q) => $q->where('verificaciones_laborales', 'like', "%$telefonorecomendacion%"));
+
+        $query->when($telefono, function ($q) use ($telefono) {
+            $q->where(function ($qq) use ($telefono) {
+                $qq->where('telefono', 'like', "%$telefono%")
+                    ->orWhere('telefono_whatsapp', 'like', "%$telefono%");
             });
-        }
+        });
 
-        if($token){
-
-            $query->where(function ($q) use ( $token ){
-                $q->where('token', $token);
+        // Actividades (OR optimizado)
+        $query->when($actividad, function ($q) use ($actividad) {
+            $ids = array_column($actividad, 'value');
+            $q->where(function ($qq) use ($ids) {
+                foreach ($ids as $id) {
+                    $qq->orWhere('actividad_id', 'like', "%$id%");
+                }
             });
-        }
+        });
 
-        if($modalidad){
+        // Conteo rápido
+        $total = $query->toBase()->count();
 
-            if($modalidad == 1){
-
-                $query->where(function ($q){
-                    $q->where('cama_adentro', true);
-                });
-
-            }else if($modalidad == 2){
-
-                $query->where(function ($q){
-                    $q->where('cama_afuera', true);
-                });
-
-            }else if($modalidad == 3){
-
-                $query->where(function ($q){
-                    $q->where('por_horas', true);
-                });
-
-            }
-
-        }
-
-        $dir = getDistritosSearch($distrito);
-
-        if($dir){
-
-            $query->where(function ($q) use ( $dir ){
-
-                $q->whereIn('distrito_id', $dir);
-            });
-        }
-
-        if($nombre){
-
-            $query->where(function ($q) use ($nombre){
-                $q->where('trabajador', 'like', '%'.$nombre .'%');
-            });
-        }
-
-        if($departamentonac){
-
-            $query->where(function ($q) use ($departamentonac){
-                $q->where('lugarnacimiento', 'like', '%'. $departamentonac .'%');
-            });
-        }
-
-        if($paispostulacion){
-
-            $query->where(function ($q) use ($paispostulacion){
-                $q->where('postulando_pais_id', $paispostulacion);
-            });
-        }
-
-        if($telefonorecomendacion){
-
-            $query->where(function ($q) use ($telefonorecomendacion){
-                $q->where('verificaciones_laborales', 'like', '%'. $telefonorecomendacion .'%');
-            });
-        }
-
-        if($telefono){
-
-            $query->where(function ($q) use ($telefono){
-                $q->where('telefono', 'like', '%'.$telefono .'%')
-                    ->orWhere('telefono_whatsapp', 'like', '%'.$telefono .'%');
-            });
-        }
-
-        if($documento){
-
-            $query->where(function ($q) use ($documento){
-                $q->where('numero_documento', 'like', '%'.$documento .'%');
-            });
-        }
-
-        if($estado){
-
-            $query->where(function ($q) use ($estado){
-                $q->where('estadoid', $estado);
-            });
-
-        }
-
-        if(in_array($nacionalidad, [1,2])){
-
-            $query->where(function ($q) use ($nacionalidad){
-                $q->where('nacionalidad_id', $nacionalidad);
-            });
-        }
-
-        if($actividad){
-
-            foreach ($actividad as $a){
-
-                $query->where(function ($q) use ($a){
-
-                    $q->where('actividad_id', 'like', '%'.$a['value'] .'%');
-                });
-            }
-        }
-
-        if($resultadocovid){
-
-            $query->where(function ($q) use ($resultadocovid){
-                $q->where('resultado_covid_id', $resultadocovid);
-            });
-        }
-
-        if($tuvocovid){
-
-            $query->where(function ($q) use ($tuvocovid){
-                $q->where('tuvo_covid', $tuvocovid);
-            });
-        }
-
-        $total = (clone $query)->count();
-
-        $items = $query
-            ->with([
-                'distrito',
-                'postulacionesActivas.requerimiento',
-                'contratosActivos.requerimiento',
-                'bajas',
-                'pais',
-                'cambiosEstatus',
-            ])
+        // Obtener items
+        $items = $query->with([
+            'distrito',
+            'postulacionesActivas.requerimiento',
+            'contratosActivos.requerimiento',
+            'bajas',
+            'pais',
+            'cambiosEstatus',
+            'estatusPostulante',
+        ])
             ->limit($limit)
             ->offset($offset)
             ->get();
 
         $postulantes = formatDataPostulante($items);
-        unset($items);
-        $query = null;
-        gc_collect_cycles();
-
 
         return response()->json([
             'code' => 200,
             'postulantes' => $postulantes,
             'total' => $total,
-            'textoresultados' => $total ? '' : ( 'No existen postulantes'),
+            'textoresultados' => $total ? '' : 'No existen postulantes',
             'accessCom' => getAccessFunctions()
         ]);
-
     }
+
+
 
     public function ajaxSetContactadoPostulantes(Request  $request){
         $idPostulante = $request->input('id');

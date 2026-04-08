@@ -28,4 +28,10 @@ class Contrato extends Model
         return $query->where('culminado', $flag);
     }
 
+    public function requerimiento()
+    {
+        return $this->belongsTo(\App\Models\Requerimiento::class, 'requerimiento_id', 'id');
+    }
+
+
 }

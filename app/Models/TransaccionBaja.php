@@ -21,4 +21,21 @@ class TransaccionBaja extends Model
         return $query->where('culminado', $flag);
     }
 
+    public function tipoBaja()
+    {
+        return $this->belongsTo(\App\Models\TipoBaja::class, 'tipobaja_id', 'id');
+    }
+
+    public function baja()
+    {
+        return $this->belongsTo(\App\Models\Baja::class, 'baja_id', 'id');
+    }
+
+
+    public function usuario()
+    {
+        return $this->belongsTo(\App\Models\Usuario::class, 'usuario_id', 'id');
+    }
+
+
 }

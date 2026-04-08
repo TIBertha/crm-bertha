@@ -19,4 +19,10 @@ class Baja extends Model
         return $this->belongsTo('App\Models\TipoBaja');
     }
 
+    public function bajas()
+    {
+        return $this->hasMany(TransaccionBaja::class, 'trabajador_id', 'id')
+            ->with('usuario');
+    }
+
 }

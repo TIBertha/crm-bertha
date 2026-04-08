@@ -690,37 +690,6 @@ export default function CardPostulante({
         );
     }
 
-    function flag(d) {
-        let m = 15 + "px";
-        let paisData = d.paisData;
-        return (
-            <div className={"align-cen pb-4"}>
-                <div
-                    className="tag-flag"
-                    data-toggle="tooltip"
-                    data-placement="bottom"
-                    title={paisData.name}
-                >
-                    <div className={"mx-2"}>
-                        <span className={"me-1 align-middle"}>Vive en</span>
-                        <span
-                            className={
-                                "flag-icon flag-icon-" +
-                                paisData.code +
-                                " flag-icon-squared flag-style"
-                            }
-                            style={{
-                                width: m,
-                                height: m,
-                                backgroundSize: "" + m + " " + m + "",
-                            }}
-                        ></span>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
     function optionsPostulacionesReq(d) {
         return (
             <>
@@ -821,18 +790,12 @@ export default function CardPostulante({
             <div
                 className={
                     "card m-0 shadow-lg rounded" +
-                    (data.select_emp == 1 ? " purple-border-postulado" : "") +
-                    (data.paisData
-                        ? data.paisData.code == "mx"
-                            ? " shadow-mx"
-                            : " shadow-pe"
-                        : "")
+                    (data.select_emp == 1 ? " purple-border-postulado" : "")
                 }
             >
                 <div className={"row m-0"}>
                     {responsive == false && (
                         <div className={"col-md-3 align-self-center px-0"}>
-                            {data.paisData ? <>{flag(data)}</> : ""}
                             <img
                                 src={foto}
                                 className="card-img img-thumbnail rounded-circle"
@@ -1019,19 +982,6 @@ export default function CardPostulante({
                             >
                                 {rowEducacion(data)}
                             </div>
-
-                            {[1].includes(modelCard) &&
-                                data.totalPostulaciones >= 1 && (
-                                    <div className={"rowPostulaciones"}>
-                                        <VerPostulaciones
-                                            postulante={nombrePostulante}
-                                            postulaciones={data.postulaciones}
-                                            totalPostulaciones={
-                                                data.totalPostulaciones
-                                            }
-                                        />
-                                    </div>
-                                )}
 
                             {[2, 3].includes(modelCard) && (
                                 <div
