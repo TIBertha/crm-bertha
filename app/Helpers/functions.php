@@ -575,6 +575,40 @@ function findDistrito($id){
     return $distrito;
 }
 
+function convertEdadToCheckbox($data){
+
+    $defaultCheck = [
+        [ 'id' => 1, 'value' => 'De 18 a 30 años', 'isChecked' => false, 'disabled' => false],
+        [ 'id' => 2, 'value' => 'De 31 a 45 años', 'isChecked' => false, 'disabled' => false],
+        [ 'id' => 3, 'value' => 'De 46 a más', 'isChecked' => false, 'disabled' => false],
+        [ 'id' => 4, 'value' => 'Todas las edades', 'isChecked' => false, 'disabled' => false]
+    ];
+
+    if($data){
+
+        foreach (json_decode($data, true) as $d){
+
+            if(in_array($d, [1,2,3])){
+                $defaultCheck[ ($d - 1)]['isChecked'] = true;
+            }else{
+
+                for($i = 0; $i < 3 ; $i++){
+                    $defaultCheck[$i]['isChecked'] = false;
+                    $defaultCheck[$i]['disabled'] = true;
+                }
+
+                $defaultCheck[3]['isChecked'] = true;
+
+            }
+
+        }
+
+    }
+
+    return $defaultCheck;
+
+}
+
 function validateNewContrato($req, $paispedido, $contratosGroup, $tiposcontratosAll)
 {
     // Obtener contrato ya precargado

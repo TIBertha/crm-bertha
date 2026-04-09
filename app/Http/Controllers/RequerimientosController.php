@@ -24,11 +24,13 @@ use App\Models\TipoDescanso;
 use App\Models\TipoVivienda;
 use App\Models\Usuario;
 use App\Models\UsuarioInterno;
+use App\Models\Views\DistritoView;
 use App\Models\Views\EmpleadorView;
 use App\Models\Views\RequerimientoView;
 use App\Models\Views\TrabajadorView;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use function GuzzleHttp\json_encode;
 
@@ -399,6 +401,108 @@ class RequerimientosController extends Controller
 
     }
 
+    public function ajaxGet(Request $request){
+        $viewDom = '';
+        $id = $request->input('id');
+        $usuarioInterno = Auth::user()->id;
+
+        $ui = UsuarioInterno::find($usuarioInterno);
+        $nom = explode(' ',trim($ui->nombres));
+
+        if($id){
+
+            $contratosGroup = Contrato::borrado(false)
+                ->activo(true)
+                ->where('requerimiento_id', $id)
+                ->orderBy('creado', 'desc')
+                ->get()
+                ->groupBy('requerimiento_id');
+
+            $tiposcontratosAll = TipoContrato::borrado(false)
+                ->orderBy('nombre', 'asc')
+                ->get()
+                ->keyBy('id');
+
+            $data = RequerimientoView::find($id);
+            $paisID = $data->paispedido_id == 11 ? [5,6] : [2,4];
+            $comprobantesAdelanto = findComprobanteAdelanto($id);
+            $contract = validateNewContrato($data,$data->paispedido_id, $contratosGroup, $tiposcontratosAll);
+            $tipocontratoid = $contract['tipocontratodefault'];
+            $tiposBeneficios = TipoBeneficio::whereIn('id', [1,2])->get();
+            $actividades = Actividad::borrado(false)->ordenar()->get();
+            $tipoviviendas = TipoVivienda::borrado(false)->orderBy('nombre', 'asc')->get();
+            $modalidades = Modalidad::borrado(false)->ordenar()->get();
+            $nacionalidades = Nacionalidad::borrado(false)->ordenar()->get();
+            $cantidades = createArrayCantidad(10, 0);
+            $cantidadesPisos = createArrayCantidad(5, 1);
+            $tiposcontratos = TipoContrato::borrado(false)->orderBy('nombre', 'asc')->get();
+            $empleador = getEmpleadorMS($data->empleadorid);
+            $distrito = convertDistritoToObject($data->distritoid);
+            $responsables = UsuarioInterno::borrado(false)->activo(true)->oficina()->orderBy('nombres', 'asc')->get();
+            $frecuencias = FrecuenciaServicio::borrado(false)->orderBy('id', 'asc')->get();
+            $diassemana = DiaSemana::borrado(false)->where('normal', true)->get();
+            $estatusreq = [];
+            $trabajador = convertToFormatMultiselectPostulantes($data->trabajadores_id);
+            $tiposdescansos = TipoDescanso::borrado(false)->orderBy('id', 'asc')->get();
+            $postulaciones = countPostulaciones($data->id);
+            $domicilios = Domicilio::borrado(false)->activo(true)->where('usuario_id', $data->empleadorusuario_id)->get();
+
+
+            $referenciaDom = null;
+            if ($data->domicilioid){
+                $dom = Domicilio::find($data->domicilioid);
+                $dist = DistritoView::find($dom->distrito_id);
+                $viewDom = $dom->link_opcional ? $dom->link_opcional : str_replace(' ', '%20',generateLinkGoogleMapCopy( $dom->direccion, $dist['distritos']));
+                $referenciaDom = $dom->referencia;
+            }
+
+            $supervisor = [
+                'nombre'        => mb_convert_case($nom[0], MB_CASE_TITLE, "UTF-8"),
+                'cargo'         => ($ui->genero_id == 1 ? 'el Supervisor' : 'la Supervisora'),
+            ];
+
+            return response()->json([
+                'code' => 200,
+                'data' => $data,
+                'postulacionesPrevias' => getNumeroPostulacionesPrevias($data->empleadorid, $data->id),
+                'divisa' => getDivisaDetails($data->paispedido_id),
+                'supervisor' => $supervisor,
+                'paises'    => Pais::get(),
+                'comprobanteadelanto' => $comprobantesAdelanto,
+                'edad' => convertEdadToCheckbox($data->rangoedadid),
+                'rangoedad' => $data->rangoedadid ? extractRangoEdad($data->rangoedadid) : null,
+                'empleador' => $empleador,
+                'distrito' => $distrito,
+                'actividades' =>$actividades,
+                'tipoviviendas' => $tipoviviendas,
+                'modalidades' => $modalidades,
+                'nacionalidades' => $nacionalidades,
+                'cantidades' => $cantidades,
+                'cantidadespisos' => $cantidadesPisos,
+                'tiposcontratos' => $tiposcontratos,
+                'trabajador' => $trabajador,
+                'estatusreq'=> $estatusreq,
+                'tipocontratoid' => $tipocontratoid,
+                'responsables' => $responsables,
+                'frecuencias' => $frecuencias,
+                'tiposdescansos' => $tiposdescansos,
+                'diassemana' => $diassemana,
+                'postulaciones' => $postulaciones,
+                'tiposBeneficios' => $tiposBeneficios,
+                'domicilios' => $domicilios,
+                'linkDomicilio' => $data->domicilioid ? $viewDom : '',
+                'referencia'    => $referenciaDom,
+                'accessCom' => (in_array($usuarioInterno, [3,5]) ? true : false)
+            ]);
+
+        }else{
+
+            return json_encode(['code' => 500]);
+        }
+
+    }
+
+
     public function ajaxGetPostulaciones(Request $request){
 
         $requerimientoid = $request->input('requerimientoid');
@@ -411,10 +515,6 @@ class RequerimientosController extends Controller
         if (intval($filtro) == 2){
             $postPC = getPostulantesPorColocar($requerimientoid, $filtro);
         }
-
-        //$start = microtime(true);
-        //dd((microtime(true) - $start));
-        //$postPC = getPostulantesPorColocar($requerimientoid, 2);
 
         return response()->json([
             'code' => 200,

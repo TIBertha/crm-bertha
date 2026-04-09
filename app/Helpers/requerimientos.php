@@ -619,6 +619,27 @@ function getCopyDetalles($d, $tipo = null, $actExt = null, $actidExt = null, $mo
 
 }
 
+function getNumeroPostulacionesPrevias($idEmpleador, $idReqActual){
+
+    $reqs = Requerimiento::where('empleador_id', $idEmpleador)->whereNotIn('id', array($idReqActual));
+    $sum = 0;
+
+    if ($reqs->count() != 0){
+        foreach ($reqs->get() as $d){
+            $postulaciones = RequerimientoPostulacion::where('requerimiento_id', $d->id)->where('activo', 2);
+            foreach ($postulaciones->get() as $p){
+                $sum+= 1;
+            }
+            /*if ($postulaciones->count() != 0){
+                $sum+= 1;
+            }*/
+        }
+    }
+
+    return $sum;
+
+}
+
 function saveRangoBusqueda($edadminima, $edadmaxima){
 
     $result = [];
@@ -674,7 +695,7 @@ function processDataPostulaciones($data){
     $result = [];
     if ($data){
         foreach ($data as $a){
-            $tra = TrabajadorView::find($a->trabajador_id);
+            $tra = Trabajador::find($a->trabajador_id);
 
             $urlWeb = config('webexperta.url-web');
             $linkform  = $urlWeb . '/registro-postulante/'. $tra->token;
@@ -689,29 +710,29 @@ function processDataPostulaciones($data){
                 'contact_name'                  => mb_convert_case(($n[0] . ' ' . $tra->apellidos), MB_CASE_UPPER, "UTF-8"),
                 'flag_emoji'                    => $tra->postulando_pais_id == 11 ? '🇨🇱' : '🇵🇪',
                 'id'                            => $a->id,
-                'vecesBajas'                    => getBajasLength($a->trabajador_id),
-                'numeroDocumento'               => $tra->numero_documento,
+                'vecesBajas'                    => getBajasLengthOptimizado($tra),
+                'numeroDocumento'               => $tra->usuario->numero_documento,
                 'tiene_cuenta'                  => $tra->tiene_cuenta,
-                'antecedentes_pdf'              => $tra->antecedente_pdf,
+                'antecedentes_pdf'              => $tra->certificado_antecedente_pdf,
                 'requerimiento_id'              => $a->requerimiento_id,
                 'trabajador_id'                 => $a->trabajador_id,
                 'trabajador'                    => mb_convert_case(($tra->trabajador), MB_CASE_UPPER, "UTF-8"),
-                'token'                         => $tra->token,
-                'nombres'                       => $tra->nombres ? $tra->nombres : 'NO DATA',
-                'apellidos'                     => $tra->apellidos ? $tra->apellidos : 'NO DATA',
-                'genero_id'                     => $tra->genero_id,
-                'genero'                        => $tra->genero ? $tra->genero : 'NO DATA',
-                'tipodocumento_id'              => $tra->tipodocumento_id,
-                'tipodocumento'                 => findDocumentAcronym($tra->tipodocumento_id),
-                'numero_documento'              => $tra->numero_documento,
-                'correo'                        => $tra->correo,
+                'token'                         => $tra->usuario->token,
+                'nombres'                       => $tra->usuario->nombres ? $tra->usuario->nombres : 'NO DATA',
+                'apellidos'                     => $tra->usuario->apellidos ? $tra->usuario->apellidos : 'NO DATA',
+                'genero_id'                     => $tra->usuario->genero_id,
+                'genero'                        => $tra->usuario->genero ? $tra->usuario->genero : 'NO DATA',
+                'tipodocumento_id'              => $tra->usuario->tipodocumento_id,
+                'tipodocumento'                 => findDocumentAcronym($tra->usuario->tipodocumento_id),
+                'numero_documento'              => $tra->usuario->numero_documento,
+                'correo'                        => $tra->usuario->correo,
                 'cama_adentro'                  => $tra->cama_adentro,
                 'cama_afuera'                   => $tra->cama_afuera,
                 'por_horas'                     => $tra->por_horas,
-                'telefono'                      => $tra->telefono,
-                'telefono_whatsapp'             => $tra->telefono_whatsapp,
-                'estatus_postulante_id'         => $tra->estadoid,
-                'estatus_postulante'            => $tra->estado,
+                'telefono'                      => $tra->usuario->telefono,
+                'telefono_whatsapp'             => $tra->usuario->telefono_whatsapp,
+                'estatus_postulante_id'         => $tra->estatuspostulante_id,
+                'estatus_postulante'            => $tra->estatusPostulante ? $tra->estatusPostulante->nombre : '',
                 'foto'                          => $tra->foto,
                 'usuario_id'                    => $tra->usuario_id,
                 'fecha_postulacion'             => $a->fecha_postulacion,
@@ -722,12 +743,12 @@ function processDataPostulaciones($data){
                 'select_emp'                    => $a->select_emp,
                 'fue_tra'                       => $a->fue_tra,
                 'select_wp'                     => $a->select_wp,
-                'telefono_tarjeta'              => separateNumber($tra->telefono),
-                'telefono_tarjeta_whatsapp'     => separateNumber($tra->telefono_whatsapp),
-                'nacionalidad'                  => $tra->nacionalidad ? $tra->nacionalidad : 'NO DATA',
-                'nacionalidadid'                => $tra->nacionalidad_id,
-                'edad'                          => $tra->edad ? $tra->edad : 'NO DATA',
-                'lugarnacimiento'               => $tra->lugarnacimiento,
+                'telefono_tarjeta'              => separateNumber($tra->usuario->telefono),
+                'telefono_tarjeta_whatsapp'     => separateNumber($tra->usuario->telefono_whatsapp),
+                'nacionalidad'                  => $tra->usuario->nacionalidad ? $tra->usuario->nacionalidad : 'NO DATA',
+                'nacionalidadid'                => $tra->usuario->nacionalidad_id,
+                'edad'                          => $tra->usuario && $tra->usuario->fecha_nacimiento ? \Carbon\Carbon::parse($tra->usuario->fecha_nacimiento)->age : '',
+                'lugarnacimiento'               => $tra->usuario->lugar_nacimiento,
                 'actividades'                   => showActividades($tra->actividad_id, 2, $tra->postulando_pais_id),
                 'modalidades'                   => showTiposModalidades($tra->cama_adentro, $tra->cama_afuera, $tra->por_horas, $tra->postulando_pais_id),
                 'antecedente'                   => checkAntecedente($tra->id),
@@ -748,7 +769,7 @@ function processDataPostulaciones($data){
                 'documento_vigente'             => $tra->documento_vigente,
                 'foto_documento_delantera'      => $tra->foto_documento_delantera,
                 'educacion'                     => configEstudios($tra->adjunto_educacion),
-                'paisData'                      => setPaisData($tra->distrito_pais_id),
+                'paisData'                      => setPaisData($tra),
                 'historialContacto'             => convertHistorialContacto($tra->historial_contacto),
             ];
         }
@@ -757,7 +778,8 @@ function processDataPostulaciones($data){
 }
 
 function getQueryPostulaciones($requerimientoid, $filtro){
-    return RequerimientoPostulacion::where('requerimiento_id', $requerimientoid)
+    return RequerimientoPostulacion::with(['trabajador.usuario'])
+        ->where('requerimiento_id', $requerimientoid)
         ->where('activo', $filtro)
         ->orderBy('select_emp', 'desc')
         ->orderBy('fecha_postulacion', 'desc');

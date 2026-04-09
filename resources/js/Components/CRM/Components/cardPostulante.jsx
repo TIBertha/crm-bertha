@@ -15,6 +15,7 @@ import DataRestantePostulante from "../Postulantes/Modals/dataRestantePostulante
 import EliminarPostulante from "../Postulantes/Modals/eliminarPostulante";
 import TooltipPorDias from "./tooltipPorDias";
 import VerPostulaciones from "../Postulantes/Components/verPostulaciones";
+import fotoExample from "../../../../../public/img/user_icon.svg";
 import TelefonoInternacional from "./telefonoInternacional";
 import { Link } from "react-router";
 

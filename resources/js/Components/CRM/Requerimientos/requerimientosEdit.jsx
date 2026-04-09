@@ -18,7 +18,7 @@ import {
     ajaxSetDistrito,
     ajaxSetDivisaPais,
     ajaxRequerimientosGet,
-    ajaxSetNewTiposBeneficios, getCostoPorDia
+    ajaxSetNewTiposBeneficios, getCostoPorDia, getSueldoPrimerMes, getMontoComision
 } from "../../Functions/Requerimientos.jsx";
 import {armarHorarioRequerimiento, getExtensionFromString, removeExtensionFromString} from "../../Helpers/strings.js";
 import {formButtons} from "../../Functions/General.jsx";
@@ -857,12 +857,14 @@ class RequerimientosEdit extends Component{
                     fechaPagoAdelanto:r.data.fecha_pago_adelanto ? moment(r.data.fecha_pago_adelanto,"YYYY-MM-DD").toDate() : '',
                 });
 
-                if(r.data.modalidad_id != 3){
+                if(r.data.modalidad_id !== 3){
+
                     this.setState({
                         montoComision: getMontoComision(null, r.data.sueldo, null, this.state),
                         sueldoPrimerMes: getSueldoPrimerMes(r.data.sueldo, r.data.paispedido_id, false),
                     });
                 }else{
+                    console.log('here3');
                     this.calculoSueldoPorDias(r.data.valor_dia_frecuencia);
                 }
 
@@ -983,15 +985,16 @@ class RequerimientosEdit extends Component{
                                     removeSeguimiento={this.removeSeguimiento}
                                 />
                             </Tab>
-                        </Tabs>
 
-                        <Tab eventKey="tab2" title={'Postulaciones'}>
-                            <Postulaciones
-                                data={this.state}
-                                requerimientoid={id}
-                                empleador={empleador}
-                            />
-                        </Tab>
+                            <Tab eventKey="tab2" title={'Postulaciones'}>
+                                <Postulaciones
+                                    data={this.state}
+                                    requerimientoid={id}
+                                    empleador={empleador}
+                                />
+                            </Tab>
+
+                        </Tabs>
 
                         {['tab1', 'tab3'].includes(keyTab) &&
                             <>{formButtons(isLoading, 'edit', null, '/requerimientos', null)}</>

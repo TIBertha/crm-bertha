@@ -168,6 +168,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/requerimientos/edit/{id}/', [RequerimientosController::class, 'ViewEdit']);
     Route::post('/ajax-requerimientos-edit', [RequerimientosController::class, 'ajaxEdit']);
     Route::post('/ajax-get-postulaciones', [RequerimientosController::class, 'ajaxGetPostulaciones']);
+    Route::post('/ajax-requerimientos-get', [RequerimientosController::class, 'ajaxGet']);
     Route::post('/ajax-requerimientos-get-data', [RequerimientosController::class, 'ajaxGetData']);
     Route::post('/ajax-requerimientos-get-data-inicial', [RequerimientosController::class, 'ajaxGetDataInicial']);
     Route::post('/ajax-refresh-requerimientos', [RequerimientosController::class, 'ajaxRefreshRequerimientos']);

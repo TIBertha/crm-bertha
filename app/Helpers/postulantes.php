@@ -17,9 +17,6 @@ function formatDataPostulante($data){
         foreach ($data as $d) {
             $urlWeb = config('webexperta.url-web');
 
-
-
-            $postulaciones = $d->postulacionesActivas;
             $diasTrabajoPorDias = null;
 
             if ($d->estatus_por_dias == 1){
@@ -38,6 +35,7 @@ function formatDataPostulante($data){
             $daysPast = $d->certificado_antecedente_fecha ? getDaysPast($d->certificado_antecedente_fecha) : null;
 
             $distrito = $d->distrito;
+            $dataDistrito = DistritoView::find($d->distrito_id);
 
             $nullFoto = asset('img/user_icon.svg');
             $n = explode(" ", $d->nombres);
@@ -76,7 +74,7 @@ function formatDataPostulante($data){
                 'edad'                       => $d->usuario && $d->usuario->fecha_nacimiento ? \Carbon\Carbon::parse($d->usuario->fecha_nacimiento)->age : '',
 
                 'telefono'                   => $d->telefono,
-                'distrito'                   => $d->distrito_id ? $distrito->distritostres : ' - ',
+                'distrito'                   => $dataDistrito ? $dataDistrito->distritostres : ' - ',
                 'telefono_whatsapp'          => $d->telefono_whatsapp,
                 'actividadid'                => $d->actividad_id,
                 'cama_adentro'               => $d->cama_adentro,

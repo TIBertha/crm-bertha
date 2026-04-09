@@ -28,4 +28,9 @@ class RequerimientoPostulacion extends Model
         return $this->belongsTo(\App\Models\Requerimiento::class, 'requerimiento_id', 'id');
     }
 
+    public function trabajador()
+    {
+        return $this->belongsTo(\App\Models\Trabajador::class, 'trabajador_id', 'id');
+    }
+
 }
