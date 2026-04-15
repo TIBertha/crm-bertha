@@ -9,8 +9,8 @@ import axios from 'axios';
 import TitleLabel from "../Components/titleLabel.jsx";
 import LoadingScreen from "../Components/loadingScreen.jsx";
 import {
+    ajaxChangeRequerimiento,
     ajaxContratosGet,
-    ajaxGetContratosRequerimiento,
     ajaxGetContratosRequerimientosDomicilios,
     getCalculoTotal,
 } from "../../Functions/Contratos.jsx";
@@ -665,7 +665,7 @@ class ContratosEdit extends Component {
         let id = this.state.requerimiento;
 
         if(id){
-            ajaxGetContratosRequerimiento(id).then(r => {
+            ajaxChangeRequerimiento(id).then(r => {
                 if(r.code === 200){
                     this.setState({
                         sueldo: r.totalpago,
