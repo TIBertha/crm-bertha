@@ -10,8 +10,7 @@ import LoadingScreen from "../Components/loadingScreen.jsx";
 import {
     ajaxChangeRequerimiento,
     ajaxContratosGetData,
-    ajaxExcludePostulante,
-    ajaxGetContratosRequerimiento, ajaxGetContratosRequerimientosDomicilios,
+    ajaxExcludePostulante, ajaxGetContratosRequerimientosDomicilios,
     ajaxGetVerificacionPorDias, getCalculoTotal,
 } from "../../Functions/Contratos.jsx";
 import {formButtons} from "../../Functions/General.jsx";
