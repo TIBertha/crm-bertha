@@ -620,12 +620,18 @@ class ContratosController extends Controller
                 'requerimientoDetalles' => $requerimientoDetalles,
             ]);
 
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
 
-            dd($e->getMessage());
+            \Log::error("ERROR ajaxChangeRequerimiento", [
+                'error' => $e->getMessage(),
+                'line' => $e->getLine(),
+                'file' => $e->getFile(),
+            ]);
 
-            return response()->json(['code' => 500]);
-
+            return response()->json([
+                'code' => 500,
+                'message' => 'Error interno en el servidor'
+            ], 500);
         }
     }
 

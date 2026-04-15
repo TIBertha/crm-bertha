@@ -128,7 +128,7 @@ export function ajaxExcludePostulante(postulante){
 }*/
 
 export function ajaxChangeRequerimiento(id){
-    return axios.post('ajax-change-requerimiento', {id} )
+    return axios.post('/ajax-change-requerimiento', {id} )
         .then(res => {
             let r = res.data;
             return r;
