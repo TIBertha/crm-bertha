@@ -630,11 +630,7 @@ class ContratosController extends Controller
 
         } catch (\Throwable $e) {
 
-            \Log::error("ERROR ajaxChangeRequerimiento", [
-                'error' => $e->getMessage(),
-                'line' => $e->getLine(),
-                'file' => $e->getFile(),
-            ]);
+            dd($e);
 
             return response()->json([
                 'code' => 500,

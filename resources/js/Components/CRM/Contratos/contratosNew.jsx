@@ -183,13 +183,13 @@ class ContratosNew extends Component{
 
             }
 
-        }else if(tipo == 'requerimiento'){
+        }else if(tipo === 'requerimiento'){
 
             this.setState({
                 requerimiento: e.target.value
             },  this.changeRequerimiento);
 
-        }else if(tipo == 'tipocomision'){
+        }else if(tipo === 'tipocomision'){
 
             this.setState({
                 tipocomision: e.target.value
