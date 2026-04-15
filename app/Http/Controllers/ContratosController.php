@@ -560,10 +560,19 @@ class ContratosController extends Controller
     }
 
     public function ajaxChangeRequerimiento(Request $request){
+        try {
 
-        $id = $request->input('id');
+            $id = $request->input('id');
 
-        if($id){
+            if (!$id) {
+                throw new \Exception("ID no recibido");
+            }
+
+            $req = Requerimiento::find($id);
+
+            if (!$req) {
+                throw new \Exception("Requerimiento no encontrado: $id");
+            }
 
             $contratosGroup = Contrato::borrado(false)
                 ->activo(true)
@@ -577,8 +586,6 @@ class ContratosController extends Controller
                 ->get()
                 ->keyBy('id');
 
-            $req = Requerimiento::find($id);
-
             $modalidad = $req->modalidad_id;
             $validateContrato = validateNewContrato($req, $req->paispedido_id, $contratosGroup, $tiposcontratosAll);
             $diaslaborablesfrecuencia = $req->horarios ? convertToFormatMultiselectDiasDescanso($req->horarios) : '';
@@ -588,7 +595,7 @@ class ContratosController extends Controller
             $requerimientoDetalles = getReqDetails(RequerimientoView::find($id));
             $divisa = getDivisaDetails($req->paispedido_id);
 
-            return json_encode([
+            return response()->json([
                 'code' => 200,
                 'hora_inicio' => getHoraInicio($req, $req->modalidad_id),
                 'divisa'  => $divisa,
@@ -621,11 +628,20 @@ class ContratosController extends Controller
                 'requerimientoDetalles' => $requerimientoDetalles,
             ]);
 
-        }else{
+        } catch (\Throwable $e) {
 
-            return json_encode(['code' => 500]);
+            \Log::error("ERROR ajaxChangeRequerimiento", [
+                'error' => $e->getMessage(),
+                'line' => $e->getLine(),
+                'file' => $e->getFile(),
+            ]);
+
+            return response()->json([
+                'code' => 500,
+                'message' => 'Error interno en el servidor',
+                'debug' => env('APP_ENV') !== 'production' ? $e->getMessage() : null,
+            ], 500);
         }
-
     }
 
     public function ajaxGetRequerimientosDomicilios(Request $request){
