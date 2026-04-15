@@ -78,6 +78,18 @@ class ContratosController extends Controller
 
             $contrato  = Contrato::find($id);
 
+            $contratosGroup = Contrato::borrado(false)
+                ->activo(true)
+                ->where('requerimiento_id', $contrato->requerimiento_id)
+                ->orderBy('creado', 'desc')
+                ->get()
+                ->groupBy('requerimiento_id');
+
+            $tiposcontratosAll = TipoContrato::borrado(false)
+                ->orderBy('nombre', 'asc')
+                ->get()
+                ->keyBy('id');
+
             $formaspagos = FormaPago::borrado(false)->orderBy('nombre', 'asc')->get();
             $modospagos = ModoPago::borrado(false)->contrato(true)->orderBy('nombre', 'asc')->get();
             $modospagosdt = ModoPago::borrado(false)->diasTrabajados(true)->orderBy('nombre', 'asc')->get();
@@ -95,7 +107,7 @@ class ContratosController extends Controller
             $tiposcomisiones = TipoComision::borrado(false)->orderBy('nombre', 'desc')->get();
             $divisa = getDivisaDetails($requerimiento->paispedido_id);
 
-            $validateContrato = validateNewContrato($requerimiento, $requerimiento->paispedido_id);
+            $validateContrato = validateNewContrato($requerimiento, $requerimiento->paispedido_id, $contratosGroup, $tiposcontratosAll);
 
             $diaslaborablesfrecuencia = $requerimiento->horarios ? convertToFormatMultiselectDiasDescanso($requerimiento->horarios) : '';
 
@@ -553,9 +565,22 @@ class ContratosController extends Controller
 
         if($id){
 
+            $contratosGroup = Contrato::borrado(false)
+                ->activo(true)
+                ->where('requerimiento_id', $id)
+                ->orderBy('creado', 'desc')
+                ->get()
+                ->groupBy('requerimiento_id');
+
+            $tiposcontratosAll = TipoContrato::borrado(false)
+                ->orderBy('nombre', 'asc')
+                ->get()
+                ->keyBy('id');
+
             $req = Requerimiento::find($id);
+
             $modalidad = $req->modalidad_id;
-            $validateContrato = validateNewContrato($req, $req->paispedido_id);
+            $validateContrato = validateNewContrato($req, $req->paispedido_id, $contratosGroup, $tiposcontratosAll);
             $diaslaborablesfrecuencia = $req->horarios ? convertToFormatMultiselectDiasDescanso($req->horarios) : '';
             $trabajadores  = TrabajadorView::where('estadoid', 1)->orderBy('trabajador', 'asc')->get();
             $trabajadoresB = TrabajadorView::orderBy('trabajador', 'asc')->get();
