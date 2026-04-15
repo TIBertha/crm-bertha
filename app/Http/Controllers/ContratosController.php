@@ -564,15 +564,7 @@ class ContratosController extends Controller
 
             $id = $request->input('id');
 
-            if (!$id) {
-                throw new \Exception("ID no recibido");
-            }
-
             $req = Requerimiento::find($id);
-
-            if (!$req) {
-                throw new \Exception("Requerimiento no encontrado: $id");
-            }
 
             $contratosGroup = Contrato::borrado(false)
                 ->activo(true)
@@ -628,15 +620,12 @@ class ContratosController extends Controller
                 'requerimientoDetalles' => $requerimientoDetalles,
             ]);
 
-        } catch (\Throwable $e) {
+        } catch (\Exception $e) {
 
-            dd($e);
+            dd($e->getMessage());
 
-            return response()->json([
-                'code' => 500,
-                'message' => 'Error interno en el servidor',
-                'debug' => env('APP_ENV') !== 'production' ? $e->getMessage() : null,
-            ], 500);
+            return response()->json(['code' => 500]);
+
         }
     }
 
