@@ -119,8 +119,16 @@ export function ajaxExcludePostulante(postulante){
         });
 }
 
-export function ajaxGetContratosRequerimiento(id){
+/*export function ajaxGetContratosRequerimiento(id){
     return axios.post('/ajax-get-contratos-requerimiento', {id} )
+        .then(res => {
+            let r = res.data;
+            return r;
+        });
+}*/
+
+export function ajaxChangeRequerimiento(id){
+    return axios.post('ajax-change-requerimiento', {id} )
         .then(res => {
             let r = res.data;
             return r;

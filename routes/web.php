@@ -205,7 +205,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/ajax-save-data-cambios-estados-contratos', [ContratosController::class, 'ajaxSaveDataCambiosEstadosContratos']);
     Route::post('/ajax-get-copys-contrato', [ContratosController::class, 'ajaxGetCopysContratos']);
     Route::post('/ajax-exclude-postulante', [ContratosController::class, 'ajaxExcludePostulante']);
-    Route::post('/ajax-get-contratos-requerimiento', [ContratosController::class, 'ajaxChangeRequerimiento']);
+    //Route::post('/ajax-get-contratos-requerimiento', [ContratosController::class, 'ajaxChangeRequerimiento']);
+    Route::post('/ajax-change-requerimiento', [ContratosController::class, 'ajaxChangeRequerimiento']);
     Route::post('/ajax-get-contratos-requerimientos-domicilios', [ContratosController::class, 'ajaxGetRequerimientosDomicilios']);
     Route::post('/ajax-get-verificacion-por-dias', [ContratosController::class, 'ajaxGetVerificacionPorDias']);
     Route::post('/ajax-set-verif-ingreso-contrato', [ContratosController::class, 'ajaxSetVerificacionIngresoContrato']);

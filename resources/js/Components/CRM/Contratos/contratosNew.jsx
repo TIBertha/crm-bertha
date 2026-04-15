@@ -8,6 +8,7 @@ import axios from 'axios';
 import TitleLabel from "../Components/titleLabel.jsx";
 import LoadingScreen from "../Components/loadingScreen.jsx";
 import {
+    ajaxChangeRequerimiento,
     ajaxContratosGetData,
     ajaxExcludePostulante,
     ajaxGetContratosRequerimiento, ajaxGetContratosRequerimientosDomicilios,
@@ -540,7 +541,7 @@ class ContratosNew extends Component{
         let id = this.state.requerimiento;
 
         if(id){
-            ajaxGetContratosRequerimiento(id).then(r => {
+            ajaxChangeRequerimiento(id).then(r => {
                 if(r.code === 200){
                     let contratodefault  = r.tipocontratodefault;
                     let garantia = r.paispedido == 54 ? r.garantia : 1;
