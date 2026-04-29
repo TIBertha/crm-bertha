@@ -213,7 +213,7 @@ class PrensaController extends Controller
     public function ajaxRefreshPrensa(Request $request){
         try {
 
-            $offset = $request->input('offset');
+            /*$offset = $request->input('offset');
 
             $lista = getNewBlogs();
             $cantidad = $lista->count();
@@ -226,7 +226,9 @@ class PrensaController extends Controller
                 'page' => $page,
                 'total' => $cantidad,
                 'textoresultados' => $cantidad ? '' : 'No existen articulos de prensa'
-            ]);
+            ]);*/
+
+            dd('hola a todos');
 
         } catch (\Throwable $e) {
 
