@@ -228,7 +228,7 @@ class PrensaController extends Controller
                 'textoresultados' => $cantidad ? '' : 'No existen articulos de prensa'
             ]);*/
 
-            $offset = $request->input('offset');
+            $offset = $request->input('offset', 0);
 
             \Log::info("DEBUG offset", [$offset]);
 
