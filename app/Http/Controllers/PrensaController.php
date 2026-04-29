@@ -211,21 +211,35 @@ class PrensaController extends Controller
     }
 
     public function ajaxRefreshPrensa(Request $request){
+        try {
 
-        $offset = $request->input('offset');
+            $offset = $request->input('offset');
 
-        $lista = getNewBlogs();
-        $cantidad = $lista->count();
-        $data = getDataBlogs($lista, $offset);
-        $page = 0;
+            $lista = getNewBlogs();
+            $cantidad = $lista->count();
+            $data = getDataBlogs($lista, $offset);
+            $page = 0;
 
-        return response()->json([
-            'code' => 200,
-            'blogs' => $data,
-            'page' => $page,
-            'total' => $cantidad,
-            'textoresultados' => $cantidad ? '' : 'No existen articulos de prensa'
-        ]);
+            return response()->json([
+                'code' => 200,
+                'blogs' => $data,
+                'page' => $page,
+                'total' => $cantidad,
+                'textoresultados' => $cantidad ? '' : 'No existen articulos de prensa'
+            ]);
 
+        } catch (\Throwable $e) {
+
+            \Log::error("ERROR ajaxRefreshPrensa", [
+                'error' => $e->getMessage(),
+                'line' => $e->getLine(),
+                'file' => $e->getFile(),
+            ]);
+
+            return response()->json([
+                'code' => 500,
+                'message' => 'Server Error'
+            ], 500);
+        }
     }
 }
