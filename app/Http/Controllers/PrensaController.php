@@ -228,7 +228,25 @@ class PrensaController extends Controller
                 'textoresultados' => $cantidad ? '' : 'No existen articulos de prensa'
             ]);*/
 
-            dd('hola a todos');
+            $offset = $request->input('offset');
+
+            \Log::info("DEBUG offset", [$offset]);
+
+            $lista = getNewBlogs();
+            \Log::info("DEBUG lista", [$lista]);
+
+            $cantidad = $lista->count();
+            \Log::info("DEBUG cantidad", [$cantidad]);
+
+            $data = getDataBlogs($lista, $offset);
+            \Log::info("DEBUG data", [$data]);
+
+            return response()->json([
+                'code' => 200,
+                'blogs' => $data,
+                'page' => 0,
+                'total' => $cantidad,
+                'textoresultados' => $cantidad ? '' : 'No existen articulos de prensa'
 
         } catch (\Throwable $e) {
 
