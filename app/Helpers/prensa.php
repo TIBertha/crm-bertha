@@ -1,10 +1,10 @@
 <?php
 
-use App\Models\views\PrensaView;
+use App\Models\Prensa;
 
 function getNewBlogs(){
 
-    $data = PrensaView::orderBy('fechaoriginal', 'desc');
+    $data = Prensa::orderBy('fecha', 'desc');
 
     return $data;
 }
