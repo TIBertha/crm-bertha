@@ -247,6 +247,7 @@ class PrensaController extends Controller
                 'page' => 0,
                 'total' => $cantidad,
                 'textoresultados' => $cantidad ? '' : 'No existen articulos de prensa'
+            ]);
 
         } catch (\Throwable $e) {
 
