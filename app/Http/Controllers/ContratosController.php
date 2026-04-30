@@ -581,10 +581,18 @@ class ContratosController extends Controller
             $modalidad = $req->modalidad_id;
             $validateContrato = validateNewContrato($req, $req->paispedido_id, $contratosGroup, $tiposcontratosAll);
             $diaslaborablesfrecuencia = $req->horarios ? convertToFormatMultiselectDiasDescanso($req->horarios) : '';
-            $trabajadores  = TrabajadorView::where('estadoid', 1)->orderBy('trabajador', 'asc')->get();
-            $trabajadoresB = TrabajadorView::orderBy('trabajador', 'asc')->get();
-            $trabajadoresC = TrabajadorView::orderBy('trabajador', 'asc')->get();
-            $requerimientoDetalles = getReqDetails(RequerimientoView::find($id));
+
+            $trabajadores = Trabajador::where('estatuspostulante_id', 1)
+                ->with('usuario')
+                ->get()
+                ->sortBy(function ($t) {
+                    return $t->usuario->nombres . ' ' . $t->usuario->apellidos;
+                })
+                ->values();
+
+            //$trabajadores  = Trabajador::where('estatuspostulante_id', 1)->orderBy('id', 'asc')->get();
+
+            $requerimientoDetalles = getReqDetails(Requerimiento::find($id));
             $divisa = getDivisaDetails($req->paispedido_id);
 
             return response()->json([
@@ -615,8 +623,8 @@ class ContratosController extends Controller
                 'diaslaborablesfrecuencia' => $diaslaborablesfrecuencia,
                 'sueldomensual' => $req->sueldo_por_dias,
                 'trabajadores' => formatMultiselectTrabajadoresCont($trabajadores),
-                'trabajadoresB' => formatMultiselectTrabajadoresCont($trabajadoresB),
-                'trabajadoresC' => formatMultiselectTrabajadoresCont($trabajadoresC),
+                'trabajadoresB' => formatMultiselectTrabajadoresCont($trabajadores),
+                'trabajadoresC' => formatMultiselectTrabajadoresCont($trabajadores),
                 'requerimientoDetalles' => $requerimientoDetalles,
             ]);
 

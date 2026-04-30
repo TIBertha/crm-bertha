@@ -56,7 +56,7 @@ function formatMultiselectTrabajadoresCont($data){
         foreach($data as $d){
 
             $result[] = [
-                'label' => ((($d->nombres. ' ' .$d->apellidos . ' (ID: ' . $d->token . ')' ))),
+                'label' => ((($d->usuario->nombres . ' ' . $d->usuario->apellidos . ' (ID: ' . $d->token . ')' ))),
                 'value' => $d->id
             ];
 
@@ -95,9 +95,9 @@ function convertToFormatMultiselectPostulantes($data){
 
     if($data){
         foreach(json_decode($data) as $d){
-            $dat = TrabajadorView::find($d);
+            $dat = \App\Models\Trabajador::with('usuario')->find($d);
             $result[] = [
-                'label' => ((($dat->nombres . ' ' .$dat->apellidos))),
+                'label' => ((($dat->usuario->nombres . ' ' .$dat->usuario->apellidos))),
                 'value' => $dat->id
             ];
         }
