@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ValidateBlog;
 use App\Models\Medio;
 use App\Models\Prensa;
+use App\Models\UsuarioInterno;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use DB, Auth;
@@ -213,38 +214,34 @@ class PrensaController extends Controller
     public function ajaxRefreshPrensa(Request $request){
         try {
 
-            /*$offset = $request->input('offset');
+            $offset = $request->input('offset');
 
             $lista = getNewBlogs();
             $cantidad = $lista->count();
             $data = getDataBlogs($lista, $offset);
+
             $page = 0;
+            $prensaData = [];
+
+            if ($data){
+                foreach ($data as $d){
+
+                    $prensaData[] = [
+                        'id' =>         $d->id,
+                        'fecha' =>      Carbon::parse($d->fecha)->format('d/m/Y'),
+                        'titulo' =>     $d->titulo,
+                        'autor' =>      $d->autor->nombres . ' ' . $d->autor->apellidos,
+                        'medio' =>      $d->medio->nombre,
+                        'prensa' =>     $d->prensa,
+                        'activo' =>     $d->activo,
+                    ];
+                }
+            }
 
             return response()->json([
                 'code' => 200,
-                'blogs' => $data,
+                'blogs' => $prensaData,
                 'page' => $page,
-                'total' => $cantidad,
-                'textoresultados' => $cantidad ? '' : 'No existen articulos de prensa'
-            ]);*/
-
-            $offset = $request->input('offset', 0);
-
-            \Log::info("DEBUG offset", [$offset]);
-
-            $lista = getNewBlogs();
-            \Log::info("DEBUG lista", [$lista]);
-
-            $cantidad = $lista->count();
-            \Log::info("DEBUG cantidad", [$cantidad]);
-
-            $data = getDataBlogs($lista, $offset);
-            \Log::info("DEBUG data", [$data]);
-
-            return response()->json([
-                'code' => 200,
-                'blogs' => $data,
-                'page' => 0,
                 'total' => $cantidad,
                 'textoresultados' => $cantidad ? '' : 'No existen articulos de prensa'
             ]);

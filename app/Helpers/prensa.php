@@ -4,7 +4,7 @@ use App\Models\Prensa;
 
 function getNewBlogs(){
 
-    $data = Prensa::orderBy('fecha', 'desc');
+    $data = Prensa::with(['autor', 'medio'])->orderBy('fecha', 'desc');
 
     return $data;
 }

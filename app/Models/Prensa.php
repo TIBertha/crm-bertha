@@ -36,4 +36,14 @@ class Prensa extends Model
             ->saveSlugsTo('slug');
     }
 
+    public function autor()
+    {
+        return $this->belongsTo(UsuarioInterno::class, 'usuariointerno_id');
+    }
+
+    public function medio()
+    {
+        return $this->belongsTo(Medio::class, 'medio_id');
+    }
+
 }
