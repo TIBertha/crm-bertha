@@ -6,6 +6,7 @@ import usePlacesAutocomplete, {getGeocode, getLatLng, getZipCode} from "use-plac
 import {generateUniqueNum} from "../../../../Helpers/helpers.js";
 import {showAlert} from "../../../../Helpers/alerts.js";
 import {forceInputUppercase} from "../../../../Helpers/strings.js";
+import {ajaxSearchDistrito} from "../../../../Functions/Requerimientos.jsx";
 
 const libraries = ["places"];
 
@@ -46,28 +47,21 @@ const processingDataLocation = async (data, type = 'address') => {
     }
 };
 
-const loadDistritoOptions = (search, callback) =>{
-
+const loadDistritoOptions = (search, callback) => {
     if (!search) {
         callback([]);
     } else {
-
         setTimeout(() => {
-
-            axios.post('/ajax-search-distrito', {search})
-                .then(res => {
-
-                    let r = res.data;
-
+            ajaxSearchDistrito(search, null)
+                .then((r) => {
                     callback(r.data);
-
-                }).catch((error) => {
-                console.log(error);
-            });
-
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
         });
     }
-}
+};
 
 const getNameDistrito = (e) => {
 
@@ -202,7 +196,11 @@ export default function DomicilioModalForm({dataEdit, add, edit, close}) {
                     isClearable
                     noOptionsMessage={() => null}
                     defaultOptions={false}
-                    onChange={(e) => setValues({distrito: e, nombredistrito: getNameDistrito(e)}) }
+                    onChange={(e) =>
+                        setValues({
+                            distrito: e, nombredistrito: getNameDistrito(e)
+                        })
+                }
                     value={domicilio.distrito}
                     placeholder={'Seleccione'}
                     theme={theme => ({
@@ -309,7 +307,7 @@ const Search = ({ panTo, domicilio, setValues}) => {
                         setValue(inputValue);
                         //setValues({ direccion: inputValue.toUpperCase() });
 
-                        if (!domicilio.direccion){
+                        if (!domicilio.direccion) {
                             setValues({ direccion: inputValue });
                         }
                         return inputValue;

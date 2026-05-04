@@ -47,8 +47,7 @@ export default function AgregarNuevoDomicilio({
                 <ModalHeader className="border-0" closeButton={view === "1"}>
                     <ModalTitle>
                         <h6>
-                            <i className="fas fa-user-plus me-2"></i>Agregar
-                            Empleador
+                            <i className="fas fa-user-plus me-2"></i>Agregar Domicilio
                         </h6>
                     </ModalTitle>
                 </ModalHeader>

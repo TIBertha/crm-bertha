@@ -270,35 +270,27 @@ const Search = ({ panTo, domicilio, setValues }) => {
         },
     });
 
-    // https://developers.google.com/maps/documentation/javascript/reference/places-autocomplete-service#AutocompletionRequest
-
-    const handleInput = (e) => {
-        setValue(e.target.value);
-        setValues({ direccion: e.target.value.toUpperCase() });
-        forceInputUppercase(e);
-    };
-
-    const handleSelect = async (address) => {
-        setValue(address, false);
-        clearSuggestions();
-
-        let result = await processingDataLocation(address, "address");
-
-        setValues(result);
-        panTo({ lat: result.latitud, lng: result.longitud });
-    };
-
     return (
+
         <div>
+
             <div className="form-group">
-                <label className="col-form-label col-form-label-sm">
-                    Dirección
-                </label>
+                <label className="col-form-label col-form-label-sm">Dirección</label>
                 <AsyncSelect
                     cacheOptions
-                    loadOptions={loadDistritoOptions}
+                    loadOptions={async (inputValue) => {
+                        setValue(inputValue);
+                        if (status === "OK") {
+                            return data.map(({ place_id, description }) => ({
+                                value: description,
+                                label: description,
+                            }));
+                        }
+                        return [];
+                    }}
                     defaultOptions={false}
                     isClearable
+                    autoFocus
                     onInputChange={async (inputValue) => {
                         setValue(inputValue);
                         //setValues({ direccion: inputValue.toUpperCase() });
@@ -308,13 +300,30 @@ const Search = ({ panTo, domicilio, setValues }) => {
                         }
                         return inputValue;
                     }}
-                    onChange={handleSelect}
+                    onChange={ async (selectedOption) => {
+                        if (!selectedOption) return;
+                        const address = selectedOption.value;
+                        setValues(address.value);
+                        clearSuggestions();
+
+                        try {
+                            const results = await getGeocode({ address });
+                            const { lat, lng } = await getLatLng(results[0]);
+
+                            setValues({
+                                direccion: address,
+                                latitud: lat,
+                                longitud: lng,
+                            });
+
+                            panTo({ lat, lng });
+                        } catch (error) {
+                            console.error("Geocoding error:", error);
+                        }
+                    }}
                     value={
                         domicilio.direccion
-                            ? {
-                                  value: domicilio.direccion,
-                                  label: domicilio.direccion,
-                              }
+                            ? { value: domicilio.direccion, label: domicilio.direccion }
                             : null
                     }
                     placeholder="Ingrese una dirección para buscar"
@@ -339,6 +348,10 @@ const Search = ({ panTo, domicilio, setValues }) => {
                     Ingrese una dirección para realizar la búsqueda en el mapa.
                 </small>
             </div>
+
+
         </div>
+
+
     );
 };
