@@ -199,6 +199,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/ajax-refresh-contratos', [ContratosController::class, 'ajaxRefreshContratos']);
     Route::post('/ajax-contratos-new', [ContratosController::class, 'ajaxNew']);
     Route::post('/ajax-contratos-edit', [ContratosController::class, 'ajaxEdit']);
+    Route::post('/ajax-contratos-finalizar', [ContratosController::class, 'ajaxFinalizar']);
+
     Route::post('/ajax-contratos-get-data-inicial', [ContratosController::class, 'ajaxGetDataInicial']);
     Route::post('/ajax-get-data-modal-detalles-contrato', [ContratosController::class, 'ajaxGetDataModalDetallesContratos']);
     Route::post('/ajax-load-data-cambio-estados', [ContratosController::class, 'ajaxLoadDataCambioEstados']);

@@ -93,7 +93,15 @@ class ContratosController extends Controller
             $formaspagos = FormaPago::borrado(false)->orderBy('nombre', 'asc')->get();
             $modospagos = ModoPago::borrado(false)->contrato(true)->orderBy('nombre', 'asc')->get();
             $modospagosdt = ModoPago::borrado(false)->diasTrabajados(true)->orderBy('nombre', 'asc')->get();
-            $trabajadores  = TrabajadorView::where('estadoid', 1)->orderBy('trabajador', 'asc')->get();
+
+            $trabajadores = Trabajador::where('estatuspostulante_id', 1)
+                ->with('usuario')
+                ->get()
+                ->sortBy(function ($t) {
+                    return $t->usuario->nombres . ' ' . $t->usuario->apellidos;
+                })
+                ->values();
+
             $tiposcontratos = TipoContrato::borrado(false)->orderBy('nombre', 'asc')->get();
             $emp = EmpleadorView::find($contrato->empleador_id);
             $req = RequerimientoView::where('empleadorid', $contrato->empleador_id)->get();
@@ -713,5 +721,70 @@ class ContratosController extends Controller
             return response()->json(['code' => 500, 'msj' => 'Ocurrio un problema al editar la asistencia del trabajador. Consulte al administrador' ]);
 
         }
+    }
+
+    public function ajaxFinalizar(Request $request){
+
+        $id = $request->input('id');
+
+        if($id){
+
+            DB::beginTransaction();
+
+            try{
+
+                $contrato = Contrato::find($id);
+                $trabajador = $contrato->trabajador_id;
+                $requerimiento = $contrato->requerimiento_id;
+
+                $tra = Trabajador::find($contrato->trabajador_id);
+                $req = Requerimiento::find($requerimiento);
+
+                // Determinar estatus del trabajador
+                $estatus = $tra->foto_documento_delantera ? 1 : 6;
+
+                $dataTra = [
+                    'estatuspostulante_id' => $estatus,
+                    'estatus_por_dias' => null,
+                    'dias_contratados_por_dias' => null,
+                ];
+
+                // Actualizar trabajador
+                $tra->update($dataTra);
+
+                // Actualizar requerimiento
+                $req->update([
+                    'estatusrequerimiento_id' => 1
+                ]);
+
+                // Marcar contrato como culminado
+                $contrato->update([
+                    'culminado' => true
+                ]);
+
+                // Actualizar postulacion
+                RequerimientoPostulacion::where('trabajador_id', $tra->id)
+                    ->where('requerimiento_id', $req->id)
+                    ->update(['fue_tra' => true]);
+
+                DB::commit();
+
+                saveCambioEstatusPostulante($trabajador, $dataTra['estatuspostulante_id']);
+
+                return response()->json(['code' => 200, 'msj' => 'Contrato finalizado exitosamente']);
+
+            } catch (\Exception $e) {
+
+                DB::rollback();
+
+                return response()->json(['code' => 500, 'msj' => 'Ocurrio un problema al finalizar contrato. Consulte al administrador' ]);
+
+            }
+
+        }else{
+
+            return json_encode(['code' => 500, 'msj' => 'Error al finalizar contrato. Consulte al Administrador']);
+        }
+
     }
 }

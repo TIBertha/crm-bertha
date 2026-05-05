@@ -56,12 +56,12 @@ export default function ContratosTable({url, setVerifIngreso, contratos, total, 
         let estado = '';
 
         if(data.anulado){
-            estado = <p className="badge badge-dark badge-dt">Anulado</p>;
+            estado = <p className="badge bgb-purple badge-dt">Anulado</p>;
         }else{
             if(data.culminado){
-                estado = <p className="badge badge-danger badge-dt">Culminado {data.diasrestantes <= 0 ? <i className="fas fa-clock"></i> : ''}</p>;
+                estado = <p className="badge bgb-red badge-dt">Culminado {data.diasrestantes <= 0 ? <i className="fas fa-clock"></i> : ''}</p>;
             }else{
-                estado = <p className="badge badge-success badge-dt">Vigente {data.diasrestantes <= 0 ? <i className="fas fa-clock"></i> : ''}</p>;
+                estado = <p className="badge bgb-green badge-dt">Vigente {data.diasrestantes <= 0 ? <i className="fas fa-clock"></i> : ''}</p>;
             }
         }
 
