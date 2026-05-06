@@ -194,12 +194,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/contratos', [ContratosController::class, 'index'])->name('contratos');
     Route::get('/contratos/new', [ContratosController::class, 'viewNew'])->name('contratos-new');
     Route::get('/contratos/edit/{id}/', [ContratosController::class, 'viewEdit']);
+    Route::get('/contratos/show/{id}/', [ContratosController::class, 'viewShow']);
     Route::post('/ajax-contratos-get', [ContratosController::class, 'ajaxGet']);
     Route::post('/ajax-contratos-get-data', [ContratosController::class, 'ajaxGetData']);
     Route::post('/ajax-refresh-contratos', [ContratosController::class, 'ajaxRefreshContratos']);
     Route::post('/ajax-contratos-new', [ContratosController::class, 'ajaxNew']);
     Route::post('/ajax-contratos-edit', [ContratosController::class, 'ajaxEdit']);
     Route::post('/ajax-contratos-finalizar', [ContratosController::class, 'ajaxFinalizar']);
+    Route::post('/ajax-contratos-buscar', [ContratosController::class, 'ajaxBuscar']);
 
     Route::post('/ajax-contratos-get-data-inicial', [ContratosController::class, 'ajaxGetDataInicial']);
     Route::post('/ajax-get-data-modal-detalles-contrato', [ContratosController::class, 'ajaxGetDataModalDetallesContratos']);

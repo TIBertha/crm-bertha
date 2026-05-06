@@ -526,10 +526,10 @@ class ContratosNew extends Component{
         let total = getCalculoTotal(cont, gan, tot, tipocontrato, paispedido, tipocomision, modalidad);
 
         this.setState({
-            totalpago: (gan == 0 ? 0 : (tieneComision == true ? montoComision : (total ? formatFloat(total) : 0)) ),
-            descuentoejecutivo: (gan == 0 ? 0 : (tieneComision == true ? montoComision : total)),
+            totalpago: (gan === 0 ? 0 : (tieneComision === true ? montoComision : (total ? formatFloat(total) : 0)) ),
+            descuentoejecutivo: (gan === 0 ? 0 : (tieneComision === true ? montoComision : total)),
             formapago: 1,
-            montototalcontrato: (gan == 0 ? 0 : (tieneComision == true ? montoComision : (total ? formatFloat(total) : 0))),
+            montototalcontrato: (gan === 0 ? 0 : (tieneComision === true ? montoComision : (total ? formatFloat(total) : 0))),
         });
 
     }
@@ -542,9 +542,10 @@ class ContratosNew extends Component{
         if(id){
             ajaxChangeRequerimiento(id).then(r => {
                 if(r.code === 200){
-                    let contratodefault  = r.tipocontratodefault;
+
                     let garantia = r.paispedido == 54 ? r.garantia : 1;
                     this.setState({
+                        tipocontrato: r.tipocontratodefault,
                         horainiciolabores: r.hora_inicio ? moment(r.hora_inicio,"YYYY-MM-DD HH:mm:ss").toDate() : '',
                         tieneComision: r.tiene_comision,
                         montoComision: r.monto_comision,
@@ -554,7 +555,6 @@ class ContratosNew extends Component{
                         sueldo: r.sueldo,
                         totalpago: r.paispedido === 54 ? r.totalpago : 120000,
                         descuentoejecutivo: r.paispedido === 54 ? r.totalpago : 120000,
-                        tipocontrato: contratodefault,
                         tipocomision: r.tipocomision,
                         fechainiciolabores: r.fechainiciolabores ? moment(r.fechainiciolabores,"YYYY-MM-DD").toDate() : new Date(),
                         fechainiciolaboresb: r.fechainiciolabores ? moment(r.fechainiciolabores,"YYYY-MM-DD").toDate() : new Date(),
@@ -578,8 +578,22 @@ class ContratosNew extends Component{
                     });
 
 
-                    this.calculoTotal();
-                    if(contratodefault == 1){
+                    //this.calculoTotal(r.garantia);
+
+                    let gan = r.garantia;
+                    let tot = r.sueldo ? r.sueldo : 0;
+                    let cont = r.tipocontratodefault ? r.tipocontratodefault : 1;
+
+                    let total = getCalculoTotal(cont, gan, tot, r.tipocontratodefault, r.paispedido, r.tipocomision, r.modalidad);
+
+                    this.setState({
+                        totalpago: (gan === 0 ? 0 : (r.tiene_comision === true ? r.monto_comision : (total ? formatFloat(total) : 0)) ),
+                        descuentoejecutivo: (gan === 0 ? 0 : (r.tiene_comision === true ? r.monto_comision : total)),
+                        formapago: 1,
+                        montototalcontrato: (gan === 0 ? 0 : (r.tiene_comision === true ? r.monto_comision : (total ? formatFloat(total) : 0))),
+                    });
+
+                    if(r.tipocontratodefault === 1){
                         this.calcularFechaFinGarantia();
                     }
                     this.setMontoTotal(1);

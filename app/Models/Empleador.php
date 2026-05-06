@@ -16,8 +16,9 @@ class Empleador extends Authenticatable
     protected $guarded = [];
     protected $dates = ['fecha', 'fecha_nacimiento'];
 
-    public function usuario(){
-        return $this->belongsTo('App\Models\Usuario')->with('Empleador');
+    public function usuario()
+    {
+        return $this->belongsTo(Usuario::class, 'usuario_id');
     }
 
     public function showAvatar(){
@@ -55,5 +56,4 @@ class Empleador extends Authenticatable
     public function isPhoneVerified(){
         return $this->verificar_telefono;
     }
-
 }

@@ -18,4 +18,5 @@ class Requerimiento extends Model
         return $query->where('borrado', $flag);
     }
 
+
 }

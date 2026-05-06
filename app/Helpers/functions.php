@@ -609,68 +609,66 @@ function convertEdadToCheckbox($data){
 
 }
 
-function validateNewContrato($req, $paispedido, $contratosGroup, $tiposcontratosAll)
-{
-    // Obtener contrato ya precargado
-    $contrato = $contratosGroup[$req->id][0] ?? null;
+function validateNewContrato($req, $paispedido, $contratosGroup, $tiposcontratosAll){
 
-    // Valores por defecto
-    $tipocontratodefault = 1;
-    $garantiaInicioCantidad = 0;
-    $tiposcontratos = $tiposcontratosAll->only([1]);
-    $domicilio = '';
-    $fechainiciogarantia = '';
-    $fechafingarantia = '';
-    $observaciones = $contrato->observaciones ?? '';
-    $tipocomision = 2;
-    $garantia = 3;
+    $contratos = Contrato::borrado(false)->activo(true)->orderBy('creado', 'desc')->where('requerimiento_id', $req->id)->first();
 
-    // Si existe contrato
-    if ($contrato) {
+    if($contratos){
 
-        $vigente = (
-            $req->fecha_inicio_garantia &&
-            $req->fecha_fin_garantia &&
-            isFechaVigente($req->fecha_inicio_garantia, $req->fecha_fin_garantia)
-        );
+        if(isFechaVigente($req->fecha_inicio_garantia, $req->fecha_fin_garantia) AND $req->fecha_inicio_garantia AND $req->fecha_fin_garantia){
 
-        if ($vigente) {
-
-            // Determinar tipo contrato
-            if (isCambioAplicable($contrato)) {
+            if(isCambioAplicable($contratos)){
                 $tipocontratodefault = 3;
                 $comisionDefault = 0;
-            } else {
+            }else{
                 $tipocontratodefault = 2;
                 $comisionDefault = 3;
             }
 
-            // Datos
             $garantiaInicioCantidad = $req->garantia;
+            if ($paispedido == 54){
+                $tiposcontratos = TipoContrato::borrado(false)->whereIn('id', [2,3])->orderBy('nombre', 'asc')->get();
+            }else{
+                $tiposcontratos = TipoContrato::borrado(false)->whereIn('id', [2])->orderBy('nombre', 'asc')->get();
+            }
 
-            // Tipos de contrato según país
-            $tiposcontratos = ($paispedido == 54)
-                ? $tiposcontratosAll->only([2, 3])
-                : $tiposcontratosAll->only([2]);
-
-            $domicilio = $contrato->domicilio_id;
+            $domicilio = $contratos->domicilio_id;
             $fechainiciogarantia = $req->fecha_inicio_garantia;
             $fechafingarantia = $req->fecha_fin_garantia;
-            $observaciones = $contrato->observaciones;
+            $observaciones = $contratos->observaciones;
+            $tipocomision = ($tipocontratodefault == 3 || $tipocontratodefault == 2) ? $comisionDefault : ($contratos->tipocomision_id == 1 ? 2 : $contratos->tipocomision_id);
+            $garantia = $contratos->garantia;
 
-            $tipocomision = ($tipocontratodefault == 3 || $tipocontratodefault == 2)
-                ? $comisionDefault
-                : ($contrato->tipocomision_id == 1 ? 2 : $contrato->tipocomision_id);
-
-            $garantia = $contrato->garantia;
+        }else{
+            $tipocontratodefault = 1;
+            $garantiaInicioCantidad = 0;
+            $tiposcontratos = TipoContrato::borrado(false)->whereIn('id', [1])->get();
+            $domicilio = '';
+            $fechainiciogarantia = '';
+            $fechafingarantia = '';
+            $observaciones = $contratos->observaciones;
+            $tipocomision = 2;
+            $garantia = 3;
         }
+
+    }else{
+
+        $tipocontratodefault = 1;
+        $garantiaInicioCantidad = 0;
+        $tiposcontratos = TipoContrato::borrado(false)->whereIn('id', [1])->get();
+        $domicilio = '';
+        $fechainiciogarantia = '';
+        $fechafingarantia = '';
+        $observaciones = '';
+        $tipocomision = 2;
+        $garantia = 3;
     }
 
     return [
         'tipocontratodefault' => $tipocontratodefault,
         'garantiainiciocantidad' => $garantiaInicioCantidad,
         'tiposcontratos' => $tiposcontratos,
-        'tipocontratonombre' => $tiposcontratosAll[$tipocontratodefault]->nombre,
+        'tipocontratonombre' => TipoContrato::find($tipocontratodefault)->nombre,
         'domicilio' => $domicilio,
         'fechainiciogarantia' => $fechainiciogarantia,
         'fechafingarantia' => $fechafingarantia,

@@ -672,9 +672,10 @@ $pink_add:#E663C3;
 .custom-phone-code{
     border: none !important;
     background: none !important;
-    width: 120% !important;
+    width: 95% !important;
     //padding: 0.375rem 0.75rem !important;
     padding-left: 35px !important;
+    padding-right: 5px;
     color: $pink_bertha !important;
     &:hover{
         cursor: pointer !important;
@@ -714,6 +715,7 @@ $pink_add:#E663C3;
 	}
     .custom-phone-code{
         padding-left: 20px !important;
+        padding-right: 5px;
     }
 }
 

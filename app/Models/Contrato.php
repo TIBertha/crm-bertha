@@ -28,10 +28,44 @@ class Contrato extends Model
         return $query->where('culminado', $flag);
     }
 
-    public function requerimiento()
+    public function empleador()
     {
-        return $this->belongsTo(\App\Models\Requerimiento::class, 'requerimiento_id', 'id');
+        return $this->belongsTo(Empleador::class, 'empleador_id');
     }
 
+    public function requerimiento()
+    {
+        return $this->belongsTo(Requerimiento::class, 'requerimiento_id');
+    }
+
+    public function actividad()
+    {
+        return $this->belongsTo(Actividad::class, 'actividad_id');
+    }
+
+    public function modalidad()
+    {
+        return $this->belongsTo(Modalidad::class, 'modalidad_id');
+    }
+
+    public function trabajador()
+    {
+        return $this->belongsTo(Trabajador::class, 'trabajador_id');
+    }
+
+    public function trabajadorB()
+    {
+        return $this->belongsTo(Trabajador::class, 'trabajador_b_id');
+    }
+
+    public function trabajadorC()
+    {
+        return $this->belongsTo(Trabajador::class, 'trabajador_c_id');
+    }
+
+    public function tipoContrato()
+    {
+        return $this->belongsTo(TipoContrato::class, 'tipocontrato_id');
+    }
 
 }

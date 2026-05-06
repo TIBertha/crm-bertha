@@ -154,13 +154,13 @@ export function ajaxGetVerificacionPorDias(id){
 export function getCalculoTotal(cont, gan, tot, tipocontrato, paispedido, tipocomision, modalidad){
     let total = 0;
     if(cont){
-        if(tipocontrato == 1){
-            if(paispedido == 54){
-                if(tipocomision == 1){
-                    if(gan == 0){
+        if(tipocontrato === 1){
+            if(paispedido === 54){
+                if(tipocomision === 1){
+                    if(gan === 0){
                         total = 0;
                     }else if(gan >= 6){
-                        if(modalidad == 3){
+                        if(modalidad === 3){
                             total = 500;
                         }else{
                             total = 700;
@@ -168,11 +168,11 @@ export function getCalculoTotal(cont, gan, tot, tipocontrato, paispedido, tipoco
                     }else if(gan < 6){
                         total = 700;
                     }
-                }else if(tipocomision == 2){
-                    if(gan == 0){
+                }else if(tipocomision === 2){
+                    if(gan === 0){
                         total = 0;
                     }else if(gan >= 3){
-                        if(modalidad == 3){
+                        if(modalidad === 3){
                             total = 500;
                         }else{
                             total = 700;
@@ -180,14 +180,14 @@ export function getCalculoTotal(cont, gan, tot, tipocontrato, paispedido, tipoco
                     }else if(gan < 3){
                         total = 0;
                     }
-                }else if(tipocomision == 3){
-                    if(modalidad == 3){
+                }else if(tipocomision === 3){
+                    if(modalidad === 3){
                         total = 500;
                     }else{
                         total = 700;
                     }
-                }else if(tipocomision == 4){
-                    if(modalidad == 3){
+                }else if(tipocomision === 4){
+                    if(modalidad === 3){
                         total = 500;
                     }else{
                         total = 700;
@@ -196,16 +196,16 @@ export function getCalculoTotal(cont, gan, tot, tipocontrato, paispedido, tipoco
             }else{
                 total = 120000;
             }
-        }else if(tipocontrato == 2){
-            if(paispedido == 54){
-                if(modalidad == 3){
+        }else if(tipocontrato === 2){
+            if(paispedido === 54){
+                if(modalidad === 3){
                     total = tot * 0.30 - 0;
                 }else{
                     total = tot * 0.30 - 0;
                 }
             }
-        }else if(tipocontrato == 3){
-            if(paispedido == 54){
+        }else if(tipocontrato === 3){
+            if(paispedido === 54){
                 total = tot * 0;
             }
         }

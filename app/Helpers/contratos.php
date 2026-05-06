@@ -1,23 +1,28 @@
 <?php
 
 use Carbon\Carbon;
+use App\Models\Requerimiento;
+use App\Models\Trabajador;
+use App\Models\Contrato;
 
-function isCambioAplicable($contrato){
-    $newContratoDT = Carbon::parse($contrato->fecha);
+function isCambioAplicable($contrato)
+{
+    if (!$contrato || !$contrato->fecha) {
+        return false;
+    }
 
-    $fechacontrato = $newContratoDT;
-    $fechaActual = \Carbon\Carbon::now();
-    $fechacontratoAddMonth = $newContratoDT->addMonths(1);
+    $fechaContrato = Carbon::parse($contrato->fecha)->startOfDay();
+    $fechaActual = Carbon::now()->startOfDay();
 
-    $aplicable = $fechaActual->isBetween($fechacontrato, $fechacontratoAddMonth, true);
+    // Clonar para no modificar la fecha original
+    $fechaContratoAddMonth = Carbon::parse($contrato->fecha)->addMonth()->startOfDay();
 
-    return $aplicable;
-
+    return $fechaActual->isBetween($fechaContrato, $fechaContratoAddMonth, true);
 }
 
 function getNewContratos(){
 
-    $data = \App\Models\Views\ContratoView::where('creadooriginal', '>=', \Carbon\Carbon::now()->subDays(2) )->orderBy('actualizadooriginal', 'desc');
+    $data = Contrato::where('creado', '>=', \Carbon\Carbon::now()->subDays(2) )->orderBy('actualizado', 'desc');
 
     return $data;
 }
@@ -35,41 +40,74 @@ function processDataContrato($data){
     if ($data){
         foreach ($data as $d){
 
-            $req= \App\Models\Views\RequerimientoView::where('id', $d->requerimientoid)->first();
+            $req= Requerimiento::where('id', $d->requerimiento_id)->first();
+
+            // Calcular días restantes
+            $diasRestantes = null;
+
+            if ($req && $req->fecha_fin_garantia) {
+                $hoy = now()->startOfDay();
+                $fin = \Carbon\Carbon::parse($req->fecha_fin_garantia)->startOfDay();
+                $diasRestantes = $hoy->diffInDays($fin, false); // false = puede dar negativo
+            }
 
             $result[] = [
-                'empleador_flag_emoji'              => $d->empleador_pais_pedido_id  ? ($d->empleador_pais_pedido_id == 11 ? '🇨🇱' : '🇵🇪') : '🇵🇪',
+                'empleador_flag_emoji'              => $d->paispedido_id  ? ($d->paispedido_id == 11 ? '🇨🇱' : '🇵🇪') : '🇵🇪',
                 'pais_pedido'                       => getDataPaisPedido($req->paispedido_id),
                 'id'                                => $d->id,
-                'creado'                            => $d->creado,
-                'empleador_contact_data'            => getEmpleadorContactData($d->empleadorid),
-                'trabajador_contact_data'           => getTrabajadorContactData($d->trabajadorid),
+                'creado'                            => Carbon::parse($d->creado)->format('d/m/Y'),
+
+                'empleador_contact_data'            => getEmpleadorContactData($d->empleador_id),
+                'trabajador_contact_data'           => getTrabajadorContactData($d->trabajador_id),
                 'empleador'                         => getNombreCorto($d->empleadornombre, $d->empleadorapellido),
-                'data_trabajador'                   => getDataTrabajadorContrato($d->trabajadorid),
-                'trabajador'                        => $d->trabajador,
-                'trabajador_short'                  => getNombreCorto($d->trabajadornombre, $d->trabajadorapellido),
-                'trabajador_id'                     => $d->trabajadorid,
-                'trabajador_b'                      => $d->trabajadorb ? $d->trabajadorb : ' - ',
+                'data_trabajador'                   => getDataTrabajadorContrato($d->trabajador_id),
+
+                'trabajador'                        => $d->trabajador && $d->trabajador->usuario
+                    ? ($d->trabajador->usuario->nombres . ' ' .  $d->trabajador->usuario->apellidos)
+                    : ' - ',
+                'trabajador_short'                  => $d->trabajador && $d->trabajador->usuario
+                    ? getNombreCorto($d->trabajador->usuario->nombres, $d->trabajador->usuario->apellidos)
+                    : ' - ',
+
+                'trabajador_id'                     => $d->trabajador_id,
+
+                'trabajador_b' => $d->trabajadorB && $d->trabajadorB->usuario
+                    ? getNombreCorto($d->trabajadorB->usuario->nombres, $d->trabajadorB->usuario->apellidos)
+                    : ' - ',
                 'trabajador_b_contact_data'         => getTrabajadorContactData($d->trabajadorb_id),
-                'trabajador_c'                      => $d->trabajadorc ? $d->trabajadorc : ' - ',
+
+                'trabajador_c' => $d->trabajadorC && $d->trabajadorC->usuario
+                    ? getNombreCorto($d->trabajadorC->usuario->nombres, $d->trabajadorC->usuario->apellidos)
+                    : ' - ',
                 'trabajador_c_contact_data'         => getTrabajadorContactData($d->trabajadorc_id),
+
                 'verif_ingreso'                     => $d->verificador_ingreso,
-                'actividad'                         => $d->actividad,
-                'actividad_id'                      => $d->actividadid,
-                'modalidad'                         => $d->modalidad,
-                'modalidad_id'                      => $d->modalidadid,
+
+                'actividad'                         => optional(optional($req)->actividad)->nombre,
+                'actividad_id'                      => optional($req)->actividad_id,
+
+                'modalidad'                         => optional(optional($req)->modalidad)->nombre,
+                'modalidad_id'                      => optional($req)->modalidad_id,
+
                 'sueldo'                            => $d->sueldo,
-                'fecha_ini_lab'                     => $d->fecha_inicio_labores ? date('d/m/Y',strtotime($d->fecha_inicio_labores)) : null,
-                'hora_ini_lab'                      => $d->hora_inicio_labores ? date('h:i A',strtotime($d->hora_inicio_labores)) : null,
+
+                'fecha_ini_lab'                     => $d->fechainiciolabores ? date('d/m/Y',strtotime($d->fechainiciolabores)) : null,
+                'hora_ini_lab'                      => $d->horainiciolabores ? date('h:i A',strtotime($d->horainiciolabores)) : null,
+
                 'anulado'                           => $d->anulado,
                 'culminado'                         => $d->culminado,
-                'estatus_req'                       => $d->estatusrequerimientoid,
-                'pdf_constancia_colocacion'         => $d->pdf_constancia_colocacion,
+
+                'estatus_req'                       => $req->estatusrequerimientoid,
+
+                'pdf_constancia_colocacion'         => null,
+
                 'antecedentes'                      => getAntecedentesTrabajadorColocado($d),
                 'comprobante'                       => getUltimoComprobante($d),
-                'tipo_contrato_id'                  => $d->tipocontratoid,
-                'tipo_contrato'                     => $d->tipocontrato,
-                'dias_restantes'                    => $d->diasrestantes,
+
+                'tipo_contrato_id'                  => $d->tipocontrato_id,
+                'tipo_contrato'                     => optional($d->tipoContrato)->nombre,
+
+                'dias_restantes'                    => $diasRestantes,
                 'domicilio_id'                      => $d->domicilio_id,
             ];
         }

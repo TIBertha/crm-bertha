@@ -7,6 +7,7 @@ use App\Models\Views\PaisView;
 use App\Models\Views\TrabajadorView;
 use App\Models\Views\EmpleadorView;
 use App\Models\Views\DistritoView;
+use App\Models\Trabajador;
 use Carbon\Carbon;
 
 function getDivisaDetails($countryID){
@@ -272,7 +273,7 @@ function getAntecedentesTrabajadorColocado($contrato){
 
     if ($contrato){
 
-        $trabajador = TrabajadorView::find($contrato->trabajadorid);
+        $trabajador = Trabajador::find($contrato->trabajador_id);
 
         if ($trabajador->antecedente_pdf){
 
@@ -284,7 +285,7 @@ function getAntecedentesTrabajadorColocado($contrato){
 
         }else{
 
-            $antecedente = Antecedente::where('trabajador_id', $contrato->trabajadorid)->orderBy('creado', 'DESC')->first();
+            $antecedente = Antecedente::where('trabajador_id', $contrato->trabajador_id)->orderBy('creado', 'DESC')->first();
 
 
             if ($antecedente){
@@ -1323,14 +1324,19 @@ function getPostulados($id){
 }
 
 function getDataPaisPedido($idPais){
-    $p = \App\Models\Pais::find($idPais);
 
+    $dataPaisPedido = [];
 
-    $dataPaisPedido = [
-        'id'            => $p->id,
-        'name'          => $p->nombre,
-        'code'          => strtolower($p->country_code),
-    ];
+    if ($idPais){
+
+        $p = \App\Models\Pais::find($idPais);
+
+        $dataPaisPedido = [
+            'id'            => $p->id,
+            'name'          => $p->nombre,
+            'code'          => strtolower($p->country_code),
+        ];
+    }
 
     return $dataPaisPedido;
 }

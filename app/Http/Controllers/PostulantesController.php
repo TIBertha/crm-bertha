@@ -499,7 +499,7 @@ class PostulantesController extends Controller
 
         if ($sinFiltros) {
             $query->where('actualizado', '>=', now()->subDays(6))
-                ->whereIn('estatuspostulante_id', [1])
+                ->whereIn('estatuspostulante_id', [1,6,7,8])
                 ->orderBy('actualizado', 'DESC');
         } else {
             $query->orderBy('estatuspostulante_id', 'asc')
@@ -527,8 +527,16 @@ class PostulantesController extends Controller
         });
 
         // LIKE filters
-        $query->when($nombre, fn($q) => $q->where('trabajador', 'like', "%$nombre%"));
+
+        $query->when($nombre, fn($q) =>
+            $q->whereHas('usuario', fn($u) =>
+                $u->whereRaw("CONCAT(nombres, ' ', apellidos) LIKE ?", ["%{$nombre}%"])
+            )
+        );
+
         $query->when($departamentonac, fn($q) => $q->where('lugarnacimiento', 'like', "%$departamentonac%"));
+
+
         $query->when($documento, fn($q) => $q->where('numero_documento', 'like', "%$documento%"));
         $query->when($telefonorecomendacion, fn($q) => $q->where('verificaciones_laborales', 'like', "%$telefonorecomendacion%"));
 

@@ -29,6 +29,10 @@ export default class ContratosApp extends Component {
                             element={<ContratosEdit url={url} show={false}/>}
                         />
                         <Route
+                            path="/contratos/show/:id"
+                            element={<ContratosEdit url={url} show={true}/>}
+                        />
+                        <Route
                             path="/contratos/new"
                             element={<ContratosNew url={url}/>}
                         />

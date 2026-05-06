@@ -47,6 +47,11 @@ class ContratosController extends Controller
         return redirect('/contratos');
     }
 
+    public function viewShow($id){
+
+        return redirect('/contratos');
+    }
+
     public function ajaxRefreshContratos(Request $request){
 
         set_time_limit(0);
@@ -162,6 +167,187 @@ class ContratosController extends Controller
 
             return json_encode(['code' => 500]);
         }
+
+    }
+
+    public function ajaxBuscar(Request $request){
+
+        set_time_limit(0);
+
+        ini_set('max_execution_time', 180);
+
+        $data = $request->input('data');
+
+        $offset = $request->input('offset');
+        $codigo           = $data['codigo'];
+        $empleador        = $data['empleador'];
+        $telefonoempleador = $data['telefonoEmpleador'];
+        $trabajador        = $data['trabajador'];
+        $telefonotrabajador = $data['telefonoTrabajador'];
+        $fechainiciogarantia = $data['fechainiciogarantia'] ? Carbon::parse($data['fechainiciogarantia']) : null;
+        $fechacreadodesde = $data['fechacreadodesde'] ? Carbon::parse($data['fechacreadodesde']) : null;
+        $fechacreadohasta = $data['fechacreadohasta'] ? Carbon::parse($data['fechacreadohasta']) : null;
+        $fecha            = $data['fecha'] ? Carbon::parse($data['fecha']) : null;
+        $fechainiciolabores = $data['fechainiciolabores'] ? Carbon::parse($data['fechainiciolabores']) : null;
+        $requerimiento    = $data['requerimiento'];
+        $actividad        = $data['actividad'];
+        $tipocontrato     = $data['tipocontrato'];
+        $tipopago         = $data['tipopago'];
+        $vigente          = $data['vigente'];
+
+        $query = Contrato::orderBy('actualizado', 'desc');
+
+        if($codigo){
+            $query->where(function ($q) use ($codigo){
+                $q->where('id', $codigo);
+            });
+        }
+
+        if ($empleador) {
+            $query->whereHas('empleador.usuario', function ($q) use ($empleador) {
+                $q->whereRaw("CONCAT(nombres, ' ', apellidos) LIKE ?", ["%{$empleador}%"]);
+            });
+        }
+
+        if ($telefonoempleador) {
+            $query->whereHas('empleador.usuario', function ($q) use ($telefonoempleador) {
+                $q->where('telefono', 'like', "%{$telefonoempleador}%");
+            });
+        }
+
+        if ($trabajador) {
+            $query->where(function ($q) use ($trabajador) {
+
+                // Trabajador A
+                $q->orWhereHas('trabajador.usuario', function ($u) use ($trabajador) {
+                    $u->whereRaw("CONCAT(nombres, ' ', apellidos) LIKE ?", ["%{$trabajador}%"]);
+                });
+
+                // Trabajador B
+                $q->orWhereHas('trabajadorB.usuario', function ($u) use ($trabajador) {
+                    $u->whereRaw("CONCAT(nombres, ' ', apellidos) LIKE ?", ["%{$trabajador}%"]);
+                });
+
+                // Trabajador C
+                $q->orWhereHas('trabajadorC.usuario', function ($u) use ($trabajador) {
+                    $u->whereRaw("CONCAT(nombres, ' ', apellidos) LIKE ?", ["%{$trabajador}%"]);
+                });
+
+            });
+        }
+
+        if ($telefonotrabajador) {
+            $query->where(function ($q) use ($telefonotrabajador) {
+
+                // Trabajador A
+                $q->orWhereHas('trabajador.usuario', function ($u) use ($telefonotrabajador) {
+                    $u->where('telefono', 'like', "%{$telefonotrabajador}%")
+                        ->orWhere('telefono_whatsapp', 'like', "%{$telefonotrabajador}%");
+                });
+
+                // Trabajador B
+                $q->orWhereHas('trabajadorB.usuario', function ($u) use ($telefonotrabajador) {
+                    $u->where('telefono', 'like', "%{$telefonotrabajador}%")
+                        ->orWhere('telefono_whatsapp', 'like', "%{$telefonotrabajador}%");
+                });
+
+                // Trabajador C
+                $q->orWhereHas('trabajadorC.usuario', function ($u) use ($telefonotrabajador) {
+                    $u->where('telefono', 'like', "%{$telefonotrabajador}%")
+                        ->orWhere('telefono_whatsapp', 'like', "%{$telefonotrabajador}%");
+                });
+
+            });
+        }
+
+        if($fechainiciogarantia){
+
+            $query->where(function ($q) use ($fechainiciogarantia){
+                $q->whereDate('fecha_inicio_garantia', $fechainiciogarantia);
+            });
+        }
+
+        if($fechacreadodesde AND $fechacreadohasta){
+
+            $query->where(function ($q) use ($fechacreadodesde, $fechacreadohasta){
+                $q->whereDate('creado', '>=', $fechacreadodesde->format('Y-m-d'));
+                $q->whereDate('creado', '<=', $fechacreadohasta->format('Y-m-d'));
+            });
+        }
+
+        if($fecha){
+
+            $query->where(function ($q) use ($fecha){
+                $q->whereDate('creado', $fecha);
+            });
+        }
+
+        if($fechainiciolabores){
+
+            $query->where(function ($q) use ($fechainiciolabores){
+                $q->whereDate('fechainiciolabores', $fechainiciolabores);
+            });
+        }
+
+        if($requerimiento){
+
+            $query->where(function ($q) use ($requerimiento){
+                $q->where('requerimiento_id', $requerimiento);
+            });
+        }
+
+        if ($actividad) {
+            $query->whereHas('requerimiento', function ($q) use ($actividad) {
+                $q->where('actividad_id', $actividad);
+            });
+        }
+
+        if($tipocontrato){
+
+            $query->where(function ($q) use ($tipocontrato){
+                $q->where('tipocontrato_id', $tipocontrato);
+            });
+        }
+
+        if($tipopago){
+
+            $query->where(function ($q) use ($tipopago){
+                $q->where('formapago_id', $tipopago);
+            });
+        }
+
+        if($vigente){
+
+            if($vigente == 'C'){
+                $query->where(function ($q) use ($vigente){
+                    $q->where('culminado', true);
+                });
+            }else if($vigente == 'V'){
+                $query->where(function ($q) use ($vigente){
+                    $q->where('culminado', false);
+                });
+            }else if($vigente == 'A'){
+                $query->where(function ($q) use ($vigente){
+                    $q->where('anulado', true);
+                });
+            }
+
+        }
+
+        logActivity(17, 'contratos', '');
+
+        $lista = $query;
+        $cantidad = $lista->count();
+        $data = getDataContratos($lista, $offset);
+        $page = 0;
+
+        return response()->json([
+            'code' => 200,
+            'contratos' => processDataContrato($data),
+            'page' => $page,
+            'total' => $cantidad,
+            'textoresultados' => $cantidad ? '' : 'No existen contratos recientes'
+        ]);
 
     }
 

@@ -73,9 +73,10 @@ function formatDataPostulante($data){
 
                 'edad'                       => $d->usuario && $d->usuario->fecha_nacimiento ? \Carbon\Carbon::parse($d->usuario->fecha_nacimiento)->age : '',
 
-                'telefono'                   => $d->telefono,
+                'telefono'                   => $d->usuario->telefono,
                 'distrito'                   => $dataDistrito ? $dataDistrito->distritostres : ' - ',
-                'telefono_whatsapp'          => $d->telefono_whatsapp,
+                'telefono_whatsapp'          => $d->usuario->telefono_whatsapp,
+
                 'actividadid'                => $d->actividad_id,
                 'cama_adentro'               => $d->cama_adentro,
                 'cama_afuera'                => $d->cama_afuera,
