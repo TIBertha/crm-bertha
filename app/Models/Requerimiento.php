@@ -18,5 +18,9 @@ class Requerimiento extends Model
         return $query->where('borrado', $flag);
     }
 
+    public function contratos()
+    {
+        return $this->hasMany(\App\Models\Contrato::class, 'requerimiento_id');
+    }
 
 }

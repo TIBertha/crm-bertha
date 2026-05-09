@@ -69,5 +69,9 @@ class Trabajador extends Model
         return $this->belongsTo(\App\Models\EstatusPostulante::class, 'estatuspostulante_id', 'id');
     }
 
+    public function contratos()
+    {
+        return $this->hasMany(\App\Models\Contrato::class, 'trabajador_id');
+    }
 
 }

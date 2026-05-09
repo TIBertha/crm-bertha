@@ -56,4 +56,9 @@ class Empleador extends Authenticatable
     public function isPhoneVerified(){
         return $this->verificar_telefono;
     }
+
+    public function contratos()
+    {
+        return $this->hasMany(\App\Models\Contrato::class, 'empleador_id');
+    }
 }

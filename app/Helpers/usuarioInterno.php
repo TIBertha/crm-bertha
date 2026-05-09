@@ -1,6 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Auth;
+use App\Models\Contrato;
+use App\Models\Trabajador;
+use App\Models\Empleador;
+use App\Models\Requerimiento;
 
 function getAccessFunctions($list = null){
 
@@ -16,91 +20,101 @@ function getAccessFunctions($list = null){
     return $result;
 }
 
-function getDataNueva($meses){
-
+function getDataNueva($meses)
+{
     $dataNueva = [];
 
-    foreach ($meses as $m){
+    foreach ($meses as $m) {
+
         $year  = $m->year;
         $month = str_pad($m->month, 2, '0', STR_PAD_LEFT);
-        $nombreMes = ucwords(strtolower(getMonthName($month))).' '.$year;
-        $fechaInicio = new DateTime($year.'-'.$month.'-01');
-        $fechaFin = new DateTime($fechaInicio->format('Y-m-t 23:59:59'));
+        $nombreMes = ucwords(strtolower(getMonthName($month))) . ' ' . $year;
 
-        $trabajadores = \App\Models\Views\TrabajadorView::where('creado', '>=',$fechaInicio)->where('creado','<=',$fechaFin);
-        $empleadores = \App\Models\Views\EmpleadorView::where('creado', '>=',$fechaInicio)->where('creado','<=',$fechaFin);
-        $requerimientos = \App\Models\Views\RequerimientoView::where('creado', '>=',$fechaInicio)->where('creado','<=',$fechaFin);
-        $contratos = \App\Models\Views\ContratoView::where('creadooriginal', '>=',$fechaInicio)->where('creadooriginal','<=',$fechaFin);
+        $fechaInicio = $year . '-' . $month . '-01 00:00:00';
+        $fechaFin    = date('Y-m-t 23:59:59', strtotime($fechaInicio));
 
-        $dataContratos = [
-            'total'                     => $contratos->count(),
-            'apertura'                  => \App\Models\Views\ContratoView::where('creadooriginal', '>=',$fechaInicio)->where('creadooriginal','<=',$fechaFin)->where('tipocontratoid',1)->count(),
-            'reposicion'                => \App\Models\Views\ContratoView::where('creadooriginal', '>=',$fechaInicio)->where('creadooriginal','<=',$fechaFin)->where('tipocontratoid',2)->count(),
-            'cambio'                    => \App\Models\Views\ContratoView::where('creadooriginal', '>=',$fechaInicio)->where('creadooriginal','<=',$fechaFin)->where('tipocontratoid',3)->count(),
-            'totalComision1'            => \App\Models\Views\ContratoView::where('creadooriginal', '>=',$fechaInicio)->where('creadooriginal','<=',$fechaFin)->where('tipocomision_req',1)->count(),
-            'totalComision2'            => \App\Models\Views\ContratoView::where('creadooriginal', '>=',$fechaInicio)->where('creadooriginal','<=',$fechaFin)->where('tipocomision_req',2)->count(),
-            'totalComision3'            => \App\Models\Views\ContratoView::where('creadooriginal', '>=',$fechaInicio)->where('creadooriginal','<=',$fechaFin)->where('tipocomision_req',3)->count(),
-        ];
+        // ============================
+        // 1. TRABAJADORES
+        // ============================
+        $trabajadoresQuery = Trabajador::whereBetween('creado', [$fechaInicio, $fechaFin]);
 
-        $idReqs = [];
+        $totalTrab = $trabajadoresQuery->count();
 
-        foreach ($requerimientos->get() as $req){
-            $findContrato = \App\Models\Contrato::where('requerimiento_id', $req->id)->first();
-
-            if (!($findContrato)){
-                array_push($idReqs, $req->id);
-            }
-        }
-
-        $dataRequerimiento = [
-            'total'                     => $requerimientos->count(),
-            'totalSinContratos'         => count($idReqs),
-            //'sinContratos'              => $idReqs,
-            'totalConContratos'         => $requerimientos->count() - count($idReqs)
-        ];
-
-        $idTrab = [];
-
-        foreach ($trabajadores->get() as $trab){
-            $findContrato = \App\Models\Contrato::where('trabajador_id', $trab->id)->first();
-
-            if (!($findContrato)){
-                array_push($idTrab, $trab->id);
-            }
-        }
+        $trabSinContrato = Trabajador::whereBetween('creado', [$fechaInicio, $fechaFin])
+            ->whereDoesntHave('contratos')
+            ->count();
 
         $dataTrabajadores = [
-            'total'                     => $trabajadores->count(),
-            'totalSinContratos'         => count($idTrab),
-            //'sinContratos'              => $idTrab,
-            'totalConContratos'         => $trabajadores->count() - count($idTrab)
+            'total'             => $totalTrab,
+            'totalSinContratos' => $trabSinContrato,
+            'totalConContratos' => $totalTrab - $trabSinContrato,
         ];
 
-        $idEmp = [];
+        // ============================
+        // 2. EMPLEADORES
+        // ============================
+        $empleadoresQuery = Empleador::whereBetween('creado', [$fechaInicio, $fechaFin]);
 
-        foreach ($empleadores->get() as $emp){
-            $findContrato = \App\Models\Contrato::where('empleador_id', $emp->id)->first();
+        $totalEmp = $empleadoresQuery->count();
 
-            if (!($findContrato)){
-                array_push($idEmp, $emp->id);
-            }
-        }
+        $empSinContrato = Empleador::whereBetween('creado', [$fechaInicio, $fechaFin])
+            ->whereDoesntHave('contratos')
+            ->count();
 
         $dataEmpleadores = [
-            'total'                     => $empleadores->count(),
-            'totalSinContratos'         => count($idEmp),
-            'totalConContratos'         => $empleadores->count() - count($idEmp)
+            'total'             => $totalEmp,
+            'totalSinContratos' => $empSinContrato,
+            'totalConContratos' => $totalEmp - $empSinContrato,
         ];
 
+        // ============================
+        // 3. REQUERIMIENTOS
+        // ============================
+        $requerimientosQuery = Requerimiento::whereBetween('creado', [$fechaInicio, $fechaFin]);
+
+        $totalReq = $requerimientosQuery->count();
+
+        $reqSinContrato = Requerimiento::whereBetween('creado', [$fechaInicio, $fechaFin])
+            ->whereDoesntHave('contratos')
+            ->count();
+
+        $dataRequerimiento = [
+            'total'             => $totalReq,
+            'totalSinContratos' => $reqSinContrato,
+            'totalConContratos' => $totalReq - $reqSinContrato,
+        ];
+
+        // ============================
+        // 4. CONTRATOS
+        // ============================
+        $contratosQuery = Contrato::whereBetween('creado', [$fechaInicio, $fechaFin]);
+
+        $dataContratos = [
+            'total'      => $contratosQuery->count(),
+            'apertura'   => Contrato::whereBetween('creado', [$fechaInicio, $fechaFin])->where('tipocontrato_id', 1)->count(),
+            'reposicion' => Contrato::whereBetween('creado', [$fechaInicio, $fechaFin])->where('tipocontrato_id', 2)->count(),
+            'cambio'     => Contrato::whereBetween('creado', [$fechaInicio, $fechaFin])->where('tipocontrato_id', 3)->count(),
+
+            'totalComision2' => Contrato::whereBetween('creado', [$fechaInicio, $fechaFin])
+                ->whereHas('requerimiento', fn($q) => $q->where('tipocomision', 2))
+                ->count(),
+
+            'totalComision3' => Contrato::whereBetween('creado', [$fechaInicio, $fechaFin])
+                ->whereHas('requerimiento', fn($q) => $q->where('tipocomision', 3))
+                ->count(),
+        ];
+
+        // ============================
+        // ARMAR RESPUESTA
+        // ============================
         $dataNueva[] = [
-            'nombreMes'                         => $nombreMes,
-            'mes'                               => $month,
-            'trabajadores'                      => $dataTrabajadores,
-            'empleadores'                       => $dataEmpleadores,
-            'requerimientos'                    => $dataRequerimiento,
-            'contratos'                         => $dataContratos,
+            'nombreMes'     => $nombreMes,
+            'mes'           => $month,
+            'trabajadores'  => $dataTrabajadores,
+            'empleadores'   => $dataEmpleadores,
+            'requerimientos'=> $dataRequerimiento,
+            'contratos'     => $dataContratos,
         ];
-
     }
 
     return $dataNueva;

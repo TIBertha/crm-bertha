@@ -55,6 +55,10 @@ class AdminNew extends Component {
         this.cancelar = this.cancelar.bind(this);
     }
 
+    setLoading(condition){
+        this.setState({isLoading: condition});
+    }
+
     cancelar(){
         const { navigate } = this.props;
         modalCancelar('/usu-int', navigate)

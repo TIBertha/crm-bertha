@@ -53,8 +53,6 @@ class AdministradorController extends Controller
             $dataUs = [
                 'nombres'               => formatText($data['nombres']),
                 'apellidos'             => formatText($data['apellidos']),
-                'documentodelatera'     => $data['fotoDocumentoD'],
-                'documentoposterior'    => $data['fotoDocumentoP'],
                 'correo'                => formatText($data['correo']),
                 'prefijo'               => 51,
                 'telefono'              => formatText($data['telefono']),
@@ -78,6 +76,8 @@ class AdministradorController extends Controller
             return response()->json(['code' => 200, 'msj' => 'Usuario creado exitosamente']);
         } catch (\Exception $e) {
             DB::rollback();
+
+            dd($e);
             return response()->json(['code' => 500, 'msj' => 'Ocurrio un problema al crear usuario. Consulte al administrador' ]);
         }
 
