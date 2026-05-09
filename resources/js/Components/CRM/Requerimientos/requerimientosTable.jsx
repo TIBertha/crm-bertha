@@ -114,6 +114,7 @@ export default function RequerimientosTable({url, requerimientos, total, page, c
 
         [3].includes(estatusID) ? (data.distrito ? (tag.push(<a onClick={(e) => changeEstadoRequerimiento(e, data.id,1)} ><i data-toggle="tooltip" data-placement="top" title="Pendiente" className="fas fa-hourglass-end icon-action px-2"></i></a>) ) : '' ) : '';
 
+        {/*
         if (data.estadoid === 1) {
             const isActive = Boolean(data.disponibleentrevista);
 
@@ -129,7 +130,7 @@ export default function RequerimientosTable({url, requerimientos, total, page, c
                 </a>
             );
         }
-
+        */}
 
         tag.push(
             <a onClick={(e) => handleEliminarRequerimiento(e, data.id)} >

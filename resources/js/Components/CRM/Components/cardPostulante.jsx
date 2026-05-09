@@ -37,6 +37,7 @@ export default function CardPostulante({
 }) {
 
     let mainWeb = 'https://bertha.pe';
+    let mainCRM = 'https://crm.bertha.pe';
 
     let responsive = isResponsive();
     let fechaPostulacion = data.fecha_postulacion
@@ -536,7 +537,7 @@ export default function CardPostulante({
                         {!d.tiene_antecedentes && (
                             <a
                                 target="_blank"
-                                href={"/postulantes/ficha-antecedente/" + d.id}
+                                href={mainCRM + "/postulantes/ficha-antecedente/" + d.id}
                             >
                                 <i
                                     data-toggle="tooltip"
