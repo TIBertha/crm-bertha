@@ -47,6 +47,14 @@ export function ajaxPostulantesGet(id) {
     });
 }
 
+export function ajaxExecuteChangePostulante(url, id) {
+    return axios.post(url, {id} )
+        .then(res => {
+            let r = res.data;
+            return r;
+        });
+}
+
 export function ajaxSaveDataFaltantePostulante(
     id,
     paisNacimiento,

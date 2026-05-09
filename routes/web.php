@@ -139,6 +139,20 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/ajax-postulantes-get-data', [PostulantesController::class, 'ajaxGetData']);
     Route::post('/ajax-postulantes-get', [PostulantesController::class, 'ajaxGet']);
     Route::post('/ajax-refresh-postulantes', [PostulantesController::class, 'ajaxRefreshPostulantes']);
+    Route::post('/ajax-postulantes-contactado', [PostulantesController::class, 'ajaxContactado']);
+    Route::post('/ajax-postulantes-colocar', [PostulantesController::class, 'ajaxColocar']);
+    Route::post('/ajax-postulantes-completar', [PostulantesController::class, 'ajaxCompletar']);
+    Route::post('/ajax-postulantes-nodisponible', [PostulantesController::class, 'ajaxNoDisponible']);
+    Route::post('/ajax-postulantes-porverificar', [PostulantesController::class, 'ajaxPorVerificar']);
+    Route::post('/ajax-postulantes-baja', [PostulantesController::class, 'ajaxBaja']);
+    Route::post('/ajax-save-data-bajas', [PostulantesController::class, 'ajaxSaveDataBajas']);
+    Route::post('/ajax-update-pago-baja', [PostulantesController::class, 'ajaxUpdatePagoBaja']);
+
+    Route::post('/ajax-buscar-vinculos-postulante', [PostulantesController::class, 'ajaxBuscarVinculosPostulante']);
+    Route::post('/ajax-transferir-data-postulante', [PostulantesController::class, 'ajaxTransferirDataPostulante']);
+    Route::post('/ajax-eliminar-data-postulante', [PostulantesController::class, 'ajaxEliminarDataPostulante']);
+
+
 
     //ruta de empleadores
     Route::get('/empleadores', [EmpleadoresController::class, 'index'])->name('empleadores');

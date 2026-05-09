@@ -20,6 +20,7 @@ use App\Models\ResultadoCovid;
 use App\Models\TipoCertificado;
 use App\Models\TipoDocumento;
 use App\Models\Trabajador;
+use App\Models\TransaccionBaja;
 use App\Models\Usuario;
 use App\Models\UsuarioInterno;
 use App\Models\Views\TrabajadorView;
@@ -705,5 +706,346 @@ class PostulantesController extends Controller
 
     }
 
+    public function ajaxContactado(Request $request){
+
+        $id = $request->input('id');
+
+        if($id){
+
+            $registro = Trabajador::find($id);
+            $registro->estatuspostulante_id = 6;
+
+            if($registro->save()){
+                saveCambioEstatusPostulante($id, 6);
+
+                return json_encode(['code' => 200, 'msj' => 'Estado cambiado exitosamente']);
+            }else{
+                return json_encode(['code' => 500, 'msj' => 'Error en el Proceso de cambio de estado. Consulte al Administrador']);
+            }
+
+        }else{
+
+            return json_encode(['code' => 600, 'msj' => 'Error al cambiar de estado. Consulte al Administrador']);
+        }
+
+    }
+
+    public function ajaxColocar(Request $request){
+
+        $id = $request->input('id');
+
+        if($id){
+
+            $registro = Trabajador::find($id);
+            $registro->estatuspostulante_id = 1;
+
+            if($registro->update()){
+                saveCambioEstatusPostulante($id, 1);
+
+                return json_encode(['code' => 200, 'msj' => 'Estado cambiado exitosamente']);
+            }else{
+                return json_encode(['code' => 500, 'msj' => 'Error en el Proceso de cambio de estado. Consulte al Administrador']);
+            }
+
+        }else{
+
+            return json_encode(['code' => 600, 'msj' => 'Error al cambiar de estado. Consulte al Administrador']);
+        }
+
+    }
+
+    public function ajaxCompletar(Request $request){
+
+        $id = $request->input('id');
+
+        if($id){
+
+            $registro = Trabajador::find($id);
+            $registro->estatuspostulante_id = 7;
+
+            if($registro->update()){
+                saveCambioEstatusPostulante($id, 7);
+
+                return json_encode(['code' => 200, 'msj' => 'Estado cambiado exitosamente']);
+            }else{
+                return json_encode(['code' => 500, 'msj' => 'Error en el Proceso de cambio de estado. Consulte al Administrador']);
+            }
+
+        }else{
+
+            return json_encode(['code' => 600, 'msj' => 'Error al cambiar de estado. Consulte al Administrador']);
+        }
+
+    }
+
+    public function ajaxNoDisponible(Request $request){
+
+        $id = $request->input('id');
+
+        if($id){
+
+            $registro = Trabajador::find($id);
+
+            if ($registro->estatuspostulante_id == 7 ){
+                $registro->nodisponible = true;
+            }
+
+            $registro->estatuspostulante_id = 3;
+
+            if($registro->update()){
+                saveCambioEstatusPostulante($id, 3);
+
+                return json_encode(['code' => 200, 'msj' => 'Estado cambiado exitosamente']);
+            }else{
+                return json_encode(['code' => 500, 'msj' => 'Error en el Proceso de cambio de estado. Consulte al Administrador']);
+            }
+
+        }else{
+
+            return json_encode(['code' => 600, 'msj' => 'Error al cambiar de estado. Consulte al Administrador']);
+        }
+
+    }
+
+    public function ajaxPorVerificar(Request $request){
+
+        $id = $request->input('id');
+
+        if($id){
+
+            $registro = Trabajador::find($id);
+            $registro->estatuspostulante_id = 8;
+
+            if($registro->update()){
+                saveCambioEstatusPostulante($id, 8);
+
+                return json_encode(['code' => 200, 'msj' => 'Estado cambiado exitosamente']);
+            }else{
+                return json_encode(['code' => 500, 'msj' => 'Error en el Proceso de cambio de estado. Consulte al Administrador']);
+            }
+
+        }else{
+
+            return json_encode(['code' => 600, 'msj' => 'Error al cambiar de estado. Consulte al Administrador']);
+        }
+
+    }
+
+    public function ajaxBaja(Request $request){
+
+        $id = $request->input('id');
+
+        if($id){
+
+            $registro = Trabajador::find($id);
+            $registro->estatuspostulante_id = 4;
+
+            if($registro->update()){
+                saveCambioEstatusPostulante($id, 4);
+
+                return json_encode(['code' => 200, 'msj' => 'Estado cambiado exitosamente']);
+            }else{
+                return json_encode(['code' => 500, 'msj' => 'Error en el Proceso de cambio de estado. Consulte al Administrador']);
+            }
+
+        }else{
+
+            return json_encode(['code' => 600, 'msj' => 'Error al cambiar de estado. Consulte al Administrador']);
+        }
+
+    }
+
+    public function ajaxBuscarVinculosPostulante(Request $request){
+        $idPostulante = $request->input('idPostulante');
+
+        $otrosPostulantes = Trabajador::where('id', '!=', $idPostulante)
+            ->with('usuario:id,nombres,apellidos')
+            ->select('id', 'usuario_id', 'foto')
+            ->get();
+
+        $listPost = $otrosPostulantes->map(function ($post) {
+            $nombre = $post->usuario->nombres . ' ' . $post->usuario->apellidos;
+
+            return [
+                'id'    => $post->id,
+                'name'  => $nombre,
+                'value' => $post->id,
+                'label' => "{$nombre} (ID:{$post->id})",
+                'photo' => $post->foto,
+            ];
+        });
+
+        $vinculos = buscarVinculosPostulantes($idPostulante);
+
+        return response()->json([
+            'code' => 200,
+            'data' => $vinculos['total'] != 0 ? $vinculos : null,
+            'listPost' => $listPost,
+        ]);
+    }
+
+    public function ajaxTransferirDataPostulante(Request $request)
+    {
+        $idOldPostulante = $request->input('idOldPostulante');
+        $newPostulante   = $request->input('newPostulante');
+        $idNewPostulante = $newPostulante['id'];
+
+        DB::beginTransaction();
+
+        try {
+
+            // Transferir datos (esta es la parte pesada)
+            transferirDatosPostulante($idOldPostulante, $idNewPostulante);
+
+            // Cargar trabajador + usuario en una sola query
+            $tra = Trabajador::with('usuario')->find($idOldPostulante);
+
+            if (!$tra) {
+                throw new \Exception("Trabajador no encontrado");
+            }
+
+            // Borrar trabajador
+            $tra->delete();
+
+            // Borrar usuario si existe
+            if ($tra->usuario) {
+                $tra->usuario->delete();
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'code' => 200,
+                'msj'  => 'Transferencia exitosa'
+            ]);
+
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+
+            // Log real del error
+            \Log::error("Error en transferencia de postulante: " . $e->getMessage());
+
+            return response()->json([
+                'code' => 500,
+                'msj'  => 'Error al transferir data. Consulte al Administrador'
+            ]);
+        }
+    }
+
+    public function ajaxEliminarDataPostulante(Request $request)
+    {
+        $idOldPostulante = $request->input('idOldPostulante');
+
+        DB::beginTransaction();
+
+        try {
+
+            // Eliminar vínculos (esta es la parte pesada)
+            eliminarDatosPostulante($idOldPostulante);
+
+            // Cargar trabajador + usuario en una sola query
+            $tra = Trabajador::with('usuario')->find($idOldPostulante);
+
+            if (!$tra) {
+                throw new \Exception("Trabajador no encontrado");
+            }
+
+            // Eliminar trabajador
+            $tra->delete();
+
+            // Eliminar usuario si existe
+            if ($tra->usuario) {
+                $tra->usuario->delete();
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'code' => 200,
+                'msj'  => 'Eliminación exitosa'
+            ]);
+
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+
+            \Log::error("Error al eliminar postulante: " . $e->getMessage());
+
+            return response()->json([
+                'code' => 500,
+                'msj'  => 'Error al eliminar al trabajador. Consulte al Administrador'
+            ]);
+        }
+    }
+
+    public function ajaxSaveDataBajas(Request $request){
+
+        $id = $request->input('idPostulante');
+        $baja = $request->input('idBaja');
+
+        DB::beginTransaction();
+
+        try{
+            if($id){
+                if($baja){
+                    generateBajaPostulante($baja, $id);
+                }
+
+                $bajaTrans= [
+                    'estatuspostulante_id' => 4
+                ];
+
+                $t = Trabajador::where('id', $id)->update($bajaTrans);
+
+                DB::commit();
+
+                saveCambioEstatusPostulante($id, 4);
+
+                return response()->json(['code' => 200, 'msj' => 'Data actualizada exitosamente']);
+            }else{
+                return response()->json(['code' => 600, 'msj' => 'Error al cambiar de estado. Consulte al Administrador']);
+            }
+        } catch (\Exception $e) {
+
+            DB::rollback();
+
+            return response()->json(['code' => 500, 'msj' => 'Ocurrio un problema al actualizar el postulante. Consulte al administrador' ]);
+
+        }
+
+    }
+
+    public function ajaxUpdatePagoBaja(Request $request){
+        $idBaja = $request->input('idBaja');
+        $monto = $request->input('monto');
+
+        DB::beginTransaction();
+
+        try{
+            if($idBaja){
+
+                $dataBaja = [
+                    'monto_pagado'              => $monto,
+                    'pagado'                    => true,
+                    'fecha_pago_monto'          => Carbon::now()
+                ];
+
+                $t = TransaccionBaja::where('id', $idBaja)->update($dataBaja);
+
+                DB::commit();
+
+                return response()->json(['code' => 200, 'msj' => 'Data actualizada exitosamente']);
+            }else{
+                return response()->json(['code' => 600, 'msj' => 'Error al cambiar de estado. Consulte al Administrador']);
+            }
+        } catch (\Exception $e) {
+
+            DB::rollback();
+
+            return response()->json(['code' => 500, 'msj' => 'Ocurrio un problema al actualizar el postulante. Consulte al administrador' ]);
+
+        }
+    }
 
 }

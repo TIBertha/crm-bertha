@@ -1,10 +1,12 @@
 import React, { Component } from "react";
+import Swal from "sweetalert2";
 import IndexButton from "../Components/indexButton";
 import ButtonAccess from "../Layouts/SubComponents/buttonAccess";
 import PostulantesSearchSideBar from "./postulantesSearchSideBar";
 import {
     ajaxPostulantesGetDataInicial,
     ajaxRefreshPostulantes,
+    ajaxExecuteChangePostulante,
 } from "../../Functions/Postulantes";
 import Flyer from "../Components/flyer";
 import NoDataLabel from "../Components/noDatalabel";

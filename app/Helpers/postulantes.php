@@ -523,19 +523,47 @@ function saveCambioEstatusPostulante($trabajadorid, $estatus){
 
 }
 
+function generateBajaPostulante($baja, $trabajadorID){
+
+    $fecha = calculoFechaBajaPostulante($baja);
+
+    $data = [
+        'trabajador_id'        => $trabajadorID,
+        'baja_id'              => $baja,
+        'fecha_inicio_sancion' => $fecha['inicio'],
+        'fecha_fin_sancion'    => $fecha['fin']
+    ];
+
+    return \App\Models\TransaccionBaja::create($data);
+}
+
+function calculoFechaBajaPostulante($bajaID){
+
+    $result = ['inicio' => null, 'fin' => null];
+
+    $dias = \App\Models\Baja::find($bajaID)->tipobaja->penalizacion_dias;
+
+    if($dias != 0){
+        $result['inicio'] = \Carbon\Carbon::now();
+        $result['fin']    = \Carbon\Carbon::now()->addDays($dias);
+    }
+
+    return $result;
+}
+
 function formatDataUsuarios($data){
 
     $result = [];
 
     if ($data){
         foreach ($data as $d) {
-            $isTrabajador = TrabajadorView::where('usuario_id', $d->id)->count() != 0 ? true : false;
+            $isTrabajador = \App\Models\Trabajador::where('usuario_id', $d->id)->exists();
 
             $result[] = [
                 'id'                => $d->id,
-                'usuario'           => $d->nombres . ' ' . $d->apellidos,
-                'numeroDocumento'   => $d->numero_documento,
-                'telefono'          => $d->telefono,
+                'usuario'           => $d->usuario->nombres . ' ' . $d->usuario->apellidos,
+                'numeroDocumento'   => $d->usuario->numero_documento,
+                'telefono'          => $d->usuario->telefono,
                 'registrado'        => $isTrabajador,
             ];
         }
@@ -543,6 +571,64 @@ function formatDataUsuarios($data){
 
     return $result;
 
+}
+
+function buscarVinculosPostulantes($idPostulante)
+{
+    $contratos      = \App\Models\Contrato::where('trabajador_id', $idPostulante)->count();
+    $postulaciones  = \App\Models\RequerimientoPostulacion::where('trabajador_id', $idPostulante)->count();
+    $estatus        = CambioEstatusTrabajador::where('trabajador_id', $idPostulante)->count();
+    $sanciones      = \App\Models\TransaccionBaja::where('trabajador_id', $idPostulante)->count();
+
+    return [
+        'total'         => $contratos + $postulaciones + $estatus + $sanciones,
+        'contratos'     => $contratos,
+        'postulaciones' => $postulaciones,
+        'estatus'       => $estatus,
+        'sanciones'     => $sanciones,
+    ];
+}
+
+function transferirDatosPostulante($idOldPostulante, $idNewPostulante)
+{
+    // Actualizar contratos
+    \App\Models\Contrato::where('trabajador_id', $idOldPostulante)
+        ->update(['trabajador_id' => $idNewPostulante]);
+
+    // Actualizar postulaciones
+    \App\Models\RequerimientoPostulacion::where('trabajador_id', $idOldPostulante)
+        ->update(['trabajador_id' => $idNewPostulante]);
+
+    // Actualizar estatus
+    CambioEstatusTrabajador::where('trabajador_id', $idOldPostulante)
+        ->update(['trabajador_id' => $idNewPostulante]);
+
+    // Actualizar sanciones
+    \App\Models\TransaccionBaja::where('trabajador_id', $idOldPostulante)
+        ->update(['trabajador_id' => $idNewPostulante]);
+
+    return 200;
+}
+
+function eliminarDatosPostulante($idOldPostulante)
+{
+    // 1. Resetear contratos (si quieres poner trabajador_id = 0)
+    \App\Models\Contrato::where('trabajador_id', $idOldPostulante)
+        ->update(['trabajador_id' => 0]);
+
+    // 2. Eliminar postulaciones
+    \App\Models\RequerimientoPostulacion::where('trabajador_id', $idOldPostulante)
+        ->delete();
+
+    // 3. Eliminar estatus
+    CambioEstatusTrabajador::where('trabajador_id', $idOldPostulante)
+        ->delete();
+
+    // 4. Eliminar sanciones
+    \App\Models\TransaccionBaja::where('trabajador_id', $idOldPostulante)
+        ->delete();
+
+    return 200;
 }
 
 function showVerificaciones($verificaciones, $restringida = false){

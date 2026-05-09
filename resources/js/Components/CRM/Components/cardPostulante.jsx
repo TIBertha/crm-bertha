@@ -35,6 +35,9 @@ export default function CardPostulante({
     selectWp,
     removePostulante,
 }) {
+
+    let mainWeb = 'https://bertha.pe';
+
     let responsive = isResponsive();
     let fechaPostulacion = data.fecha_postulacion
         ? format(parseISO(data.fecha_postulacion), "dd/MM/yyyy h:mm aa")
@@ -639,7 +642,7 @@ export default function CardPostulante({
                     <NewCopyIcon
                         icon={"fas fa-file-import"}
                         additonalClass={"icon-action-sm align-self-center"}
-                        copyText={d.token_privado}
+                        copyText={mainWeb + d.token_privado}
                         tooltipText={"Enviar link privado de postulante"}
                         successMsj={"Link copiado"}
                         colorNeutro={"#ffbf36"}
