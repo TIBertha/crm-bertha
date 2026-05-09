@@ -128,82 +128,76 @@ function formatDataEmpleador($data){
 
 }
 
-function buscarVinculosEmpleador($idEmpleador){
-    $empleador = \App\Models\Empleador::find($idEmpleador);
-    $contratos = \App\Models\Views\ContratoView::where('empleadorid',$idEmpleador);
-    $requerimientos = \App\Models\Views\RequerimientoView::where('empleadorid', $idEmpleador);
-    $domicilios = \App\Models\Domicilio::where('usuario_id', $empleador->usuario_id);
+function buscarVinculosEmpleador($idEmpleador)
+{
+    $empleador = \App\Models\Empleador::select('id', 'usuario_id')->find($idEmpleador);
 
-    return([
-        'total'                         => $contratos->count() + $requerimientos->count() + $domicilios->count(),
-        'contratos'                     => $contratos->count(),
-        'requerimientos'                => $requerimientos->count(),
-        'domicilios'                    => $domicilios->count(),
-        'comprobantes'                  => 0,
-    ]);
+    if (!$empleador) {
+        return [
+            'total' => 0,
+            'contratos' => 0,
+            'requerimientos' => 0,
+            'domicilios' => 0,
+            'comprobantes' => 0,
+        ];
+    }
+
+    $contratos      = \App\Models\Contrato::where('empleador_id', $idEmpleador)->count();
+    $requerimientos = \App\Models\Requerimiento::where('empleador_id', $idEmpleador)->count();
+    $domicilios     = \App\Models\Domicilio::where('usuario_id', $empleador->usuario_id)->count();
+
+    return [
+        'total'         => $contratos + $requerimientos + $domicilios,
+        'contratos'     => $contratos,
+        'requerimientos'=> $requerimientos,
+        'domicilios'    => $domicilios,
+        'comprobantes'  => 0,
+    ];
 }
 
-function transferirDatosEmpleador($idOldEmpleador, $idNewEmpleador){
-    $oldEmpleador = \App\Models\Empleador::find($idOldEmpleador);
-    $newEmpleador = \App\Models\Empleador::find($idNewEmpleador);
-    $contratos = \App\Models\Views\ContratoView::where('empleadorid',$idOldEmpleador);
-    $requerimientos = \App\Models\Views\RequerimientoView::where('empleadorid', $idOldEmpleador);
-    $domicilios = \App\Models\Domicilio::where('usuario_id', $oldEmpleador->usuario_id);
+function transferirDatosEmpleador($idOldEmpleador, $idNewEmpleador)
+{
+    $oldEmpleador = \App\Models\Empleador::select('id', 'usuario_id')->find($idOldEmpleador);
+    $newEmpleador = \App\Models\Empleador::select('id', 'usuario_id')->find($idNewEmpleador);
 
-    if($contratos->count() >= 1){
-        foreach ($contratos->get() as $c){
-            $datCont = [
-                'empleador_id' => $idNewEmpleador,
-            ];
-            $e = \App\Models\Contrato::where('empleador_id', $idOldEmpleador)->update($datCont);
-        }
+    if (!$oldEmpleador || !$newEmpleador) {
+        return 0;
     }
 
-    if($requerimientos->count() >= 1){
-        foreach ($requerimientos->get() as $c){
-            $datReq = [
-                'empleador_id' => $idNewEmpleador,
-            ];
-            $e = \App\Models\Requerimiento::where('empleador_id', $idOldEmpleador)->update($datReq);
-        }
-    }
+    // 1. Transferir contratos
+    \App\Models\Contrato::where('empleador_id', $idOldEmpleador)
+        ->update(['empleador_id' => $idNewEmpleador]);
 
-    if($domicilios->count() >= 1){
-        foreach ($domicilios->get() as $c){
-            $datDom = [
-                'usuario_id' => $newEmpleador->usuario_id,
-            ];
-            $e = \App\Models\Domicilio::where('usuario_id', $idOldEmpleador)->update($datDom);
-        }
-    }
+    // 2. Transferir requerimientos
+    \App\Models\Requerimiento::where('empleador_id', $idOldEmpleador)
+        ->update(['empleador_id' => $idNewEmpleador]);
+
+    // 3. Transferir domicilios (usuario_id)
+    \App\Models\Domicilio::where('usuario_id', $oldEmpleador->usuario_id)
+        ->update(['usuario_id' => $newEmpleador->usuario_id]);
 
     return 200;
 }
 
-function eliminarDatosEmpleador($idOldEmpleador){
-    $oldEmpleador = \App\Models\Empleador::find($idOldEmpleador);
-    $contratos = \App\Models\Views\ContratoView::where('empleadorid',$idOldEmpleador);
-    $requerimientos = \App\Models\Views\RequerimientoView::where('empleadorid', $idOldEmpleador);
-    $domicilios = \App\Models\Domicilio::where('usuario_id', $oldEmpleador->usuario_id);
+function eliminarDatosEmpleador($idOldEmpleador)
+{
+    $oldEmpleador = \App\Models\Empleador::select('id', 'usuario_id')->find($idOldEmpleador);
 
-    if($contratos->count() >= 1){
-        foreach ($contratos->get() as $c){
-            $datCont = [
-                'empleador_id' => 1,
-            ];
-            $e = \App\Models\Contrato::where('empleador_id', $idOldEmpleador)->update($datCont);
-        }
+    if (!$oldEmpleador) {
+        return 0;
     }
-    if($requerimientos->count() >= 1){
-        foreach ($requerimientos->get() as $c){
-            $e = \App\Models\Requerimiento::where('empleador_id', $idOldEmpleador)->delete();
-        }
-    }
-    if($domicilios->count() >= 1){
-        foreach ($domicilios->get() as $c){
-            $e = \App\Models\Domicilio::where('usuario_id', $oldEmpleador->usuario_id)->delete();
-        }
-    }
+
+    // 1. Resetear contratos (empleador_id = 1)
+    \App\Models\Contrato::where('empleador_id', $idOldEmpleador)
+        ->update(['empleador_id' => 1]);
+
+    // 2. Eliminar requerimientos
+    \App\Models\Requerimiento::where('empleador_id', $idOldEmpleador)
+        ->delete();
+
+    // 3. Eliminar domicilios
+    \App\Models\Domicilio::where('usuario_id', $oldEmpleador->usuario_id)
+        ->delete();
 
     return 200;
 }

@@ -556,89 +556,130 @@ class EmpleadoresController extends Controller
 
     }
 
-    public function ajaxBuscarVinculosEmpleador(Request $request){
-
+    public function ajaxBuscarVinculosEmpleador(Request $request)
+    {
         $idEmpleador = $request->input('idEmpleador');
+
         $vinculos = buscarVinculosEmpleador($idEmpleador);
         $listEmp = [];
 
-        if ($vinculos['total'] != 0){
-            $otrosEmpleadores = EmpleadorView::whereNotIn('id', [$idEmpleador])->get();
+        if ($vinculos['total'] != 0) {
 
-            foreach ($otrosEmpleadores as $emp){
-                $d = [
-                    'id'                => $emp->id,
-                    'name'              => $emp->empleador,
-                    'value'             => $emp->id,
-                    'label'             => $emp->empleador,
+            $otrosEmpleadores = Empleador::where('id', '!=', $idEmpleador)
+                ->with('usuario:id,nombres,apellidos')
+                ->select('id', 'usuario_id')
+                ->get();
+
+            $listEmp = $otrosEmpleadores->map(function ($emp) {
+                $nombre = $emp->usuario->nombres . ' ' . $emp->usuario->apellidos;
+
+                return [
+                    'id'    => $emp->id,
+                    'name'  => $nombre,
+                    'value' => $emp->id,
+                    'label' => $nombre,
                 ];
-
-                array_push($listEmp, $d);
-            }
+            });
         }
 
         return response()->json([
             'code' => 200,
             'data' => $vinculos['total'] != 0 ? $vinculos : null,
-            'listEmp'  => $listEmp,
+            'listEmp' => $listEmp,
         ]);
     }
 
-    public function ajaxTransferirDataEmpleador(Request $request){
+    public function ajaxTransferirDataEmpleador(Request $request)
+    {
         $idOldEmpleador = $request->input('idOldEmpleador');
-        $newEmpleador = $request->input('newEmpleador');
+        $newEmpleador   = $request->input('newEmpleador');
         $idNewEmpleador = $newEmpleador['id'];
 
         DB::beginTransaction();
+
         try {
-            $r = transferirDatosEmpleador($idOldEmpleador, $idNewEmpleador);
 
-            $emp = Empleador::find($idOldEmpleador);
-            $usu = Usuario::find($emp->usuario_id);
+            // Transferir datos (optimizado)
+            transferirDatosEmpleador($idOldEmpleador, $idNewEmpleador);
 
-            $e1 = $emp->delete();
-            $e2 = $usu->delete();
+            // Cargar empleador + usuario en una sola query
+            $emp = Empleador::with('usuario')->find($idOldEmpleador);
+
+            if (!$emp) {
+                throw new \Exception("Empleador no encontrado");
+            }
+
+            // Eliminar empleador
+            $emp->delete();
+
+            // Eliminar usuario si existe
+            if ($emp->usuario) {
+                $emp->usuario->delete();
+            }
 
             DB::commit();
 
-            return json_encode(['code' => 200, 'msj' => 'Transferencia exitosa']);
+            return response()->json([
+                'code' => 200,
+                'msj'  => 'Transferencia exitosa'
+            ]);
 
         } catch (\Exception $e) {
 
-            dd($e);
+            DB::rollBack();
 
-            DB::rollback();
+            \Log::error("Error en transferencia de empleador: " . $e->getMessage());
 
-            return json_encode(['code' => 500, 'msj' => 'Error al transferir data. Consulte al Administrador']);
+            return response()->json([
+                'code' => 500,
+                'msj'  => 'Error al transferir data. Consulte al Administrador'
+            ]);
         }
-
     }
 
-    public function ajaxEliminarDataEmpleador(Request $request){
+    public function ajaxEliminarDataEmpleador(Request $request)
+    {
         $idOldEmpleador = $request->input('idOldEmpleador');
 
         DB::beginTransaction();
+
         try {
-            $r = eliminarDatosEmpleador($idOldEmpleador);
 
-            $emp = Empleador::find($idOldEmpleador);
-            $usu = Usuario::find($emp->usuario_id);
+            // Eliminar vínculos (optimizado)
+            eliminarDatosEmpleador($idOldEmpleador);
 
-            $e1 = $emp->delete();
-            $e2 = $usu->delete();
+            // Cargar empleador + usuario en una sola query
+            $emp = Empleador::with('usuario')->find($idOldEmpleador);
+
+            if (!$emp) {
+                throw new \Exception("Empleador no encontrado");
+            }
+
+            // Eliminar empleador
+            $emp->delete();
+
+            // Eliminar usuario si existe
+            if ($emp->usuario) {
+                $emp->usuario->delete();
+            }
 
             DB::commit();
 
-            return json_encode(['code' => 200, 'msj' => 'Eliminación exitosa']);
+            return response()->json([
+                'code' => 200,
+                'msj'  => 'Eliminación exitosa'
+            ]);
 
         } catch (\Exception $e) {
 
-            dd($e);
+            DB::rollBack();
 
-            DB::rollback();
+            \Log::error("Error al eliminar empleador: " . $e->getMessage());
 
-            return json_encode(['code' => 500, 'msj' => 'Error al eliminar al trabajador. Consulte al Administrador']);
+            return response()->json([
+                'code' => 500,
+                'msj'  => 'Error al eliminar al trabajador. Consulte al Administrador'
+            ]);
         }
-
     }
 }
