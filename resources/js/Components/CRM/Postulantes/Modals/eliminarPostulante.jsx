@@ -100,49 +100,33 @@ export default function EliminarPostulante({
             <>
                 {vinculos && (
                     <div className={"py-1"}>
-                        <h5>
+                        <h5 className={'font-bold'}>
                             {"Se encontraron " + vinculos.total + " registros:"}
                         </h5>
-                        <div className={"pt-3 pe-2"}>
-                            {vinculos.antecedentes != 0 ? (
-                                <p>
-                                    {"- "}
-                                    <strong>{vinculos.antecedentes}</strong>
-                                    {" antecedente(s)."}
-                                </p>
-                            ) : null}
-                            {vinculos.antecedentesTemporales != 0 ? (
-                                <p>
-                                    {"- "}
-                                    <strong>
-                                        {vinculos.antecedentesTemporales}
-                                    </strong>
-                                    {" antecedente(s) temporal(es)."}
-                                </p>
-                            ) : null}
+                        <div className={"pt-3 ps-2"}>
                             {vinculos.contratos != 0 ? (
-                                <p>
+                                <p className={'m-0'}>
                                     {"- "}
                                     <strong>{vinculos.contratos}</strong>
                                     {" contrato(s)."}
                                 </p>
                             ) : null}
                             {vinculos.estatus != 0 ? (
-                                <p>
+                                <p className={'m-0'}>
                                     {"- "}
                                     <strong>{vinculos.estatus}</strong>
                                     {" cambio(s) de estado(s)."}
                                 </p>
                             ) : null}
                             {vinculos.postulaciones != 0 ? (
-                                <strong>
+                                <strong className={'m-0'}>
                                     {"- "}
                                     <b>{vinculos.postulaciones}</b>
                                     {" postulaciones."}
                                 </strong>
                             ) : null}
                             {vinculos.sanciones != 0 ? (
-                                <p>
+                                <p className={'m-0'}>
                                     {"- "}
                                     <strong>{vinculos.sanciones}</strong>
                                     {" sancion(es)."}
@@ -157,7 +141,7 @@ export default function EliminarPostulante({
                 </div>
 
                 <div>
-                    <h6>Transferir data a nuevo registro:</h6>
+                    <h6 className={'font-bold'}>Transferir data a nuevo registro:</h6>
                     <div className={"mt-2"}>
                         <Select
                             value={postSelected}
@@ -215,7 +199,7 @@ export default function EliminarPostulante({
                             <div className={"pt-2"}>
                                 <a
                                     className={
-                                        "btn btn-sm btn-block btn-green font-weight-700"
+                                        "btn btn-sm btn-block bertha-green-button font-weight-700"
                                     }
                                     onClick={(e) => transferirData(e)}
                                 >
@@ -232,14 +216,14 @@ export default function EliminarPostulante({
                             <hr className={"m-0"} />
                         </div>
                         <div className={"py-1"}>
-                            <h6>
+                            <h6 className={'font-bold'}>
                                 Si no quiere transferir la data, puede
                                 eliminarla:
                             </h6>
                             <div className={"pt-2"}>
                                 <a
                                     className={
-                                        "btn btn-red btn-sm btn-block font-weight-700"
+                                        "btn bertha-red-button btn-sm btn-block font-weight-700"
                                     }
                                     onClick={(e) => eliminarData(e)}
                                 >
@@ -262,7 +246,7 @@ export default function EliminarPostulante({
                 {noData == true && (
                     <a
                         className={
-                            "btn btn-red btn-sm btn-block font-weight-700 my-2"
+                            "btn bertha-red-button btn-sm btn-block font-weight-700 my-2"
                         }
                         onClick={(e) => eliminarData(e)}
                     >
