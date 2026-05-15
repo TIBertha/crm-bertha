@@ -15,8 +15,9 @@ class Baja extends Model
         return $query->where('borrado', $flag);
     }
 
-    public function tipobaja(){
-        return $this->belongsTo('App\Models\TipoBaja');
+    public function tipoBaja()
+    {
+        return $this->belongsTo(\App\Models\TipoBaja::class, 'tipobaja_id');
     }
 
     public function bajas()

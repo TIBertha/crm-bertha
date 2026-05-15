@@ -406,6 +406,43 @@ function configEstudios($estudios){
     return $result;
 }
 
+function getBajasLength($idTrabajador){
+    $result = [];
+    $bajas = \App\Models\TransaccionBaja::where('trabajador_id', $idTrabajador)->orderBy('creado', 'desc')->get();
+
+    foreach ($bajas as $b) {
+        $result[] = [
+            'id'                            => $b->id,
+            'usuario_id'                    => $b->trabajador->usuario_id,
+            'trabajador_id'                 => $b->trabajador->id,
+            'trabajador'                    => mb_convert_case(($b->trabajador->usuario->nombres . ' ' . $b->trabajador->usuario->apellidos), MB_CASE_UPPER, "UTF-8"),
+            'trabajadornombres'             => mb_convert_case(($b->trabajador->usuario->nombres), MB_CASE_UPPER, "UTF-8"),
+            'trabajadorapellidos'           => mb_convert_case(($b->trabajador->usuario->apellidos), MB_CASE_UPPER, "UTF-8"),
+            'trabajadorcorreo'              => $b->trabajador->usuario->correo,
+            'trabajadortelefono'            => $b->trabajador->usuario->telefono,
+            'trabajadortelefonowhatsapp'    => $b->trabajador->usuario->telefono_whatsapp,
+            'tipobaja_id'                   => $b->id,
+            'tipobajanombre'                => $b->tipobajanombre,
+            'penalizacion_dias'             => $b->penalizacion_dias,
+            'baja_id'                       => $b->baja_id,
+            'bajanombre'                    => $b->baja->tipoBaja->nombre,
+            'fecha_inicio_sancion'          => $b->fecha_inicio_sancion,
+            'fecha_fin_sancion'             => $b->fecha_fin_sancion,
+            'fecha_inicio_sancion_format'   => $b->fecha_inicio_sancion,
+            'fecha_fin_sancion_format'      => $b->fecha_fin_sancion,
+            'culminado'                     => $b->culminado,
+            'creado_format'                 => $b->creado,
+            'creado'                        => $b->creado,
+            'actualizado'                   => $b->actualizado,
+            'pagado'                        => boolval($b->pagado),
+            'monto_pagado'                  => $b->monto_pagado,
+            'fecha_pago_monto'              => $b->fecha_pago_monto
+        ];
+    }
+
+    return $result;
+}
+
 function showDiasSemana($dias, $limit = ''){
 
     $result = [];

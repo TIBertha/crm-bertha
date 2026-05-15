@@ -5,7 +5,7 @@ import moment from 'moment';
 import "react-datepicker/dist/react-datepicker.css";
 import {Tab, Tabs} from "react-bootstrap";
 import "react-phone-input-2/lib/style.css";
-import parse from "html-react-parser";
+import Constantes from "../../Helpers/constantes.js";
 import {modalCancelar, showAlert, showAlertConfirmRedirectReactRouter} from '../../Helpers/alerts.js';
 import {GetRequisitosViewPostulantes2} from "../../Helpers/postulantes.js";
 import {
@@ -361,7 +361,7 @@ class PostulantesEdit extends Component {
     }
 
     handleSingularDelete(e, campo){
-        if(campo == 'certificadoantecedente'){
+        if(campo === 'certificadoantecedente'){
             Swal.fire({
                 text: "¿Está seguro que desea borrar el certificado de antecedente?",
                 type: "warning",

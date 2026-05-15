@@ -1645,3 +1645,9 @@ $pink_add:#E663C3;
 .badge-dt{
     font-size: 85%;
 }
+
+.option-action{
+    &:hover{
+        cursor: pointer;
+    }
+}

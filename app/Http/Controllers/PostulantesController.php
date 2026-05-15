@@ -54,6 +54,43 @@ class PostulantesController extends Controller
         return view('PDF.Ficha_Postulante.template', $data);
     }
 
+    public function viewFichaAntecedente($id){
+
+        $d = Trabajador::find($id);
+
+        $data['ficha'] = [
+            'title'                      => setTitlePdf($d->usuario->nombres, $d->usuario->apellidos, 'antecedente'),
+            'fechaHoy'                   => (new \DateTime(\Carbon\Carbon::now()->format('Y-m-d')))->format('Y-m-d'),
+            'tiene_antecedentes'         => $d->antecedente_pdf ? true : false,
+            'nombres'                    => $d->usuario->nombres . ' ' . $d->usuario->apellidos,
+            'nacionalidad'               => $d->usuario->nacionalidad->nombre,
+            'tipodocumento'              => findDocumentAcronym($d->usuario->tipodocumento_id),
+            'tipodocumento_id'           => $d->usuario->tipodocumento_id,
+            'numerodocumento'            => $d->usuario->numero_documento,
+            'nacionalidadid'             => $d->nacionalidad_id,
+            'edad'                       => $d->edad ? $d->edad : '',
+            'telefono_whatsapp'          => $d->usuario->telefono_whatsapp,
+            'lugarnacimiento'            => $d->lugarnacimiento,
+            'antecedente'                => checkAntecedente($d->id),
+            'certificado_antecedente'    => checkEstadoCertificadoAntecedente($d->certificado_antecedente, $d->certificado_antecedente_fecha),
+            'videointroduccion'          => $d->video_introduccion,
+            'video_introduccion_youtube' => $d->video_introduccion_youtube,
+            'estadoid'                   => $d->estatuspostulante_id,
+            'estado'                     => $d->estatusPostulante->nombre,
+            'creado'                     => $d->creado,
+            'actualizado'                => $d->actualizado,
+            'firma'                      => $d->firma,
+            'vecesBajas'                 => getBajasLength($d->id),
+            'documento_vigente'          => $d->documento_vigente,
+            'foto_documento_delantera'   => $d->foto_documento_delantera,
+            'educacion'                  => configEstudios($d->adjunto_educacion),
+            'paisData'                   => setPaisData($d),
+            'historialContacto'          => convertHistorialContacto($d->historial_contacto),
+        ];
+
+        return view('PDF.Ficha_Postulante.Antecedentes.antecedentes', $data);
+    }
+
     public function ajaxSaveEstatusTieneCUL(Request $request){
         $estatus = $request->input('estatus');
         $id = $request->input('id');

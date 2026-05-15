@@ -19,6 +19,16 @@
     }
 }
 
+.logo-proveedor {
+    width: auto;
+    height: 50px;
+}
+
+.tabla-antecedentes {
+    width: 100%;
+    margin-top: 1.5rem;
+}
+
 .titulo-seccion {
     padding: 0.5rem;
     margin-bottom: 1rem;
@@ -30,14 +40,46 @@
     }
 }
 
-.table1 td{
-    -webkit-print-color-adjust: exact;
-    background-color: #CEDBFA;
-    -webkit-print-color-adjust: exact;
+.table1{
+    td{
+        -webkit-print-color-adjust: exact;
+        background-color: #CEDBFA;
+        -webkit-print-color-adjust: exact;
+    }
+
+    th{
+        border: unset;
+    }
 }
 
 .table2{
     background-color: #FEFEFE;
+}
+
+.tabla-antecedentes {
+    width: 100%;
+    text-align: center;
+    margin-top: 1.5rem;
+
+    td{
+        padding: .5rem;
+        font-size: 16px !important;
+    }
+
+    td, table{
+        border: none !important;
+    }
+}
+
+.antecedentes-conclusion {
+    width: 100%;
+    text-align: center;
+    margin-top: 0.5rem;
+
+    td{
+        padding: 0.25rem;
+        font-size: 22px !important;
+    }
 }
 
 .contenedor-tabla-recomendacion{
@@ -128,6 +170,21 @@
 }
 
 @media print {
+
+    .tabla-antecedentes {
+        margin-top: 1rem;
+
+        td{
+            font-size: 12px !important;
+        }
+    }
+
+    .antecedentes-conclusion {
+
+        td{
+            font-size: 18px !important;
+        }
+    }
 
     .ficha-foto-perfil{
         width: 202px;
@@ -225,10 +282,19 @@
         font-size: 0.75rem !important;
     }
 
-    .titulo h3{
-        font-size: 1rem !important;
-        font-weight: bold;
+    .titulo{
+
         text-align: center;
+
+        h3{
+            font-size: 1rem !important;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .titulo-antecedente{
+            font-size: 1.8rem;
+        }
     }
 
     .subtitulo h4{
@@ -245,9 +311,7 @@
     .lista-compromiso{
         padding-inline-start: 0;
     }
-    .titulo{
-        text-align: center;
-    }
+
     .font1 p{
         font-size: 0.75rem;
     }
@@ -327,10 +391,7 @@
         box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
     }
 
-    .titulo h3{
-        font-size: 1.8rem;
-        font-weight: bold;
-    }
+
 
     .textualic p,li{
         font-size: 1rem !important;
@@ -342,6 +403,11 @@
 
     .titulo{
         text-align: center;
+
+        h3, .titulo-antecedente{
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
     }
 
     .subtitulo h4{

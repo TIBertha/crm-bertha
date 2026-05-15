@@ -132,6 +132,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/ajax-save-estatus-cul', [PostulantesController::class, 'ajaxSaveEstatusTieneCUL']);
     Route::post('/ajax-get-historial-bajas', [PostulantesController::class, 'ajaxGetHistorialBajas']);
     Route::get('/postulantes/ficha-postulante/{id}/', [PostulantesController::class, 'viewFicha']);
+    Route::get('/postulantes/ficha-antecedente/{id}/', [PostulantesController::class, 'viewFichaAntecedente']);
 
     //Route::get('/postulantes/ficha-antecedente/{id}/', [PostulantesController::class, 'viewFichaAntecedente']);
 

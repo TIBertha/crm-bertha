@@ -53,6 +53,16 @@ class Trabajador extends Model
         return $this->belongsTo(\App\Models\Pais::class, 'nacionalidad_id', 'id');
     }
 
+    public function nacionalidad()
+    {
+        return $this->belongsTo(\App\Models\Nacionalidad::class, 'nacionalidad_id', 'id');
+    }
+
+    public function estatusPostulante()
+    {
+        return $this->belongsTo(\App\Models\EstatusPostulante::class, 'estatuspostulante_id', 'id');
+    }
+
     public function cambiosEstatus()
     {
         return $this->hasMany(\App\Models\CambioEstatusTrabajador::class, 'trabajador_id', 'id');
@@ -62,11 +72,6 @@ class Trabajador extends Model
     public function usuario()
     {
         return $this->belongsTo(Usuario::class, 'usuario_id', 'id');
-    }
-
-    public function estatusPostulante()
-    {
-        return $this->belongsTo(\App\Models\EstatusPostulante::class, 'estatuspostulante_id', 'id');
     }
 
     public function contratos()

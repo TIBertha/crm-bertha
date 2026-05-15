@@ -62,6 +62,11 @@ class Usuario extends Model
         return $this->verificar_telefono;
     }
 
+    public function nacionalidad()
+    {
+        return $this->belongsTo(\App\Models\Nacionalidad::class, 'nacionalidad_id', 'id');
+    }
+
     public function isTrabajador(){
 
         $tra = Trabajador::activo(true)->where('usuario_id', $this->id)->first();

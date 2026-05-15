@@ -26,11 +26,15 @@ class TransaccionBaja extends Model
         return $this->belongsTo(\App\Models\TipoBaja::class, 'tipobaja_id', 'id');
     }
 
+    public function trabajador()
+    {
+        return $this->belongsTo(\App\Models\Trabajador::class, 'baja_id', 'id');
+    }
+
     public function baja()
     {
         return $this->belongsTo(\App\Models\Baja::class, 'baja_id', 'id');
     }
-
 
     public function usuario()
     {
