@@ -574,14 +574,19 @@ class PostulantesController extends Controller
 
         $query->when($departamentonac, fn($q) => $q->where('lugarnacimiento', 'like', "%$departamentonac%"));
 
+        $query->when($documento, function ($q) use ($documento) {
+            $q->whereHas('usuario', function ($u) use ($documento) {
+                $u->where('numero_documento', 'like', "%{$documento}%");
+            });
+        });
 
-        $query->when($documento, fn($q) => $q->where('numero_documento', 'like', "%$documento%"));
+
         $query->when($telefonorecomendacion, fn($q) => $q->where('verificaciones_laborales', 'like', "%$telefonorecomendacion%"));
 
         $query->when($telefono, function ($q) use ($telefono) {
-            $q->where(function ($qq) use ($telefono) {
-                $qq->where('telefono', 'like', "%$telefono%")
-                    ->orWhere('telefono_whatsapp', 'like', "%$telefono%");
+            $q->whereHas('usuario', function ($u) use ($telefono) {
+                $u->where('telefono', 'like', "%{$telefono}%")
+                    ->orWhere('telefono_whatsapp', 'like', "%{$telefono}%");
             });
         });
 

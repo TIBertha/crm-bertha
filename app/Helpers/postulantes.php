@@ -34,7 +34,6 @@ function formatDataPostulante($data){
 
             $daysPast = $d->certificado_antecedente_fecha ? getDaysPast($d->certificado_antecedente_fecha) : null;
 
-            $distrito = $d->distrito;
             $dataDistrito = DistritoView::find($d->distrito_id);
 
             $nullFoto = asset('img/user_icon.svg');
@@ -43,7 +42,6 @@ function formatDataPostulante($data){
             $result[] = [
                 'dias_contratados_por_dias'  => $diasTrabajoPorDias,
 
-                'tipodocumento'              => findDocumentAcronym($d->tipodocumento_id),
                 'telefono_tarjeta'           => separateNumber($d->usuario->telefono),
                 'telefono_tarjeta_whatsapp'  => separateNumber($d->usuario->telefono_whatsapp),
                 'actividades'                => showActividades($d->actividad_id, 2, $d->postulando_pais_id),
@@ -55,21 +53,22 @@ function formatDataPostulante($data){
                 'educacion'                  => configEstudios($d->adjunto_educacion),
                 'historialContacto'          => convertHistorialContacto($d->historial_contacto),
 
-                'tiene_antecedentes'         => !empty($d->antecedente_pdf),
+                'tiene_antecedentes'         => !empty($d->certificado_antecedente_pdf),
                 'diaspasadoscertificadoantecedente' => $daysPast,
                 'contact_name'               => $n[0] . ' ' . $d->apellidos ,
                 'flag_emoji'                 => $d->postulando_pais_id == 11 ? '🇨🇱' : '🇵🇪',
                 'id'                         => $d->id,
-                'numeroDocumento'            => $d->numero_documento,
-                'antecedentes_pdf'           => $d->antecedente_pdf,
+                'numeroDocumento'            => $d->usuario->numero_documento,
+                'antecedentes_pdf'           => $d->certificado_antecedente_pdf,
                 'tiene_cuenta'               => $d->tiene_cuenta,
                 'foto'                       => $d->foto ? $d->foto : $nullFoto,
 
                 'nombres'                    => $d->usuario->nombres . ' ' . $d->usuario->apellidos,
 
-                'nacionalidad'               => $d->nacionalidad,
-                'tipodocumento_id'           => $d->tipodocumento_id,
-                'nacionalidadid'             => $d->nacionalidad_id,
+                'nacionalidad'               => $d->usuario->nacionalidad->nombre,
+                'tipodocumento_id'           => $d->usuario->tipodocumento_id,
+                'tipodocumento'              => findDocumentAcronym($d->tipodocumento_id),
+                'nacionalidadid'             => $d->usuario->nacionalidad_id,
 
                 'edad'                       => $d->usuario && $d->usuario->fecha_nacimiento ? \Carbon\Carbon::parse($d->usuario->fecha_nacimiento)->age : '',
 

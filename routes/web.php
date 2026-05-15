@@ -133,10 +133,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/ajax-get-historial-bajas', [PostulantesController::class, 'ajaxGetHistorialBajas']);
     Route::get('/postulantes/ficha-postulante/{id}/', [PostulantesController::class, 'viewFicha']);
     Route::get('/postulantes/ficha-antecedente/{id}/', [PostulantesController::class, 'viewFichaAntecedente']);
-
-    //Route::get('/postulantes/ficha-antecedente/{id}/', [PostulantesController::class, 'viewFichaAntecedente']);
-
-
     Route::post('/ajax-set-contactado-postulantes', [PostulantesController::class, 'ajaxSetContactadoPostulantes']);
     Route::post('/ajax-calcular-liquidacion', [PostulantesController::class, 'ajaxCalcularLiquidacion']);
     Route::post('/ajax-get-registro-liquidacion', [PostulantesController::class, 'ajaxGetRegistroLiquidaciones']);
@@ -155,9 +151,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/ajax-buscar-vinculos-postulante', [PostulantesController::class, 'ajaxBuscarVinculosPostulante']);
     Route::post('/ajax-transferir-data-postulante', [PostulantesController::class, 'ajaxTransferirDataPostulante']);
     Route::post('/ajax-eliminar-data-postulante', [PostulantesController::class, 'ajaxEliminarDataPostulante']);
-
-
-
 
     //ruta de empleadores
     Route::get('/empleadores', [EmpleadoresController::class, 'index'])->name('empleadores');

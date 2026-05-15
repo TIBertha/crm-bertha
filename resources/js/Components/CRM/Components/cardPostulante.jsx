@@ -660,11 +660,15 @@ export default function CardPostulante({
                 {!d.tipodocumento && (
                     <>
                         {(access = true) && (
-                            <DataRestantePostulante
-                                url={url}
-                                idPostulante={d.id}
-                                nombrePostulante={d.nombres}
-                            />
+                            <>
+                                {d.estadoid === 7 &&
+                                    <DataRestantePostulante
+                                        url={url}
+                                        idPostulante={d.id}
+                                        nombrePostulante={d.nombres}
+                                    />
+                                }
+                            </>
                         )}
                     </>
                 )}
