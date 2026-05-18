@@ -71,7 +71,7 @@ export default function DatosPrensa({view, data, show, handleChange, handleEdito
 
             <div className={'form-group col-12 col-md-7'}>
                 <div className="row">
-                    <label className="col-12 col-md-3 col-form-label align-self-center"><span className='mr-2'>Etiquetas</span><Tooltips estilo={'tooltip-tc'} placement={'bottom'} text={'Estas etiquetas servirán para posicionar el artículo en Google.'} /></label>
+                    <label className="col-12 col-md-3 col-form-label align-self-center"><span className='me-2'>Etiquetas</span><Tooltips estilo={'tooltip-tc'} placement={'bottom'} text={'Estas etiquetas servirán para posicionar el artículo en Google.'} /></label>
                     <div className="col-md-9 align-self-center">
                         <ReactTags
                             tags={data.tags}

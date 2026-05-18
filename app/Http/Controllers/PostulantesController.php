@@ -1090,4 +1090,70 @@ class PostulantesController extends Controller
         }
     }
 
+    public function ajaxGetDataFaltantePostulante(Request $request){
+        $id = $request->input('id');
+
+        $trab = Trabajador::find($id);
+        $data = [
+            'numeroDocumento'   => $trab->usuario->numero_documento,
+            'tipoDocumento'     => $trab->usuario->tipodocumento_id,
+            'paisNacimiento'    => $trab->usuario->paisnacimiento_id,
+            'paisPostulacion'   => $trab->postulando_pais_id,
+        ];
+
+        return response()->json([
+            'code' => 200,
+            'data' => $data,
+            'tiposDocumentos' => TipoDocumento::get(),
+            'paises' => Pais::get(),
+        ]);
+    }
+
+    public function ajaxSaveDataFaltantePostulante(Request $request){
+
+        DB::beginTransaction();
+
+        try {
+            $id               = $request->input('id');
+            $paisNacimiento   = $request->input('paisNacimiento');
+            $paisPostulacion  = $request->input('paisPostulacion');
+            $tipoDocumento    = $request->input('tipoDocumento');
+            $numeroDocumento  = $request->input('numeroDocumento');
+
+            $trab = Trabajador::with('usuario')->find($id);
+
+            if (!$trab) {
+                return response()->json([
+                    'code' => 404,
+                    'msj'  => 'Trabajador no encontrado'
+                ]);
+            }
+
+            // Actualizar usuario
+            $trab->usuario->update([
+                'tipodocumento_id'  => $tipoDocumento,
+                'numero_documento'  => $numeroDocumento,
+                'paisnacimiento_id' => $paisNacimiento,
+            ]);
+
+            // Actualizar trabajador
+            $trab->update([
+                'postulando_pais_id' => $paisPostulacion,
+            ]);
+
+            DB::commit();
+
+            return response()->json(['code' => 200]);
+        } catch (\Exception $e) {
+
+            DB::rollback();
+
+            dd($e);
+
+            return response()->json(['code' => 500, 'msj' => 'Ocurrio un problema al actualizar el postulante. Consulte al administrador' ]);
+
+        }
+
+
+    }
 }

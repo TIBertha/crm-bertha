@@ -41,7 +41,7 @@ export default function CopyContratos({idCont}) {
             <Modal size="md" show={show} onHide={(e) => setShow(false)} centered={true} backdrop="static">
                 <ModalHeader className="border-0" closeButton>
                     <ModalTitle>
-                        <h6><i className={conf.title + ' mr-2' }></i>{conf.title}</h6>
+                        <h6><i className={conf.title + ' me-2' }></i>{conf.title}</h6>
                     </ModalTitle>
                 </ModalHeader>
                 <ModalBody className="py-20">

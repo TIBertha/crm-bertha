@@ -103,7 +103,7 @@ export default function ResetPasswords({}) {
                 >
                     <i className={conf.icon + " icon-question"}></i>{" "}
                     {responsive === true && (
-                        <span className="ml-2">{conf.title}</span>
+                        <span className="ms-2">{conf.title}</span>
                     )}
                 </div>
             </a>

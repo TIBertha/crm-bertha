@@ -151,6 +151,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/ajax-buscar-vinculos-postulante', [PostulantesController::class, 'ajaxBuscarVinculosPostulante']);
     Route::post('/ajax-transferir-data-postulante', [PostulantesController::class, 'ajaxTransferirDataPostulante']);
     Route::post('/ajax-eliminar-data-postulante', [PostulantesController::class, 'ajaxEliminarDataPostulante']);
+    Route::post('/ajax-get-data-faltante-postulante', [PostulantesController::class, 'ajaxGetDataFaltantePostulante']);
+    Route::post('/ajax-save-data-faltante-postulante', [PostulantesController::class, 'ajaxSaveDataFaltantePostulante']);
 
     //ruta de empleadores
     Route::get('/empleadores', [EmpleadoresController::class, 'index'])->name('empleadores');
@@ -201,6 +203,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/ajax-requerimientos-pendiente', [RequerimientosController::class, 'ajaxPendiente']);
     Route::post('/ajax-cambiar-estado-requerimientos', [RequerimientosController::class, 'ajaxCambiarEstadoReq']);
     Route::post('/ajax-entrevista-switch', [RequerimientosController::class, 'ajaxEntrevistaSwitch']);
+    Route::post('/ajax-requerimientos-delete', [RequerimientosController::class, 'ajaxDelete']);
 
     //ruta contratos
     Route::get('/contratos', [ContratosController::class, 'index'])->name('contratos');
@@ -214,7 +217,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/ajax-contratos-edit', [ContratosController::class, 'ajaxEdit']);
     Route::post('/ajax-contratos-finalizar', [ContratosController::class, 'ajaxFinalizar']);
     Route::post('/ajax-contratos-buscar', [ContratosController::class, 'ajaxBuscar']);
-
     Route::post('/ajax-contratos-get-data-inicial', [ContratosController::class, 'ajaxGetDataInicial']);
     Route::post('/ajax-get-data-modal-detalles-contrato', [ContratosController::class, 'ajaxGetDataModalDetallesContratos']);
     Route::post('/ajax-load-data-cambio-estados', [ContratosController::class, 'ajaxLoadDataCambioEstados']);

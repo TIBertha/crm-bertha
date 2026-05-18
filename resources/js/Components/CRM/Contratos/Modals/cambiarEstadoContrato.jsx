@@ -141,7 +141,7 @@ export default function CambiarEstadoContrato({ url, idContrato }) {
                 <div className="row mx-0">
                     <div className={"col-12 form-group text-center"}>
                         <a
-                            className="btn btn-lg btn-block btn-green-webexperta text-white"
+                            className="btn btn-lg btn-block bertha-green-button text-white"
                             onClick={(e) => saveChanges(e)}
                         >
                             Guardar
@@ -187,7 +187,7 @@ export default function CambiarEstadoContrato({ url, idContrato }) {
                 <ModalHeader className="border-0" closeButton>
                     <ModalTitle>
                         <h6>
-                            <i className={conf.icon + " mr-2"}></i>
+                            <i className={conf.icon + " me-2"}></i>
                             {conf.title}
                         </h6>
                     </ModalTitle>

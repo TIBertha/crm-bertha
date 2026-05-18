@@ -45,10 +45,10 @@ export default function redencialesSearchSide({data, sideBar, handleOpenSideBar,
 
                                     <div className="row mt-10">
                                         <div className="col-6">
-                                            <button id="btn-buscar" className="btn btn-purple-webexperta btn-block btn-sm btn-reset"  type="submit" >Buscar</button>
+                                            <button id="btn-buscar" className="btn bertha-purple-button btn-block btn-sm btn-reset"  type="submit" >Buscar</button>
                                         </div>
                                         <div className="col-6">
-                                            <button className="btn btn-pink-webexperta btn-block btn-sm btn-reset" onClick={(e) => limpiarBusqueda(e)}>Limpiar</button>
+                                            <button className="btn bertha-pink-button btn-block btn-sm btn-reset" onClick={(e) => limpiarBusqueda(e)}>Limpiar</button>
                                         </div>
                                     </div>
 

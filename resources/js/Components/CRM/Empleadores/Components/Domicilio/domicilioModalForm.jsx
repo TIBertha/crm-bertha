@@ -223,7 +223,7 @@ export default function DomicilioModalForm({dataEdit, add, edit, close}) {
             </div>
 
             <div className="form-group">
-                <label className="col-form-label col-form-label-sm">Link (Opcional) <a className="purple-bertha-div" href="https://www.google.com.pe/maps?hl=es" target="_blank">Buscar en Google Maps <i className="fas fa-search ml-1"></i></a></label>
+                <label className="col-form-label col-form-label-sm">Link (Opcional) <a className="purple-bertha-div" href="https://www.google.com.pe/maps?hl=es" target="_blank">Buscar en Google Maps <i className="fas fa-search ms-1"></i></a></label>
                 <input type="text" className="form-control form-control-sm" id="linkOpcional" name="nombres" value={domicilio.linkOpcional} onChange={(e) => {setValues({linkOpcional: e.target.value});  } } placeholder="Link opcional"/>
             </div>
 

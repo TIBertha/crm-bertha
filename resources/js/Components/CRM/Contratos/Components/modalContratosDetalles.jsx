@@ -42,14 +42,14 @@ export default function ModalContratosDetalles({idCont}) {
     return (
         <>
             <a className="button-information-modal" role="button" onClick={(e) => openModal(e)}>
-                <i className={conf.icon + ' mr-2'}></i>
-                {responsive && <span className='ml-2'>{conf.title}</span>}
+                <i className={conf.icon + ' me-2'}></i>
+                {responsive && <span className='ms-2'>{conf.title}</span>}
             </a>
 
             <Modal size="md" show={show} onHide={(e) => setShow(false)} centered={true}>
                 <ModalHeader className="border-0" closeButton>
                     <ModalTitle>
-                        <h6><i className={conf.icon + ' mr-2'}></i>{conf.title}</h6>
+                        <h6><i className={conf.icon + ' me-2'}></i>{conf.title}</h6>
                     </ModalTitle>
                 </ModalHeader>
                 <ModalBody className="py-20">

@@ -9,11 +9,16 @@ import VerMaps from "../Components/verMaps.jsx";
 import Cotizador from "./Components/Cotizador.jsx";
 import RequerimientosTable from "./requerimientosTable.jsx";
 import {
+    ajaxCambiarEstadoReq,
     ajaxRefreshRequerimientos,
+    ajaxRequerimientosDelete,
     ajaxRequerimientosBuscar,
     ajaxRequerimientosGetDataInicial
 } from "../../Functions/Requerimientos.jsx";
 import {useNavigate, useParams} from "react-router-dom";
+import {showAlert, showAlertConfirmRedirectReactRouter} from "../../Helpers/alerts.js";
+import {setEstadosRequerimientoName} from "../../Helpers/bd.js";
+import global from "../../Helpers/constantes.js";
 
 export function withRouter(Component) {
     return props => {
@@ -160,7 +165,7 @@ class RequerimientosIndex extends Component{
                     if(r.code === 200){
                         this.refreshRequerimientos();
                         const { navigate } = this.props;
-                        showAlertConfirmRedirectReactRouter('exito', r.msj, '/requerimientos.js', navigate);
+                        showAlertConfirmRedirectReactRouter('exito', r.msj, '/requerimientos', navigate);
                     }else if(r.code === 500){
                         showAlert('error', r.msj);
                     }
@@ -189,7 +194,7 @@ class RequerimientosIndex extends Component{
                     if (r.code === 200){
                         this.refreshRequerimientos();
                         const { navigate } = this.props;
-                        showAlertConfirmRedirectReactRouter('exito', r.msj, '/requerimientos.js', navigate);
+                        showAlertConfirmRedirectReactRouter('exito', r.msj, '/requerimientos', navigate);
                     }else if (r.code === 500){
                         showAlert('error', r.msj);
                     }
@@ -218,7 +223,7 @@ class RequerimientosIndex extends Component{
                     if (r.code === 200){
                         this.refreshRequerimientos();
                         const { navigate } = this.props;
-                        showAlertConfirmRedirectReactRouter('exito', r.msj, '/requerimientos.js', navigate);
+                        showAlertConfirmRedirectReactRouter('exito', r.msj, '/requerimientos', navigate);
                     }else if (r.code === 500){
                         showAlert('error', r.msj);
                     }

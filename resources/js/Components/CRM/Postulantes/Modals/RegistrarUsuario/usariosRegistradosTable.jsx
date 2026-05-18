@@ -79,7 +79,7 @@ export default function UsariosRegistradosTable({usuarios}) {
                                         <>
                                             {(viewUsuario == 2) &&
                                                 <strong className={tbMsjColor}>
-                                                    {tbMsjText} <i className={tbMsjIcon + ' mr-2'}></i>
+                                                    {tbMsjText} <i className={tbMsjIcon + ' me-2'}></i>
                                                 </strong>
                                             }
 

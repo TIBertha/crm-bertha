@@ -12,14 +12,14 @@ export default function VerDetallesRequerimiento({data, responsive = false}) {
         <>
             <a className={responsive === true ? 'w-100' : ''} role="button" onClick={(e) => setShow(true)}>
                 <div className={('btn bertha-purple-button font-weight-bold font btn-') + (responsive === true ? 'lg w-100' : 'sm text-white')} data-toggle="tooltip" data-placement="bottom" title={conf.title}>
-                    <i className={conf.icon + ' icon-question'}></i> {responsive === true && <span className='ml-2'>{conf.title}</span>}
+                    <i className={conf.icon + ' icon-question'}></i> {responsive === true && <span className='ms-2'>{conf.title}</span>}
                 </div>
             </a>
 
             <Modal size="lg" show={show} onHide={(e) => setShow(false)} centered={true}>
                 <ModalHeader className="border-0" closeButton>
                     <ModalTitle>
-                        <h6><i className={conf.icon + ' mr-2'}></i>{conf.title}</h6>
+                        <h6><i className={conf.icon + ' me-2'}></i>{conf.title}</h6>
                     </ModalTitle>
                 </ModalHeader>
                 <ModalBody className="py-20">

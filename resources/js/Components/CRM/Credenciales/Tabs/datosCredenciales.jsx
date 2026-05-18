@@ -38,8 +38,8 @@ export default function DatosCredenciales({data, handleChange}) {
                         <div className={'row mx-0'}>
                             <input type="text" className={'form-control col' + (data.linkPlataforma ? '' : '-12')} id="linkPlataforma" name="linkPlataforma" value={data.linkPlataforma} onChange={handleChange} placeholder="Ingrese el link de acceso" />
                             {data.linkPlataforma &&
-                                <div className={'col-auto pr-0'}>
-                                    <a className={'btn btn-sm btn-green-webexperta font-weight-bold text-white h-100'} href={data.linkPlataforma} target={'_blank'}>
+                                <div className={'col-auto pe-0'}>
+                                    <a className={'btn btn-sm bertha-green-button font-weight-bold text-white h-100'} href={data.linkPlataforma} target={'_blank'}>
                                         <i className={'fas fa-link alignButtonReq icon-question'}></i>
                                     </a>
                                 </div>

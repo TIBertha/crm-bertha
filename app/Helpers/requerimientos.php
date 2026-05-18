@@ -829,9 +829,11 @@ function getNewRequerimientos($fastsearch = false){
     if ($fastsearch == 'H') {
         $query->whereDate('fechaentrevista', Carbon::now());
     } elseif ($fastsearch == 'T') {
-        $query->where('fechaentrevista', '>=', Carbon::now()->subDays(3));
+        $query->where('fechaentrevista', '>=', Carbon::now()->subDays(3))
+            ->orWhere('actualizado', '>=', Carbon::now()->subDays(1));
     } else {
-        $query->where('actualizado', '>=', Carbon::now()->subDays(3));
+        $query->where('actualizado', '>=', Carbon::now()->subDays(3))
+            ->orWhereNull('fechaentrevista');
     }
 
     $query->whereIn('estatusrequerimientoid', [1,4])
@@ -909,6 +911,7 @@ function processDataRequerimiento($data){
 
         $newTerms1711 = isNewTerms1711($d->creado);
         $contract = validateNewContrato($d, $d->paispedido_id, $contratosGroup, $tiposcontratosAll);
+        $dataAnuncio = [];
 
         // Divisa
         if ($d->paispedido_id == 54) {
@@ -921,7 +924,39 @@ function processDataRequerimiento($data){
 
         $n = explode(" ", $d->empleadornombres);
 
+        if ($d->estatusrequerimientoid === 1){
+
+            $divisa = 'S/ ';
+
+            $nem = \App\Models\Modalidad::find($d->modalidadid);
+            $newModalidad = $nem->nombre;
+
+            $dist = \App\Models\Views\DistritoView::find($d->distrito_domicilioid);
+
+            $dataAnuncio = [
+                'paispedido'            => $d->paispedido_id,
+                'actividad'             => ($d->actividad),
+                'modalidad'             => ($newModalidad),
+                'modalidadid'           => $d->modalidadid,
+                'fechaentrevista'       => fechaCompletaSpanish(Carbon::parse($d->fechaentrevista)),
+                'sueldo'                => in_array($d->modalidadid, [1,2,4,5]) ? ($divisa . number_format($d->sueldo)) : null,
+                'sueldopordia'          => in_array($d->modalidadid, [3]) ? ($divisa . $d->valor_dia_frecuencia . ' x día') : null,
+                'frecuencia'            => in_array($d->modalidadid, [3]) ? ($d->frecuenciaservicio_id . ' ve' . ($d->frecuenciaservicio_id == 1 ? 'z': 'ces') .' x semana') : null,
+                'horarioPD'             => in_array($d->modalidadid, [3]) ? setHorarioPorDias($d->horarios) : null,
+                'horarioCF'             => in_array($d->modalidadid, [2,4,5]) ? setHorarioCamaAfuera($d->horarios) : null,
+                'horarioCD'             => in_array($d->modalidadid, [1]) ? setHorarioCamaAdentro($d) : null,
+                'distrito'              => $d->distrito_domicilioid ? mb_convert_case( $dist->distritostres, MB_CASE_TITLE, "UTF-8") : null,
+                'domicilioid'           => $d->domicilioid,
+                'referencia'            => $d->referencia ? mb_convert_case( $d->referencia, MB_CASE_TITLE, "UTF-8") : null,
+                'referenciacanvas'      => $d->referenciacanvas ? mb_convert_case( $d->referenciacanvas, MB_CASE_TITLE, "UTF-8") : null,
+            ];
+        }
+
+
+
         $result[] = [
+
+            'data_anuncio' => $dataAnuncio,
 
             'postulados' => $postulados[$d->id]->total ?? 0,
             'empleador_contact_data' => $empleadores[$d->empleadorid] ?? null,

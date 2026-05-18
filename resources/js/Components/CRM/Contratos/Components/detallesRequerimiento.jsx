@@ -47,7 +47,7 @@ export default function DetallesRequerimiento({data}) {
                     {data.horarios ?
                         <div>
                             <p>Horario:</p>
-                            <div className="ml-3">
+                            <div className="ms-3">
                                 {data.horarios.map((d,index) => {
                                     return(
                                         <>

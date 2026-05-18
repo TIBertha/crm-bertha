@@ -51,7 +51,7 @@ export default function RequerimientosTable({url, requerimientos, total, page, c
                 </span>
 
                     <i
-                        className={'ml-1 fas fa-coins ' +colorCoinIcon}
+                        className={'ms-1 fas fa-coins ' +colorCoinIcon}
                         data-toggle="tooltip"
                         data-placement="top"
                         title={tooltipCoinIcon}
@@ -180,7 +180,7 @@ export default function RequerimientosTable({url, requerimientos, total, page, c
                                         <>
                                             {responsive ?
                                                 <div className='notificacionPostulante-button-cero'>
-                                                    <span className='badge badge-light notificacionPostulante-mobileBadge mr-1'>0</span> Postulados <i className='fas fa-user ml-1'></i>
+                                                    <span className='badge badge-light notificacionPostulante-mobileBadge me-1'>0</span> Postulados <i className='fas fa-user ms-1'></i>
                                                 </div>
                                                 :
                                                 <i className="fas fa-user-slash notificacionPostulante-cero"></i>

@@ -266,6 +266,14 @@ export function ajaxCambiarEstadoReq(id, estado) {
         });
 }
 
+export function ajaxRequerimientosDelete(id){
+    return axios.post('/ajax-requerimientos-delete', {id} )
+        .then(res => {
+            let r = res.data;
+            return r;
+        });
+}
+
 export function ajaxEntrevistaSwitch(id){
     return axios.post('/ajax-entrevista-switch', {id})
         .then(res => {

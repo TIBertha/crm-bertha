@@ -532,7 +532,7 @@ class RequerimientosController extends Controller
         $idReq = $request->input('idReq');
         $requerimiento = RequerimientoView::find($idReq);
         $newTerms1711  = isNewTerms1711($requerimiento->creado);
-        $contract = validateNewContrato($requerimiento, $requerimiento->paispedido_id);
+        $contract = validateNewContrato($requerimiento, $requerimiento->paispedido_id, null, null);
         $linkComprobante = null;
 
         if ($requerimiento->adjunto_adelanto || $requerimiento->comprobante_adelanto_id){
@@ -846,7 +846,7 @@ class RequerimientosController extends Controller
             $newReq->fill([
                 'creado'                   => now(),
                 'actualizado'              => now(),
-                'estatusrequerimiento_id'  => 1,
+                'estatusrequerimiento_id'  => 4,
                 'fecha'                    => now(),
                 'trabajadores_id'          => null,
                 'fecha_entrevista'         => null,
@@ -952,5 +952,41 @@ class RequerimientosController extends Controller
             return json_encode(['code' => 600, 'msj' => 'No existe ID. Consulte al administrador']);
         }
 
+    }
+
+    public function ajaxDelete(Request $request)
+    {
+        $id = $request->input('id');
+        $requerimiento = Requerimiento::find($id);
+
+        if (!$requerimiento) {
+            return response()->json([
+                'code' => 600,
+                'msj'  => 'El requerimiento no existe. Consulte al Administrador.'
+            ]);
+        }
+
+        // Contar contratos asociados
+        $contratos = Contrato::where('requerimiento_id', $id)->count();
+
+        if ($contratos > 0) {
+            return response()->json([
+                'code' => 500,
+                'msj'  => "El requerimiento N° $id está vinculado a $contratos contrato" . ($contratos > 1 ? 's' : '') . ". Consulte al Administrador."
+            ]);
+        }
+
+        // Eliminar
+        if ($requerimiento->delete()) {
+            return response()->json([
+                'code' => 200,
+                'msj'  => 'Requerimiento eliminado exitosamente'
+            ]);
+        }
+
+        return response()->json([
+            'code' => 500,
+            'msj'  => 'Error al eliminar el requerimiento. Consulte al Administrador.'
+        ]);
     }
 }

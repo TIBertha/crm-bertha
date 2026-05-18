@@ -174,7 +174,7 @@ export default function EliminarEmpleador({idEmpleador, nombreEmpleador, handleR
             <Modal size="xl" scrollable={false} backdrop="static" keyboard={false} show={show} onHide={(e) => closeModal()} centered={true}>
                 <ModalHeader className="border-0 pb-0" closeButton={!Boolean(loading)}>
                     <ModalTitle>
-                        <h6><i className={modal.icon + ' mr-2'}></i>{modal.title}</h6>
+                        <h6><i className={modal.icon + ' me-2'}></i>{modal.title}</h6>
                     </ModalTitle>
                 </ModalHeader>
                 <ModalBody className="py-3">

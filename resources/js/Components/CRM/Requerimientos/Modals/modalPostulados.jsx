@@ -46,7 +46,7 @@ export default function ModalPostulados({idReq, empleador, postuladosCantidad}) 
                 {responsive
                     ?
                     <>
-                        <span className='badge badge-light notificacionPostulante-mobileBadge me-1'>{postuladosCantidad}</span> Postulados <i className={conf.icon + '  ml-1'}></i>
+                        <span className='badge badge-light notificacionPostulante-mobileBadge me-1'>{postuladosCantidad}</span> Postulados <i className={conf.icon + '  ms-1'}></i>
                     </>
                     :
                     <div className={'notificacionPostulanciones'}>
