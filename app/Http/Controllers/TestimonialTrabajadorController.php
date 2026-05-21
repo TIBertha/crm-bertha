@@ -108,10 +108,6 @@ class TestimonialTrabajadorController extends Controller
     public function ajaxGet(Request $request){
 
         $id = $request->input('id');
-        $trabajadores = Trabajador::with('usuario')
-            ->whereNotNull('usuario_id')
-            ->get()
-            ->sortBy(fn($t) => $t->usuario->nombres);
 
         if($id){
 
@@ -124,7 +120,6 @@ class TestimonialTrabajadorController extends Controller
                 'imagen'                    => $data->imagen,
                 'dispMx'                    => $data->disp_mx,
                 'dispPe'                    => $data->disp_pe,
-                'trabajadores'              => formatMultiselectTrabajadores($trabajadores)
             ]);
         }else{
             return json_encode(['code' => 500]);

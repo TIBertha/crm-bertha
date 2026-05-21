@@ -259,7 +259,6 @@ class TestimonialesTrabajadorEdit extends Component {
                     imagenTestimonial: r.imagen,
                     dispPe: Boolean(r.dispPe),
                     dispMx: Boolean(r.dispMx),
-                    trabajadores: r.trabajadores,
                 });
                 this.setLoading(false);
             }else if(r.code === 500){
