@@ -165,6 +165,7 @@ export default function DatosAdmin({data, view, handleChange}) {
                 </div>
             </div>
 
+            {/*
             <div className="form-group col-12 col-md-6">
                 <div className="row">
                     <label className="col-12 col-md-3 col-form-label align-self-center">Ubicación</label>
@@ -178,6 +179,7 @@ export default function DatosAdmin({data, view, handleChange}) {
                     </div>
                 </div>
             </div>
+            */}
 
             <div className="form-group col-12 col-md-6">
                 <div className="row">
@@ -193,7 +195,7 @@ export default function DatosAdmin({data, view, handleChange}) {
                 </div>
             </div>
 
-            {!([2].includes(parseInt(data.rol))) &&
+            {/*!([2].includes(parseInt(data.rol))) &&
                 <div className="form-group col-12 col-md-6">
                     <div className="row">
                         <label className="col-12 col-md-3 col-form-label align-self-center">{sueldoNombre}</label>
@@ -206,7 +208,7 @@ export default function DatosAdmin({data, view, handleChange}) {
                         </div>
                     </div>
                 </div>
-            }
+            */}
         </section>
     )
 }

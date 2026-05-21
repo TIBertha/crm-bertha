@@ -190,15 +190,20 @@ export default function Postulaciones({data, requerimientoid, empleador}) {
     };
 
     useEffect(() => {
-
         getListaPostulaciones(requerimientoid, filtro);
-
-    }, []);
+    }, [requerimientoid, filtro]);
 
     useEffect(() => {
 
+        if (!search) {
+            setPostulacionesFiltered(postulaciones);
+            return;
+        }
+
+        const s = search.toLowerCase();
+
         const results = postulaciones.filter(p =>
-            p.trabajador.includes(search)
+            p.trabajador.toLowerCase().includes(s)
         );
 
         setPostulacionesFiltered(results);

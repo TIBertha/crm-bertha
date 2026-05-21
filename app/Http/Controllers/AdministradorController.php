@@ -48,7 +48,7 @@ class AdministradorController extends Controller
                 $pathImagen = saveImageGeneralS3($imagen, '', null,'administrador', $extension);
             }
 
-            $ubicacion = formatText($data['ubicacion']);
+            //$ubicacion = formatText($data['ubicacion']);
 
             $dataUs = [
                 'nombres'               => formatText($data['nombres']),
@@ -63,10 +63,10 @@ class AdministradorController extends Controller
                 'tipodocumento_id'      => formatText($data['tipoDocumento']),
                 'numero_documento'      => formatText($data['numeroDocumento']),
                 'domicilio'             => formatText($data['domicilio']),
-                'departamento_id'       => saveUbicacion($ubicacion, 'departamento'),
-                'provincia_id'          => saveUbicacion($ubicacion, 'provincia'),
-                'distrito_id'           => saveUbicacion($ubicacion, 'distrito'),
-                'sueldo'                => formatText($data['sueldo']),
+                //'departamento_id'       => saveUbicacion($ubicacion, 'departamento'),
+                //'provincia_id'          => saveUbicacion($ubicacion, 'provincia'),
+                //'distrito_id'           => saveUbicacion($ubicacion, 'distrito'),
+                //'sueldo'                => formatText($data['sueldo']),
                 'foto'                  => $pathImagen,
                 'password'              => bcrypt('1234')
             ];
@@ -101,7 +101,7 @@ class AdministradorController extends Controller
         }
 
 
-        $ubicacion = formatText($data['ubicacion']);
+        //$ubicacion = formatText($data['ubicacion']);
 
         $dataUs = [
             'nombres'               => formatText($data['nombres']),
@@ -115,10 +115,10 @@ class AdministradorController extends Controller
             'tipodocumento_id'      => formatText($data['tipoDocumento']),
             'numero_documento'      => formatText($data['numeroDocumento']),
             'domicilio'             => formatText($data['domicilio']),
-            'departamento_id'       => saveUbicacion($ubicacion, 'departamento'),
-            'provincia_id'          => saveUbicacion($ubicacion, 'provincia'),
-            'distrito_id'           => saveUbicacion($ubicacion, 'distrito'),
-            'sueldo'                => formatText($data['sueldo']),
+            //'departamento_id'       => saveUbicacion($ubicacion, 'departamento'),
+            //'provincia_id'          => saveUbicacion($ubicacion, 'provincia'),
+            //'distrito_id'           => saveUbicacion($ubicacion, 'distrito'),
+            //'sueldo'                => formatText($data['sueldo']),
             'foto'                  => $pathImagen,
         ];
 

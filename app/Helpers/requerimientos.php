@@ -716,12 +716,12 @@ function processDataPostulaciones($data){
                 'antecedentes_pdf'              => $tra->certificado_antecedente_pdf,
                 'requerimiento_id'              => $a->requerimiento_id,
                 'trabajador_id'                 => $a->trabajador_id,
-                'trabajador'                    => mb_convert_case(($tra->trabajador), MB_CASE_UPPER, "UTF-8"),
-                'token'                         => $tra->usuario->token,
+                'trabajador'                    => mb_convert_case(($tra->usuario->nombres . ' ' . $tra->usuario->apellidos), MB_CASE_UPPER, "UTF-8"),
+                'token'                         => $tra->token,
                 'nombres'                       => $tra->usuario->nombres ? $tra->usuario->nombres : 'NO DATA',
                 'apellidos'                     => $tra->usuario->apellidos ? $tra->usuario->apellidos : 'NO DATA',
                 'genero_id'                     => $tra->usuario->genero_id,
-                'genero'                        => $tra->usuario->genero ? $tra->usuario->genero : 'NO DATA',
+                'genero'                        => $tra->usuario->genero ? $tra->usuario->genero->nombre : 'NO DATA',
                 'tipodocumento_id'              => $tra->usuario->tipodocumento_id,
                 'tipodocumento'                 => findDocumentAcronym($tra->usuario->tipodocumento_id),
                 'numero_documento'              => $tra->usuario->numero_documento,
@@ -745,7 +745,7 @@ function processDataPostulaciones($data){
                 'select_wp'                     => $a->select_wp,
                 'telefono_tarjeta'              => separateNumber($tra->usuario->telefono),
                 'telefono_tarjeta_whatsapp'     => separateNumber($tra->usuario->telefono_whatsapp),
-                'nacionalidad'                  => $tra->usuario->nacionalidad ? $tra->usuario->nacionalidad : 'NO DATA',
+                'nacionalidad'                  => $tra->usuario->nacionalidad_id ? $tra->usuario->nacionalidad->nombre : 'NO DATA',
                 'nacionalidadid'                => $tra->usuario->nacionalidad_id,
                 'edad'                          => $tra->usuario && $tra->usuario->fecha_nacimiento ? \Carbon\Carbon::parse($tra->usuario->fecha_nacimiento)->age : '',
                 'lugarnacimiento'               => $tra->usuario->lugar_nacimiento,
@@ -829,7 +829,8 @@ function getNewRequerimientos($fastsearch = false){
     if ($fastsearch == 'H') {
         $query->whereDate('fechaentrevista', Carbon::now());
     } elseif ($fastsearch == 'T') {
-        $query->where('fechaentrevista', '>=', Carbon::now()->subDays(3))
+        $query->whereIn('estatusrequerimientoid', [1, 4])
+            ->where('fechaentrevista', '>=', Carbon::now()->subDays(3))
             ->orWhere('actualizado', '>=', Carbon::now()->subDays(1));
     } else {
         $query->where('actualizado', '>=', Carbon::now()->subDays(3))

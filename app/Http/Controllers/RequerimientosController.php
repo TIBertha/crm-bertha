@@ -10,7 +10,7 @@ use App\Models\Contrato;
 use App\Models\DiaSemana;
 use App\Models\Domicilio;
 use App\Models\Empleador;
-use App\Models\EstatusEmpleador;
+use App\Models\EstatusRequerimiento;
 use App\Models\FrecuenciaServicio;
 use App\Models\Modalidad;
 use App\Models\Nacionalidad;
@@ -591,7 +591,7 @@ class RequerimientosController extends Controller
 
     public function ajaxGetDataInicial(){
 
-        $estados = EstatusEmpleador::borrado(false)->orderBy('nombre', 'ASC')->get();
+        $estados = EstatusRequerimiento::orderBy('nombre', 'ASC')->get();
         $responsables = UsuarioInterno::borrado(false)->whereIn('id',[6,7,8])->orderBy('nombres', 'asc')->get();
 
         return response()->json([
