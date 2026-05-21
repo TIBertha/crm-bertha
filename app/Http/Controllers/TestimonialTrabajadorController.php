@@ -99,29 +99,24 @@ class TestimonialTrabajadorController extends Controller
     }
 
     public function ajaxGetData(Request $request){
-        $trabajadores = Trabajador::join('usuarios', 'usuarios.id', '=', 'trabajadores.usuario_id')
-            ->whereNotNull('trabajadores.usuario_id')
-            ->whereNotNull('usuarios.nombres')
-            ->whereNotNull('usuarios.apellidos')
-            ->orderBy('usuarios.nombres', 'asc')
-            ->orderBy('usuarios.apellidos', 'asc')
-            ->select('trabajadores.*')
-            ->get();
+        $trabajadores = Trabajador::with('usuario')
+            ->whereNotNull('usuario_id')
+            ->get()
+            ->sortBy(fn($t) => $t->usuario->nombres);
 
-        return json_encode(['code' => 200, 'trabajadores' => formatMultiselectTrabajadores($trabajadores)]);
+        return response()->json([
+            'code' => 200,
+            'trabajadores' => formatMultiselectTrabajadores($trabajadores)
+        ]);
     }
 
     public function ajaxGet(Request $request){
 
         $id = $request->input('id');
-        $trabajadores = Trabajador::join('usuarios', 'usuarios.id', '=', 'trabajadores.usuario_id')
-            ->whereNotNull('trabajadores.usuario_id')
-            ->whereNotNull('usuarios.nombres')
-            ->whereNotNull('usuarios.apellidos')
-            ->orderBy('usuarios.nombres', 'asc')
-            ->orderBy('usuarios.apellidos', 'asc')
-            ->select('trabajadores.*')
-            ->get();
+        $trabajadores = Trabajador::with('usuario')
+            ->whereNotNull('usuario_id')
+            ->get()
+            ->sortBy(fn($t) => $t->usuario->nombres);
 
         if($id){
 

@@ -168,24 +168,12 @@ function formatRequerimientosContratosNoVigentes($data){
 
 }
 
-function formatMultiselectTrabajadores($data){
-
-    $result = [];
-
-    if($data){
-
-        foreach($data as $d){
-
-            $result[] = [
-                'label' => ((($d->usuario->nombres. ' ' .$d->usuario->apellidos))),
-                'value' => $d->id
-            ];
-
-        }
-    }
-
-    return $result;
-
+function formatMultiselectTrabajadores($data)
+{
+    return $data->map(fn($d) => [
+        'label' => trim($d->usuario->nombres . ' ' . $d->usuario->apellidos),
+        'value' => $d->id,
+    ])->values();
 }
 
 function conveconvertToFormatMultiselectDiasLabor($data){
