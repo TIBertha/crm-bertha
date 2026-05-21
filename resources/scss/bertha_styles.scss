@@ -1521,15 +1521,23 @@ $pink_add:#E663C3;
     }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
     .button-information-modal{
-        font-size: 12.8px !important;
         background-color: $purple_bertha;
         padding: 0.25rem 0.5rem;
         border-radius: 0.25rem;
         &, &:hover{
             color: white;
         }
+    }
+}
+
+@media (min-width: 768px) {
+    .button-information-modal{
+        i{
+            color: rgb(94, 93, 93);
+        }
+        
     }
 }
 

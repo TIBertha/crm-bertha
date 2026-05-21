@@ -12,4 +12,14 @@ class TestimonialesTrabajador extends Model
 
     const CREATED_AT = 'creado';
     const UPDATED_AT = 'actualizado';
+
+    public function trabajador()
+    {
+        return $this->belongsTo(Trabajador::class, 'trabajador_id');
+    }
+
+    public function usuarioInterno()
+    {
+        return $this->belongsTo(UsuarioInterno::class, 'usuariointerno_id');
+    }
 }

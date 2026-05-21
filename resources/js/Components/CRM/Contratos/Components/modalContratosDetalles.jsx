@@ -41,8 +41,8 @@ export default function ModalContratosDetalles({idCont}) {
 
     return (
         <>
-            <a className="button-information-modal" role="button" onClick={(e) => openModal(e)}>
-                <i className={conf.icon + ' me-2'}></i>
+            <a className="button-information-modal text-white" role="button" onClick={(e) => openModal(e)}>
+                <i className={conf.icon + ' me-2 me-md-0'}></i>
                 {responsive && <span className='ms-2'>{conf.title}</span>}
             </a>
 

@@ -57,9 +57,9 @@ function processDataContrato($data){
                 'id'                                => $d->id,
                 'creado'                            => Carbon::parse($d->creado)->format('d/m/Y'),
 
-                'empleador_contact_data'            => getEmpleadorContactData($d->empleador_id),
-                'trabajador_contact_data'           => getTrabajadorContactData($d->trabajador_id),
-                'empleador'                         => getNombreCorto($d->empleadornombre, $d->empleadorapellido),
+                'empleador_contact_data'            => getEmpleadorContactData($d),
+                'trabajador_contact_data'           => getTrabajadorContactData($d->trabajador),
+                'empleador'                         => getNombreCorto($d->empleador->usuario->nombres, $d->empleador->usuario->apellidos),
                 'data_trabajador'                   => getDataTrabajadorContrato($d->trabajador_id),
 
                 'trabajador'                        => $d->trabajador && $d->trabajador->usuario
@@ -74,12 +74,12 @@ function processDataContrato($data){
                 'trabajador_b' => $d->trabajadorB && $d->trabajadorB->usuario
                     ? getNombreCorto($d->trabajadorB->usuario->nombres, $d->trabajadorB->usuario->apellidos)
                     : ' - ',
-                'trabajador_b_contact_data'         => getTrabajadorContactData($d->trabajadorb_id),
+                'trabajador_b_contact_data'         => getTrabajadorContactData($d->trabajadorB),
 
                 'trabajador_c' => $d->trabajadorC && $d->trabajadorC->usuario
                     ? getNombreCorto($d->trabajadorC->usuario->nombres, $d->trabajadorC->usuario->apellidos)
                     : ' - ',
-                'trabajador_c_contact_data'         => getTrabajadorContactData($d->trabajadorc_id),
+                'trabajador_c_contact_data'         => getTrabajadorContactData($d->trabajadorC),
 
                 'verif_ingreso'                     => $d->verificador_ingreso,
 

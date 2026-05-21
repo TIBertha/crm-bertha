@@ -177,7 +177,7 @@ function formatMultiselectTrabajadores($data){
         foreach($data as $d){
 
             $result[] = [
-                'label' => ((($d->nombres. ' ' .$d->apellidos))),
+                'label' => ((($d->usuario->nombres. ' ' .$d->usuario->apellidos))),
                 'value' => $d->id
             ];
 
@@ -252,20 +252,6 @@ function formatMultiselectEmpleadores($data){
 
     return $result;
 
-}
-
-function getDataTrabajadorContrato($trabajador){
-    $data = TrabajadorView::find($trabajador);
-
-    $result = [
-        'nombres'                       => $data->nombres,
-        'antecedentes_pdf'              => $data->antecedente_pdf,
-        'numeroDocumento'               => $data->numero_documento,
-        'tiene_cuenta'                  => $data->tiene_cuenta,
-        'certificado_antecedente'       => checkEstadoCertificadoAntecedente($data->certificado_antecedente, $data->certificado_antecedente_fecha),
-    ];
-
-    return $result;
 }
 
 function getAntecedentesTrabajadorColocado($contrato){
@@ -358,34 +344,6 @@ function validateExistTrabajador($trabajador){
 
         if ($d){
             $result = $d->id;
-        }
-    }
-
-    return $result;
-}
-
-function getTrabajadorContactData($trabajadorID){
-
-    $result = null;
-
-    if ($trabajadorID){
-        $trabajador = TrabajadorView::find($trabajadorID);
-
-        if($trabajador){
-            $result = [
-                'exist'                    => true,
-                'id'                       => $trabajadorID,
-                'nombres'                  => $trabajador->trabajador,
-                'short_name'               => getNombreCorto($trabajador->nombres , $trabajador->apellidos),
-                'flag_emoji'               => $trabajador->postulando_pais_id ? ($trabajador->postulando_pais_id == 11 ? '🇨🇱' : '🇵🇪') : '🇵🇪',
-                'telefono'                 => $trabajador->telefono,
-                'telefono_whatsapp'        => $trabajador->telefono_whatsapp,
-            ];
-        }else{
-            $result = [
-                'exist'                    => false,
-                'id'                       => $trabajadorID,
-            ];
         }
     }
 
@@ -1250,21 +1208,48 @@ function setHorarioCamaAfuera($horario){
     return $result;
 }
 
-function getEmpleadorContactData($empleadorID){
+function getEmpleadorContactData($contratoData){
 
-    if ($empleadorID){
-        $empleador = EmpleadorView::find($empleadorID);
+    return [
+        'id'                        => $contratoData->empleador->id,
+        'nombres'                   => $contratoData->empleador->usuario->nombres,
+        'flag_emoji'                => $contratoData->empleador->pais_pedido_id ? ($contratoData->empleador->pais_pedido_id == 11 ? '🇨🇱' : '🇵🇪') : '🇵🇪',
+        'telefono'                  => $contratoData->empleador->usuario->telefono,
 
-        return [
-            'id'                       => $empleadorID,
-            'nombres'                  => $empleador->empleador,
-            'flag_emoji'              => $empleador->pais_pedido_id ? ($empleador->pais_pedido_id == 11 ? '🇨🇱' : '🇵🇪') : '🇵🇪',
-            'telefono'                 => $empleador->telefono,
+    ];
+}
 
+function getTrabajadorContactData($trabajador){
+
+    $result = null;
+
+    if ($trabajador){
+        $result = [
+            'exist'                    => true,
+            'id'                       => $trabajador->id,
+            'nombres'                  => ($trabajador->usuario->nombres . ' ' . $trabajador->usuario->apellidos),
+            'short_name'               => getNombreCorto($trabajador->usuario->nombres , $trabajador->usuario->apellidos),
+            'flag_emoji'               => $trabajador->postulando_pais_id ? ($trabajador->postulando_pais_id === 11 ? '🇨🇱' : '🇵🇪') : '🇵🇪',
+            'telefono'                 => $trabajador->usuario->telefono,
+            'telefono_whatsapp'        => $trabajador->usuario->telefono_whatsapp,
         ];
-    }else{
-        return null;
     }
+
+    return $result;
+}
+
+function getDataTrabajadorContrato($trabajador){
+    $data = TrabajadorView::find($trabajador);
+
+    $result = [
+        'nombres'                       => $data->nombres,
+        'antecedentes_pdf'              => $data->antecedente_pdf,
+        'numeroDocumento'               => $data->numero_documento,
+        'tiene_cuenta'                  => $data->tiene_cuenta,
+        'certificado_antecedente'       => checkEstadoCertificadoAntecedente($data->certificado_antecedente, $data->certificado_antecedente_fecha),
+    ];
+
+    return $result;
 }
 
 function formatHora($date){

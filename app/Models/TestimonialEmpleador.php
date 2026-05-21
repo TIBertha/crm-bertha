@@ -20,4 +20,14 @@ class TestimonialEmpleador extends Model
     public function scopeOrdenar($query){
         return $query->orderBy('orden', 'asc');
     }
+
+    public function empleador()
+    {
+        return $this->belongsTo(Empleador::class, 'empleador_id');
+    }
+
+    public function usuarioInterno()
+    {
+        return $this->belongsTo(UsuarioInterno::class, 'usuariointerno_id');
+    }
 }

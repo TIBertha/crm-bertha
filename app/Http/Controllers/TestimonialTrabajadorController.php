@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ValidateTestimonialTrabajador;
 use App\Models\TestimonialesTrabajador;
-use App\Models\Views\TrabajadorView;
+use App\Models\Trabajador;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use DB, Auth;
@@ -99,7 +99,14 @@ class TestimonialTrabajadorController extends Controller
     }
 
     public function ajaxGetData(Request $request){
-        $trabajadores  = TrabajadorView::whereNotNull('nombres')->whereNotNull('apellidos')->orderBy('trabajador', 'asc')->get();
+        $trabajadores = Trabajador::join('usuarios', 'usuarios.id', '=', 'trabajadores.usuario_id')
+            ->whereNotNull('trabajadores.usuario_id')
+            ->whereNotNull('usuarios.nombres')
+            ->whereNotNull('usuarios.apellidos')
+            ->orderBy('usuarios.nombres', 'asc')
+            ->orderBy('usuarios.apellidos', 'asc')
+            ->select('trabajadores.*')
+            ->get();
 
         return json_encode(['code' => 200, 'trabajadores' => formatMultiselectTrabajadores($trabajadores)]);
     }
@@ -107,7 +114,14 @@ class TestimonialTrabajadorController extends Controller
     public function ajaxGet(Request $request){
 
         $id = $request->input('id');
-        $trabajadores  = TrabajadorView::whereNotNull('nombres')->whereNotNull('apellidos')->orderBy('trabajador', 'asc')->get();
+        $trabajadores = Trabajador::join('usuarios', 'usuarios.id', '=', 'trabajadores.usuario_id')
+            ->whereNotNull('trabajadores.usuario_id')
+            ->whereNotNull('usuarios.nombres')
+            ->whereNotNull('usuarios.apellidos')
+            ->orderBy('usuarios.nombres', 'asc')
+            ->orderBy('usuarios.apellidos', 'asc')
+            ->select('trabajadores.*')
+            ->get();
 
         if($id){
 
@@ -163,7 +177,7 @@ class TestimonialTrabajadorController extends Controller
         $page = 0;
 
         return response()->json(['code' => 200,
-            'testimoniales' => $data,
+            'testimoniales' => getTestimonialesTrabajador($data),
             'page' => $page,
             'total' => $cantidad,
             'textoresultados' => $cantidad ? '' : 'No existen testimoniales',
