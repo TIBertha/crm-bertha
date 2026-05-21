@@ -199,20 +199,20 @@ function formatMultiselectTrabajador($data, $multi = true){
 
     $result = [];
 
-    $emp = TrabajadorView::find($data);
+    $tra = Trabajador::find($data);
 
     if($multi){
 
         $result[] = [
-            'label' => ((($emp->nombres. ' ' .$emp->apellidos))),
-            'value' => $emp->id
+            'label' => ((($tra->usuario->nombres. ' ' .$tra->usuario->apellidos))),
+            'value' => $tra->id
         ];
 
     }else{
-        if ($emp){
+        if ($tra){
             $result = [
-                'label' => ((($emp->nombres. ' ' .$emp->apellidos))),
-                'value' => $emp->id
+                'label' => ((($tra->usuario->nombres. ' ' .$tra->usuario->apellidos))),
+                'value' => $tra->id
             ];
         }
     }
