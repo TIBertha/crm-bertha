@@ -3,12 +3,13 @@ import DatePicker from "react-datepicker";
 import es from 'date-fns/locale/es';
 import "react-datepicker/dist/react-datepicker.css";
 import Select from "react-select";
+import AsyncSelect from "react-select/async";
 
 import InputAreaImage from "../../Components/inputAreaImage.jsx";
 import IndividualCheckbox from "../../Components/individualCheckbox.jsx";
 import Tooltips from "../../Components/tooltips.jsx";
 
-export default function DatosTestimonialesTrabajador({data, handleChange, handleSingularUpload, handleSingularDelete, view}) {
+export default function DatosTestimonialesTrabajador({data, loadTrabajadoresOptions, handleChange, handleSingularUpload, handleSingularDelete, view}) {
     return(
         <section className={'row mx-0 pb-4 pt-35'}>
 
@@ -36,13 +37,13 @@ export default function DatosTestimonialesTrabajador({data, handleChange, handle
                 <div className="row">
                     <label className="col-12 col-md-3 col-form-label align-self-center">Trabajador</label>
                     <div className="col-md-9 align-self-center">
-                        <Select
-                            value={data.trabajador}
-                            isMulti={false}
+                        <AsyncSelect
+                            loadOptions={loadTrabajadoresOptions}
+                            noOptionsMessage={() => null}
+                            defaultOptions={false}
                             isDisabled={view == 'edit' ? true :false}
-                            isSearchable
-                            onChange={(e) => handleChange(e, 'select', 'trabajador')}
-                            options={data.trabajadores}
+                            onChange={(e) => handleChange(e, 'trabajador', 'trabajador')}
+                            value={data.trabajador}
                             placeholder={'Seleccione'}
                             theme={theme => ({
                                 ...theme,

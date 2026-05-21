@@ -99,14 +99,9 @@ class TestimonialTrabajadorController extends Controller
     }
 
     public function ajaxGetData(Request $request){
-        $trabajadores = Trabajador::with('usuario')
-            ->whereNotNull('usuario_id')
-            ->get()
-            ->sortBy(fn($t) => $t->usuario->nombres);
 
         return response()->json([
             'code' => 200,
-            'trabajadores' => formatMultiselectTrabajadores($trabajadores)
         ]);
     }
 

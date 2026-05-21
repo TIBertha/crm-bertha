@@ -864,7 +864,6 @@ class RequerimientosEdit extends Component{
                         sueldoPrimerMes: getSueldoPrimerMes(r.data.sueldo, r.data.paispedido_id, false),
                     });
                 }else{
-                    console.log('here3');
                     this.calculoSueldoPorDias(r.data.valor_dia_frecuencia);
                 }
 

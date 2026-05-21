@@ -14,6 +14,7 @@ import LoadingScreen from "../Components/loadingScreen.jsx";
 import {modalCancelar, showAlert, showAlertConfirmRedirectReactRouter} from "../../Helpers/alerts.js";
 import {getExtensionFromString} from "../../Helpers/strings.js";
 import {
+    ajaxSearchTrabajadores,
     ajaxTestimonialesTrabajadorEdit,
     ajaxTestimonialesTrabajadorGet,
     ajaxTestimonialesTrabajadorGetData,
@@ -48,10 +49,29 @@ class TestimonialesTrabajadorEdit extends Component {
         };
 
         this.save = this.save.bind(this);
+        this.loadTrabajadoresOptions = this.loadTrabajadoresOptions.bind(this);
         this.handleSingularUpload = this.handleSingularUpload.bind(this);
         this.handleSingularDelete = this.handleSingularDelete.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.cancelar = this.cancelar.bind(this);
+    }
+
+    loadTrabajadoresOptions(search, callback){
+
+        if (!search) {
+            callback([]);
+        } else {
+
+            setTimeout(() => {
+
+                ajaxSearchTrabajadores(search).then(r => {
+                    callback(r.data);
+                }).catch(function (error) {
+                    console.log(error);
+                });
+
+            });
+        }
     }
 
     setLoading(condition){
@@ -69,6 +89,12 @@ class TestimonialesTrabajadorEdit extends Component {
 
             this.setState({
                 [campo]: e
+            });
+
+        }else if(tipo == 'trabajador'){
+
+            this.setState({
+                trabajador: e,
             });
 
         }else if (tipo == 'visibilidad'){
@@ -260,6 +286,7 @@ class TestimonialesTrabajadorEdit extends Component {
                             <Tab eventKey="tab1" title="Datos">
                                 <DatosTestimonialesTrabajador
                                     data={this.state}
+                                    loadTrabajadoresOptions={this.loadTrabajadoresOptions}
                                     handleChange={this.handleChange}
                                     handleSingularUpload={this.handleSingularUpload}
                                     handleSingularDelete={this.handleSingularDelete}

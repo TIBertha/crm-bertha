@@ -8,6 +8,14 @@ export function ajaxRefreshTestimonialesTrabajador(offset) {
         });
 }
 
+export function ajaxSearchTrabajadores(search){
+    return axios.post('/ajax-search-trabajadores', {search})
+        .then(res => {
+            let r = res.data;
+            return r;
+        });
+}
+
 export function ajaxTestimonialesTrabajadorGetData() {
     return axios.post('/ajax-testimoniales-trabajador-get-data', {} )
         .then(res => {
@@ -92,14 +100,6 @@ export function ajaxTestimonialesEmpleadorNew(data) {
 
 export function ajaxTestimonialesEmpleadorEdit(id, data) {
     return axios.post('/ajax-testimoniales-empleador-edit', {id, data} )
-        .then(res => {
-            let r = res.data;
-            return r;
-        });
-}
-
-export function ajaxSearchTrabajadores(search){
-    return axios.post('/ajax-search-trabajadores', {search})
         .then(res => {
             let r = res.data;
             return r;

@@ -9,6 +9,7 @@ use App\Models\Distrito;
 use App\Models\Domicilio;
 use App\Models\Empleador;
 use App\Models\Provincia;
+use App\Models\Trabajador;
 use App\Models\TipoBeneficio;
 use App\Models\Usuario;
 use App\Models\Views\DistritoView;
@@ -138,6 +139,23 @@ class MasterController extends Controller
         $data = \App\Models\Views\EmpleadorView::borrado(false)->activo(true)->where('empleador', 'LIKE','%' . $search . '%')->whereIn('estatusid', [1,2])->orderBy('empleador', 'asc')->get();
 
         return json_encode(['code' => 200, 'data' => convertFormatEmpleadoresSelect($data)]);
+
+    }
+
+    public function ajaxSearchTrabajadores(Request $request){
+
+        $search = $request->input('search');
+
+        //$data = \App\Models\Views\TrabajadorView::activo(true)->where('trabajador', 'LIKE','%' . $search . '%')->whereIn('estatusid', [1,2])->orderBy('trabajador', 'asc')->get();
+        $data = Trabajador::join('usuarios', 'usuarios.id', '=', 'trabajadores.usuario_id')
+            ->where('trabajadores.activo', true)
+            ->whereIn('trabajadores.estatuspostulante_id', [1, 2])
+            ->whereRaw("CONCAT(usuarios.nombres, ' ', usuarios.apellidos) LIKE ?", ["%{$search}%"])
+            ->orderByRaw("CONCAT(usuarios.nombres, ' ', usuarios.apellidos) ASC")
+            ->select('trabajadores.*')
+            ->get();
+
+        return json_encode(['code' => 200, 'data' => convertFormatTrabajadoresSelect($data)]);
 
     }
 

@@ -580,7 +580,7 @@ function convertFormatTrabajadoresSelect($data){
         foreach($data as $d){
 
             $result[] = [
-                'label' => ($d->trabajador),
+                'label' => ((($d->usuario->nombres . ' ' .$d->usuario->apellidos))),
                 'value' => $d->id
             ];
         }

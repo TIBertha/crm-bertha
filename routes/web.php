@@ -113,6 +113,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/ajax-search-distrito', [MasterController::class, 'ajaxSearchDistrito']);
     Route::post('/ajax-search-distrito-experiencia', [MasterController::class, 'ajaxSearchDistritoExperiencia']);
     Route::post('/ajax-search-empleadores', [MasterController::class, 'ajaxSearchEmpleadores']);
+    Route::post('/ajax-search-trabajadores', [MasterController::class, 'ajaxSearchTrabajadores']);
     Route::post('/ajax-search-trabajadores-por-colocar', [MasterController::class, 'ajaxSearchTrabajadoresPorColocar']);
 
     //ruta de usuarios
