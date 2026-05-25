@@ -148,11 +148,11 @@ export default function RequerimientosTable({url, requerimientos, total, page, c
                 <Thead>
 
                     <Tr className={'table-titulo pink-bg'}>
-                        <Th className="vertical-align-middle" width='10%'>{responsive ? 'DETALLES' : null}</Th>
+                        <Th className="vertical-align-middle" width='5%'>{responsive ? 'DETALLES' : null}</Th>
                         <Th className="vertical-align-middle" width='6%'>ENTREVISTA</Th>
 
                         <Th className="vertical-align-middle" width='14%'>EMPLEADOR / TELEFONO</Th>
-                        <Th className="vertical-align-middle" width='10%'>ACTIVIDAD / MODALIDAD</Th>
+                        <Th className="vertical-align-middle" width='15%'>ACTIVIDAD / MODALIDAD</Th>
                         <Th className="vertical-align-middle" width='14%'>DISTRITO / NACIONALIDAD / EDADES</Th>
                         <Th className="vertical-align-middle" width='12%'>TIPO BENEFICIO / COMISION</Th>
                         <Th className="vertical-align-middle" width='8%'>SUELDO</Th>
