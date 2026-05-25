@@ -1085,3 +1085,9 @@ label {
 .icon-star {
     color: goldenrod;
 }
+
+.react-datepicker__day--today{
+    text-decoration: underline;
+    font-weight: bolder;
+    color: $pink_bertha;
+}

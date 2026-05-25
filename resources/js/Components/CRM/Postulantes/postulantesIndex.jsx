@@ -495,7 +495,7 @@ export default class PostulantesIndex extends Component {
         } = this.state;
 
         let links = {
-            ElDNI: "https://dniperu.com/buscar-dni-nombres-apellidos/",
+            ElDNI: "https://eldni.com/",
             SIS: "http://app.sis.gob.pe/SisConsultaEnLinea/Consulta/frmConsultaEnLinea.aspx",
             RUN: "https://consulta.servel.cl",
         };

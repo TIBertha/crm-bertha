@@ -845,8 +845,8 @@ function getNewRequerimientos($fastsearch = false){
             'diaRetorno'
         ]);
 
-    return $query->orderBy('fechaentrevista', 'desc')
-        ->orderBy('horaentrevistaformat', 'desc')
+    return $query->orderBy('fechaentrevista', 'asc')
+        ->orderBy('horaentrevistaformat', 'asc')
         ->limit(10);
 }
 
