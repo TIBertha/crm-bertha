@@ -680,6 +680,9 @@ $pink_add:#E663C3;
     &:hover{
         cursor: pointer !important;
     }
+    &.cardPost{
+        width: 100% !important;
+    }
 }
 
 .custom-phone-input{
@@ -1537,7 +1540,7 @@ $pink_add:#E663C3;
         i{
             color: rgb(94, 93, 93);
         }
-        
+
     }
 }
 

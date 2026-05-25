@@ -36,7 +36,7 @@ export default function CardPostulante({
     removePostulante,
 }) {
 
-    let mainWeb = 'https://bertha.pe';
+    let mainWeb = 'https://holabertha.com';
 
     let responsive = isResponsive();
     let fechaPostulacion = data.fecha_postulacion
@@ -300,6 +300,7 @@ export default function CardPostulante({
                         {" "}
                         <TelefonoInternacional
                             numero={d.telefono_tarjeta}
+                            cardPostulante={true}
                         />{" "}
                     </a>
                 </span>
@@ -321,6 +322,7 @@ export default function CardPostulante({
                             {" "}
                             <TelefonoInternacional
                                 numero={d.telefono_tarjeta}
+                                cardPostulante={true}
                             />{" "}
                         </a>
                     </div>
@@ -345,6 +347,7 @@ export default function CardPostulante({
                                 {" "}
                                 <TelefonoInternacional
                                     numero={d.telefono_tarjeta_whatsapp}
+                                    cardPostulante={true}
                                 />{" "}
                             </a>
                         </div>

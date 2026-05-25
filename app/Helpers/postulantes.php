@@ -37,7 +37,7 @@ function formatDataPostulante($data){
             $dataDistrito = DistritoView::find($d->distrito_id);
 
             $nullFoto = asset('img/user_icon.svg');
-            $n = explode(" ", $d->nombres);
+            $n = explode(" ", $d->usuario->nombres);
 
             $result[] = [
                 'dias_contratados_por_dias'  => $diasTrabajoPorDias,
@@ -55,7 +55,7 @@ function formatDataPostulante($data){
 
                 'tiene_antecedentes'         => !empty($d->certificado_antecedente_pdf),
                 'diaspasadoscertificadoantecedente' => $daysPast,
-                'contact_name'               => $n[0] . ' ' . $d->apellidos ,
+                'contact_name'               => $n[0] . ' ' . $d->usuario->apellidos ,
                 'flag_emoji'                 => $d->postulando_pais_id == 11 ? '🇨🇱' : '🇵🇪',
                 'id'                         => $d->id,
                 'numeroDocumento'            => $d->usuario->numero_documento,

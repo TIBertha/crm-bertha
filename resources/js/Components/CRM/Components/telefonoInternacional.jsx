@@ -5,14 +5,14 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import esp from "react-phone-input-2/lang/es.json";
 
-export default function TelefonoInternacional({ numero, paddingLeft = false }) {
+export default function TelefonoInternacional({ numero, paddingLeft = false, cardPostulante = false }) {
     return (
         <PhoneInput
             localization={esp}
             country={"pe"}
             value={numero}
             disableDropdown={true}
-            inputClass="custom-phone-code no-box-shadow"
+            inputClass={'custom-phone-code no-box-shadow' + (cardPostulante ? ' cardPostulante' : '')}
             containerClass={
                 (paddingLeft ? "no-padding " : "") +
                 "custom-phone-input no-box-shadow"
