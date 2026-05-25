@@ -54,7 +54,7 @@ class IndicadoresController extends Controller
 
     public function ajaxGetIndicadores()
     {
-        $fechas = $this->getDates(12);
+        $fechas = $this->getDates(15);
 
         // Rango total (desde el mes más antiguo hasta hoy)
         $fechaInicio = $fechas[count($fechas)-1]->copy()->startOfMonth();
