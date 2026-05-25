@@ -39,6 +39,8 @@ export function getSpeechCotizador(actividadID, modalidadID, sueldoIngresado, fr
                 com3 = 350;
             }else if (nuevSueldo >= 1400){
                 com3 = 400;
+            }else if (nuevSueldo < 1200){
+                com2 = 500;
             }
         }else{
             com2 = 400;
