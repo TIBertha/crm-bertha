@@ -27,15 +27,22 @@ export function getSpeechCotizador(actividadID, modalidadID, sueldoIngresado, fr
         let sl = nuevSueldo - 20;
         let slRest = ((nuevSueldo * frecuencia * 4) - (sl  * frecuencia * 4));
 
+        let ahorroCom1 = 400;
+
+        let com1 = 700;
         let com2 = (nuevSueldo >= 1200) ? 500 : 400;
         let com3 = 350;
 
         if ([1,2].includes(parseInt(modalidadID))){
             if(nuevSueldo >= 1200 && nuevSueldo <= 1250){
                 com3 = 350;
+            }else if (nuevSueldo == 1250){
+                ahorroCom1 = 320;
             }else if (nuevSueldo == 1300){
                 com3 = 370;
             }else if (nuevSueldo == 1350){
+                ahorroCom1 = 350;
+                com1 = toPesos3(1000);
                 com3 = 350;
             }else if (nuevSueldo >= 1400){
                 com3 = 400;
@@ -53,7 +60,7 @@ export function getSpeechCotizador(actividadID, modalidadID, sueldoIngresado, fr
             '- Modalidad: ' + modalidad + "\r\n" +
             '- Sueldo ofrecido: ' + sueldo + ' ' + divisa + "\r\n" +
             '- Pago a agencia: Le enviamos 3 tipos de comisiones para que escoja la de su preferencia:' + "\r\n" +  "\r\n" +
-            '*Comisión 1*: ' + '*' + (nuevSueldo == 1350 ? '1,000' :  '700') + divisa +' y ahorra '+ ( nuevSueldo == 1350 ? 350 : '400' ) + ' ' + divisa + '*. Bertha cobra por la selección de personal y por brindarle los reemplazos de personal que usted necesite hasta por *3 meses*.' + "\r\n" +  "\r\n" +
+            '*Comisión 1*: ' + '*' + com1 + divisa +' y ahorra '+ ahorroCom1 + ' ' + divisa + '*. Bertha cobra por la selección de personal y por brindarle los reemplazos de personal que usted necesite hasta por *3 meses*.' + "\r\n" +  "\r\n" +
 
             'Usted como empleador puede ofrecer un sueldo de prueba *el primer mes*, lo mínimo es ' + ( nuevSueldo == 1350 ? '1,000' : toPesos3(st)) + ' ' + divisa +'. Así usted tiene un *ahorro de ' + ( nuevSueldo == 1350 ? 350 : (nuevSueldo - st) ) + ' ' + divisa +'* (' + (sueldoIngresado) + ' ' + divisa +' - ' + (nuevSueldo == 1350 ? '1,000' :  toPesos3(st)) + ' ' + divisa +'). El segundo mes, usted le aumenta a ' + sueldo + ' ' + divisa +'.' + "\r\n" + "\r\n" +
 
