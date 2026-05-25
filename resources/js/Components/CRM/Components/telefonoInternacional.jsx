@@ -12,7 +12,7 @@ export default function TelefonoInternacional({ numero, paddingLeft = false, car
             country={"pe"}
             value={numero}
             disableDropdown={true}
-            inputClass={'custom-phone-code no-box-shadow' + (cardPostulante ? ' cardPostulante' : '')}
+            inputClass={'custom-phone-code no-box-shadow' + (cardPostulante ? ' cardPost' : '')}
             containerClass={
                 (paddingLeft ? "no-padding " : "") +
                 "custom-phone-input no-box-shadow"
