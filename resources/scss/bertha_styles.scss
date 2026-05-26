@@ -1662,3 +1662,76 @@ $pink_add:#E663C3;
         cursor: pointer;
     }
 }
+
+.modal-postulante-add-zone{
+    overflow-y: auto;
+    height: 390px;
+}
+
+.list-postulaciones{
+    .list-group-item:hover {
+        background: #eceeef
+    }
+
+    .avatar-postulante {
+        width: 45px;
+        height: 45px;
+    }
+
+    .icon-action-postulaciones{
+        font-size: 1.3rem;
+        color: red;
+        cursor: pointer;
+    }
+
+    .icon-action-postulaciones-add{
+        font-size: 1.3rem;
+        color: $purple_bertha;
+        cursor: pointer;
+    }
+
+    .nombre-postulante{
+        font-weight: bold;
+        font-size: 0.85rem;
+    }
+
+    .telefono-postulante{
+        font-size: 0.85rem;
+
+        a{
+            &, &:hover, &:active, &:focus{
+                color: $pink_bertha;
+            }
+        }
+    }
+
+    .fecha-postulacion{
+        font-size: 0.85rem;
+    }
+}
+
+@media (min-width: 475px){
+    .list-postulaciones{
+        .avatar-postulante {
+            width: 60px;
+            height: 60px;
+        }
+
+        .nombre-postulante{
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .telefono-postulante{
+            font-size: 1rem;
+        }
+
+        .fecha-postulacion{
+            font-size: 1rem;
+        }
+    }
+}
+
+.alignselfcenter{
+    align-self: center;
+}

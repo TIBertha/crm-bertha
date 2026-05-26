@@ -313,7 +313,7 @@ class ContratosIndex extends Component {
         })
     }
 
-    changePaginations(page){
+    /*changePaginations(page){
         let pagina = parseInt(page.selected) + 1;
         let offset = (pagina - 1) * 10 ;
 
@@ -326,7 +326,26 @@ class ContratosIndex extends Component {
                 textoresultados: r.textoresultados,
             });
         })
-    }
+    }*/
+
+    changePaginations = (page) => {
+        const pagina = Number(page.selected) + 1;
+        const offset = (Number(pagina) - 1) * 10;
+
+        ajaxRefreshContratos(offset).then(r => {
+            if(r.code === 200){
+                if(r.contratos){
+                    this.setState({
+                        page: pagina,
+                        contratos: r.contratos,
+                        totalcontratos: r.total,
+                        textoresultados: r.textoresultados,
+                    });
+                    this.setLoading(false);
+                }
+            }
+        });
+    };
 
     paginationSearch(page){
         let pagina = parseInt(page.selected) + 1;

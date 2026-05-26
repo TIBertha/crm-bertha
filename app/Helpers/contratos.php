@@ -89,7 +89,7 @@ function processDataContrato($data){
                 'modalidad'                         => optional(optional($req)->modalidad)->nombre,
                 'modalidad_id'                      => optional($req)->modalidad_id,
 
-                'sueldo'                            => $d->sueldo,
+                'sueldo'                            => $req->sueldo,
 
                 'fecha_ini_lab'                     => $d->fechainiciolabores ? date('d/m/Y',strtotime($d->fechainiciolabores)) : null,
                 'hora_ini_lab'                      => $d->horainiciolabores ? date('h:i A',strtotime($d->horainiciolabores)) : null,
@@ -97,7 +97,7 @@ function processDataContrato($data){
                 'anulado'                           => $d->anulado,
                 'culminado'                         => $d->culminado,
 
-                'estatus_req'                       => $req->estatusrequerimientoid,
+                'estatus_req'                       => $req->estatusrequerimiento_id,
 
                 'pdf_constancia_colocacion'         => null,
 

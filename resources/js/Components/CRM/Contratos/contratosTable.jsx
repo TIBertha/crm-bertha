@@ -219,8 +219,8 @@ export default function ContratosTable({url, setVerifIngreso, contratos, total, 
                 <nav aria-label="Page navigation">
                     <ReactPaginate
                         pageCount={cantidadPaginas}
-                        initialPage={ page ? (page - 1) :  0 }
-                        forcePage={page ? (page - 1) :  0}
+                        //initialPage={ Number(page) ? (Number(page) - 1) :  0 }
+                        forcePage={Number(page) ? (Number(page) - 1) :  0}
                         marginPagesDisplayed={2}
                         pageRangeDisplayed={2}
                         previousLabel={'Previo'}

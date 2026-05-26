@@ -23,4 +23,13 @@ class Requerimiento extends Model
         return $this->hasMany(\App\Models\Contrato::class, 'requerimiento_id');
     }
 
+    public function actividad()
+    {
+        return $this->belongsTo(Actividad::class, 'actividad_id');
+    }
+
+    public function modalidad()
+    {
+        return $this->belongsTo(Modalidad::class, 'modalidad_id');
+    }
 }

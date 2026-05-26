@@ -54,7 +54,9 @@ class CredencialesIndex extends Component {
     }
 
     openSideBar(e, condition) {
-        this.setState({sideBar: condition});
+        this.setState({
+            sideBar: condition,
+        });
     }
 
     setLoading(condition){
@@ -186,7 +188,7 @@ class CredencialesIndex extends Component {
                 ajaxCredencialesEliminar(id).then(r => {
                     if(r.code === 200){
                         const { navigate } = this.props;
-                        showAlertConfirmRedirectReactRouter('exito', r.msj, '/empleadores', navigate);
+                        showAlertConfirmRedirectReactRouter('exito', r.msj, '/credenciales', navigate);
                     }else if(r.code === 500){
                         showAlert('error', r.msj);
                     }
@@ -232,16 +234,16 @@ class CredencialesIndex extends Component {
 
     render() {
 
-        let { isLoading, credenciales, totalcredenciales, access} = this.state;
+        let { isLoading, sideBar, credenciales, totalcredenciales, access} = this.state;
 
         if(isLoading) return <LoadingScreen load={isLoading} classStyle={'bg-purple-bertha'}/>;
 
         return(
             <section>
 
-
                 <CredencialesSearchSideBar
                     data={this.state}
+                    sideBar={sideBar}
                     handleChange={this.handleChange}
                     buscar={this.buscar}
                     limpiarBusqueda={this.limpiarBusqueda}
