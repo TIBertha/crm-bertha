@@ -18,6 +18,7 @@ import {
     ajaxSetDistrito,
     ajaxSetDivisaPais,
     ajaxRequerimientosGet,
+    getValordiaFrecuencia,
     ajaxSetNewTiposBeneficios, getCostoPorDia, getSueldoPrimerMes, getMontoComision
 } from "../../Functions/Requerimientos.jsx";
 import {armarHorarioRequerimiento, getExtensionFromString, removeExtensionFromString} from "../../Helpers/strings.js";
@@ -421,24 +422,26 @@ class RequerimientosEdit extends Component{
 
             this.setState({edad: edad});
 
-        }else if(tipo == 'calculo'){
-            if(campo == 'sueldo'){
+        }else if(tipo === 'calculo'){
+            if(campo === 'sueldo'){
                 let {value} = e;
 
                 this.setState({
                     [campo]: value,
                     sueldoPrimerMes: getSueldoPrimerMes(e, this.state.paispedido),
                 });
-            }else if(campo == 'valordiafrecuencia'){
+            }else if(campo === 'valordiafrecuencia'){
                 let {value} = e;
                 let minvalue = getValordiaFrecuencia(this.state.paispedido);
 
                 this.setState({
-                    [campo] : value,
-                    isValorDiaFrecuenciaValido: (value < minvalue) ? false : true
-                }, this.calculoSueldoPorDias(value) );
+                    [campo]: value,
+                    isValorDiaFrecuenciaValido: value >= minvalue
+                }, () => {
+                    this.calculoSueldoPorDias(value);
+                });
 
-            }else if (campo == 'montoAdelanto'){
+            }else if (campo === 'montoAdelanto'){
                 let {value} = e;
 
                 this.setState({
@@ -446,7 +449,7 @@ class RequerimientosEdit extends Component{
                     fechaPagoAdelanto: new Date(),
                 });
             }
-        }else if(tipo == 'seguimiento'){
+        }else if(tipo === 'seguimiento'){
 
             const newSeguimiento = this.state.seguimientos.map((seguimiento, sidx) => {
                 if (campo !== sidx) return seguimiento;
@@ -455,7 +458,7 @@ class RequerimientosEdit extends Component{
 
             this.setState({ seguimientos: newSeguimiento});
 
-        }else if(tipo == 'modalidad'){
+        }else if(tipo === 'modalidad'){
 
             this.setState({
                 modalidad: e.target.value,

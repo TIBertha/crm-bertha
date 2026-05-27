@@ -800,7 +800,7 @@ function getEncondedLink($link , $ruta){
     $result = '';
 
     if ($link){
-        $urlWeb = config('webexperta.url-web');
+        $urlWeb = 'https://holabertha.com';
         $result = $urlWeb . '/' . ($ruta ? ($ruta . '/') : '') . base64_encode($link);
     }
 

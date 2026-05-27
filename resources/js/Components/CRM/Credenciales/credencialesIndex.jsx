@@ -187,6 +187,7 @@ class CredencialesIndex extends Component {
             if (result.value) {
                 ajaxCredencialesEliminar(id).then(r => {
                     if(r.code === 200){
+                        this.refresh();
                         const { navigate } = this.props;
                         showAlertConfirmRedirectReactRouter('exito', r.msj, '/credenciales', navigate);
                     }else if(r.code === 500){

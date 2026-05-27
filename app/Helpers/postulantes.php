@@ -556,13 +556,13 @@ function formatDataUsuarios($data){
 
     if ($data){
         foreach ($data as $d) {
-            $isTrabajador = \App\Models\Trabajador::where('usuario_id', $d->id)->exists();
+            $isTrabajador = \App\Models\Trabajador::where('usuario_id', $d->id)->first();
 
             $result[] = [
                 'id'                => $d->id,
-                'usuario'           => $d->usuario->nombres . ' ' . $d->usuario->apellidos,
-                'numeroDocumento'   => $d->usuario->numero_documento,
-                'telefono'          => $d->usuario->telefono,
+                'usuario'           => $d->nombres . ' ' . $d->apellidos,
+                'numeroDocumento'   => $d->numero_documento,
+                'telefono'          => $d->telefono,
                 'registrado'        => $isTrabajador,
             ];
         }

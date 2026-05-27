@@ -228,6 +228,10 @@ class RequerimientosController extends Controller
             $modalidad = $data['modalidad'];
             $rangobusqueda = saveRangoBusqueda($data['rangominimo'], $data['rangomaximo']);
 
+
+
+            //dd($modalidad);
+
             $dataReq = [
                 'tipocomision'      => $data['tipoComision'],
                 'monto_comision'      => $data['montoComision'],

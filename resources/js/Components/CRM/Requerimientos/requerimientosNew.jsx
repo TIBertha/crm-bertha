@@ -25,7 +25,8 @@ import {
     ajaxSetNewTiposBeneficios,
     getSueldoPrimerMes,
     getCostoPorDia,
-    getMontoComision
+    getMontoComision,
+    getValordiaFrecuencia
 } from "../../Functions/Requerimientos.jsx";
 import {armarHorarioRequerimiento} from "../../Helpers/strings.js";
 import {formButtons} from "../../Functions/General.jsx";
@@ -529,9 +530,9 @@ class RequerimientosNew extends Component {
 
             this.setState({edad: edad});
 
-        }else if(tipo == 'calculo'){
+        }else if(tipo === 'calculo'){
 
-            if(campo == 'sueldo'){
+            if(campo === 'sueldo'){
                 let {value} = e;
 
                 this.setState({
@@ -539,16 +540,18 @@ class RequerimientosNew extends Component {
                     montoComision: getMontoComision(null, value, null, this.state),
                     sueldoPrimerMes: getSueldoPrimerMes(e, this.state.paispedido),
                 });
-            }else if(campo == 'valordiafrecuencia'){
+            }else if(campo === 'valordiafrecuencia'){
                 let {value} = e;
                 let minvalue = getValordiaFrecuencia(this.state.paispedido);
 
                 this.setState({
-                    [campo] : value,
-                    isValorDiaFrecuenciaValido: (value < minvalue) ? false : true
-                }, this.calculoSueldoPorDias(value) );
+                    [campo]: value,
+                    isValorDiaFrecuenciaValido: value >= minvalue
+                }, () => {
+                    this.calculoSueldoPorDias(value);
+                });
 
-            }else if (campo == 'montoAdelanto'){
+            }else if (campo === 'montoAdelanto'){
                 let {value} = e;
 
                 this.setState({
@@ -557,18 +560,18 @@ class RequerimientosNew extends Component {
                 });
             }
 
-        }else if(tipo == 'cuarentena'){
+        }else if(tipo === 'cuarentena'){
 
             this.setState({cuarentena: e.target.value});
 
-        }else if(tipo == 'tipoComision'){
+        }else if(tipo === 'tipoComision'){
 
             this.setState({
                 tipoComision: e.target.value,
                 montoComision: getMontoComision(e.target.value, null, null, this.state),
             });
 
-        }else if(tipo == 'empleador'){
+        }else if(tipo === 'empleador'){
 
             this.setState({
                 empleador: e,
@@ -578,24 +581,24 @@ class RequerimientosNew extends Component {
                 referenciaDomicilio: '',
             }, this.getCorreoEmpleador(e.value));
 
-        }else if(tipo == 'actividad'){
+        }else if(tipo === 'actividad'){
 
             this.setState({
                 actividad: e.target.value
             }, this.getModalidad );
 
-        }else if(tipo == 'modalidad'){
+        }else if(tipo === 'modalidad'){
 
             this.setState({
                 modalidad: e.target.value,
                 montoComision: getMontoComision(null, null, e.target.value, this.state),
             }, this.changeModalidad(e.target.value) );
 
-        }else if (tipo == 'paispedido'){
+        }else if (tipo === 'paispedido'){
 
             let value = parseInt(e.target.value);
 
-            if (value == 49){
+            if (value === 49){
                 this.setState({
                     tipoComision: 3,
                     montoComision: getMontoComision(e.target.value, null, null, this.state),
@@ -606,7 +609,7 @@ class RequerimientosNew extends Component {
                 paispedido: value,
             }, this.setDivisaPais(value));
 
-        }else if(tipo == 'seguimiento'){
+        }else if(tipo === 'seguimiento'){
 
             const newSeguimiento = this.state.seguimientos.map((seguimiento, sidx) => {
                 if (campo !== sidx) return seguimiento;
