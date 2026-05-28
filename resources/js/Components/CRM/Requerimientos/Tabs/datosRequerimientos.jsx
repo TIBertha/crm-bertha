@@ -617,7 +617,7 @@ export default function DatosRequerimientos({url, view, data, show, handleChange
                 </div>
             }
 
-            { (parseInt(data.cuarentena) != 7) &&
+            { (parseInt(data.cuarentena) !== 7) &&
                 <Horarios data={data} onChangeHorario={handleChangeHorarios} onChange={handleChange} view={view} />
             }
 

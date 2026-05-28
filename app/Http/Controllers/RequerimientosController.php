@@ -214,9 +214,10 @@ class RequerimientosController extends Controller
         try{
 
             $data = $request->input('data');
-            $horaSalida = $request->input('horasalida');
-            $horaRetorno = $request->input('horaretorno');
-            $horaEntrevista = $request->input('horaentrevista');
+
+            $horaSalida = $request->input('hs');
+            $horaRetorno = $request->input('hr');
+            $horaEntrevista = $request->input('he');
             $id = $request->input('id');
 
             $req = Requerimiento::find($id);
@@ -227,10 +228,6 @@ class RequerimientosController extends Controller
             $actividadid = $data['actividad'];
             $modalidad = $data['modalidad'];
             $rangobusqueda = saveRangoBusqueda($data['rangominimo'], $data['rangomaximo']);
-
-
-
-            //dd($modalidad);
 
             $dataReq = [
                 'tipocomision'      => $data['tipoComision'],
@@ -267,14 +264,18 @@ class RequerimientosController extends Controller
                 'sueldo_por_dias' => $modalidad == 3 ? ($data['frecuencia'] * $data['valordiafrecuencia'] * 4) : null,
                 'tiempo_cuarentena'=> ( $data['cuarentena'] ) ? $data['cuarentena'] : null,
                 'horarios' => $modalidad == 1 ? null : ($data['horarios'] ? json_encode($data['horarios']) : null),
-                'dia_salida' => $modalidad == 1 ? ($data['diasalida'] ? $data['diasalida'] : null) : null,
-                'hora_salida' => $modalidad == 1 ? ($horaSalida ? Carbon::parse($horaSalida) : null) : null,
-                'dia_ingreso' => $modalidad == 1 ? ($data['diaretorno'] ? $data['diaretorno' ] : null) : null,
-                'hora_ingreso' => $modalidad == 1 ? ($horaRetorno ? Carbon::parse($horaRetorno) : null) : null,
+
                 'domicilio_id' => $data['domicilio'],
                 'monto_adelanto' => $data['montoAdelanto'],
                 'fecha_pago_adelanto' => $data['fechaPagoAdelanto'] ? Carbon::parse($data['fechaPagoAdelanto']) : null,
+
+                'dia_ingreso' => $modalidad == 1 ? ($data['diaretorno'] ? $data['diaretorno' ] : null) : null,
+                'hora_ingreso' => $modalidad == 1 ? ($horaRetorno ? Carbon::parse($horaRetorno) : null) : null,
+                'dia_salida' => $modalidad == 1 ? ($data['diasalida'] ? $data['diasalida'] : null) : null,
+                'hora_salida' => $modalidad == 1 ? ($horaSalida ? Carbon::parse($horaSalida) : null) : null,
             ];
+
+            //dd($dataReq);
 
             if($estatusReq == 4){
                 $dataReq['estatusrequerimiento_id'] = 1;

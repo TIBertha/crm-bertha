@@ -56,23 +56,21 @@ class CredencialesController extends Controller
     }
 
     public function ajaxEdit(ValidateCredencial $request){
-        $id = $request->input('id');
-        $credencial = CredencialPlataforma::find($id);
+        $data = $request->input('data');
 
-        $data = [
-            'nombre_plataforma'     => $request->input('nombrePlataforma'),
-            'usuario'               => $request->input('usuario'),
-            'contra'                => $request->input('contra'),
-            'link_plataforma'       => $request->input('linkPlataforma'),
-            'nivel_credencial'      => $request->input('nivelCredencial'),
-            'creado'                => Carbon::now(),
+        $inf = [
+            'nombre_plataforma'     => $data['nombrePlataforma'],
+            'usuario'               => $data['usuario'],
+            'contra'                => $data['contra'],
+            'link_plataforma'       => $data['linkPlataforma'],
+            'nivel_credencial'      => $data['nivelCredencial'],
             'actualizado'           => Carbon::now(),
         ];
 
         DB::beginTransaction();
 
         try{
-            $exito = CredencialPlataforma::where('id', $id)->update($data);
+            $exito = CredencialPlataforma::where('id', $data['id'])->update($inf);
 
             DB::commit();
 

@@ -8,6 +8,7 @@ import RequerimientosSearchSideBar from "./requerimientosSearchSideBar.jsx";
 import VerMaps from "../Components/verMaps.jsx";
 import Cotizador from "./Components/Cotizador.jsx";
 import RequerimientosTable from "./requerimientosTable.jsx";
+import RequerimientosSearch from "./requerimientosSearch.jsx";
 import {
     ajaxCambiarEstadoReq,
     ajaxRefreshRequerimientos,
@@ -127,7 +128,7 @@ class RequerimientosIndex extends Component{
 
         }else{
 
-            if(e.target.name == 'fastsearch'){
+            if(e.target.name === 'fastsearch'){
 
                 this.setState({
                     [e.target.name]: e.target.value.toUpperCase()
@@ -270,6 +271,7 @@ class RequerimientosIndex extends Component{
     refreshRequerimientos(){
 
         let {fastsearch} = this.state;
+        let self = this;
 
         this.setLoading(true);
 
@@ -289,8 +291,8 @@ class RequerimientosIndex extends Component{
                 this.setLoading(false);
             }
         }).catch(function (error) {
-            if (error.response.status == 422){
-                this.setLoading(false);
+            if (error.response.status === 422){
+                self.setLoading(false);
             }
         });
     }
@@ -352,6 +354,7 @@ class RequerimientosIndex extends Component{
             if (r.code === 200){
                 if(r.requerimientos){
                     this.setState({
+                        sideBar: false,
                         requerimientos: r.requerimientos,
                         totalrequerimientos: r.total,
                         textoresultados: r.textoresultados,
@@ -380,7 +383,7 @@ class RequerimientosIndex extends Component{
     }
 
     render() {
-        let {url, sideBar, access, requerimientos, isLoading, totalrequerimientos, page, busqueda, textoresultados} = this.state;
+        let {url, sideBar, access, fastsearch, requerimientos, isLoading, totalrequerimientos, page, busqueda, textoresultados} = this.state;
 
         let mapas = [
             {name: 'Lima - Perú', flag: 'pe', img: 'https://adjuntosexperta.s3.amazonaws.com/Adjuntos/mapa-lima.jpg', size: 'lg'},
@@ -428,6 +431,17 @@ class RequerimientosIndex extends Component{
                         </ul>
                     </div>
 
+
+
+                </div>
+
+                <div className="row mx-0 pt-4">
+                    <div className="col-12 col-md-auto px-1 my-2 my-md-0">
+                        <RequerimientosSearch
+                            change={this.handleChange}
+                            fastsearch={fastsearch}
+                        />
+                    </div>
                 </div>
 
                 <section className="fichas">
@@ -438,7 +452,8 @@ class RequerimientosIndex extends Component{
                             ></Flyer>
                         </div>
 
-                        <>
+                        <div>
+
                             {requerimientos.length ?
                                 <RequerimientosTable
                                     url={url}
@@ -454,7 +469,7 @@ class RequerimientosIndex extends Component{
                                 :
                                 <NoDataLabel msj={textoresultados}/>
                             }
-                        </>
+                        </div>
                     </div>
                 </section>
 

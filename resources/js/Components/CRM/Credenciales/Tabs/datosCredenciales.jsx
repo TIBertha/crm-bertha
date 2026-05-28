@@ -55,15 +55,15 @@ export default function DatosCredenciales({data, handleChange}) {
                     <div className="col-md-9 align-self-center">
                         <div>
                             <div className="form-check form-check-inline">
-                                <input className="form-check-input" type="radio" name="nivelCredencial" id={1} value={1} checked={data.nivelCredencial == '1' ? true : false} onChange={(e) => handleChange(e, 'nivelCredencial')} />
-                                <label className="form-check-label" htmlFor={1} >Nivel 1 (Todos los Usuarios)</label>
+                                <input className="form-check-input" type="radio" name="nivelCredencial" id={'1'} value={1} checked={data.nivelCredencial == '1' ? true : false} onChange={(e) => handleChange(e, 'nivelCredencial')} />
+                                <label className="form-check-label" htmlFor={'1'} >Nivel 1 (Todos los Usuarios)</label>
                             </div>
                         </div>
 
                         <div>
                             <div className="form-check form-check-inline">
-                                <input className="form-check-input" type="radio" name="nivelCredencial" id={2} value={2} checked={data.nivelCredencial == '2' ? true : false} onChange={(e) => handleChange(e, 'nivelCredencial')} />
-                                <label className="form-check-label" htmlFor={2} >Nivel 2 (Restringida)</label>
+                                <input className="form-check-input" type="radio" name="nivelCredencial" id={'2'} value={2} checked={data.nivelCredencial == '2' ? true : false} onChange={(e) => handleChange(e, 'nivelCredencial')} />
+                                <label className="form-check-label" htmlFor={'2'} >Nivel 2 (Restringida)</label>
                             </div>
                         </div>
                     </div>

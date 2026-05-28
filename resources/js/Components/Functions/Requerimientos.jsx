@@ -8,8 +8,8 @@ export function ajaxRequerimientosNew(data, horasalida, horaretorno, horaentrevi
         });
 }
 
-export function ajaxRequerimientosEdit(data, id, horasalida, horaretorno, horaentrevista){
-    return axios.post('/ajax-requerimientos-edit', {data, id, horasalida, horaretorno, horaentrevista} )
+export function ajaxRequerimientosEdit(data, id, hs, hr, he){
+    return axios.post('/ajax-requerimientos-edit', {data, id, hs, hr, he} )
         .then(res => {
             let r = res.data;
             return r;

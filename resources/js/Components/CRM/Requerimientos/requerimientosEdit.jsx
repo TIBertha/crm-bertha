@@ -696,7 +696,7 @@ class RequerimientosEdit extends Component{
                 showAlert('error', r.msj);
             }
         }).catch(function (error) {
-            if (error.response.status == 422){
+            if (error.response.status === 422){
                 self.setLoading(false);
                 showAlert('error', error.response.data);
             }

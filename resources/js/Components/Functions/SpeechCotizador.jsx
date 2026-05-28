@@ -43,7 +43,7 @@ export function getSpeechCotizador(actividadID, modalidadID, sueldoIngresado, fr
                 com3 = 370;
             }else if (nuevSueldo === 1350){
                 ahorroCom1 = 350;
-                com1 = toPesos3(1000);
+                com1 = 700;
                 com3 = 350;
             }else if (nuevSueldo >= 1400){
                 com3 = 400;

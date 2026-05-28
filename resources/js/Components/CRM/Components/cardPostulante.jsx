@@ -766,7 +766,7 @@ export default function CardPostulante({
     if (data.select_emp == 1) {
         etiquetaSelectEmp = (
             <div className="pt-2 text-center">
-                <span className="badge font-badge badgetext-bg-warning white-text">
+                <span className="badge font-badge bg-warning white-text">
                     <i className="fas fa-crown me-2"></i>Cliente Web
                 </span>
             </div>
@@ -777,7 +777,7 @@ export default function CardPostulante({
     if (data.fue_tra == 1) {
         etiquetaFueTra = (
             <div className="pt-2 text-center">
-                <span className="badge font-badge text-bg--secondary white-text">
+                <span className="badge font-badge bg-secondary white-text">
                     <i className="fas fa-user-times me-2"></i>Fue Trabajadora
                 </span>
             </div>
@@ -788,7 +788,7 @@ export default function CardPostulante({
     if (data.select_wp == 1) {
         etiquetaSelectWp = (
             <div className="pt-2 text-center">
-                <span className="badge font-badge text-bg--success white-text">
+                <span className="badge font-badge bg-success white-text">
                     <i className="fas fa-crown me-2"></i>Cliente WhatsApp
                 </span>
             </div>
@@ -821,7 +821,7 @@ export default function CardPostulante({
                                         <ModalHistorialContactoCardPostulante
                                             historial={historialContacto}
                                             trabajador={
-                                                modelCard == 1
+                                                modelCard === 1
                                                     ? str_limit(
                                                           data.nombres,
                                                           30,
