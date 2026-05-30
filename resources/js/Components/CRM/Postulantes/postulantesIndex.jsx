@@ -420,6 +420,7 @@ export default class PostulantesIndex extends Component {
                             postulantes: r.postulantes,
                             totalpostulantes: r.total,
                             textoresultados: r.textoresultados,
+                            sideBar: false,
                         });
                         this.setLoading(false);
                     } else {
