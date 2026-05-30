@@ -1,7 +1,7 @@
 import axios from "axios";
 
-export function ajaxRequerimientosNew(data, horasalida, horaretorno, horaentrevista){
-    return axios.post('/ajax-requerimientos-new', {data, horasalida, horaretorno,horaentrevista} )
+export function ajaxRequerimientosNew(data, hs, hr, he){
+    return axios.post('/ajax-requerimientos-new', {data, hs, hr, he} )
         .then(res => {
             let r = res.data;
             return r;

@@ -144,11 +144,11 @@ class ValidateRequerimientosNew extends FormRequest
         return match ($this->modalidad) {
             1 => [
                 'sueldo' => ['required', 'gt:929'],
-                'tipoBeneficio' => $this->paispedido == 54 ? 'required' : 'nullable',
-                'diaretorno' => $this->cuarentena == 7 ? 'nullable' : 'required',
-                'diasalida'  => $this->cuarentena == 7 ? 'nullable' : 'required',
-                'horaretorno'=> $this->cuarentena == 7 ? 'nullable' : 'required',
-                'horasalida' => $this->cuarentena == 7 ? 'nullable' : 'required',
+                'tipoBeneficio' => $this->paispedido === 54 ? 'required' : 'nullable',
+                'diaretorno' => $this->cuarentena === 7 ? 'nullable' : 'required',
+                'diasalida'  => $this->cuarentena === 7 ? 'nullable' : 'required',
+                'horaretorno'=> $this->cuarentena === 7 ? 'nullable' : 'required',
+                'horasalida' => $this->cuarentena === 7 ? 'nullable' : 'required',
             ],
             2 => [
                 'sueldo' => ['required', 'gt:929'],

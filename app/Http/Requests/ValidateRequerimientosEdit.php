@@ -137,21 +137,21 @@ class ValidateRequerimientosEdit extends FormRequest
         return match ($this->modalidad) {
             1 => [
                 'sueldo' => ['required', 'gt:929'],
-                'tipoBeneficio' => $this->paispedido == 11 ? 'nullable' : 'required',
-                'diaretorno' => $this->cuarentena == 7 ? 'nullable' : 'required',
-                'diasalida'  => $this->cuarentena == 7 ? 'nullable' : 'required',
-                'horaretorno'=> $this->cuarentena == 7 ? 'nullable' : 'required',
-                'horasalida' => $this->cuarentena == 7 ? 'nullable' : 'required',
+                'tipoBeneficio' => $this->paispedido === 11 ? 'nullable' : 'required',
+                'diaretorno' => $this->cuarentena === 7 ? 'nullable' : 'required',
+                'diasalida'  => $this->cuarentena === 7 ? 'nullable' : 'required',
+                'horaretorno'=> $this->cuarentena === 7 ? 'nullable' : 'required',
+                'horasalida' => $this->cuarentena === 7 ? 'nullable' : 'required',
             ],
             2 => [
                 'sueldo' => ['required', 'gt:929'],
-                'tipoBeneficio' => $this->paispedido == 11 ? 'nullable' : 'required',
+                'tipoBeneficio' => $this->paispedido === 11 ? 'nullable' : 'required',
             ],
             3 => [
                 'sueldo' => ['required', 'gt:69'],
-                'frecuencia'         => $this->cuarentena == 7 ? 'nullable' : 'required',
-                'valordiafrecuencia' => $this->cuarentena == 7 ? 'nullable' : 'required|gt:69',
-                'tipoBeneficio'      => $this->paispedido == 11 ? 'nullable' : 'required',
+                'frecuencia'         => $this->cuarentena === 7 ? 'nullable' : 'required',
+                'valordiafrecuencia' => $this->cuarentena === 7 ? 'nullable' : 'required|gt:69',
+                'tipoBeneficio'      => $this->paispedido === 11 ? 'nullable' : 'required',
             ],
             default => [],
         };

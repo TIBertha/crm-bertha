@@ -58,9 +58,9 @@ class RequerimientosController extends Controller
         try{
 
             $data = $request->input('data');
-            $horaSalida = $request->input('horasalida');
-            $horaRetorno = $request->input('horaretorno');
-            $horaEntrevista = $request->input('horaentrevista');
+            $horaSalida = $request->input('hs');
+            $horaRetorno = $request->input('hr');
+            $horaEntrevista = $request->input('he');
 
             $tipoemp = $data['tipoempleador'];
             $responsable = $data['responsable'];
@@ -178,10 +178,12 @@ class RequerimientosController extends Controller
                 'sueldo'           => $modalidad == 3 ? ($data['frecuencia'] * $data['valordiafrecuencia'] * 4) : $data['sueldo'],
                 'sueldo_por_dias' => $modalidad == 3 ? ($data['frecuencia'] * $data['valordiafrecuencia'] * 4) : null,
                 'horarios' => $modalidad == 1 ? null : ($data['horarios'] ? json_encode($data['horarios']) : null),
-                'dia_salida' => $modalidad == 1 ? ($data['diasalida'] ? $data['diasalida'] : null) : null,
-                'hora_salida' => $modalidad == 1 ? ($horaSalida ? Carbon::parse($horaSalida) : null) : null,
+
                 'dia_ingreso' => $modalidad == 1 ? ($data['diaretorno'] ? $data['diaretorno'] : null) : null,
                 'hora_ingreso' => $modalidad == 1 ? ($horaRetorno ? Carbon::parse($horaRetorno) : null) : null,
+                'dia_salida' => $modalidad == 1 ? ($data['diasalida'] ? $data['diasalida'] : null) : null,
+                'hora_salida' => $modalidad == 1 ? ($horaSalida ? Carbon::parse($horaSalida) : null) : null,
+
                 'estatusrequerimiento_id'  => 1,
                 'domicilio_id' => $data['domicilio'],
                 'monto_adelanto' => $data['montoAdelanto'],
