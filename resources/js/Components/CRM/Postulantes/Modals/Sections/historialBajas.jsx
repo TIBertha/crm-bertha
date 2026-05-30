@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
 import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
+import {ajaxUpdatePagoBaja} from "../../../../Functions/Postulantes.jsx";
 
 export default function HistorialBajas({ historialbajas }) {
     return (
@@ -34,7 +35,7 @@ export default function HistorialBajas({ historialbajas }) {
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {historialbajas.map((histBaj, key) => {
+                            {historialbajas.map((histBaj) => {
                                 const [view, setView] = useState(1);
                                 const [montoPagado, setMontoPagado] =
                                     useState(20);
@@ -89,7 +90,7 @@ export default function HistorialBajas({ historialbajas }) {
                                     useState("");
                                 const [tbMsjIcon, setTbMsjIcon] = useState("");
 
-                                function updatePagoBaja(e) {
+                                function updatePagoBaja() {
                                     setView(0);
                                     ajaxUpdatePagoBaja(histBaj.id, montoPagado)
                                         .then((r) => {
@@ -123,7 +124,7 @@ export default function HistorialBajas({ historialbajas }) {
                                                 }, 1250);
                                             }
                                         })
-                                        .catch(function (error) {
+                                        .catch(function () {
                                             setPagado(false);
                                             setView(3);
                                             setTbMsjText(
@@ -147,7 +148,7 @@ export default function HistorialBajas({ historialbajas }) {
                                         }, 750);
                                     }
 
-                                    if (view == 0) {
+                                    if (view === 0) {
                                         return (
                                             <div
                                                 className={"w-100 text-center"}
@@ -157,7 +158,7 @@ export default function HistorialBajas({ historialbajas }) {
                                         );
                                     }
 
-                                    if (view == 1) {
+                                    if (view === 1) {
                                         return (
                                             <a
                                                 className={
@@ -169,11 +170,9 @@ export default function HistorialBajas({ historialbajas }) {
                                             </a>
                                         );
                                     }
-                                    if (view == 2) {
+                                    if (view === 2) {
                                         return (
-                                            <div
-                                                class={"input-button-container"}
-                                            >
+                                            <div className={"input-button-container"}>
                                                 <input
                                                     type="text"
                                                     className={
@@ -211,7 +210,7 @@ export default function HistorialBajas({ historialbajas }) {
                                             </div>
                                         );
                                     }
-                                    if (view == 3) {
+                                    if (view === 3) {
                                         return (
                                             <strong className={tbMsjColor}>
                                                 {tbMsjText}{" "}
@@ -223,7 +222,7 @@ export default function HistorialBajas({ historialbajas }) {
                                             </strong>
                                         );
                                     }
-                                    if (view == 5) {
+                                    if (view === 5) {
                                         return <div></div>;
                                     }
                                 }
@@ -240,7 +239,7 @@ export default function HistorialBajas({ historialbajas }) {
                                                 ")"}
                                         </Td>
                                         <Td className={"align-middle"}>
-                                            {histBaj.penalizacion_dias == 0
+                                            {histBaj.penalizacion_dias === 0
                                                 ? "PERMANENTE"
                                                 : histBaj.penalizacion_dias +
                                                   " DIAS"}

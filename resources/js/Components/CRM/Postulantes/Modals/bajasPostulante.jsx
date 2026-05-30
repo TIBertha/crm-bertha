@@ -37,12 +37,12 @@ export default function BajasPostulante({
                     setTiposBajas(r.tiposBajas);
                 }
             })
-            .catch(function (error) {
+            .catch(function () {
                 setShow(false);
             });
     }
 
-    function aplicarSancion(e) {
+    function aplicarSancion() {
         setUploading(true);
         ajaxSaveDataBajas(idPostulante, baja)
             .then((r) => {
@@ -56,14 +56,14 @@ export default function BajasPostulante({
                                 setHistorialBajas(r.historialBajas);
                             }
                         })
-                        .catch(function (error) {
+                        .catch(function () {
                             setShow(false);
                         });
                 } else {
                     setSuccess(false);
                 }
             })
-            .catch(function (error) {
+            .catch(function () {
                 setUploading(false);
                 setSuccess(false);
             });
@@ -71,7 +71,7 @@ export default function BajasPostulante({
 
     return (
         <>
-            <a onClick={(e) => openModal()}>
+            <a onClick={() => openModal()}>
                 <i
                     data-toggle="tooltip"
                     data-placement="top"
@@ -86,12 +86,12 @@ export default function BajasPostulante({
                 backdrop="static"
                 keyboard={false}
                 show={show}
-                onHide={(e) => setShow(false)}
+                onHide={() => setShow(false)}
                 centered={true}
             >
                 <ModalHeader
                     className="border-0 pb-0"
-                    closeButton={success ? false : true}
+                    closeButton={!success}
                 >
                     <ModalTitle>
                         <h6>
