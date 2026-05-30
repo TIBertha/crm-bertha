@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {format, parseISO} from 'date-fns';
 import { isResponsive } from "../../Functions/General";
 import ModalHistorialContactoCardPostulante from "./modalHistorialContactoCardPostulante";
@@ -29,7 +29,6 @@ export default function CardPostulante({
     handlePorColocar,
     handlePorVerificar,
     handlePorCompletar,
-    handleEliminarFicha,
     filtro,
     ascenderPostulante,
     selectWp,
@@ -45,15 +44,15 @@ export default function CardPostulante({
 
     let foto = data.foto ? data.foto : fotoExample;
     let nombrePostulante =
-        modelCard == 1 ? data.contact_name : data.contact_name;
+        modelCard === 1 ? data.contact_name : data.contact_name;
 
     let estatus =
-        data.por_horas == 1 &&
-        data.cama_adentro == 0 &&
-        data.cama_afuera == 0 &&
-        data.estadoid == 1
+        data.por_horas === 1 &&
+        data.cama_adentro === 0 &&
+        data.cama_afuera === 0 &&
+        data.estadoid === 1
             ? "DISPONIBLE"
-            : modelCard == 1
+            : modelCard === 1
               ? data.estado
               : data.estatus_postulante;
     //let badgeEstado = '';
@@ -78,9 +77,9 @@ export default function CardPostulante({
         return {
             fontSize: "0.9rem",
             color:
-                $veri == "si"
+                $veri === "si"
                     ? "#4dabf7"
-                    : $call == true
+                    : $call === true
                       ? "#f83f37"
                       : $eje
                         ? "#ffc107"
@@ -95,10 +94,10 @@ export default function CardPostulante({
         };
 
         if (d.foto_documento_delantera) {
-            if (parseInt(d.documento_vigente) == 0) {
+            if (parseInt(d.documento_vigente) === 0) {
                 documento.iconColor = "text-danger";
                 documento.msj = "Su documento de identidad NO está vigente";
-            } else if (parseInt(d.documento_vigente) == 1) {
+            } else if (parseInt(d.documento_vigente) === 1) {
                 documento.iconColor = "text-purple-bertha";
                 documento.msj = "Su documento de identidad SI está vigente";
             }
@@ -111,7 +110,7 @@ export default function CardPostulante({
                 d.diaspasadoscertificadoantecedente &&
                 d.diaspasadoscertificadoantecedente >= 0
             ) {
-                if (d.diaspasadoscertificadoantecedente == 0) {
+                if (d.diaspasadoscertificadoantecedente === 0) {
                     antecedentesprops.iconColor = "#22af47";
                     antecedentesprops.iconColorOnCopy = "#146c2f";
                     antecedentesprops.message =
@@ -146,7 +145,7 @@ export default function CardPostulante({
                 }
             }
         } else {
-            if (d.tiene_cuenta != 0) {
+            if (d.tiene_cuenta !== 0) {
                 antecedentesprops.iconColor = "text-warning";
                 antecedentesprops.tooltip =
                     "Tiene una cuenta registrada. Solicitar su certificado único laboral";
@@ -162,7 +161,7 @@ export default function CardPostulante({
                 <>
                     {d.nombres ? (
                         <>
-                            {modelCard == 1
+                            {modelCard === 1
                                 ? str_limit(d.nombres, 30)
                                 : d.trabajador}
                         </>
@@ -181,7 +180,7 @@ export default function CardPostulante({
                 <NewCopyIcon
                     icon={"fas fa-user-tag"}
                     additonalClass={"icon-action-sm px-0 ms-1"}
-                    copyText={modelCard == 1 ? d.nombres : d.trabajador}
+                    copyText={modelCard === 1 ? d.nombres : d.trabajador}
                     tooltipText={"Copiar nombre postulante"}
                     successMsj={"Nombre(s) copiado"}
                 />
@@ -237,7 +236,7 @@ export default function CardPostulante({
                     </>
                 ) : (
                     <>
-                        {d.tiene_cuenta != 0 ? (
+                        {d.tiene_cuenta !== 0 ? (
                             <i
                                 data-toggle="tooltip"
                                 data-placement="top"
@@ -405,10 +404,10 @@ export default function CardPostulante({
                         {d.verificaciones_laborales.map((verif, index) => {
                             let iconVerifTitle = "No tiene verificación";
 
-                            if (verif.adjunto == "si") {
+                            if (verif.adjunto === "si") {
                                 iconVerifTitle = "Tiene verificación";
                             } else {
-                                if (verif.llamar == true) {
+                                if (verif.llamar === true) {
                                     iconVerifTitle =
                                         "Llamar, no cuenta con WhatsApp";
                                 } else {
@@ -452,13 +451,13 @@ export default function CardPostulante({
             <>
                 {d.vecesBajas && (
                     <>
-                        {d.vecesBajas.map((vb, index) => {
+                        {d.vecesBajas.map((vb) => {
                             let titleBaja =
                                 "SANCION: " +
                                 vb.bajanombre +
                                 "\r\n" +
                                 "ESTADO: " +
-                                (vb.pagado == true
+                                (vb.pagado === true
                                     ? "PAGADO (S/. " +
                                       vb.monto_pagado +
                                       ")" +
@@ -467,7 +466,7 @@ export default function CardPostulante({
                                       vb.fecha_pago_monto
                                     : "NO PAGADO");
                             let colorIcon = "text-danger";
-                            if (vb.pagado == true) {
+                            if (vb.pagado === true) {
                                 colorIcon = "text-success";
                             }
                             return (
@@ -490,12 +489,12 @@ export default function CardPostulante({
             <>
                 {d.educacion && (
                     <>
-                        {d.educacion.map((ed, index) => {
+                        {d.educacion.map((ed) => {
                             return (
                                 <i
                                     className={
                                         "fas fa-pen mx-1 text-" +
-                                        (ed.hasAdj == true
+                                        (ed.hasAdj === true
                                             ? "dblue"
                                             : "secondary")
                                     }
@@ -574,7 +573,7 @@ export default function CardPostulante({
                     </a>
                 )}
 
-                {modelCard == 1 && access == true && d.estadoid != 1 && (
+                {(modelCard === 1 && access && d.estadoid !== 1) && (
                     <a onClick={(e) => handlePorColocar(e, d.id)}>
                         <i
                             data-toggle="tooltip"
@@ -587,8 +586,8 @@ export default function CardPostulante({
 
                 {[3, 4].includes(d.estadoid) && (
                     <>
-                        {parseInt(d.estatus_anterior) == 1 &&
-                        access == false ? (
+                        {parseInt(d.estatus_anterior) === 1 &&
+                        access === false ? (
                             <a onClick={(e) => handlePorColocar(e, d.id)}>
                                 <i
                                     data-toggle="tooltip"
@@ -631,7 +630,7 @@ export default function CardPostulante({
                     </>
                 )}
 
-                {d.link_form && d.estadoid == 7 && (
+                {d.link_form && d.estadoid === 7 && (
                     <NewCopyIcon
                         icon={"far fa-clipboard"}
                         additonalClass={"icon-action-sm align-self-center"}
@@ -727,7 +726,7 @@ export default function CardPostulante({
                     colorOnCopy={"#da9500"}
                 />
 
-                {filtro == "1" && (
+                {filtro === "1" && (
                     <>
                         <a onClick={() => ascenderPostulante(d.id)}>
                             <i className="fas fa-check icon-action-postulaciones text-success icon-action-sm mx-1"></i>
@@ -738,7 +737,7 @@ export default function CardPostulante({
                     </>
                 )}
 
-                {d.select_wp == 0 && (
+                {d.select_wp === 0 && (
                     <a
                         onClick={() => selectWp(d.id)}
                         data-toggle="tooltip"
@@ -754,16 +753,16 @@ export default function CardPostulante({
 
     let cardStyle = "";
 
-    if (modelCard == 1) {
+    if (modelCard === 1) {
         cardStyle = "col-sm-6 col-md-4";
-    } else if (modelCard == 2) {
+    } else if (modelCard === 2) {
         cardStyle = "px-3 list-group list-unstyled";
-    } else if (modelCard == 3) {
+    } else if (modelCard === 3) {
         cardStyle = "col-sm-6 col-md-4 px-3 list-group list-unstyled";
     }
 
     let etiquetaSelectEmp = <br className="pt-2" />;
-    if (data.select_emp == 1) {
+    if (data.select_emp === 1) {
         etiquetaSelectEmp = (
             <div className="pt-2 text-center">
                 <span className="badge font-badge bg-warning white-text">
@@ -774,7 +773,7 @@ export default function CardPostulante({
     }
 
     let etiquetaFueTra = <br className="pt-2" />;
-    if (data.fue_tra == 1) {
+    if (data.fue_tra === 1) {
         etiquetaFueTra = (
             <div className="pt-2 text-center">
                 <span className="badge font-badge bg-secondary white-text">
@@ -785,7 +784,7 @@ export default function CardPostulante({
     }
 
     let etiquetaSelectWp = <br className="pt-2" />;
-    if (data.select_wp == 1) {
+    if (data.select_wp === 1) {
         etiquetaSelectWp = (
             <div className="pt-2 text-center">
                 <span className="badge font-badge bg-success white-text">
@@ -800,14 +799,15 @@ export default function CardPostulante({
             <div
                 className={
                     "card m-0 shadow-lg rounded" +
-                    (data.select_emp == 1 ? " purple-border-postulado" : "")
+                    (data.select_emp === 1 ? " purple-border-postulado" : "")
                 }
             >
                 <div className={"row m-0"}>
-                    {responsive == false && (
+                    {responsive === false && (
                         <div className={"col-md-3 align-self-center px-0"}>
                             <img
                                 src={foto}
+                                alt={'bertha'}
                                 className="card-img img-thumbnail rounded-circle"
                             />
 
@@ -913,7 +913,7 @@ export default function CardPostulante({
                                     <>
                                         <>{data.modalidades}</>
                                         <>
-                                            {data.estatus_por_dias == 1 && (
+                                            {data.estatus_por_dias === 1 && (
                                                 <TooltipPorDias
                                                     estilo={"tooltip-gray"}
                                                     placement={"bottom"}

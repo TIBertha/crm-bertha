@@ -183,8 +183,6 @@ class ContratosIndex extends Component {
     }
 
     setVerifIngreso(e,id,condition){
-        const text = condition === 1 ? 'ASISTIÓ' : 'NO ASISTIÓ';
-
         ajaxSetVerifIngresoContrato(id, condition).then(r => {
             if(r.code === 200){
                 showAlert('exito', r.msj);
@@ -228,25 +226,25 @@ class ContratosIndex extends Component {
 
     handleChange(e, tipo = '', campo = '') {
 
-        if(tipo == 'time'){
+        if(tipo === 'time'){
             this.setState({
                 [campo]: e
             });
 
-        }else if(tipo == 'keypress'){
+        }else if(tipo === 'keypress'){
 
             if(e.charCode === 13){
 
                 this.buscar();
             }
 
-        }else if(tipo == 'comprobanteExterno'){
+        }else if(tipo === 'comprobanteExterno'){
 
             let reader = new FileReader();
 
             reader.readAsDataURL(e.target.files[0]);
 
-            reader.onload = (e) => {
+            reader.onload = () => {
                 this.actionUploadFile(reader.result, campo, 'comprobanteExterno');
             };
 
@@ -257,7 +255,7 @@ class ContratosIndex extends Component {
 
             this.setState({
                 [e.target.name]: e.target.value.toUpperCase()
-            }, () =>  (start == undefined && end == undefined) ? '' : input.setSelectionRange(start, end) );
+            }, () =>  (start === undefined && end === undefined) ? '' : input.setSelectionRange(start, end) );
         }
     }
 
@@ -349,6 +347,7 @@ class ContratosIndex extends Component {
     paginationSearch(page){
         let pagina = parseInt(page.selected) + 1;
         let offset = (pagina - 1) * 10 ;
+        let self = this;
 
         ajaxContratosBuscar(this.state, offset).then(r => {
             if(r.code === 200){
@@ -369,8 +368,8 @@ class ContratosIndex extends Component {
                 showAlert('error', r.msj);
             }
         }).catch( function (error) {
-            if (error.response.status == 422){
-                this.setLoading(false);
+            if (error.response.status === 422){
+                self.setLoading(false);
                 showAlert('error', error.response.data);
             }
         });
@@ -381,6 +380,7 @@ class ContratosIndex extends Component {
         this.setLoading(true);
         this.setBusqueda(true);
         let offset = 0;
+        let self = this;
 
         ajaxContratosBuscar(this.state, offset).then(r => {
             if(r.code === 200){
@@ -402,7 +402,7 @@ class ContratosIndex extends Component {
             }
         }).catch( function (error) {
             if (error.response.status === 422){
-                this.setLoading(false);
+                self.setLoading(false);
                 showAlert('error', error.response.data);
             }
         });
@@ -415,12 +415,6 @@ class ContratosIndex extends Component {
 
     render() {
         let {url, sideBar, busqueda, access, contratos, textoresultados, totalcontratos, page, isLoading, comprobanteExterno, isUploadingComprobanteExterno, showModalComprobanteExterno} = this.state;
-
-        let links = {
-            ElDNI: 'https://dniperu.com/buscar-dni-nombres-apellidos/',
-            SIS: 'http://app.sis.gob.pe/SisConsultaEnLinea/Consulta/frmConsultaEnLinea.aspx',
-            RUN: 'https://consulta.servel.cl'
-        };
 
         if(isLoading) return <LoadingScreen load={isLoading} classStyle={'bg-purple-bertha'}/>;
 

@@ -233,16 +233,16 @@ class PostulantesNew extends Component {
         let token = (new Date()).getTime();
         let data = [];
 
-        if(type == 'foto'){
+        if(type === 'foto'){
             this.setState({loadingfoto: true});
             data = Object.assign({}, this.state.foto);
-        }else if (type == 'fotodnidelantera'){
+        }else if (type === 'fotodnidelantera'){
             this.setState({loadingfotodnidelantera: true});
             data = Object.assign({}, this.state.fotodnidelantera);
-        }else if (type == 'fotodnitrasera'){
+        }else if (type === 'fotodnitrasera'){
             this.setState({loadingfotodnitrasera: true});
             data = Object.assign({}, this.state.fotodnitrasera);
-        }else if (type == 'fotorecibo'){
+        }else if (type === 'fotorecibo'){
             this.setState({loadingrecibos: true});
             data = Object.assign({}, this.state.fotorecibo);
         }
@@ -264,7 +264,7 @@ class PostulantesNew extends Component {
     }
 
     handleSingularDelete(e, campo){
-        if(campo == 'certificadoantecedente'){
+        if(campo === 'certificadoantecedente'){
             this.setState({
                 certificadoantecedente: '',
                 certificadoantecedentepdf: '',
@@ -300,13 +300,13 @@ class PostulantesNew extends Component {
                         [type]: r.adjunto.url,
                     });
 
-                    if (type == 'foto'){
+                    if (type === 'foto'){
                         this.setState({loadingfoto: false})
-                    }else if (type == 'fotodnidelantera'){
+                    }else if (type === 'fotodnidelantera'){
                         this.setState({loadingfotodnidelantera: false})
-                    }else if (type == 'fotodnitrasera'){
+                    }else if (type === 'fotodnitrasera'){
                         this.setState({loadingfotodnitrasera: false})
-                    }else if (type == 'fotorecibo'){
+                    }else if (type === 'fotorecibo'){
                         this.setState({loadingrecibos: false})
                     }
                 }else if(r.code === 500){
@@ -329,7 +329,7 @@ class PostulantesNew extends Component {
 
     handleUpload(files, key, type, tipoadjunto = ''){
 
-        if(type == 'verificaciones'){
+        if(type === 'verificaciones'){
 
             let data = Object.assign({}, this.state.verificaciones);
 
@@ -350,9 +350,9 @@ class PostulantesNew extends Component {
                 url: null
             }));
 
-            if(tipoadjunto == 'adjuntosrecomendaciones'){
+            if(tipoadjunto === 'adjuntosrecomendaciones'){
                 data[key].adjuntosrecomendaciones = data[key].adjuntosrecomendaciones ? data[key].adjuntosrecomendaciones.concat(uploadedFiles) : uploadedFiles;
-            }else if(tipoadjunto == 'adjuntosverificaciones'){
+            }else if(tipoadjunto === 'adjuntosverificaciones'){
                 data[key].adjuntos = data[key].adjuntos ? data[key].adjuntos.concat(uploadedFiles) : uploadedFiles;
             }
 
@@ -360,7 +360,7 @@ class PostulantesNew extends Component {
 
             uploadedFiles.forEach((e) => this.processUpload(e, data, key, type, tipoadjunto));
 
-        }else if(type == 'educacion'){
+        }else if(type === 'educacion'){
 
             let data = Object.assign({}, this.state.adjuntoeducacion);
 
@@ -383,7 +383,7 @@ class PostulantesNew extends Component {
 
             uploadedFiles.forEach((e) => this.processUpload(e, data, key, type));
 
-        }else if(type == 'videopresentacion'){
+        }else if(type === 'videopresentacion'){
 
             let keyLoading = 'loading' + type;
 
@@ -470,20 +470,20 @@ class PostulantesNew extends Component {
 
         let datos = Object.values(Data);
 
-        if(type == 'verificaciones'){
-            if(tipoadjunto == 'adjuntosrecomendaciones'){
+        if(type === 'verificaciones'){
+            if(tipoadjunto === 'adjuntosrecomendaciones'){
                 datos[key].adjuntosrecomendaciones = datos[key].adjuntosrecomendaciones.map(uploadedFile => {
-                    return id == uploadedFile.id ? { ...uploadedFile, ...valores } : uploadedFile;
+                    return id === uploadedFile.id ? { ...uploadedFile, ...valores } : uploadedFile;
                 });
-            }else if(tipoadjunto == 'adjuntosverificaciones'){
+            }else if(tipoadjunto === 'adjuntosverificaciones'){
                 datos[key].adjuntos = datos[key].adjuntos.map(uploadedFile => {
-                    return id == uploadedFile.id ? { ...uploadedFile, ...valores } : uploadedFile;
+                    return id === uploadedFile.id ? { ...uploadedFile, ...valores } : uploadedFile;
                 });
             }
             this.setState({verificaciones: datos});
-        }else if(type == 'educacion'){
+        }else if(type === 'educacion'){
             datos[key].adjuntos = datos[key].adjuntos.map(uploadedFile => {
-                return id == uploadedFile.id ? { ...uploadedFile, ...valores } : uploadedFile;
+                return id === uploadedFile.id ? { ...uploadedFile, ...valores } : uploadedFile;
             });
             this.setState({adjuntoeducacion: datos});
         }
@@ -493,9 +493,9 @@ class PostulantesNew extends Component {
 
     handleRenameAdjunto(text, fileid, key, type, tipoadjunto = ''){
 
-        if(type == 'verificaciones'){
+        if(type === 'verificaciones'){
             this.updateFile(fileid, key, this.state.verificaciones, {name: text.nameFile}, type, tipoadjunto);
-        }else if(type == 'educacion'){
+        }else if(type === 'educacion'){
             this.updateFile(fileid, key, this.state.adjuntoeducacion, {name: text.nameFile}, type, tipoadjunto);
         }
     }
@@ -513,19 +513,19 @@ class PostulantesNew extends Component {
 
             if (result.value) {
 
-                if(type == 'verificaciones'){
+                if(type === 'verificaciones'){
 
                     let data = Object.values(this.state.verificaciones);
 
-                    if(tipoadjunto == 'adjuntosrecomendaciones'){
+                    if(tipoadjunto === 'adjuntosrecomendaciones'){
                         data[key].adjuntosrecomendaciones = data[key].adjuntosrecomendaciones.filter(file => file.id !== fileid);
-                    }else if(tipoadjunto == 'adjuntosverificaciones'){
+                    }else if(tipoadjunto === 'adjuntosverificaciones'){
                         data[key].adjuntos = data[key].adjuntos.filter(file => file.id !== fileid);
                     }
 
                     this.setState({verificaciones: data});
 
-                }else if(type == 'educacion'){
+                }else if(type === 'educacion'){
 
                     let data = Object.values(this.state.adjuntoeducacion);
 
@@ -533,7 +533,7 @@ class PostulantesNew extends Component {
 
                     this.setState({adjuntoeducacion: data});
 
-                }else if(type == 'videopresentacion'){
+                }else if(type === 'videopresentacion'){
 
                     this.setState({videopresentacion: []});
                 }
@@ -554,11 +554,11 @@ class PostulantesNew extends Component {
             let file = e.target.files[0];
             let tipoFile = file.type;
 
-            if(tipo == 'imagen'){
+            if(tipo === 'imagen'){
 
                 let options = '';
 
-                if (campo == 'foto'){
+                if (campo === 'foto'){
                     options = {
                         maxSizeMB: 4,
                         maxWidthOrHeight: 800,
@@ -587,7 +587,7 @@ class PostulantesNew extends Component {
 
                 });
 
-            }else if(tipo == 'imagenpdf'){
+            }else if(tipo === 'imagenpdf'){
 
                 let tiposFilePermitidos = ['image/png', 'image/jpg', 'image/jpeg', 'application/pdf'];
 
@@ -605,9 +605,9 @@ class PostulantesNew extends Component {
 
             }
 
-        }else if(tipo == 'time'){
+        }else if(tipo === 'time'){
 
-            if (campo == 'fechanacimiento'){
+            if (campo === 'fechanacimiento'){
                 this.setState({
                     [campo]: e.target.value
                 }, this.calculteAge);
@@ -617,7 +617,7 @@ class PostulantesNew extends Component {
                 });
             }
 
-        }else if(tipo == 'modalidad') {
+        }else if(tipo === 'modalidad') {
 
             let modalidad = this.state.modalidad;
 
@@ -629,25 +629,25 @@ class PostulantesNew extends Component {
             this.setState({modalidad: modalidad});
 
 
-        }else if(tipo == 'formbasico'){
+        }else if(tipo === 'formbasico'){
 
             this.setState(prev => ({
                 formbasico: !prev.formbasico
             }));
 
 
-        }else if(tipo == 'pais'){
+        }else if(tipo === 'pais'){
 
             let {departamentonacimiento, lugarnacimiento, paispostulando} = this.state;
 
             let tipoDocumento = '';
 
-            if(paispostulando == 11){
-                if (parseInt(e.target.value) == 11){
+            if(paispostulando === 11){
+                if (parseInt(e.target.value) === 11){
                     tipoDocumento = 10;
                 }
-            }else if(paispostulando == 54){
-                if (parseInt(e.target.value) == 54){
+            }else if(paispostulando === 54){
+                if (parseInt(e.target.value) === 54){
                     tipoDocumento = 1;
                 }
             }
@@ -656,37 +656,39 @@ class PostulantesNew extends Component {
                 paisprocedencia: e.target.value,
                 nacionalidad: functionSelectNationality(e.target.value),
                 tipodocumento: tipoDocumento,
-                lugarnacimiento: (parseInt(e.target.value) == 54 ? lugarnacimiento : ''),
-                departamentonacimiento: (parseInt(e.target.value) == 54 ? departamentonacimiento : ''),
-            }, this.getDepartamentosByNacionalidad(e.target.value));
+                lugarnacimiento: (parseInt(e.target.value) === 54 ? lugarnacimiento : ''),
+                departamentonacimiento: (parseInt(e.target.value) === 54 ? departamentonacimiento : ''),
+            }, () => {
+                this.getDepartamentosByNacionalidad(e.target.value)
+            });
 
-        }else if(tipo == 'departamentonacimiento') {
+        }else if(tipo === 'departamentonacimiento') {
 
             this.setState({
                 departamentonacimiento: e.target.value
             });
 
-        }else if(tipo == 'departamento') {
+        }else if(tipo === 'departamento') {
 
             this.setState({
                 departamento: e.target.value
             });
 
-        }else if(tipo == 'provincia') {
+        }else if(tipo === 'provincia') {
 
             this.setState({
                 provincia: e.target.value
             });
 
-        }else if(tipo == 'distrito') {
+        }else if(tipo === 'distrito') {
 
             this.setState({
                 distrito: e
             });
 
-        }else if(tipo == 'evento') {
+        }else if(tipo === 'evento') {
 
-            if(campo == 'actividad'){
+            if(campo === 'actividad'){
                 this.isChofer(e);
             }
 
@@ -694,12 +696,12 @@ class PostulantesNew extends Component {
                 [campo]: e
             });
 
-        }else if(tipo == 'contacto'){
+        }else if(tipo === 'contacto'){
 
             const data = this.state.contactos.map((contacto, sidx) => {
                 if (campo !== sidx) return contacto;
 
-                if (campo2 == 'telefono'){
+                if (campo2 === 'telefono'){
                     return { ...contacto, telefono: e };
                 }else{
                     return { ...contacto, [e.target.name]: e.target.value.toUpperCase() };
@@ -709,21 +711,21 @@ class PostulantesNew extends Component {
 
             this.setState({ contactos: data});
 
-        }else if(tipo == 'verificacion'){
+        }else if(tipo === 'verificacion'){
 
             const data = this.state.verificaciones.map((verificacion, sidx) => {
                 if (campo !== sidx) return verificacion;
 
-                if(campo2 == 'distrito'){
+                if(campo2 === 'distrito'){
                     return { ...verificacion, distrito: e};
-                }else if(campo2 == 'actividad') {
+                }else if(campo2 === 'actividad') {
                     return { ...verificacion, actividad: e};
-                }else if(campo2 == 'ejecutivo') {
+                }else if(campo2 === 'ejecutivo') {
                     const ejecutivoNombre = this.state.nombreResponsable;
                     return { ...verificacion, ejecutivo: ejecutivoNombre};
-                }else if (campo2 == 'telefono'){
+                }else if (campo2 === 'telefono'){
                     return { ...verificacion, telefono: e};
-                }else if(campo2 == 'llamar') {
+                }else if(campo2 === 'llamar') {
                     return { ...verificacion, llamar: true};
                 }else if(['inicioLabores', 'finLabores'].includes(campo2)){
                     return{ ...verificacion, [campo2]: e, tiempo: this.calcularTiempo(campo,e,campo2, 'verificaciones')};
@@ -735,7 +737,7 @@ class PostulantesNew extends Component {
 
             this.setState({ verificaciones: data});
 
-        }else if(tipo == 'educacion'){
+        }else if(tipo === 'educacion'){
 
             const data = this.state.adjuntoeducacion.map((educacion, sidx) => {
                 if (campo !== sidx) return educacion;
@@ -750,54 +752,64 @@ class PostulantesNew extends Component {
 
             this.setState({ adjuntoeducacion: data});
 
-        }else if(tipo == 'test') {
+        }else if(tipo === 'test') {
 
             const formState = Object.assign({}, this.state.tests);
             formState[e.target.name] = e.target.value;
             this.setState({tests: formState})
 
-        }else if(tipo == 'paispostulando'){
+        }else if(tipo === 'paispostulando'){
             let {genero, } = this.state;
             this.setState({
                 paispostulando: e.target.value
-            }, this.getActividadesList(genero, e.target.value));
-        }else if(tipo == 'genero') {
+            }, () => {
+                this.getActividadesList(genero, e.target.value)
+            });
+        }else if(tipo === 'genero') {
             let {paispostulando, } = this.state;
 
             this.setState({
                 genero: e.target.value
-            }, this.getActividadesList(e.target.value, paispostulando));
+            }, () => {
+                this.getActividadesList(e.target.value, paispostulando)
+            });
 
-        }else if(tipo == 'videoyoutube') {
+        }else if(tipo === 'videoyoutube') {
 
             this.setState({
                 videointroduccionyoutube: e.target.value
             });
 
-        }else if(tipo == 'numerocelular') {
+        }else if(tipo === 'numerocelular') {
 
             this.setState({
                 telefono: e.target.value,
                 telefonowhatsapp: e.target.value
-            }, this.verificarDuplicado(e.target.value, 'phone'));
+            }, () => {
+                this.verificarDuplicado(e.target.value, 'phone')
+            });
 
-        }else if (tipo == 'codigoTelefonico'){
+        }else if (tipo === 'codigoTelefonico'){
 
-            if (campo == 'telefono'){
+            if (campo === 'telefono'){
                 this.setState({
                     telefono: e,
                     telefonowhatsapp: e
-                }, this.verificarDuplicado(e, 'phone'));
+                }, () => {
+                    this.verificarDuplicado(e, 'phone')
+                });
             }else{
                 this.setState({
                     [campo]: e,
                 });
             }
-        }else if (tipo == 'numeroDocumento'){
+        }else if (tipo === 'numeroDocumento'){
 
             this.setState({
                 numerodocumento: e.target.value.toUpperCase()
-            }, this.verificarDuplicado(e.target.value, 'ID'));
+            }, () => {
+                this.verificarDuplicado(e.target.value, 'ID')
+            });
 
         }else{
 
@@ -807,7 +819,7 @@ class PostulantesNew extends Component {
 
             this.setState({
                 [e.target.name]: e.target.value.toUpperCase()
-            }, () =>  (start == undefined && end == undefined) ? '' : input.setSelectionRange(start, end) );
+            }, () =>  (start === undefined && end === undefined) ? '' : input.setSelectionRange(start, end) );
 
         }
         this.getRequis();
@@ -815,27 +827,27 @@ class PostulantesNew extends Component {
 
     verificarDuplicado(numero, tipo){
 
-        if (tipo == 'phone'){
+        if (tipo === 'phone'){
             this.setState({
-                searchingNumber: numero.length > 0 ? true : false,
+                searchingNumber: numero.length > 0,
                 estatusNumber: '',
             });
-        }else if(tipo == 'ID'){
+        }else if(tipo === 'ID'){
             this.setState({
-                searchingDocumentoID: numero.length > 0 ? true : false,
+                searchingDocumentoID: numero.length > 0,
                 estatusDocumentoID: '',
             });
         }
 
         ajaxVerificarNumero(numero, tipo).then(r => {
-            if (tipo == 'phone'){
+            if (tipo === 'phone'){
                 this.setState({
                     searchingNumber: false,
                     estatusNumber: numero.length > 0 ? r.estatusNumber : '',
                     iconEstatusNumber: numero.length > 0 ? r.iconEstatusNumber : '',
                     existDuplicityNumber: numero.length > 0 ? r.existDuplicityNumber : 0,
                 });
-            }else if(tipo == 'ID'){
+            }else if(tipo === 'ID'){
                 this.setState({
                     searchingDocumentoID: false,
                     estatusDocumentoID: numero.length > 0 ? r.estatusDocumentoID : '',
@@ -856,19 +868,19 @@ class PostulantesNew extends Component {
 
         ajaxUploadFile(file, campo, tipoarchivo).then(r => {
             if (r.code === 200){
-                if(campo == 'certificadoantecedente'){
+                if(campo === 'certificadoantecedente'){
                     this.setState({
                         [key]: false,
                         certificadoantecedente: r.result.image,
                         certificadoantecedentepdf: r.result.pdf
                     });
-                }else if(campo == 'cartillavacunapdf'){
+                }else if(campo === 'cartillavacunapdf'){
                     this.setState({
                         [key]: false,
                         cartillavacuna: r.result.image,
                         cartillavacunapdf: r.result.pdf
                     });
-                }else if(campo == 'recibos'){
+                }else if(campo === 'recibos'){
                     const data = this.state.fotorecibo.map((recibo, sidx) => {
                         if (llave !== sidx){
                             return recibo;
@@ -889,7 +901,7 @@ class PostulantesNew extends Component {
                 showAlert('error', r.msj)
             }
         }).catch( function (error) {
-            if (error.response.status == 422){
+            if (error.response.status === 422){
                 showAlert('error', error.response.data);
             }
         });
@@ -923,35 +935,33 @@ class PostulantesNew extends Component {
         let fechaI = '';
         let fechaF = '';
 
-        if(tipoObjeto == 'verificaciones'){
+        if(tipoObjeto === 'verificaciones'){
 
             let verificaciones = this.state.verificaciones;
 
-            if(tipo == 'inicioLabores'){
+            if(tipo === 'inicioLabores'){
                 fechaI = valor;
                 fechaF = verificaciones[key].finLabores;
-            }else if(tipo == 'finLabores'){
+            }else if(tipo === 'finLabores'){
                 fechaI = verificaciones[key].inicioLabores;
                 fechaF = valor;
             }
 
-        }else if(tipoObjeto == 'educacion'){
+        }else if(tipoObjeto === 'educacion'){
 
             let educacion = this.state.adjuntoeducacion;
 
-            if(tipo == 'fechainicio'){
+            if(tipo === 'fechainicio'){
                 fechaI = valor;
                 fechaF = educacion[key].fechafin;
-            }else if(tipo == 'fechafin'){
+            }else if(tipo === 'fechafin'){
                 fechaI = educacion[key].fechainicio;
                 fechaF = valor;
             }
 
         }
 
-        let result = executeCalcularTiempo(fechaI, fechaF);
-
-        return result;
+        return executeCalcularTiempo(fechaI, fechaF);
 
     }
 
@@ -1003,7 +1013,7 @@ class PostulantesNew extends Component {
 
             let isFirma = this.sigPad.current.isEmpty();
 
-            if(isFirma == false){
+            if(isFirma === false){
                 return this.sigPad.current.toDataURL();
             }else{
                 return null;
@@ -1073,6 +1083,8 @@ class PostulantesNew extends Component {
 
     searchUser(e){
 
+        let self = this;
+
         e.preventDefault();
 
         this.setLoadingSearch(true);
@@ -1101,15 +1113,16 @@ class PostulantesNew extends Component {
                         nacionalidad: r.usuario.paisnacimiento_id ? functionSelectNationality(r.usuario.paisnacimiento_id) : '',
                         departamentonacimiento: r.usuario.departamentonacimiento_id,
                         lugarnacimiento: r.usuario.lugar_nacimiento
+                    }, () => {
+                        if(r.usuario.genero_id){
+                            this.getActividadesList(r.usuario.genero_id, 54);
+                        }
+
+                        if(r.usuario.fecha_nacimiento){
+                            this.calculteAge();
+                        }
                     });
 
-                    if(r.usuario.genero_id){
-                        this.getActividadesList(r.usuario.genero_id, 54);
-                    }
-
-                    if(r.usuario.fecha_nacimiento){
-                        this.calculteAge();
-                    }
                 }
 
             }else if(r.code === 500){
@@ -1117,8 +1130,8 @@ class PostulantesNew extends Component {
                 showAlert('error', r.msj);
             }
         }).catch( function (error) {
-            if (error.response.status == 422){
-                this.setLoadingSearch(false);
+            if (error.response.status === 422){
+                self.setLoadingSearch(false);
                 showAlert('error', error.response.data);
             }
         });
@@ -1132,8 +1145,8 @@ class PostulantesNew extends Component {
 
         if(verificaciones.length){
 
-            let isInicioLaboresEmpty = verificaciones.some(element => (element.inicioLabores == null || element.inicioLabores == '' || element.inicioLabores == undefined) );
-            let isFinLaboresEmpty = verificaciones.some(element => (element.inicioLabores == null || element.inicioLabores == '' || element.inicioLabores == undefined) );
+            let isInicioLaboresEmpty = verificaciones.some(element => (element.inicioLabores == null || element.inicioLabores === '' || element.inicioLabores === undefined) );
+            let isFinLaboresEmpty = verificaciones.some(element => (element.inicioLabores == null || element.inicioLabores === '' || element.inicioLabores === undefined) );
 
             if(isInicioLaboresEmpty || isFinLaboresEmpty){
                 Swal.fire({
@@ -1169,7 +1182,7 @@ class PostulantesNew extends Component {
                 showAlert('error', r.msj);
             }
         }).catch( function (error) {
-            if (error.response.status == 422){
+            if (error.response.status === 422){
                 self.setLoadingSave(false);
                 showAlert('error', error.response.data);
             }
@@ -1204,7 +1217,7 @@ class PostulantesNew extends Component {
                 }else{
                     this.setState({
                         actividades: r.actividades,
-                        actividad: (genero == 1 ? '' : r.actividadDefault)
+                        actividad: (genero === 1 ? '' : r.actividadDefault)
                     });
                 }
             }

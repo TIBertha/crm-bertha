@@ -7,6 +7,7 @@ import Flyer from "../Components/flyer.jsx";
 import IndexButton from "../Components/indexButton.jsx";
 import ButtonAccess from "../Layouts/SubComponents/buttonAccess.jsx";
 import NoDataLabel from "../Components/noDatalabel.jsx";
+import {showAlert, showAlertConfirmRedirectReactRouter} from "../../Helpers/alerts.js";
 
 import {
     getEmpleadores,
@@ -113,7 +114,7 @@ class EmpleadoresIndex extends Component{
         this.setState({isLoadingModalQR: condition});
     }
 
-    saveQuickRegister(e){
+    saveQuickRegister(){
 
         this.setLoadingModalQR(true);
 
@@ -133,7 +134,7 @@ class EmpleadoresIndex extends Component{
                 });
             }
         }).catch( function (error) {
-            if (error.response.status == 422){
+            if (error.response.status === 422){
                 this.setState({
                     isLoadingModalQR: false,
                     rMsjQR: r.msj,
@@ -143,7 +144,7 @@ class EmpleadoresIndex extends Component{
         });
     }
 
-    openModalQuickRegister(e){
+    openModalQuickRegister(){
         this.setState({
             modalQuickReg: true,
         });
@@ -159,7 +160,7 @@ class EmpleadoresIndex extends Component{
 
         this.cleandDataQR();
 
-        if (refresh == true){
+        if (refresh === true){
             this.refreshEmpleadores();
         }
     }
@@ -185,7 +186,7 @@ class EmpleadoresIndex extends Component{
         }, 1000);
     }
 
-    openModalLinkFormRequerimiento(e){
+    openModalLinkFormRequerimiento(){
         this.setState({
             modalGenerateLinkFormRequerimiento: true,
             exist: false,
@@ -193,14 +194,14 @@ class EmpleadoresIndex extends Component{
         });
     }
 
-    closeModalLinkFormRequerimiento(e){
+    closeModalLinkFormRequerimiento(){
         this.setState({
             modalGenerateLinkFormRequerimiento: false,
             empTemp: '',
         });
     }
 
-    changeViewModal(e){
+    changeViewModal(){
         this.setState({
             viewModalFormRequerimiento: '2',
         });
@@ -321,19 +322,19 @@ class EmpleadoresIndex extends Component{
 
     handleChange(e, tipo = '', campo = '') {
 
-        if(tipo == 'time'){
+        if(tipo === 'time'){
             this.setState({
                 [campo]: e
             });
 
-        }else if(tipo == 'keypress'){
+        }else if(tipo === 'keypress'){
 
             if(e.charCode === 13){
 
                 this.buscar();
             }
 
-        }else if(tipo == 'telefono'){
+        }else if(tipo === 'telefono'){
             this.setState({
                 [e]: e
             });
@@ -346,7 +347,7 @@ class EmpleadoresIndex extends Component{
 
             this.setState({
                 [e.target.name]: e.target.value.toUpperCase()
-            }, () =>  (start == undefined && end == undefined) ? '' : input.setSelectionRange(start, end) );
+            }, () =>  (start === undefined && end === undefined) ? '' : input.setSelectionRange(start, end) );
         }
     }
 
@@ -395,6 +396,7 @@ class EmpleadoresIndex extends Component{
         this.setModificado(1);
         this.setLoading(true);
         this.setBusqueda(true);
+        let self = this;
 
         ajaxEmpleadoresBuscar(this.state, 0).then(r => {
             if(r.code === 200){
@@ -415,8 +417,8 @@ class EmpleadoresIndex extends Component{
                 showAlert('error', r.msj);
             }
         }).catch( function (error) {
-            if (error.response.status == 422){
-                this.setLoading(false);
+            if (error.response.status === 422){
+                self.setLoading(false);
                 showAlert('error', error.response.data);
             }
         });
@@ -426,6 +428,7 @@ class EmpleadoresIndex extends Component{
 
         let pagina = parseInt(page.selected) + 1;
         let offset = (pagina - 1) * 10 ;
+        let self = this;
 
         ajaxEmpleadoresBuscar(this.state, offset).then(r => {
             if(r.code === 200){
@@ -445,8 +448,8 @@ class EmpleadoresIndex extends Component{
                 showAlert('error', r.msj);
             }
         }).catch( function (error) {
-            if (error.response.status == 422){
-                this.setLoading(false);
+            if (error.response.status === 422){
+                self.setLoading(false);
                 showAlert('error', error.response.data);
             }
         });
@@ -458,7 +461,7 @@ class EmpleadoresIndex extends Component{
 
         this.getDataInicial();
 
-        if (busqueda == 0){
+        if (busqueda === 0){
             this.refreshEmpleadores();
         }
 
@@ -467,8 +470,6 @@ class EmpleadoresIndex extends Component{
     render() {
 
         let {url, sideBar, viewModalFormRequerimiento, textoresultados, exist, linkFormRequerimiento, modalGenerateLinkFormRequerimiento, isLoading, empleadores, totalempleadores, page, isBusqueda} = this.state;
-
-        let {modalQuickReg, nombresQR, apellidosQR, telefonoQR, tokenQR, rMsjQR, isLoadingModalQR, successModalQR} = this.state;
 
         let links = {
             ElDNI: 'https://dniperu.com/buscar-dni-nombres-apellidos/',

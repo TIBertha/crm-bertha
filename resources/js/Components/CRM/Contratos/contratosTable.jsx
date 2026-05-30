@@ -22,7 +22,7 @@ export default function ContratosTable({url, setVerifIngreso, contratos, total, 
             <div className="row mx-0">
                 <NewCopyIcon icon={'fas fa-user-tag'} additonalClass={'col-auto px-1 my-auto icon-action-sm align-self-center'} copyText={data.trabajador_contact_data.nombres} tooltipText={'Copiar nombre trabajador'} successMsj={'Nombre trabajador copiado'} />
                 <NewCopyIcon icon={'fas fa-copy'} additonalClass={'col-auto px-1 my-auto icon-action-sm align-self-center'} copyText={'PO ' + data.trabajador_contact_data.nombres + ' ' + data.trabajador_contact_data.flag_emoji } tooltipText={'Copiar nombre trabajador en Google'} successMsj={'Nombre trabajador para Google Copiado'} />
-                <div className={'col-auto px-1 my-auto ' + (data.verif_ingreso == 1 ? '' : 'text-danger')}>{data.trabajador_contact_data.short_name}</div>
+                <div className={'col-auto px-1 my-auto ' + (data.verif_ingreso === 1 ? '' : 'text-danger')}>{data.trabajador_contact_data.short_name}</div>
                 <NewCopyIcon icon={'fas fa-mobile-alt'} additonalClass={'col-auto px-1 my-auto icon-action-sm align-self-center'} copyText={data.trabajador_contact_data.telefono_whatsapp} tooltipText={'Copiar teléfono trabajador'} successMsj={'Teléfono trabajador copiado'} />
             </div>
         );
@@ -30,7 +30,7 @@ export default function ContratosTable({url, setVerifIngreso, contratos, total, 
 
     function findColumnTrabajadorBC(trabajador_contact_data, tipo) {
         if (trabajador_contact_data){
-            if (trabajador_contact_data.exist == true){
+            if (trabajador_contact_data.exist === true){
                 return (
                     <div className="row mx-0">
                         <NewCopyIcon icon={'fas fa-user-tag'} additonalClass={'col-auto px-1 my-auto icon-action-sm align-self-center'} copyText={trabajador_contact_data.nombres} tooltipText={'Copiar nombre trabajador ' + tipo} successMsj={'Nombre trabajador ' + tipo + ' copiado'}/>
@@ -75,7 +75,7 @@ export default function ContratosTable({url, setVerifIngreso, contratos, total, 
 
         let tag = [];
 
-        if(culminado == false && anulado == false){
+        if (!culminado && !anulado){
             tag.push(<Link to={'/contratos/edit/' + data.id} ><i data-toggle="tooltip" data-placement="top" title="Editar" className={'fas fa-edit icon-action-sm px-2'}></i></Link>);
         }else{
             tag.push(<Link to={'/contratos/show/' + data.id} ><i data-toggle="tooltip" data-placement="top" title="Editar" className={'fas fa-edit icon-action-sm px-2'}></i></Link>);
@@ -89,7 +89,7 @@ export default function ContratosTable({url, setVerifIngreso, contratos, total, 
             <CambiarEstadoContrato idContrato={data.id} url={url} />
         );
 
-        if( (culminado == false && anulado == false) && data.estatus_req != 1 ){
+        if (!culminado && !anulado && data.estatus_req !== 1){
             tag.push(<a onClick={(e) => finalizar(e, data.id)} ><i data-toggle="tooltip" data-placement="top" title="Culminar contrato" className={'fas fa-trash-alt icon-action-sm px-2'}></i></a>);
         }
 
@@ -105,7 +105,7 @@ export default function ContratosTable({url, setVerifIngreso, contratos, total, 
                     </>
                     :
                     <>
-                        {data.data_trabajador.tiene_cuenta != 0 ?
+                        {data.data_trabajador.tiene_cuenta !== 0 ?
                             <i data-toggle="tooltip" data-placement="top" title={(firstNamePost(data.data_trabajador.nombres) + ' tiene una cuenta registrada. Solicitar su certificado único laboral')} className="fas fa-portrait text-warning px-2"></i>
                             :
                             <>
@@ -146,7 +146,7 @@ export default function ContratosTable({url, setVerifIngreso, contratos, total, 
                 </Thead>
                 <Tbody>
 
-                    {contratos.map((data,index) =>{
+                    {contratos.map((data) =>{
 
                         const [verificadorIngreso, setVerificadorIngreso] = useState(data.verif_ingreso);
                         let switchClassName= 'col-12 col-md text-center option-action font-weight-bold px-2';
@@ -197,8 +197,8 @@ export default function ContratosTable({url, setVerifIngreso, contratos, total, 
                                 <Td className={'vertical-align-middle align-switch'}>
                                     <div className={'switch-side-area-purple'}>
                                         <div className="row mx-0 justify-content-center">
-                                            <div className={switchClassName + (verificadorIngreso == 1 ? ' checked-green' : '')} onClick={(e) => ( verificadorIngreso == 0 ? changeEstatusAsistencia(e, 1) : null)} >{'SI'}</div>
-                                            <div className={switchClassName + (verificadorIngreso == 0 ? ' checked-purple' : '')} onClick={(e) => ( verificadorIngreso == 1 ? changeEstatusAsistencia(e, 0) : null)}>{'NO'}</div>
+                                            <div className={switchClassName + (verificadorIngreso === 1 ? ' checked-green' : '')} onClick={(e) => ( verificadorIngreso === 0 ? changeEstatusAsistencia(e, 1) : null)} >{'SI'}</div>
+                                            <div className={switchClassName + (verificadorIngreso === 0 ? ' checked-purple' : '')} onClick={(e) => ( verificadorIngreso === 1 ? changeEstatusAsistencia(e, 0) : null)}>{'NO'}</div>
                                         </div>
                                     </div>
                                 </Td>

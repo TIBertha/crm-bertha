@@ -149,30 +149,31 @@ class ContratosEdit extends Component {
         modalCancelar('/contratos', navigate)
     }
 
-    clearPad(e){
-
+    clearPad(){
         this.sigPad.clear();
     }
 
     handleChange(e, tipo = '', campo = '') {
 
-        if(tipo == 'time'){
+        if(tipo === 'time'){
 
-            if(campo == 'creado'){
+            if(campo === 'creado'){
                 this.setState({
                     [campo]: e
                 }, this.calcularFechaFinGarantia);
 
-            }else if(campo == 'fechafinlabores'){
+            }else if(campo === 'fechafinlabores'){
 
                 this.setState({
                     [campo]: e
                 }, this.calculoFechaMontoDiasTrabajados);
 
-            }else if(campo == 'fechainiciogarantia'){
+            }else if(campo === 'fechainiciogarantia'){
                 this.setState({
                     [campo]: e
-                }, this.calcularFechaFinGarantia(e));
+                }, () => {
+                    this.calcularFechaFinGarantia(e)
+                });
 
             }else{
                 this.setState({
@@ -180,34 +181,34 @@ class ContratosEdit extends Component {
                 });
             }
 
-        }else if(tipo == 'empleador'){
+        }else if(tipo === 'empleador'){
 
             this.setState({
                 empleador: e
             }, this.getRequerimientosDomicilios);
 
-        }else if(tipo == 'select'){
+        }else if(tipo === 'select'){
 
             this.setState({
                 [campo]: e
             });
 
-        }else if(tipo == 'requerimiento'){
+        }else if(tipo === 'requerimiento'){
 
             this.setState({
                 requerimiento: e.target.value
             },  this.changeRequerimiento);
 
-        }else if(tipo == 'tipocomision'){
+        }else if(tipo === 'tipocomision'){
 
             this.setState({
                 tipocomision: e.target.value
             },  this.changeComision);
 
 
-        }else if(tipo == 'calculo'){
+        }else if(tipo === 'calculo'){
 
-            if(campo == 'sueldo'){
+            if(campo === 'sueldo'){
 
                 let {value} = e;
 
@@ -223,11 +224,11 @@ class ContratosEdit extends Component {
 
             }
 
-        }else if(tipo == 'diferencia'){
+        }else if(tipo === 'diferencia'){
 
             let valor = '';
 
-            if(campo == 'descuentoejecutivo'){
+            if(campo === 'descuentoejecutivo'){
                 let {value} = e;
                 valor = value;
             }else{
@@ -236,13 +237,15 @@ class ContratosEdit extends Component {
 
             this.setState({
                 [campo]: valor
-            },  this.calculoDiferencia(campo, valor));
+            }, () => {
+                this.calculoDiferencia(campo, valor)
+            });
 
-        }else if(tipo == 'pago12'){
+        }else if(tipo === 'pago12'){
 
             let valor = '';
 
-            if(campo == 'pago1'){
+            if(campo === 'pago1'){
                 let {value} = e;
                 valor = value;
             }else{
@@ -253,11 +256,11 @@ class ContratosEdit extends Component {
                 [campo]: valor
             },  this.calculoContado);
 
-        }else if(tipo == 'adelantodebe'){
+        }else if(tipo === 'adelantodebe'){
 
             let valor = '';
 
-            if(campo == 'adelanto'){
+            if(campo === 'adelanto'){
                 let {value} = e;
                 valor = value;
             }else{
@@ -268,15 +271,15 @@ class ContratosEdit extends Component {
                 [campo]: valor
             },  this.CalcularAdelantoDebe);
 
-        }else if(tipo == 'verificacion'){
+        }else if(tipo === 'verificacion'){
 
             this.setState({verificadoingreso: e.target.value});
 
-        }else if(tipo == 'calculodebe'){
+        }else if(tipo === 'calculodebe'){
 
             let valor = '';
 
-            if(campo == 'debe'){
+            if(campo === 'debe'){
                 let {value} = e;
                 valor = value;
             }else{
@@ -287,13 +290,15 @@ class ContratosEdit extends Component {
                 [campo]: valor
             },  this.calculoDebe);
 
-        }else if(tipo == 'formapago'){
+        }else if(tipo === 'formapago'){
 
             this.setState({
                 [campo]: e.target.value
-            },  this.setMontoTotal(e.target.value));
+            }, () => {
+                this.setMontoTotal(e.target.value)
+            });
 
-        }else if(tipo == 'montodiastrabajados'){
+        }else if(tipo === 'montodiastrabajados'){
 
             let {value} = e;
 
@@ -301,7 +306,7 @@ class ContratosEdit extends Component {
                 [campo]: value
             },  this.calculoOperacionDiasTrabajados);
 
-        }else if(tipo == 'float') {
+        }else if(tipo === 'float') {
 
             let {value} = e;
 
@@ -311,23 +316,23 @@ class ContratosEdit extends Component {
 
         }else{
 
-            if(campo == 'garantia'){
+            if(campo === 'garantia'){
 
                 this.setState({
                     [e.target.name]: e.target.value
                 }, this.calcularFechaFinGarantia);
 
-            }else if(campo == 'cantdiastrabajados'){
+            }else if(campo === 'cantdiastrabajados'){
 
                 this.setState({
                     [e.target.name]: e.target.value.toUpperCase(),
                 }, this.calcularMontoDiasTrabajados);
 
-            }else if(tipo == 'adjunto'){
+            }else if(tipo === 'adjunto'){
 
                 let reader = new FileReader();
                 reader.readAsDataURL(e.target.files[0]);
-                reader.onloadend = (e) =>  {
+                reader.onloadend = () =>  {
 
                     this.setState({
                         adjunto: reader.result
@@ -337,7 +342,7 @@ class ContratosEdit extends Component {
 
             }else{
 
-                if(tipo == 'observaciones'){
+                if(tipo === 'observaciones'){
 
                     const input = e.target;
                     const start = input.selectionStart;
@@ -355,7 +360,7 @@ class ContratosEdit extends Component {
 
                     this.setState({
                         [e.target.name]: e.target.value.toUpperCase()
-                    }, () =>  (start == undefined && end == undefined) ? '' : input.setSelectionRange(start, end) );
+                    }, () =>  (start === undefined && end === undefined) ? '' : input.setSelectionRange(start, end) );
 
                 }
 
@@ -419,7 +424,7 @@ class ContratosEdit extends Component {
 
         let {montototalcontrato, debe} = this.state;
 
-        if(debe != montototalcontrato){
+        if(debe !== montototalcontrato){
 
             if(debe < montototalcontrato){
                 this.setState({adelanto: formatFloat(montototalcontrato - debe)})
@@ -435,7 +440,7 @@ class ContratosEdit extends Component {
         let {garantia, creado} = this.state;
         let fecha = '';
 
-        if(creado == ''){
+        if(creado === ''){
             fecha = new Date();
         }else{
             fecha = creado;
@@ -485,7 +490,7 @@ class ContratosEdit extends Component {
 
             }).catch(function (error){
 
-            if (error.response.status == 422){
+            if (error.response.status === 422){
                 self.setLoading(false);
                 showAlert('error', error.response.data);
 
@@ -498,7 +503,7 @@ class ContratosEdit extends Component {
 
         let {montototalcontrato} = this.state;
 
-        if(formapago == ''){
+        if(formapago === ''){
 
             this.setState({
                 pago1: '',
@@ -515,13 +520,13 @@ class ContratosEdit extends Component {
 
             });
 
-        }else if(formapago == 1){
+        }else if(formapago === 1){
 
             this.setState({
                 pago1: formatFloat(montototalcontrato),
             });
 
-        }else if(formapago == 2){
+        }else if(formapago === 2){
 
             this.setState({
                 adelanto: formatFloat(montototalcontrato),
@@ -538,9 +543,8 @@ class ContratosEdit extends Component {
         let tot = montototalcontrato;
         let pag1 = pago1;
         let pag2 = pago2;
-        let dif = '';
 
-        if(pag1 != tot){
+        if(pag1 !== tot){
 
             if(pag1 < tot){
                 pag2 = tot - pag1;
@@ -555,7 +559,7 @@ class ContratosEdit extends Component {
 
         }
 
-        if(pag1 != ''){
+        if(pag1 !== ''){
             this.setState({fechapago: new Date()});
         }else{
             this.setState({fechapago: ''});
@@ -570,9 +574,8 @@ class ContratosEdit extends Component {
         let tot = parseFloat(montototalcontrato);
         let pag1 = parseFloat(adelanto);
         let pag2 = parseFloat(debe);
-        let dif = '';
 
-        if(pag1 != tot){
+        if(pag1 !== tot){
 
             if(pag1 < tot){
 
@@ -589,7 +592,7 @@ class ContratosEdit extends Component {
             }
         }
 
-        if(pag1 != ''){
+        if(pag1 !== ''){
             this.setState({fechapagoadelanto: new Date()});
         }else{
             this.setState({fechapagoadelanto: ''});
@@ -602,25 +605,25 @@ class ContratosEdit extends Component {
 
         let tot = totalpago;
         let med = totalpago;
-        let desc = campo == 'descuentoejecutivo' ? valor : descuentoejecutivo;
+        let desc = campo === 'descuentoejecutivo' ? valor : descuentoejecutivo;
         let dif = 0;
 
-        if(desc != tot){
+        if(desc !== tot){
 
-            if(tipocontrato == 3) {
+            if(tipocontrato === 3) {
                 if(desc > tot){
                     dif = desc;
                 }
-            }else if(tipocontrato != 3){
+            }else if(tipocontrato !== 3){
 
                 if(formatFloat(desc) < formatFloat(tot)){
                     dif = tot - desc;
                 }else if(desc > tot){
 
-                    if (campo == 'descuentoejecutivo'){
+                    if (campo === 'descuentoejecutivo'){
                         dif = tot - desc;
                     }else{
-                        if(tot == 0){
+                        if(tot === 0){
                             dif = 0;
                             //tot = med;
                         }else{
@@ -652,10 +655,10 @@ class ContratosEdit extends Component {
         let total = getCalculoTotal(cont, gan, tot, tipocontrato, paispedido, tipocomision, modalidad);
 
         this.setState({
-            totalpago: (gan == 0 ? 0 : (tieneComision == true ? montoComision : (total ? formatFloat(total) : 0)) ),
-            descuentoejecutivo: (gan == 0 ? 0 : (tieneComision == true ? montoComision : total)),
+            totalpago: (gan === 0 ? 0 : (tieneComision === true ? montoComision : (total ? formatFloat(total) : 0)) ),
+            descuentoejecutivo: (gan === 0 ? 0 : (tieneComision === true ? montoComision : total)),
             formapago: 1,
-            montototalcontrato: (gan == 0 ? 0 : (tieneComision == true ? montoComision : (total ? formatFloat(total) : 0))),
+            montototalcontrato: (gan === 0 ? 0 : (tieneComision === true ? montoComision : (total ? formatFloat(total) : 0))),
         });
 
     }
@@ -705,7 +708,7 @@ class ContratosEdit extends Component {
         let {tipocomision} = this.state;
 
         this.setState({
-            garantia: tipocomision == 1 ? 6 : 3
+            garantia: tipocomision === 1 ? 6 : 3
         }, this.actionsChangeComision);
 
     }
@@ -853,7 +856,7 @@ class ContratosEdit extends Component {
 
     render() {
 
-        let { url, show, keyTab, isLoading, verificadoingreso, id, linkDomicilio} = this.state;
+        let { show, keyTab, isLoading, verificadoingreso, id, linkDomicilio} = this.state;
         if(isLoading) return <LoadingScreen load={isLoading} classStyle={'bg-purple-bertha'}/>;
 
         return(
@@ -870,8 +873,8 @@ class ContratosEdit extends Component {
                                     <div className="col-6 col-md-auto align-self-center">
                                         <div className="switch-side-area">
                                             <div className="row mx-0">
-                                                <div className={'col-auto option-action font-weight-bold' + (verificadoingreso == '1' ? ' checked-green' : '')} onClick={() => this.setVerifIngreso('1')} >{'SI'}</div>
-                                                <div className={'col-auto option-action font-weight-bold' + (verificadoingreso == '0' ? ' checked-red' : '')} onClick={() => this.setVerifIngreso('0')}>{'NO'}</div>
+                                                <div className={'col-auto option-action font-weight-bold' + (verificadoingreso === '1' ? ' checked-green' : '')} onClick={() => this.setVerifIngreso('1')} >{'SI'}</div>
+                                                <div className={'col-auto option-action font-weight-bold' + (verificadoingreso === '0' ? ' checked-red' : '')} onClick={() => this.setVerifIngreso('0')}>{'NO'}</div>
                                             </div>
                                         </div>
                                     </div>

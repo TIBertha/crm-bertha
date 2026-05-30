@@ -115,12 +115,12 @@ class RequerimientosIndex extends Component{
 
     handleChange(e, tipo = '', campo = '') {
 
-        if(tipo == 'time'){
+        if(tipo === 'time'){
             this.setState({
                 [campo]: e
             });
 
-        }else if(tipo == 'keypress'){
+        }else if(tipo === 'keypress'){
 
             if(e.charCode === 13){
                 this.buscar();
@@ -142,7 +142,7 @@ class RequerimientosIndex extends Component{
 
                 this.setState({
                     [e.target.name]: e.target.value.toUpperCase()
-                }, () =>  (start == undefined && end == undefined) ? '' : input.setSelectionRange(start, end) );
+                }, () =>  (start === undefined && end === undefined) ? '' : input.setSelectionRange(start, end) );
 
             }
 
@@ -170,7 +170,7 @@ class RequerimientosIndex extends Component{
                     }else if(r.code === 500){
                         showAlert('error', r.msj);
                     }
-                }).catch(function (error) {
+                }).catch(function () {
                     showAlert('error', 'Ocurrio un problema al eliminar el requerimiento. Consulte al administrador');
                 });
             }
@@ -199,7 +199,7 @@ class RequerimientosIndex extends Component{
                     }else if (r.code === 500){
                         showAlert('error', r.msj);
                     }
-                }).catch(function (error) {
+                }).catch(function () {
                     showAlert('error', 'Ocurrio un problema al adjuntar archivo. Consulte al administrador');
                 });
             }
@@ -211,7 +211,7 @@ class RequerimientosIndex extends Component{
         e.preventDefault();
 
         Swal.fire({
-            text: ('¿Desea que ' + (activo == true ? 'no' : 'si') + ' figure en holabertha.com/busco-trabajo?'),
+            text: ('¿Desea que ' + (activo === true ? 'no' : 'si') + ' figure en holabertha.com/busco-trabajo?'),
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: global.PURPLEBERTHA,
@@ -229,7 +229,7 @@ class RequerimientosIndex extends Component{
                         showAlert('error', r.msj);
                     }
                 }).catch(function (error) {
-                    if (error.response.status == 422){
+                    if (error.response.status === 422){
                         showAlert('error', r.msj);
                     }
                 });
@@ -257,7 +257,7 @@ class RequerimientosIndex extends Component{
         const data = requerimientos.map(item => {
             let view = false;
 
-            if(item.id == id){
+            if(item.id === id){
                 view = true;
             }
 
@@ -316,6 +316,7 @@ class RequerimientosIndex extends Component{
     paginationSearch(page){
         let pagina = parseInt(page.selected) + 1;
         let offset = (pagina - 1) * 15 ;
+        let self = this;
 
         ajaxRequerimientosBuscar(this.state, offset).then(r =>{
             if (r.code === 200){
@@ -335,8 +336,8 @@ class RequerimientosIndex extends Component{
                 showAlert('error', r.msj);
             }
         }).catch(function (error) {
-            if (error.response.status == 422){
-                this.setLoading(false);
+            if (error.response.status === 422){
+                self.setLoading(false);
                 showAlert('error', error.response.data);
             }
         });
@@ -349,6 +350,7 @@ class RequerimientosIndex extends Component{
 
         let pagina = 0;
         let offset = 0;
+        let self = this;
 
         ajaxRequerimientosBuscar(this.state, offset).then(r => {
             if (r.code === 200){
@@ -370,8 +372,8 @@ class RequerimientosIndex extends Component{
                 showAlert('error', r.msj);
             }
         }).catch(function (error) {
-            if (error.response.status == 422){
-                this.setLoading(false);
+            if (error.response.status === 422){
+                self.setLoading(false);
                 showAlert('error', error.response.data);
             }
         });
@@ -383,7 +385,7 @@ class RequerimientosIndex extends Component{
     }
 
     render() {
-        let {url, sideBar, access, fastsearch, requerimientos, isLoading, totalrequerimientos, page, busqueda, textoresultados} = this.state;
+        let {url, sideBar, fastsearch, requerimientos, isLoading, totalrequerimientos, page, busqueda, textoresultados} = this.state;
 
         let mapas = [
             {name: 'Lima - Perú', flag: 'pe', img: 'https://adjuntosexperta.s3.amazonaws.com/Adjuntos/mapa-lima.jpg', size: 'lg'},
@@ -421,7 +423,7 @@ class RequerimientosIndex extends Component{
 
                     <div className={'col-12 col-md-auto px-1 my-2 my-md-0'}>
                         <ul className={'mapaButtons'}>
-                            {mapas.map((m,index) => {
+                            {mapas.map((m) => {
                                 return(
                                     <li>
                                         <VerMaps flag={m.flag} name={m.name} img={m.img} imgSize={m.size}/>

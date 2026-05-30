@@ -176,7 +176,7 @@ class RequerimientosEdit extends Component{
                 });
             }
         }).catch(function (error) {
-            if (error.response.status == 422){
+            if (error.response.status === 422){
 
             }
         });
@@ -187,6 +187,7 @@ class RequerimientosEdit extends Component{
         e.preventDefault();
 
         this.setLoadingModalDomicilio(true);
+        let self = this;
 
         let {nuevoDomicilio, empleador} = this.state;
 
@@ -212,13 +213,13 @@ class RequerimientosEdit extends Component{
                 this.setLoadingModalDomicilio(false);
             }
         }).catch(function (error) {
-            if (error.response.status == 422){
+            if (error.response.status === 422){
                 this.setState({
                     viewModalDomicilio: '2',
                     typeMsjCreateDomicilio: r.typeMsj,
                     msjCreateDomicilio: r.msj,
                 });
-                this.setLoadingModalDomicilio(false);
+                self.setLoadingModalDomicilio(false);
             }
         });
 
@@ -234,7 +235,7 @@ class RequerimientosEdit extends Component{
                 })
             }
         }).catch(function (error) {
-            if (error.response.status == 422){
+            if (error.response.status === 422){
                 showAlert('error', r.msj);
             }
         });
@@ -265,15 +266,15 @@ class RequerimientosEdit extends Component{
     handleDelete(e, campo) {
         const { edades, edadbebes, edadninos, edadadulto } = this.state;
 
-        if (campo == 'edadbebes'){
+        if (campo === 'edadbebes'){
             this.setState({
                 edadbebes: edadbebes.filter((tag, index) => index !== e),
             });
-        }else if (campo == 'edadninos'){
+        }else if (campo === 'edadninos'){
             this.setState({
                 edadninos: edadninos.filter((tag, index) => index !== e),
             });
-        }else if (campo == 'edadadulto'){
+        }else if (campo === 'edadadulto'){
             this.setState({
                 edadadulto: edadadulto.filter((tag, index) => index !== e),
             });
@@ -287,11 +288,11 @@ class RequerimientosEdit extends Component{
 
     handleAddition(e, campo) {
 
-        if (campo == 'edadbebes'){
+        if (campo === 'edadbebes'){
             this.setState(state => ({ edadbebes: [...state.edadbebes, e] }));
-        }else if (campo == 'edadninos'){
+        }else if (campo === 'edadninos'){
             this.setState(state => ({ edadninos: [...state.edadninos, e] }));
-        }else if (campo == 'edadadulto'){
+        }else if (campo === 'edadadulto'){
             this.setState(state => ({ edadadulto: [...state.edadadulto, e] }));
         }else{
             this.setState(state => ({ edades: [...state.edades, e] }));
@@ -301,7 +302,7 @@ class RequerimientosEdit extends Component{
 
     handleDrag(tag, currPos, newPos, campo) {
 
-        if (campo == 'edadbebes'){
+        if (campo === 'edadbebes'){
             const edades = [...this.state.edadbebes];
             const newTags = edades.slice();
 
@@ -310,7 +311,7 @@ class RequerimientosEdit extends Component{
 
             // re-render
             this.setState({ edadbebes: newTags });
-        }else if (campo == 'edadninos'){
+        }else if (campo === 'edadninos'){
             const edades = [...this.state.edadninos];
             const newTags = edades.slice();
 
@@ -319,7 +320,7 @@ class RequerimientosEdit extends Component{
 
             // re-render
             this.setState({ edadninos: newTags });
-        }else if (campo == 'edadadulto'){
+        }else if (campo === 'edadadulto'){
             const edades = [...this.state.edadadulto];
             const newTags = edades.slice();
 
@@ -362,36 +363,38 @@ class RequerimientosEdit extends Component{
 
     handleChange(e, tipo = '', campo = '') {
 
-        if(tipo == 'time'){
+        if(tipo === 'time'){
 
             this.setState({
                 [campo]: e
             });
 
-        }else if(tipo == 'tipoComision'){
+        }else if(tipo === 'tipoComision'){
 
             this.setState({
                 tipoComision: e.target.value,
                 montoComision: getMontoComision(e.target.value, null, null, this.state),
             });
 
-        }else if(tipo == 'empleador'){
+        }else if(tipo === 'empleador'){
 
             this.setState({
                 empleador: e
-            }, this.getCorreoEmpleador(e.value));
+            }, () => {
+                this.getCorreoEmpleador(e.value)
+            });
 
-        }else if(tipo == 'edad') {
+        }else if(tipo === 'edad') {
 
             let edad = this.state.edad;
 
-            if(campo == 'multiple'){
+            if(campo === 'multiple'){
 
                 edad.forEach(m => {
 
-                    if(e.target.checked == true){
+                    if(e.target.checked === true){
 
-                        if(m.id != 4){
+                        if(m.id !== 4){
                             m.isChecked = false;
                             m.disabled = true;
                         }else{
@@ -400,7 +403,7 @@ class RequerimientosEdit extends Component{
 
                     }else{
 
-                        if(m.id != 4){
+                        if(m.id !== 4){
                             m.isChecked = false;
                             m.disabled = false;
                         }else{
@@ -411,7 +414,7 @@ class RequerimientosEdit extends Component{
 
                 });
 
-            }else if(campo == 'single'){
+            }else if(campo === 'single'){
 
                 edad.forEach(m => {
                     if (m.value === e.target.value)
@@ -438,7 +441,7 @@ class RequerimientosEdit extends Component{
                     [campo]: value,
                     isValorDiaFrecuenciaValido: value >= minvalue
                 }, () => {
-                    this.calculoSueldoPorDias(value);
+                    this.calculoSueldoPorDias(value, true);
                 });
 
             }else if (campo === 'montoAdelanto'){
@@ -463,17 +466,19 @@ class RequerimientosEdit extends Component{
             this.setState({
                 modalidad: e.target.value,
                 montoComision: getMontoComision(null, null, e.target.value, this.state),
-            }, this.changeModalidad(e.target.value) );
+            }, () => {
+                this.changeModalidad(e.target.value)
+            } );
 
-            if(parseInt(e.target.value) == 3){
+            if(parseInt(e.target.value) === 3){
                 this.setState({tipoBeneficio: 4});
             }
 
-        }else if (tipo == 'paispedido'){
+        }else if (tipo === 'paispedido'){
 
             let value = parseInt(e.target.value);
 
-            if (value == 49){
+            if (value === 49){
                 this.setState({
                     tipoComision: 3,
                     montoComision: getMontoComision(e.target.value, null, null, this.state),
@@ -482,13 +487,15 @@ class RequerimientosEdit extends Component{
 
             this.setState({
                 paispedido: value,
-            }, this.setDivisaPais(value));
+            }, () => {
+                this.setDivisaPais(value)
+            });
 
-        }else if(tipo == 'frecuencia'){
+        }else if(tipo === 'frecuencia'){
 
             this.setState({
                 frecuencia : e.target.value
-            }, this.calculoSueldoPorDias );
+            }, this.calculoSueldoPorDias, true);
 
         }else if (['rangominimo','rangomaximo'].includes(tipo)){
 
@@ -496,19 +503,21 @@ class RequerimientosEdit extends Component{
                 [e.target.name]: e.target.value.toUpperCase(),
             });
 
-        }else if (tipo == 'domicilio'){
+        }else if (tipo === 'domicilio'){
 
             this.setState({
                 [e.target.name]: e.target.value.toUpperCase(),
-            }, this.setDistrito(e.target.value) );
+            }, () => {
+                this.setDistrito(e.target.value)
+            } );
 
-        }else if (tipo == 'codigoTelefonico'){
+        }else if (tipo === 'codigoTelefonico'){
 
             this.setState({
                 [campo]: e,
             });
 
-        }else if (tipo == 'adjuntoAdelanto'){
+        }else if (tipo === 'adjuntoAdelanto'){
             let file = e.target.files[0];
 
             const uploadedFile = ({
@@ -527,7 +536,7 @@ class RequerimientosEdit extends Component{
             this.actionUploadFile(uploadedFile);
         }else{
 
-            if(tipo == 'observaciones'){
+            if(tipo === 'observaciones'){
 
                 const input = e.target;
                 const start = input.selectionStart;
@@ -537,7 +546,7 @@ class RequerimientosEdit extends Component{
                     [e.target.name]: e.target.value
                 }, () => input.setSelectionRange(start, end));
 
-            }else if(tipo == 'observacionesWeb'){
+            }else if(tipo === 'observacionesWeb'){
 
                 const input = e.target;
                 const start = input.selectionStart;
@@ -604,7 +613,7 @@ class RequerimientosEdit extends Component{
 
             let value = '';
 
-            if(campo == 'isDescanso'){
+            if(campo === 'isDescanso'){
                 value = e.target.checked;
             }else{
                 value = e ? moment(e).format() : e
@@ -619,7 +628,7 @@ class RequerimientosEdit extends Component{
 
                 return updatedDia;
             }else{
-                if (id == '1'){
+                if (id === '1'){
                     if (['horaingreso', 'horasalida'].includes(campo)){
                         const updatedDia = {
                             ...item,
@@ -639,7 +648,7 @@ class RequerimientosEdit extends Component{
 
     }
 
-    calculoSueldoPorDias(valordia){
+    calculoSueldoPorDias(valordia, handle){
 
         let costodia = 0;
         let sueldo = 0;
@@ -653,9 +662,9 @@ class RequerimientosEdit extends Component{
             });
         }
 
-        let condition = (frecuencia && costodia) ? true : false;
+        let condition = !!(frecuencia && costodia);
 
-        if (condition == true){
+        if (condition === true){
             if(frecuencia < 4){
                 sueldo = costodia * 12;
             }else{
@@ -667,10 +676,15 @@ class RequerimientosEdit extends Component{
 
         this.setState({
             sueldo: isValid ? sueldo : '',
-            montoComision: isValid ? getMontoComision(null, sueldo, null, this.state) : '',
             sueldomensual: isValid ? 4 * frecuencia * costodia : '',
             sueldoPrimerMes: isValid ? (costodia - (parseInt(paispedido) === 49 ? 100 : 20)) * frecuencia * 4 : '',
         });
+
+        if (handle === true){
+            this.setState({
+                montoComision: isValid ? getMontoComision(null, sueldo, null, this.state) : '',
+            });
+        }
 
     }
 
@@ -709,7 +723,7 @@ class RequerimientosEdit extends Component{
         this.setState({
             frecuencia: '',
             valordiafrecuencia: 70,
-            cuarentena: (modalidad == 1) ? 1 : '',
+            cuarentena: (modalidad === 1) ? 1 : '',
             horarios: armarHorarioRequerimiento(modalidad),
             tipoBeneficio: [5].includes(parseInt(modalidad)) ? 4 : tipoBeneficio,
         });
@@ -736,17 +750,17 @@ class RequerimientosEdit extends Component{
         let mainPaisID = paisReq ? paisReq : this.state.paispedido;
         let result = '';
 
-        if (parseInt(mainPaisID) == 11){
+        if (parseInt(mainPaisID) === 11){
             if([1,2].includes(parseInt(mainModalidadID))){
                 result = 5
             }else if([3,5].includes(parseInt(mainModalidadID))){
                 result = 6;
             }
-        }else if (parseInt(mainPaisID) == 54){
+        }else if (parseInt(mainPaisID) === 54){
             if([3,5].includes(parseInt(mainModalidadID))){
                 result = 4;
             }
-        }else if (parseInt(mainPaisID) == 49){
+        }else if (parseInt(mainPaisID) === 49){
             result = 3;
         }
 
@@ -768,7 +782,7 @@ class RequerimientosEdit extends Component{
                 showAlert('error', r.msj);
             }
         }).catch(function (error) {
-            if (error.response.status == 422){
+            if (error.response.status === 422){
                 showAlert('error', r.msj);
             }
         });
@@ -858,17 +872,19 @@ class RequerimientosEdit extends Component{
                     access: r.accessCom,
                     montoAdelanto: r.data.monto_adelanto,
                     fechaPagoAdelanto:r.data.fecha_pago_adelanto ? moment(r.data.fecha_pago_adelanto,"YYYY-MM-DD").toDate() : '',
+                }, () => {
+                    if(r.data.modalidad_id !== 3){
+
+                        this.setState({
+                            //montoComision: getMontoComision(null, r.data.sueldo, null, this.state),
+                            sueldoPrimerMes: getSueldoPrimerMes(r.data.sueldo, r.data.paispedido_id, false),
+                        });
+                    }else{
+                        this.calculoSueldoPorDias(r.data.valor_dia_frecuencia, false);
+                    }
                 });
 
-                if(r.data.modalidad_id !== 3){
 
-                    this.setState({
-                        montoComision: getMontoComision(null, r.data.sueldo, null, this.state),
-                        sueldoPrimerMes: getSueldoPrimerMes(r.data.sueldo, r.data.paispedido_id, false),
-                    });
-                }else{
-                    this.calculoSueldoPorDias(r.data.valor_dia_frecuencia);
-                }
 
 
                 this.setLoading(false);

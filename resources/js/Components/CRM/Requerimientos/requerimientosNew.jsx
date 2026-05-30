@@ -195,7 +195,7 @@ class RequerimientosNew extends Component {
                 });
             }
         }).catch(function (error) {
-            if (error.response.status == 422){
+            if (error.response.status === 422){
                 showAlert('error', error.response.data);
             }
         });
@@ -290,7 +290,7 @@ class RequerimientosNew extends Component {
                 })
             }
         }).catch(function (error) {
-            if (error.response.status == 422){
+            if (error.response.status === 422){
                 this.setState({
                     loadingModalEmpleador: false,
                     viewModalEmpleador: '2',
@@ -325,6 +325,8 @@ class RequerimientosNew extends Component {
 
         e.preventDefault();
 
+        let self = this;
+
         this.setLoadingModalDomicilio(true);
 
         let {nuevoDomicilio, empleador} = this.state;
@@ -353,13 +355,15 @@ class RequerimientosNew extends Component {
                 this.setLoadingModalDomicilio(false);
             }
         }).catch(function (error) {
-            if (error.response.status == 422){
+            if (error.response.status === 422){
                 this.setState({
                     viewModalDomicilio: '2',
                     typeMsjCreateDomicilio: r.typeMsj,
                     msjCreateDomicilio: r.msj,
+                }, () => {
+                    self.setLoadingModalDomicilio(false);
                 });
-                this.setLoadingModalDomicilio(false);
+
             }
         });
 
@@ -375,7 +379,7 @@ class RequerimientosNew extends Component {
                 })
             }
         }).catch(function (error) {
-            if (error.response.status == 422){
+            if (error.response.status === 422){
                 showAlert('error', r.msj);
             }
         });
@@ -386,15 +390,15 @@ class RequerimientosNew extends Component {
     handleDelete(e, campo) {
         const { edades, edadbebes, edadninos, edadadulto } = this.state;
 
-        if (campo == 'edadbebes'){
+        if (campo === 'edadbebes'){
             this.setState({
                 edadbebes: edadbebes.filter((tag, index) => index !== e),
             });
-        }else if (campo == 'edadninos'){
+        }else if (campo === 'edadninos'){
             this.setState({
                 edadninos: edadninos.filter((tag, index) => index !== e),
             });
-        }else if (campo == 'edadadulto'){
+        }else if (campo === 'edadadulto'){
             this.setState({
                 edadadulto: edadadulto.filter((tag, index) => index !== e),
             });
@@ -402,27 +406,27 @@ class RequerimientosNew extends Component {
             this.setState({
                 edades: edades.filter((tag, index) => index !== e),
             });
-        };
+        }
 
     }
 
     handleAddition(e, campo) {
 
-        if (campo == 'edadbebes'){
+        if (campo === 'edadbebes'){
             this.setState(state => ({ edadbebes: [...state.edadbebes, e] }));
-        }else if (campo == 'edadninos'){
+        }else if (campo === 'edadninos'){
             this.setState(state => ({ edadninos: [...state.edadninos, e] }));
-        }else if (campo == 'edadadulto'){
+        }else if (campo === 'edadadulto'){
             this.setState(state => ({ edadadulto: [...state.edadadulto, e] }));
         }else{
             this.setState(state => ({ edades: [...state.edades, e] }));
-        };
+        }
 
     }
 
     handleDrag(tag, currPos, newPos, campo) {
 
-        if (campo == 'edadbebes'){
+        if (campo === 'edadbebes'){
             const edades = [...this.state.edadbebes];
             const newTags = edades.slice();
 
@@ -431,7 +435,7 @@ class RequerimientosNew extends Component {
 
             // re-render
             this.setState({ edadbebes: newTags });
-        }else if (campo == 'edadninos'){
+        }else if (campo === 'edadninos'){
             const edades = [...this.state.edadninos];
             const newTags = edades.slice();
 
@@ -440,7 +444,7 @@ class RequerimientosNew extends Component {
 
             // re-render
             this.setState({ edadninos: newTags });
-        }else if (campo == 'edadadulto'){
+        }else if (campo === 'edadadulto'){
             const edades = [...this.state.edadadulto];
             const newTags = edades.slice();
 
@@ -483,23 +487,23 @@ class RequerimientosNew extends Component {
 
     handleChange(e, tipo = '', campo = '') {
 
-        if(tipo == 'time'){
+        if(tipo === 'time'){
 
             this.setState({
                 [campo]: e
             });
 
-        }else if(tipo == 'edad') {
+        }else if(tipo === 'edad') {
 
             let edad = this.state.edad;
 
-            if(campo == 'multiple'){
+            if(campo === 'multiple'){
 
                 edad.forEach(m => {
 
-                    if(e.target.checked == true){
+                    if(e.target.checked === true){
 
-                        if(m.id != 4){
+                        if(m.id !== 4){
                             m.isChecked = false;
                             m.disabled = true;
                         }else{
@@ -508,7 +512,7 @@ class RequerimientosNew extends Component {
 
                     }else{
 
-                        if(m.id != 4){
+                        if(m.id !== 4){
                             m.isChecked = false;
                             m.disabled = false;
                         }else{
@@ -519,7 +523,7 @@ class RequerimientosNew extends Component {
 
                 });
 
-            }else if(campo == 'single'){
+            }else if(campo === 'single'){
 
                 edad.forEach(m => {
                     if (m.value === e.target.value)
@@ -579,7 +583,9 @@ class RequerimientosNew extends Component {
                 tipovivienda: '',
                 distrito: '',
                 referenciaDomicilio: '',
-            }, this.getCorreoEmpleador(e.value));
+            }, () => {
+                this.getCorreoEmpleador(e.value)
+            });
 
         }else if(tipo === 'actividad'){
 
@@ -592,7 +598,9 @@ class RequerimientosNew extends Component {
             this.setState({
                 modalidad: e.target.value,
                 montoComision: getMontoComision(null, null, e.target.value, this.state),
-            }, this.changeModalidad(e.target.value) );
+            }, () => {
+                this.changeModalidad(e.target.value)
+            });
 
         }else if (tipo === 'paispedido'){
 
@@ -607,7 +615,9 @@ class RequerimientosNew extends Component {
 
             this.setState({
                 paispedido: value,
-            }, this.setDivisaPais(value));
+            }, () => {
+                this.setDivisaPais(value)
+            });
 
         }else if(tipo === 'seguimiento'){
 
@@ -618,13 +628,13 @@ class RequerimientosNew extends Component {
 
             this.setState({ seguimientos: newSeguimiento});
 
-        }else if(tipo == 'frecuencia'){
+        }else if(tipo === 'frecuencia'){
 
             this.setState({
                 frecuencia : e.target.value
             }, this.calculoSueldoPorDias );
 
-        }else if (tipo == 'tipoempleador'){
+        }else if (tipo === 'tipoempleador'){
 
             this.setState({
                 [e.target.name]: e.target.value.toUpperCase(),
@@ -638,19 +648,21 @@ class RequerimientosNew extends Component {
                 [e.target.name]: e.target.value.toUpperCase(),
             });
 
-        }else if (tipo == 'domicilio'){
+        }else if (tipo === 'domicilio'){
 
             this.setState({
                 [e.target.name]: e.target.value.toUpperCase(),
-            }, this.setDistrito(e.target.value) );
+            }, () => {
+                this.setDistrito(e.target.value)
+            } );
 
-        }else if (tipo == 'codigoTelefonico'){
+        }else if (tipo === 'codigoTelefonico'){
 
             this.setState({
                 [campo]: e,
             });
 
-        }else if (tipo == 'adjuntoAdelanto'){
+        }else if (tipo === 'adjuntoAdelanto'){
             let file = e.target.files[0];
 
             const uploadedFile = ({
@@ -669,7 +681,7 @@ class RequerimientosNew extends Component {
             this.actionUploadFile(uploadedFile);
         }else{
 
-            if(tipo == 'observaciones'){
+            if(tipo === 'observaciones'){
 
                 const input = e.target;
                 const start = input.selectionStart;
@@ -679,7 +691,7 @@ class RequerimientosNew extends Component {
                     [e.target.name]: e.target.value
                 }, () => input.setSelectionRange(start, end));
 
-            }else if(tipo == 'observacionesWeb'){
+            }else if(tipo === 'observacionesWeb'){
 
                 const input = e.target;
                 const start = input.selectionStart;
@@ -797,9 +809,9 @@ class RequerimientosNew extends Component {
             });
         }
 
-        let condition = (frecuencia && costodia) ? true : false;
+        let condition = !!(frecuencia && costodia);
 
-        if (condition == true){
+        if (condition === true){
             if(frecuencia < 4){
                 sueldo = costodia * 12;
             }else{
@@ -839,7 +851,7 @@ class RequerimientosNew extends Component {
                 showAlert('error', r.msj);
             }
         }).catch( function (error) {
-            if (error.response.status == 422){
+            if (error.response.status === 422){
                 self.setLoading(false);
                 showAlert('error', error.response.data);
             }
@@ -852,7 +864,7 @@ class RequerimientosNew extends Component {
         this.setState({
             frecuencia: '',
             valordiafrecuencia: 80,
-            cuarentena: (modalidad == 1) ? 1 : '',
+            cuarentena: (modalidad === 1) ? 1 : '',
             horarios: armarHorarioRequerimiento(modalidad),
         });
     }
@@ -872,7 +884,7 @@ class RequerimientosNew extends Component {
                     showAlert('error', r.msj);
                 }
             }).catch(function (error) {
-                if (error.response.status == 422){
+                if (error.response.status === 422){
                     showAlert('error', r.msj);
                 }
             });
@@ -887,6 +899,7 @@ class RequerimientosNew extends Component {
 
     getData(){
 
+        let self = this;
         this.setLoading(true);
 
         ajaxRequerimientosGetData().then(r => {
@@ -914,9 +927,9 @@ class RequerimientosNew extends Component {
 
             }
         }).catch(function (error) {
-            if (error.response.status == 422){
+            if (error.response.status === 422){
 
-                this.setLoading(false);
+                self.setLoading(false);
 
                 showAlert('error', r.msj);
 
@@ -995,7 +1008,7 @@ class RequerimientosNew extends Component {
     }
 
     render() {
-        let {url, keyTab, confirmacionAdelanto, isLoading} = this.state;
+        let {url, isLoading} = this.state;
         if(isLoading) return <LoadingScreen load={isLoading} classStyle={'bg-purple-bertha'}/>;
 
         return(

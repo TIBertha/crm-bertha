@@ -103,7 +103,7 @@ class EmpleadoresNew extends Component {
                     resultUpload: {isCreated: false, msj: 'No se creo el estado', type: 'fas fa-times-circle', isLoading: false},
                 });
             }
-        }).catch(function (error) {
+        }).catch(function () {
             this.setState({
                 resultUpload: {isCreated: false, msj: 'No se creo el estado', type: 'fas fa-times-circle', isLoading: false},
             });
@@ -156,38 +156,46 @@ class EmpleadoresNew extends Component {
 
     handleChange(e, tipo = '', campo = '', campo2 = '') {
 
-        if(tipo == 'time'){
+        if(tipo === 'time'){
             this.setState({
                 [campo]: e.target.value
             });
-        }else if (tipo == 'codigoTelefonico'){
+        }else if (tipo === 'codigoTelefonico'){
 
             this.setState({
                 [campo] : e
-            }, this.verificarDuplicado(e, 'phone'));
-        }else if (tipo == 'numeroDocumento'){
+            }, () => {
+                this.verificarDuplicado(e, 'phone')
+            });
+        }else if (tipo === 'numeroDocumento'){
             this.setState({
                 [campo] : e.target.value
-            }, this.verificarDuplicado(e.target.value, 'ID'));
-        }else if(tipo == 'tipodocumento') {
+            }, () => {
+                this.verificarDuplicado(e.target.value, 'ID')
+            });
+        }else if(tipo === 'tipodocumento') {
 
             this.setState({
                 tipodocumento: e.target.value
-            }, this.setPais(e.target.value));
+            }, () => {
+                this.setPais(e.target.value)
+            });
 
-        }else if(tipo == 'numerocelular') {
+        }else if(tipo === 'numerocelular') {
 
             this.setState({
                 telefono: e.target.value
             });
 
-        }else if(tipo == 'pais') {
+        }else if(tipo === 'pais') {
 
             this.setState({
                 paisnacimiento: e.target.value,
-            }, this.getDepartamentosByNacionalidad(e.target.value));
+            }, () => {
+                this.getDepartamentosByNacionalidad(e.target.value)
+            });
 
-        }else if(tipo == 'departamento') {
+        }else if(tipo === 'departamento') {
 
             this.setState({
                 departamentonacimiento: e.target.value
@@ -200,7 +208,7 @@ class EmpleadoresNew extends Component {
 
             this.setState({
                 [e.target.name]: e.target.value.toUpperCase()
-            }, () =>  (start == undefined && end == undefined) ? '' : input.setSelectionRange(start, end) );
+            }, () =>  (start === undefined && end === undefined) ? '' : input.setSelectionRange(start, end) );
         }
     }
 
@@ -288,6 +296,7 @@ class EmpleadoresNew extends Component {
 
         e.preventDefault();
         this.setLoading(true);
+        let self = this;
 
         ajaxEmpleadoresNew(this.state).then(r => {
             this.setLoading(false);
@@ -298,8 +307,8 @@ class EmpleadoresNew extends Component {
                 showAlert('error', r.msj);
             }
         }).catch( function (error) {
-            if (error.response.status == 422){
-                this.setLoading(false);
+            if (error.response.status === 422){
+                self.setLoading(false);
                 showAlert('error', error.response.data);
             }
         });
@@ -307,25 +316,25 @@ class EmpleadoresNew extends Component {
 
     verificarDuplicado(numero, tipo){
 
-        if (tipo == 'phone'){
+        if (tipo === 'phone'){
             this.setState({
-                searchingNumber: numero.length > 0 ? true : false,
+                searchingNumber: Boolean(numero.length > 0),
                 estatusNumber: '',
             });
-        }else if(tipo == 'ID'){
+        }else if(tipo === 'ID'){
             this.setState({
-                searchingDocumentoID: numero.length > 0 ? true : false,
+                searchingDocumentoID: Boolean(numero.length > 0),
                 estatusDocumentoID: '',
             });
         }
 
         ajaxVerificarNumero(numero, tipo).then(r => {
-            if (tipo == 'phone'){
+            if (tipo === 'phone'){
                 this.setState({
                     searchingNumber: false,
                     estatusNumber: numero.length > 0 ? r.estatusNumber : '',
                 });
-            }else if(tipo == 'ID'){
+            }else if(tipo === 'ID'){
                 this.setState({
                     searchingDocumentoID: false,
                     estatusDocumentoID: numero.length > 0 ? r.estatusDocumentoID : '',
@@ -337,7 +346,7 @@ class EmpleadoresNew extends Component {
     }
 
     setPais(tipodocumento){
-        this.setState({paisnacimiento: (tipodocumento == 1 ? 54 : '')});
+        this.setState({paisnacimiento: (tipodocumento === 1 ? 54 : '')});
     }
 
     getData(){
@@ -382,7 +391,7 @@ class EmpleadoresNew extends Component {
 
     render() {
 
-        let {show, keyTab, isLoading, domicilios} = this.state;
+        let {keyTab, isLoading, domicilios} = this.state;
         if(isLoading) return <LoadingScreen load={isLoading} classStyle={'bg-purple-bertha'}/>;
 
         return(

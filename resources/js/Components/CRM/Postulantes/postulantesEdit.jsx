@@ -35,7 +35,7 @@ import {ajaxGetDepartamentosByNacionalidad,
     ajaxUploadFile, ajaxVerificarNumero,
     executeCalcularTiempo, formButtons} from "../../Functions/General.jsx";
 import LoadingScreen from "../Components/loadingScreen.jsx";
-import {getExtensionFromString, GetListAddEstudios, GetSpeechDespedida2, getSpeechLlamadaVerificacion, removeExtensionFromString} from "../../Helpers/strings.js";
+import {getExtensionFromString, removeExtensionFromString} from "../../Helpers/strings.js";
 import {filesize} from "filesize";
 import TooltipCopy from "../Components/tooltipCopy.jsx";
 import BadgeTab from "../Components/badgeTab.jsx";
@@ -271,7 +271,7 @@ class PostulantesEdit extends Component {
         if (certificadoantecedentepdf){
             this.changeEstatusCULDisable('Ya cuenta con certificado único laboral')
         }else{
-            if (estatus == true){
+            if (estatus === true){
                 this.changeEstatusCULDisable('Ya fue accionado este botón')
             }else{
                 this.saveAndChangeEstatusCUL(true);
@@ -404,7 +404,7 @@ class PostulantesEdit extends Component {
                 let r = res.data;
 
                 if(r.code === 200){
-                    if (type == 'certificadoantecedente'){
+                    if (type === 'certificadoantecedente'){
                         this.setState({
                             certificadoantecedente: r.adjunto.image,
                             certificadoantecedentepdf: r.adjunto.pdf,
@@ -415,15 +415,15 @@ class PostulantesEdit extends Component {
                         });
                     }
 
-                    if (type == 'foto'){
+                    if (type === 'foto'){
                         this.setState({loadingfoto: false})
-                    }else if (type == 'fotodnidelantera'){
+                    }else if (type === 'fotodnidelantera'){
                         this.setState({loadingfotodnidelantera: false})
-                    }else if (type == 'fotodnitrasera'){
+                    }else if (type === 'fotodnitrasera'){
                         this.setState({loadingfotodnitrasera: false})
-                    }else if (type == 'fotorecibo'){
+                    }else if (type === 'fotorecibo'){
                         this.setState({loadingrecibos: false})
-                    }else if (type == 'certificadoantecedente'){
+                    }else if (type === 'certificadoantecedente'){
                         this.setState({loadingcertificadoantecedente: false})
                     }
                 }else if(r.code === 500){
@@ -460,9 +460,9 @@ class PostulantesEdit extends Component {
                 url: null
             }));
 
-            if(tipoadjunto == 'adjuntosrecomendaciones'){
+            if(tipoadjunto === 'adjuntosrecomendaciones'){
                 data[key].adjuntosrecomendaciones = data[key].adjuntosrecomendaciones ? data[key].adjuntosrecomendaciones.concat(uploadedFiles) : uploadedFiles;
-            }else if(tipoadjunto == 'adjuntosverificaciones'){
+            }else if(tipoadjunto === 'adjuntosverificaciones'){
                 data[key].adjuntos = data[key].adjuntos ? data[key].adjuntos.concat(uploadedFiles) : uploadedFiles;
             }
 
@@ -470,7 +470,7 @@ class PostulantesEdit extends Component {
 
             uploadedFiles.forEach((e) => this.processUpload(e, data, key, type, tipoadjunto));
 
-        }else if(type == 'educacion'){
+        }else if(type === 'educacion'){
 
             let data = Object.assign({}, this.state.adjuntoeducacion);
 
@@ -493,7 +493,7 @@ class PostulantesEdit extends Component {
 
             uploadedFiles.forEach((e) => this.processUpload(e, data, key, type));
 
-        }else if(type == 'videopresentacion'){
+        }else if(type === 'videopresentacion'){
 
             let keyLoading = 'loading' + type;
 
@@ -582,28 +582,28 @@ class PostulantesEdit extends Component {
 
         let datos = Object.values(Data);
 
-        if(type == 'verificaciones'){
+        if(type === 'verificaciones'){
 
-            if(tipoadjunto == 'adjuntosrecomendaciones'){
+            if(tipoadjunto === 'adjuntosrecomendaciones'){
 
                 datos[key].adjuntosrecomendaciones = datos[key].adjuntosrecomendaciones.map(uploadedFile => {
-                    return id == uploadedFile.id ? { ...uploadedFile, ...valores } : uploadedFile;
+                    return id === uploadedFile.id ? { ...uploadedFile, ...valores } : uploadedFile;
                 });
 
-            }else if(tipoadjunto == 'adjuntosverificaciones'){
+            }else if(tipoadjunto === 'adjuntosverificaciones'){
 
                 datos[key].adjuntos = datos[key].adjuntos.map(uploadedFile => {
-                    return id == uploadedFile.id ? { ...uploadedFile, ...valores } : uploadedFile;
+                    return id === uploadedFile.id ? { ...uploadedFile, ...valores } : uploadedFile;
                 });
 
             }
 
             this.setState({verificaciones: datos});
 
-        }else if(type == 'educacion'){
+        }else if(type === 'educacion'){
 
             datos[key].adjuntos = datos[key].adjuntos.map(uploadedFile => {
-                return id == uploadedFile.id ? { ...uploadedFile, ...valores } : uploadedFile;
+                return id === uploadedFile.id ? { ...uploadedFile, ...valores } : uploadedFile;
             });
 
             this.setState({adjuntoeducacion: datos});
@@ -614,9 +614,9 @@ class PostulantesEdit extends Component {
 
     handleRenameAdjunto(text, fileid, key, type, tipoadjunto = ''){
 
-        if(type == 'verificaciones'){
+        if(type === 'verificaciones'){
             this.updateFile(fileid, key, this.state.verificaciones, {name: text.nameFile}, type, tipoadjunto);
-        }else if(type == 'educacion'){
+        }else if(type === 'educacion'){
             this.updateFile(fileid, key, this.state.adjuntoeducacion, {name: text.nameFile}, type, tipoadjunto);
         }
     }
@@ -634,19 +634,19 @@ class PostulantesEdit extends Component {
 
             if (result.value) {
 
-                if(type == 'verificaciones'){
+                if(type === 'verificaciones'){
 
                     let data = Object.values(this.state.verificaciones);
 
-                    if(tipoadjunto == 'adjuntosrecomendaciones'){
+                    if(tipoadjunto === 'adjuntosrecomendaciones'){
                         data[key].adjuntosrecomendaciones = data[key].adjuntosrecomendaciones.filter(file => file.id !== fileid);
-                    }else if(tipoadjunto == 'adjuntosverificaciones'){
+                    }else if(tipoadjunto === 'adjuntosverificaciones'){
                         data[key].adjuntos = data[key].adjuntos.filter(file => file.id !== fileid);
                     }
 
                     this.setState({verificaciones: data});
 
-                }else if(type == 'educacion'){
+                }else if(type === 'educacion'){
 
                     let data = Object.values(this.state.adjuntoeducacion);
 
@@ -654,7 +654,7 @@ class PostulantesEdit extends Component {
 
                     this.setState({adjuntoeducacion: data});
 
-                }else if(type == 'videopresentacion'){
+                }else if(type === 'videopresentacion'){
 
                     this.setState({videopresentacion: ''});
                 }
@@ -671,9 +671,9 @@ class PostulantesEdit extends Component {
             let file = e.target.files[0];
             let tipoFile = file.type;
 
-            if(tipo == 'imagen'){
+            if(tipo === 'imagen'){
 
-                if(campo == 'cartillavacuna'){
+                if(campo === 'cartillavacuna'){
                     this.setState({
                         loadingcartillavacuna: true,
                     });
@@ -681,7 +681,7 @@ class PostulantesEdit extends Component {
 
                 let options = '';
 
-                if (campo == 'foto'){
+                if (campo === 'foto'){
                     options = {
                         maxSizeMB: 4,
                         maxWidthOrHeight: 800,
@@ -709,15 +709,15 @@ class PostulantesEdit extends Component {
 
                 });
 
-            }else if(tipo == 'imagenpdf'){
+            }else if(tipo === 'imagenpdf'){
 
                 let tiposFilePermitidos = ['image/png', 'image/jpg', 'image/jpeg', 'application/pdf'];
 
                 if(tiposFilePermitidos.includes(tipoFile)){
 
-                    if(campo == 'certificadoantecedente'){
+                    if(campo === 'certificadoantecedente'){
                         this.setState({ loadingcertificadoantecedente: true});
-                    }else if(campo == 'cartillavacunapdf'){
+                    }else if(campo === 'cartillavacunapdf'){
                         this.setState({ loadingcartillavacuna: true});
                     }
 
@@ -727,7 +727,7 @@ class PostulantesEdit extends Component {
                         this.actionUploadFile(reader.result, campo, tipoFile);
                     };
 
-                    if (campo == 'certificadoantecedente'){
+                    if (campo === 'certificadoantecedente'){
                         this.saveAndChangeEstatusCUL(false);
                     }
 
@@ -735,19 +735,19 @@ class PostulantesEdit extends Component {
                     showAlert('error', 'Tipo de archivo no permitido');
                 }
 
-                if(campo == 'cartillavacunapdf'){
+                if(campo === 'cartillavacunapdf'){
                     this.setState({cartillaverificada: true});
                 }
 
             }
 
-        }else if(tipo == 'sideCartilla'){
+        }else if(tipo === 'sideCartilla'){
             this.setState({
                 sideCartilla: campo
             });
-        }else if(tipo == 'time'){
+        }else if(tipo === 'time'){
 
-            if (campo == 'fechanacimiento'){
+            if (campo === 'fechanacimiento'){
                 this.setState({
                     [campo]: e.target.value
                 }, this.calculteAge);
@@ -757,7 +757,7 @@ class PostulantesEdit extends Component {
                 });
             }
 
-        }else if(tipo == 'modalidad') {
+        }else if(tipo === 'modalidad') {
 
             let modalidad = this.state.modalidad;
 
@@ -768,26 +768,26 @@ class PostulantesEdit extends Component {
 
             this.setState({modalidad: modalidad});
 
-        }else if(tipo == 'checkaprobado'){
+        }else if(tipo === 'checkaprobado'){
 
             this.setState({checkaprobado: e.target.checked});
 
-        }else if(tipo == 'cartillaverificada'){
+        }else if(tipo === 'cartillaverificada'){
 
             this.setState({cartillaverificada: e.target.checked});
 
-        }else if(tipo == 'pais'){
+        }else if(tipo === 'pais'){
 
             let {departamentonacimiento, lugarnacimiento, paispostulando} = this.state;
 
             let tipoDocumento = '';
 
-            if(paispostulando == 11){
-                if (parseInt(e.target.value) == 11){
+            if(paispostulando === 11){
+                if (parseInt(e.target.value) === 11){
                     tipoDocumento = 10;
                 }
-            }else if(paispostulando == 54){
-                if (parseInt(e.target.value) == 54){
+            }else if(paispostulando === 54){
+                if (parseInt(e.target.value) === 54){
                     tipoDocumento = 1;
                 }
             }
@@ -796,37 +796,39 @@ class PostulantesEdit extends Component {
                 paisprocedencia: e.target.value,
                 nacionalidad: functionSelectNationality(e.target.value),
                 tipodocumento: tipoDocumento,
-                lugarnacimiento: (parseInt(e.target.value) == 54 ? lugarnacimiento : ''),
-                departamentonacimiento: (parseInt(e.target.value) == 54 ? departamentonacimiento : ''),
-            }, this.getDepartamentosByNacionalidad(e.target.value));
+                lugarnacimiento: (parseInt(e.target.value) === 54 ? lugarnacimiento : ''),
+                departamentonacimiento: (parseInt(e.target.value) === 54 ? departamentonacimiento : ''),
+            }, () => {
+                this.getDepartamentosByNacionalidad(e.target.value)
+            });
 
-        }else if(tipo == 'departamentonacimiento') {
+        }else if(tipo === 'departamentonacimiento') {
 
             this.setState({
                 departamentonacimiento: e.target.value
             });
 
-        }else if(tipo == 'departamento') {
+        }else if(tipo === 'departamento') {
 
             this.setState({
                 departamento: e.target.value
             });
 
-        }else if(tipo == 'provincia') {
+        }else if(tipo === 'provincia') {
 
             this.setState({
                 provincia: e.target.value
             });
 
-        }else if(tipo == 'distrito') {
+        }else if(tipo === 'distrito') {
 
             this.setState({
                 distrito: e
             });
 
-        }else if(tipo == 'evento') {
+        }else if(tipo === 'evento') {
 
-            if(campo == 'actividad'){
+            if(campo === 'actividad'){
                 this.isChofer(e);
             }
 
@@ -834,25 +836,25 @@ class PostulantesEdit extends Component {
                 [campo]: e
             });
 
-        }else if(tipo == 'verificacion'){
+        }else if(tipo === 'verificacion'){
 
             const data = this.state.verificaciones.map((verificacion, sidx) => {
                 if (campo !== sidx) return verificacion;
 
-                if(campo2 == 'distrito'){
+                if(campo2 === 'distrito'){
                     return { ...verificacion, distrito: e};
-                }else if(campo2 == 'actividad') {
+                }else if(campo2 === 'actividad') {
                     return { ...verificacion, actividad: e};
-                }else if(campo2 == 'ejecutivo') {
+                }else if(campo2 === 'ejecutivo') {
                     const ejecutivoNombre = this.state.nombreResponsable;
                     return { ...verificacion, ejecutivo: ejecutivoNombre};
-                }else if (campo2 == 'telefono'){
+                }else if (campo2 === 'telefono'){
                     return { ...verificacion, telefono: e};
-                }else if(campo2 == 'llamar') {
-                    return { ...verificacion, llamar: verificacion.llamar == true ? false : true};
+                }else if(campo2 === 'llamar') {
+                    return { ...verificacion, llamar: !verificacion.llamar};
                 }else if(['inicioLabores', 'finLabores'].includes(campo2)){
                     return{ ...verificacion, [campo2]: e, tiempo: this.calcularTiempo(campo,e,campo2, 'verificaciones')};
-                }else if(campo2 == 'uploadAdjunto'){
+                }else if(campo2 === 'uploadAdjunto'){
 
                     //const uuidv4 = uuidv4();
 
@@ -884,7 +886,7 @@ class PostulantesEdit extends Component {
                 this.saveEjecutivo(data);
             }
 
-        }else if(tipo == 'educacion'){
+        }else if(tipo === 'educacion'){
 
             const data = this.state.adjuntoeducacion.map((educacion, sidx) => {
                 if (campo !== sidx) return educacion;
@@ -899,42 +901,46 @@ class PostulantesEdit extends Component {
 
             this.setState({ adjuntoeducacion: data});
 
-        }else if(tipo == 'test') {
+        }else if(tipo === 'test') {
 
             const formState = Object.assign({}, this.state.tests);
             formState[e.target.name] = e.target.value;
             this.setState({tests: formState})
 
-        }else if(tipo == 'paispostulando'){
+        }else if(tipo === 'paispostulando'){
             let {genero, } = this.state;
 
             this.setState({
                 paispostulando: e.target.value,
                 niveleducativo: '',
-            }, this.getActividadesList(genero, e.target.value));
-        }else if(tipo == 'genero') {
+            }, () => {
+                this.getActividadesList(genero, e.target.value)
+            });
+        }else if(tipo === 'genero') {
             let {paispostulando, } = this.state;
 
             this.setState({
                 genero: e.target.value
-            }, this.getActividadesList(e.target.value, paispostulando));
+            }, () => {
+                this.getActividadesList(e.target.value, paispostulando)
+            });
 
-        }else if(tipo == 'videoyoutube') {
+        }else if(tipo === 'videoyoutube') {
 
             this.setState({
                 videointroduccionyoutube: e.target.value
             });
 
-        }else if(tipo == 'numerocelular') {
+        }else if(tipo === 'numerocelular') {
 
             this.setState({
                 telefono: e.target.value,
                 telefonowhatsapp: e.target.value
             });
 
-        }else if (tipo == 'codigoTelefonico'){
+        }else if (tipo === 'codigoTelefonico'){
 
-            if (campo == 'telefono'){
+            if (campo === 'telefono'){
                 this.setState({
                     telefono: e,
                     telefonowhatsapp: e
@@ -945,11 +951,11 @@ class PostulantesEdit extends Component {
                 });
             }
 
-        }else if (tipo == 'numeroDocumento'){
+        }else if (tipo === 'numeroDocumento'){
 
             this.setState({
                 numerodocumento: e.target.value.toUpperCase()
-            }, (this.state.emptyDocumentoID == true ? this.verificarDuplicado(e.target.value, 'ID') : null));
+            }, (this.state.emptyDocumentoID === true ? this.verificarDuplicado(e.target.value, 'ID') : null));
 
         }else{
 
@@ -959,7 +965,7 @@ class PostulantesEdit extends Component {
 
             this.setState({
                 [e.target.name]: e.target.value.toUpperCase()
-            }, () =>  (start == undefined && end == undefined) ? '' : input.setSelectionRange(start, end) );
+            }, () =>  (start === undefined && end === undefined) ? '' : input.setSelectionRange(start, end) );
 
         }
         this.getRequis();
@@ -967,27 +973,27 @@ class PostulantesEdit extends Component {
 
     verificarDuplicado(numero, tipo){
 
-        if (tipo == 'phone'){
+        if (tipo === 'phone'){
             this.setState({
-                searchingNumber: numero.length > 0 ? true : false,
+                searchingNumber: numero.length > 0,
                 estatusNumber: '',
             });
-        }else if(tipo == 'ID'){
+        }else if(tipo === 'ID'){
             this.setState({
-                searchingDocumentoID: numero.length > 0 ? true : false,
+                searchingDocumentoID: numero.length > 0,
                 estatusDocumentoID: '',
             });
         }
 
         ajaxVerificarNumero(numero, tipo).then(r => {
-            if (tipo == 'phone'){
+            if (tipo === 'phone'){
                 this.setState({
                     searchingNumber: false,
                     estatusNumber: numero.length > 0 ? r.estatusNumber : '',
                     iconEstatusNumber: numero.length > 0 ? r.iconEstatusNumber : '',
                     existDuplicityNumber: numero.length > 0 ? r.existDuplicityNumber : 0,
                 });
-            }else if(tipo == 'ID'){
+            }else if(tipo === 'ID'){
                 this.setState({
                     searchingDocumentoID: false,
                     estatusDocumentoID: numero.length > 0 ? r.estatusDocumentoID : '',
@@ -1008,19 +1014,19 @@ class PostulantesEdit extends Component {
 
         ajaxUploadFile(file,campo, tipoarchivo).then(r => {
             if(r.code === 200){
-                if(campo == 'certificadoantecedente'){
+                if(campo === 'certificadoantecedente'){
                     this.setState({
                         [key]: false,
                         certificadoantecedentepdf: r.result.pdf,
                         loadingcertificadoantecedente: false,
                     });
-                }else if(campo == 'cartillavacunapdf'){
+                }else if(campo === 'cartillavacunapdf'){
                     this.setState({
                         [key]: false,
                         cartillavacunapdf: r.result.pdf,
                         loadingcartillavacuna: false,
                     });
-                }else if(campo == 'recibos'){
+                }else if(campo === 'recibos'){
                     const data = this.state.fotorecibo.map((recibo, sidx) => {
                         if (llave !== sidx){
                             return recibo;
@@ -1030,7 +1036,7 @@ class PostulantesEdit extends Component {
 
                     this.setState({ [key]: false, fotorecibo: data});
 
-                }else if(campo == 'cartillavacuna'){
+                }else if(campo === 'cartillavacuna'){
                     this.setState({
                         loadingcartillavacuna: false,
                         cartillaverificada: true,
@@ -1081,35 +1087,33 @@ class PostulantesEdit extends Component {
         let fechaI = '';
         let fechaF = '';
 
-        if(tipoObjeto == 'verificaciones'){
+        if(tipoObjeto === 'verificaciones'){
 
             let verificaciones = this.state.verificaciones;
 
-            if(tipo == 'inicioLabores'){
+            if(tipo === 'inicioLabores'){
                 fechaI = valor;
                 fechaF = verificaciones[key].finLabores;
-            }else if(tipo == 'finLabores'){
+            }else if(tipo === 'finLabores'){
                 fechaI = verificaciones[key].inicioLabores;
                 fechaF = valor;
             }
 
-        }else if(tipoObjeto == 'educacion'){
+        }else if(tipoObjeto === 'educacion'){
 
             let educacion = this.state.adjuntoeducacion;
 
-            if(tipo == 'fechainicio'){
+            if(tipo === 'fechainicio'){
                 fechaI = valor;
                 fechaF = educacion[key].fechafin;
-            }else if(tipo == 'fechafin'){
+            }else if(tipo === 'fechafin'){
                 fechaI = educacion[key].fechainicio;
                 fechaF = valor;
             }
 
         }
 
-        let result = executeCalcularTiempo(fechaI, fechaF);
-
-        return result;
+        return executeCalcularTiempo(fechaI, fechaF);
 
     };
 
@@ -1143,7 +1147,7 @@ class PostulantesEdit extends Component {
 
             let isFirma = this.sigPad.current.isEmpty();
 
-            if(isFirma == false){
+            if(isFirma === false){
                 return this.sigPad.current.toDataURL();
             }else{
                 return null;
@@ -1165,8 +1169,8 @@ class PostulantesEdit extends Component {
 
         if(verificaciones.length){
 
-            let isInicioLaboresEmpty = verificaciones.some(element => (element.inicioLabores == null || element.inicioLabores == '' || element.inicioLabores == undefined) );
-            let isFinLaboresEmpty = verificaciones.some(element => (element.inicioLabores == null || element.inicioLabores == '' || element.inicioLabores == undefined) );
+            let isInicioLaboresEmpty = verificaciones.some(element => (element.inicioLabores == null || element.inicioLabores === '' || element.inicioLabores === undefined) );
+            let isFinLaboresEmpty = verificaciones.some(element => (element.inicioLabores == null || element.inicioLabores === '' || element.inicioLabores === undefined) );
 
             if(isInicioLaboresEmpty || isFinLaboresEmpty){
 
@@ -1210,7 +1214,6 @@ class PostulantesEdit extends Component {
     }
 
     savePostulante(firmaPad){
-        let self = this;
         this.setLoadingSave(true);
         let {id} = this.state;
 
@@ -1262,7 +1265,7 @@ class PostulantesEdit extends Component {
                 }else{
                     this.setState({
                         actividades: r.actividades,
-                        actividad: (genero == 1 ? '' : r.actividadDefault)
+                        actividad: (genero === 1 ? '' : r.actividadDefault)
                     });
                 }
             }
@@ -1379,14 +1382,14 @@ class PostulantesEdit extends Component {
                     telefonowhatsapp: r.data.usuario.telefono_whatsapp ? r.data.usuario.telefono_whatsapp : (r.data.usuario.telefono ? r.data.usuario.telefono : null),
                     tipodocumento: r.data.usuario.tipodocumento_id,
                     numerodocumento: r.data.usuario.numero_documento,
-                    emptyDocumentoID: r.data.usuario.numero_documento ? false : true,
+                    emptyDocumentoID: !r.data.usuario.numero_documento,
                     estadocivil: r.data.usuario.estadocivil_id,
                     fechanacimiento: r.data.usuario.fecha_nacimiento ? (r.data.usuario.fecha_nacimiento).slice(0, 10) : '',
                     edad: r.data.usuario.fecha_nacimiento ? functionCalculateAge((r.data.usuario.fecha_nacimiento).slice(0, 10)) :'',
                     aceptamascotas: r.data.aceptamascotas,
                     //correo: r.data.usuario.correo,
                     niveleducativo: r.data.niveleducativo_id,
-                    paisprocedencia: r.data.usuario.nacionalidad_id == 1 ? '54' : (r.data.usuario.paisnacimiento_id).toString(),
+                    paisprocedencia: r.data.usuario.nacionalidad_id === 1 ? '54' : (r.data.usuario.paisnacimiento_id).toString(),
                     paispostulando: r.data.postulando_pais_id,
                     nacionalidad: r.data.usuario.nacionalidad_id,
                     departamentonacimiento: r.data.usuario.departamentonacimiento_id ? r.data.usuario.departamentonacimiento_id : '',
@@ -1401,9 +1404,9 @@ class PostulantesEdit extends Component {
                     idioma: r.idioma ? r.idioma : [{value: 4, label: 'ESPAÑOL', is_fixed: true}] ,
                     actividad: r.actividad,
                     modalidad: [
-                        {id: 1, value: "Cama Adentro",  valueCH: "Puerta Adentro", valueMX: 'De Planta', isChecked: r.data.cama_adentro ? true : false},
-                        {id: 2, value: "Cama Afuera",  valueCH: "Puerta Afuera", valueMX: 'Entrada por Salida', isChecked: r.data.cama_afuera ? true : false},
-                        {id: 3, value: "Por Dias",  valueCH: "Por Dias", valueMX: 'Por Dias', isChecked: r.data.por_horas ? true : false}
+                        {id: 1, value: "Cama Adentro",  valueCH: "Puerta Adentro", valueMX: 'De Planta', isChecked: Boolean(r.data.cama_adentro)},
+                        {id: 2, value: "Cama Afuera",  valueCH: "Puerta Afuera", valueMX: 'Entrada por Salida', isChecked: Boolean(r.data.cama_afuera)},
+                        {id: 3, value: "Por Dias",  valueCH: "Por Dias", valueMX: 'Por Dias', isChecked: Boolean(r.data.por_horas)}
                     ],
                     verificaciones: r.verificaciones ? r.verificaciones : [],
                     adjuntoeducacion: r.adjuntoeducacion ? r.adjuntoeducacion : [],
@@ -1412,7 +1415,7 @@ class PostulantesEdit extends Component {
                     fotodnitrasera: r.data.foto_documento_posterior,
                     foto: r.data.foto,
                     firma: r.data.firma ? r.data.firma : null,
-                    changeSignature: r.data.firma ? false : true,
+                    changeSignature: !r.data.firma,
                     isChofer: r.data.chofer,
                     fotolicenciadelantera: r.data.foto_licencia_delantera,
                     fotolicenciatrasera: r.data.foto_licencia_trasera,
@@ -1437,22 +1440,14 @@ class PostulantesEdit extends Component {
                     documentoVigente: r.data.documento_vigente,
                     historialContacto: r.historialContacto ? JSON.parse(r.historialContacto) : [],
                     isLoading: false,
-                });
-
-                if(r.data.usuario.genero_id){
-                    this.getActividadesList(r.data.usuario.genero_id, r.data.postulando_pais_id, true);
-                }else{
-                    this.getActividadesList(2, r.data.postulando_pais_id);
-                }
-                this.getData(r.data.usuario.genero_id, r.data.postulando_pais_id);
-
-                if (r.diaspasadoscertificadoantecedente){
-                    if((r.diaspasadoscertificadoantecedente >= 0) && (r.diaspasadoscertificadoantecedente <= 84)){
-                        console.log('Dentro del limite');
-                    }else if (r.diaspasadoscertificadoantecedente >= 85){
-                        this.setState({showAlertModal: true});
+                }, () => {
+                    if(r.data.usuario.genero_id){
+                        this.getActividadesList(r.data.usuario.genero_id, r.data.postulando_pais_id, true);
+                    }else{
+                        this.getActividadesList(2, r.data.postulando_pais_id);
                     }
-                }
+                    this.getData(r.data.usuario.genero_id, r.data.postulando_pais_id);
+                });
 
             }else if(r.code === 500){
                 this.setLoading(false)
@@ -1468,7 +1463,7 @@ class PostulantesEdit extends Component {
 
     render() {
 
-        let {isLoadingSave, contactname, showAlertModal, diaspasadoscertificadoantecedente, flagemoji, nombres, apellidos, checkaprobado, historialContacto, token, keyTab, documentoVigente, verificaciones, adjuntoeducacion, certificadoantecedentepdf, tienecuenta, fotodnidelantera, estatuspostulante, isLoading, show, cartillavacuna, cartillaverificada} = this.state;
+        let {isLoadingSave, contactname, showAlertModal, diaspasadoscertificadoantecedente, flagemoji, nombres, apellidos, checkaprobado, historialContacto, token, keyTab, documentoVigente, verificaciones, adjuntoeducacion, certificadoantecedentepdf, tienecuenta, fotodnidelantera, estatuspostulante, isLoading} = this.state;
 
         if(isLoading) return <LoadingScreen load={isLoading} classStyle={'bg-purple-bertha'}/>;
 
@@ -1493,7 +1488,7 @@ class PostulantesEdit extends Component {
                 antecedentes.tooltip = 'Tiene certificado único laboral';
             }
         }else{
-            if (tienecuenta == true ){
+            if (tienecuenta === true ){
                 antecedentes.iconColor = 'text-warning';
                 antecedentes.tooltip = 'Tiene una cuenta registrada. Solicitar su certificado único laboral';
             }else{
@@ -1539,7 +1534,7 @@ class PostulantesEdit extends Component {
                                 />
                             </Tab>
 
-                            <Tab eventKey="tab2" title={<span>Adjuntos <i className={'fas fa-id-card-alt ms-1 ' + (fotodnidelantera ? (parseInt(documentoVigente) == 0 ? 'text-danger' : 'text-purple-bertha') : 'text-secondary')}></i></span>}>
+                            <Tab eventKey="tab2" title={<span>Adjuntos <i className={'fas fa-id-card-alt ms-1 ' + (fotodnidelantera ? (parseInt(documentoVigente) === 0 ? 'text-danger' : 'text-purple-bertha') : 'text-secondary')}></i></span>}>
                                 <Adjuntos
                                     data={this.state}
                                     handleChange={this.handleChange}

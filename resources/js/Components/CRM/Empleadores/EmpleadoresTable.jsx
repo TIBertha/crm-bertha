@@ -26,7 +26,6 @@ export default function EmpleadoresTable({handleRefresh, url, empleadores, activ
     }
 
     function columnAcciones(data, activo, eliminar, linkFormRequerimiento) {
-        let linkcondiciones = 'Por transparencia y buenas prácticas siempre enviamos los términos y condiciones de nuestro servicio antes del pago, por favor léalos y dele "Acepto", cuando lo haga le saldrá nuestra cuenta bancaria.' + "\r\n" + "\r\n" + 'https://holabertha.com/condiciones/' + data.token;
 
         let tag = [];
 
@@ -42,7 +41,7 @@ export default function EmpleadoresTable({handleRefresh, url, empleadores, activ
 
         if (data.token){
             tag.push(
-                <NewCopyIcon copyText={data.linkaceptocondiciones} icon={'fas fa-user-'+ (data.aceptoterminos == 1 ? 'check green-neon' : 'times')} additonalClass={'icon-action-sm'} tooltipText={'Copiar link Términos y Condiciones'} successMsj={'Link TC copiado'} />
+                <NewCopyIcon copyText={data.linkaceptocondiciones} icon={'fas fa-user-'+ (data.aceptoterminos === 1 ? 'check green-neon' : 'times')} additonalClass={'icon-action-sm'} tooltipText={'Copiar link Términos y Condiciones'} successMsj={'Link TC copiado'} />
             )
         }
 
@@ -73,7 +72,7 @@ export default function EmpleadoresTable({handleRefresh, url, empleadores, activ
                 </Thead>
                 <Tbody>
 
-                    {empleadores.map((data,index) =>{
+                    {empleadores.map((data) =>{
 
                         return(
                             <Tr className={'table-filas hover-column'}>
@@ -82,13 +81,13 @@ export default function EmpleadoresTable({handleRefresh, url, empleadores, activ
                                         <NewCopyIcon icon={'fas fa-user-tag'} additonalClass={'col-auto px-1 my-auto icon-action align-self-center'} copyText={data.empleador} tooltipText={'Copiar nombre empleador'} successMsj={'Nombre empleador copiado'}/>
                                         <NewCopyIcon icon={'fas fa-copy'} additonalClass={'col-auto px-1 my-auto icon-action align-self-center'} copyText={'CL ' + data.contact_name + ' ' + data.flag_emoji} tooltipText={'Copiar nombre en Google'} successMsj={'Nombre en Google copiado'}/>
                                         <div className={'col-auto px-1 nombre-empleador' + ((!data.domicilio || !data.contrato) ? ' text-red' : '')}>{data.nombrecorto ? data.nombrecorto : data.empleador }</div>
-                                        {data.new == true ? <i data-toggle="tooltip" data-placement="top" title="Nuevo empleador con los TC" className="col-auto px-1 my-auto fas fa-star text-warning"></i> : null}
+                                        {data.new === true ? <i data-toggle="tooltip" data-placement="top" title="Nuevo empleador con los TC" className="col-auto px-1 my-auto fas fa-star text-warning"></i> : null}
                                     </div>
                                 </Td>
                                 <Td className={'vertical-align-middle'}>
                                     <div className="row mx-0">
                                         <NewCopyIcon icon={'fas fa-mobile-alt'} additonalClass={'col-auto px-1 my-auto icon-action align-self-center'} copyText={data.telefono} tooltipText={'Copiar teléfono empleador'} successMsj={'Teléfono empleador copiado'}/>
-                                        <a className="col-auto px-1 my-auto" href={'tel:'+data.telefono}><TelefonoInternacional numero={data.tarjetaTelefono}/></a>
+                                        <a className="col-auto px-1 my-auto" href={'tel:'+data.telefono}><TelefonoInternacional numero={data.tarjetaTelefono} cardPostulante={true}/></a>
                                     </div>
                                 </Td>
                                 <Td className={'vertical-align-middle'}>

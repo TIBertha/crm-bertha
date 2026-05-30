@@ -87,11 +87,11 @@ export default class PostulantesIndex extends Component {
     }
 
     handleChange(e, tipo = "", campo = "") {
-        if (tipo == "time") {
+        if (tipo === "time") {
             this.setState({
                 [campo]: e,
             });
-        } else if (tipo == "keypress") {
+        } else if (tipo === "keypress") {
             if (e.charCode === 13) {
                 this.buscar();
             }
@@ -104,7 +104,7 @@ export default class PostulantesIndex extends Component {
                     [e.target.name]: e.target.value.toUpperCase(),
                 },
                 () =>
-                    start == undefined && end == undefined
+                    start === undefined && end === undefined
                         ? ""
                         : input.setSelectionRange(start, end),
             );
@@ -410,6 +410,7 @@ export default class PostulantesIndex extends Component {
             e.preventDefault();
         }
         this.setLoading(true);
+        let self = this;
 
         ajaxRefreshPostulantes(this.calcularOffset(1), this.state)
             .then((r) => {
@@ -431,8 +432,8 @@ export default class PostulantesIndex extends Component {
                 }
             })
             .catch(function (error) {
-                if (error.response.status == 422) {
-                    this.setLoading(false);
+                if (error.response.status === 422) {
+                    self.setLoading(false);
                     showAlert("error", error.response.data);
                 }
             });
@@ -538,7 +539,7 @@ export default class PostulantesIndex extends Component {
                         <CalculadoraBeneficio />
                     </div>
 
-                    {access == true && (
+                    {access === true && (
                         <div className="col-12 col-md-auto px-1 my-2 my-md-0">
                             <RegistrarUsuario />
                         </div>
@@ -556,7 +557,7 @@ export default class PostulantesIndex extends Component {
                         <>
                             {postulantes.length ? (
                                 <div className="d-flex flex-wrap">
-                                    {postulantes.map((p, key) => (
+                                    {postulantes.map((p) => (
                                         <CardPostulante
                                             url={url}
                                             access={access}

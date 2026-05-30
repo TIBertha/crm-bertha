@@ -102,7 +102,7 @@ class EmpleadoresEdit extends Component {
                     resultUpload: {isCreated: false, msj: 'No se creo el estado', type: 'fas fa-times-circle', isLoading: false},
                 });
             }
-        }).catch(function (error) {
+        }).catch(function () {
             this.setState({
                 resultUpload: {isCreated: false, msj: 'No se creo el estado', type: 'fas fa-times-circle', isLoading: false},
             });
@@ -139,15 +139,13 @@ class EmpleadoresEdit extends Component {
         });
     };
 
-    removeDomicilio(id, idDom){
+    removeDomicilio(id){
         this.setState({
             domicilios: this.state.domicilios.filter((s, sidx) => id !== sidx)
         });
     };
 
     handleChange(e, tipo = '', campo = '', campo2='') {
-
-        //,
 
         if(tipo === 'time'){
 
