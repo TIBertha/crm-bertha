@@ -395,7 +395,7 @@ export function getMontoComision(inputComision, inputSueldo, inputModalidad, dat
     let {sueldo, modalidad, tipoComision, paispedido} = dataReq;
 
     let newComision = (inputComision ? inputComision : tipoComision);
-    let newSueldo = (inputSueldo ? inputSueldo : sueldo);
+    let newSueldo = parseInt(inputSueldo ? inputSueldo : sueldo);
     let newModalidad = (inputModalidad ? inputModalidad : modalidad);
     let com = 0;
 
@@ -426,10 +426,6 @@ export function getMontoComision(inputComision, inputSueldo, inputModalidad, dat
             com = 350;
         }
     }
-
-    console.log(newComision, newModalidad, newSueldo);
-
-
 
     return com;
 }
