@@ -406,12 +406,12 @@ class EmpleadoresIndex extends Component{
                         totalempleadores: r.total,
                         textoresultados: r.textoresultados,
                         page: r.page,
+                        sideBar: false,
                     });
                     this.setLoading(false);
                 }else{
                     this.setLoading(false);
                 }
-                this.closeSearchSide();
             }else if(r.code === 500){
                 this.setLoading(false);
                 showAlert('error', r.msj);

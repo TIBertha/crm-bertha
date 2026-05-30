@@ -12,7 +12,7 @@ function columnAcciones(c, eliminar, access){
     return <>
 
         <a href={c.link_plataforma} target={'_blank'} className={'px-2'} >
-            <span className="badge badge-purple-bertha-p text-white">
+            <span className="badge link-purple ">
                 <i data-toggle="tooltip" data-placement="top" title="Ingresar a plataforma" className="fas fa-sign-in-alt me-2"></i>Ir
             </span>
         </a>

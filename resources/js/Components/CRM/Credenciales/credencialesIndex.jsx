@@ -67,13 +67,8 @@ class CredencialesIndex extends Component {
         this.setState({busqueda: condition});
     }
 
-    closeSearchSide(){
-        $(".hk-wrapper").toggleClass('hk-settings-toggle');
-        $(window).trigger( "resize" );
-    }
-
     handleChange(e, tipo = '', campo = ''){
-        if(tipo == 'keypress'){
+        if(tipo === 'keypress'){
 
             if(e.charCode === 13){
                 this.buscar();
@@ -81,7 +76,7 @@ class CredencialesIndex extends Component {
 
         }else{
 
-            if(e.target.name == 'fastsearch'){
+            if(e.target.name === 'fastsearch'){
 
                 this.setState({
                     [e.target.name]: e.target.value.toUpperCase()
@@ -95,7 +90,7 @@ class CredencialesIndex extends Component {
 
                 this.setState({
                     [e.target.name]: e.target.value
-                }, () =>  (start == undefined && end == undefined) ? '' : input.setSelectionRange(start, end) );
+                }, () =>  (start === undefined && end === undefined) ? '' : input.setSelectionRange(start, end) );
 
             }
 
@@ -123,7 +118,7 @@ class CredencialesIndex extends Component {
                 showAlert('error', r.msj);
             }
         }).catch( function (error) {
-            if (error.response.status == 422){
+            if (error.response.status === 422){
                 showAlert('error', error.response.data);
             }
         });
@@ -135,6 +130,7 @@ class CredencialesIndex extends Component {
         this.setBusqueda(true);
 
         let offset = 0;
+        let self = this;
 
         ajaxCredencialesBuscar(this.state, offset).then(r => {
             if(r.code === 200){
@@ -144,20 +140,20 @@ class CredencialesIndex extends Component {
                         totalcredenciales: r.total,
                         textoresultados: r.textoresultados,
                         page: r.page,
+                        sideBar: false,
                         fastsearch: ''
                     });
                     this.setLoading(false);
                 }else{
                     this.setLoading(false);
                 }
-                this.closeSearchSide();
             }else if(r.code === 500){
                 this.setLoading(false);
                 showAlert('error', r.msj);
             }
         }).catch( function (error) {
-            if (error.response.status == 422){
-                this.setLoading(false);
+            if (error.response.status === 422){
+                self.setLoading(false);
                 showAlert('error', error.response.data);
             }
         });
