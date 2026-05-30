@@ -399,41 +399,35 @@ export function getMontoComision(inputComision, inputSueldo, inputModalidad, dat
     let newModalidad = (inputModalidad ? inputModalidad : modalidad);
     let com = 0;
 
-    if (paispedido == 54){
-        if (parseInt(newComision) == 1){
-            if ([1,2,5].includes(parseInt(newModalidad))){
-                com = 700;
-            }else{
-                com = 500;
-            }
-        }else if (parseInt(newComision) == 2){
-            if ([1,2,5].includes(parseInt(newModalidad))){
-                com = (newSueldo >= 1200) ? 500 : 400
-            }else{
+    if (parseInt(newComision) === 1){
+        if ([1,2,5].includes(parseInt(newModalidad))){
+            com = 700;
+        }else{
+            com = 500;
+        }
+    }else if (parseInt(newComision) === 2){
+        if ([1,2,5].includes(parseInt(newModalidad))){
+            com = (newSueldo >= 1200) ? 500 : 400
+        }else{
+            com = 400;
+        }
+    }else if (parseInt(newComision) === 3){
+        if ([1,2,5].includes(parseInt(newModalidad))){
+            if(newSueldo >= 1200 && newSueldo <= 1250){
+                com = 350;
+            }else if (newSueldo === 1300){
+                com = 370;
+            }if ([1350, 1150].includes(newSueldo)) {
+                com = 350;
+            }else if (newSueldo >= 1400){
                 com = 400;
             }
-        }else if (parseInt(newComision) == 3){
-            if ([1,2,5].includes(parseInt(newModalidad))){
-                if(newSueldo >= 1200 && newSueldo <= 1250){
-                    com = 350;
-                }else if (newSueldo == 1300){
-                    com = 370;
-                }else if (newSueldo == 1350){
-                    com = 350;
-                }else if (newSueldo >= 1400){
-                    com = 400;
-                }
-            }else{
-                com = 350;
-            }
-        }
-    }else if (paispedido == 49){
-        if ([1,2].includes(parseInt(newModalidad))){
-            com = 2000;
-        }else if (parseInt(newModalidad) == 3){
-            com = 1800;
+        }else{
+            com = 350;
         }
     }
+
+    console.log(newComision, newModalidad, newSueldo);
 
 
 

@@ -332,7 +332,6 @@ class ContratosIndex extends Component {
 
         ajaxRefreshContratos(offset).then(r => {
 
-
             console.log (pagina, offset, r);
             this.setState({contratos: []});
             this.setState({

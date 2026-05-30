@@ -876,7 +876,7 @@ class RequerimientosEdit extends Component{
                     if(r.data.modalidad_id !== 3){
 
                         this.setState({
-                            //montoComision: getMontoComision(null, r.data.sueldo, null, this.state),
+                            montoComision: getMontoComision(null, r.data.sueldo, null, this.state),
                             sueldoPrimerMes: getSueldoPrimerMes(r.data.sueldo, r.data.paispedido_id, false),
                         });
                     }else{
