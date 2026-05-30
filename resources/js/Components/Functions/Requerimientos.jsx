@@ -407,7 +407,7 @@ export function getMontoComision(inputComision, inputSueldo, inputModalidad, dat
         }
     }else if (parseInt(newComision) === 2){
         if ([1,2,5].includes(parseInt(newModalidad))){
-            if (newSueldo === 1300){
+            if (newSueldo === 1150){
                 com = 500;
             }else{
                 com = (newSueldo >= 1200) ? 500 : 400
