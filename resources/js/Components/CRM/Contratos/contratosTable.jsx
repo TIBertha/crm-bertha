@@ -10,6 +10,7 @@ import NewCopyIcon from "../Components/newCopyIcon.jsx";
 import ModalContratosDetalles from "./Components/modalContratosDetalles.jsx";
 import CambiarEstadoContrato from "./Modals/cambiarEstadoContrato.jsx";
 import CopyContratos from "./Modals/copyContratos.jsx";
+import VerificadorIngresoTd from "./Components/verificadorIngresoTd.jsx";
 
 export default function ContratosTable({url, setVerifIngreso, contratos, total, page, changePagination, finalizar, reenviarMail, paginationSearch, busqueda}) {
     let responsive = isResponsive();
@@ -148,14 +149,6 @@ export default function ContratosTable({url, setVerifIngreso, contratos, total, 
 
                     {contratos.map((data) =>{
 
-                        const [verificadorIngreso, setVerificadorIngreso] = useState(data.verif_ingreso);
-                        let switchClassName= 'col-12 col-md text-center option-action font-weight-bold px-2';
-
-                        function changeEstatusAsistencia(e, condition) {
-                            setVerificadorIngreso(condition);
-                            setVerifIngreso(e, data.id, condition);
-                        }
-
                         let m = 25 + 'px';
                         let paisData = data.pais_pedido;
 
@@ -194,14 +187,7 @@ export default function ContratosTable({url, setVerifIngreso, contratos, total, 
                                 <Td className={'vertical-align-middle ' + (data.trabajador_b_contact_data ? '' : 'text-center')}>{findColumnTrabajadorBC(data.trabajador_b_contact_data, 'B')}</Td>
                                 <Td className={'vertical-align-middle ' + (data.trabajador_c_contact_data ? '' : 'text-center')}>{findColumnTrabajadorBC(data.trabajador_c_contact_data, 'C')}</Td>
 
-                                <Td className={'vertical-align-middle align-switch'}>
-                                    <div className={'switch-side-area-purple'}>
-                                        <div className="row mx-0 justify-content-center">
-                                            <div className={switchClassName + (verificadorIngreso === 1 ? ' checked-green' : '')} onClick={(e) => ( verificadorIngreso === 0 ? changeEstatusAsistencia(e, 1) : null)} >{'SI'}</div>
-                                            <div className={switchClassName + (verificadorIngreso === 0 ? ' checked-purple' : '')} onClick={(e) => ( verificadorIngreso === 1 ? changeEstatusAsistencia(e, 0) : null)}>{'NO'}</div>
-                                        </div>
-                                    </div>
-                                </Td>
+                                <VerificadorIngresoTd data={data} setVerifIngreso={setVerifIngreso} />
 
                                 <Td className={'vertical-align-middle'}>{data.fecha_ini_lab + ' ' + data.hora_ini_lab}</Td>
                                 <Td className={'vertical-align-middle'}>{data.tipo_contrato}</Td>
