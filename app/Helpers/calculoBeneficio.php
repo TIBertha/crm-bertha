@@ -5,7 +5,7 @@
 use Carbon\Carbon;
 function calculateDaysBetweenDates($fechainicial, $fechafinal){
 
-    $newFechaFinal = Carbon::parse($fechafinal);
+    $newFechaFinal = Carbon::parse($fechafinal)->addDays(1);
 
     $diff = $newFechaFinal->diff($fechainicial);
 
