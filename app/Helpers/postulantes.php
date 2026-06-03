@@ -883,7 +883,7 @@ function calculoLiquidacion($fechaIngreso, $fechaCese, $sueldo, $version){
         'navidad' => $navidad['registros'],
         'calculoCtsVaca' => $calculoCTSNuevo['intervaloFechas']
     ];
-    
+
     return $liquidacion;
 
 }

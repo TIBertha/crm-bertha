@@ -158,12 +158,14 @@ function cacluloFiestasPatrias($fechainicio, $fechafin, $sueldo, $version){
         //$total = ($sum >= 30 ? (float)($sueldo / 180 * $sum) : 0);
         $total = ($sum >= 30 ? (float)($sueldo / 6 * floor($sum / 30)) : 0);
 
+        $newTotal = ($version == 'antigua' ? round(($total / 2), 2) : round($total, 2));
+
         if($sum != 0){
             $result[] = [
                 'ano' => $y,
                 'dias' => $sum == 0 ? 'NO' : $sum,
                 'meses' => $sum == 0 ? 'NO' : floor($sum / 30),
-                'total' => ($version == 'antigua' ? round(($total / 2), 2) : round($total, 2)),
+                'total' => number_format($newTotal, 2, '.', ''),
                 'fechaingreso' => $sum == 180 ? '01/01/'.$y : '',
                 'fechacese' => $sum == 180 ? '30/06/'.$y : '',
                 //'start' => $sum == 0 ? $newFechafin->format('d/m/Y') : $flagStart,
@@ -275,13 +277,14 @@ function cacluloNavidad($fechainicio, $fechafin, $sueldo, $version){
 
         //$total = $sum >= 30 ? (float)($sueldo / 180 * $sum) : 0;
         $total = ($sum >= 30 ? (float)($sueldo / 6 * floor($sum / 30)) : 0);
+        $newTotal = ($version == 'antigua' ? round(($total / 2), 2) : round($total, 2));
 
         if($sum != 0){
             $result[] = [
                 'ano' => $y,
                 'dias' => $sum == 0 ? 'NO' : ($sum),
                 'meses' => $sum == 0 ? 'NO' : floor($sum / 30),
-                'total' => ($version == 'antigua' ? round(($total / 2), 2) : round($total, 2)),
+                'total' => number_format($newTotal, 2, '.', ''),
                 'fechaingreso' => $sum == 180 ? '01/07/'.$y : '',
                 'fechacese' => $sum == 180 ? '30/12/'.$y : '',
                 //'start' => $sum == 0 ? $newFechaInicio->format('d/m/Y') : $flagStart,
@@ -390,7 +393,7 @@ function calculoCTSNuevo($fechainicio, $fechafin, $sueldo, $version){
             'fechaF' => $fechaF,
             'fecha' => $fechaI.' - '. $fechaF,
             'dias' => $diasTot,
-            'total' => $pago2
+            'total' => number_format($pago2, 2, '.', ''),
         ];
 
         $flagInter++;
