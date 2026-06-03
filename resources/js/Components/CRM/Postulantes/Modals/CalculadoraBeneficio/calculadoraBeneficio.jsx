@@ -9,6 +9,7 @@ import {
 } from "../../../../Functions/Postulantes.jsx";
 import { isResponsive } from "../../../../Functions/General.jsx";
 import { IMaskInput } from "react-imask";
+import moment from 'moment';
 import CardRegistro from "./cardRegistro.jsx";
 import toast from "react-hot-toast";
 
@@ -71,12 +72,12 @@ export default function CalculadoraBeneficio({}) {
     }
 
     function handleChange(e, campo) {
-        if (campo == "fechaIngreso") {
+        if (campo === "fechaIngreso") {
             setFechaIngreso(e);
             if (fechaCese) {
                 getTotalDias(e, fechaCese);
             }
-        } else if (campo == "fechaCese") {
+        } else if (campo === "fechaCese") {
             setFechaCese(e);
             if (fechaIngreso) {
                 getTotalDias(fechaIngreso, e);
@@ -93,11 +94,11 @@ export default function CalculadoraBeneficio({}) {
         }
     }
 
-    function openModal(e) {
+    function openModal() {
         setShow(true);
         cleanData();
     }
-    function cleanData(e) {
+    function cleanData() {
         setMonto(20);
         setFechaIngreso(null);
         setFechaCese(null);
@@ -107,7 +108,7 @@ export default function CalculadoraBeneficio({}) {
         setTotalDias(null);
     }
 
-    function calcular(e) {
+    function calcular() {
         setLoading(true);
         ajaxCalcularLiquidacion(fechaIngreso, fechaCese, sueldo, monto)
             .then((r) => {
@@ -119,12 +120,12 @@ export default function CalculadoraBeneficio({}) {
                     setLoading(false);
                 }
             })
-            .catch(function (error) {
+            .catch(function () {
                 setLoading(false);
             });
     }
 
-    function setView2(e) {
+    function setView2() {
         setView(2);
         getData();
     }
@@ -140,7 +141,7 @@ export default function CalculadoraBeneficio({}) {
                     setLoadingRegistros(false);
                 }
             })
-            .catch(function (error) {
+            .catch(function () {
                 setLoadingRegistros(false);
             });
     }
@@ -275,7 +276,6 @@ export default function CalculadoraBeneficio({}) {
                                 value={sueldo}
                                 onChange={(e) => setSueldo(e.target.value)}
                                 name="sueldo"
-                                mask="99999999"
                                 maskPlaceholder=""
                                 maskChar=""
                                 disabled={!monto}
