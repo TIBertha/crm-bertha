@@ -576,7 +576,7 @@ export default function DatosRequerimientos({url, view, data, show, handleChange
 
                     <div className={'form-group col-12 col-md-7'}>
                         <div className={'estructuraDireccion'}>
-                            <div>Si tiene menos de 14 años considéralo como niño, sino como adulto</div>
+                            <div>Si tiene menos de 13 años considéralo como niño, sino como adulto</div>
                         </div>
                     </div>
                 </>
