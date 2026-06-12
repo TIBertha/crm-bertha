@@ -3,9 +3,9 @@ import React from "react";
 export default function CheckBoxModalidad({handleChange, pais, m}){
     let CheckValue = m.value;
 
-    if (parseInt(pais) == 11){
+    if (parseInt(pais) === 11){
         CheckValue = m.valueCH;
-    }else if (parseInt(pais) == 49){
+    }else if (parseInt(pais) === 49){
         CheckValue = m.valueMX;
     }
     return(

@@ -1,3 +1,5 @@
+$selected_purple_bertha: #ebe2f3;
+$selected_pink_bertha: #F191C1FF;
 $purple_bertha: #47187D;
 $purple_hover_bertha: #35125c;
 $pink_bertha: #ff0080;
@@ -272,6 +274,14 @@ $white:#fff;
 $twitter_blue:#00aced;
 $success:#00de00;
 $pink_add:#E663C3;
+
+.light-purple-bg{
+    background-color: $selected_purple_bertha
+}
+
+.light-pink-bg{
+    background-color: $selected_pink_bertha
+}
 
 .badge-por-colocar {
     color: #212529;
@@ -1734,4 +1744,56 @@ $pink_add:#E663C3;
 
 .alignselfcenter{
     align-self: center;
+}
+
+.checkbox-alimentos{
+    display: flex;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    gap: 20px;
+
+    li{
+        span{
+            color: black;
+        }
+        input, span{
+            vertical-align: middle;
+        }
+    }
+}
+
+.padding-y-special{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 0.625rem;
+}
+
+input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #999;
+    background-color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    position: relative;
+
+    &:checked {
+        background-color: $purple_bertha; // tu color
+        border-color: $purple_bertha;
+    }
+
+    &:checked::after {
+        content: "";
+        position: absolute;
+        left: 5px;
+        top: 1px;
+        width: 5px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+    }
 }

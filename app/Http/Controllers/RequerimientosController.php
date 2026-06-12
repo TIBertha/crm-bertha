@@ -137,7 +137,12 @@ class RequerimientosController extends Controller
                 $garantia = 1;
             }
 
+            $alimentos = getAlimentos($data['alimentos']);
+
             $dataReq = [
+                'desayuno'          => $alimentos['desayuno'],
+                'almuerzo'          => $alimentos['almuerzo'],
+                'cena'              => $alimentos['cena'],
                 'garantia'          => $garantia,
                 'tipocomision'      => $data['tipoComision'],
                 'monto_comision'      => $data['montoComision'],
@@ -230,8 +235,12 @@ class RequerimientosController extends Controller
             $actividadid = $data['actividad'];
             $modalidad = $data['modalidad'];
             $rangobusqueda = saveRangoBusqueda($data['rangominimo'], $data['rangomaximo']);
+            $alimentos = getAlimentos($data['alimentos']);
 
             $dataReq = [
+                'desayuno'          => $alimentos['desayuno'],
+                'almuerzo'          => $alimentos['almuerzo'],
+                'cena'              => $alimentos['cena'],
                 'tipocomision'      => $data['tipoComision'],
                 'monto_comision'      => $data['montoComision'],
                 'paispedido_id'  => $data['paispedido'],

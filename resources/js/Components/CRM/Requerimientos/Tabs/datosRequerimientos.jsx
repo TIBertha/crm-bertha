@@ -15,6 +15,7 @@ import Edades from "../Components/Edades/edades.jsx";
 import RangoBusqueda from "../Components/Edades/rangoBusqueda.jsx";
 import Horarios from "../Components/Horarios/horarios.jsx";
 import VerEntrevistasRegistradas from "../Modals/verEntrevistasRegistradas.jsx";
+import CheckBoxAlimentos from "../Components/checkBoxAlimentos.jsx";
 
 export default function DatosRequerimientos({url, view, data, show, handleChange, addSeguimiento, removeSeguimiento, loadEmpleadoresOptions, openModalEmpleador, closeModalEmpleador, setNewEmpleador, saveNuevoEmpleador, openModalDomicilio, closeModalDomicilio, setNewDomicilio, saveNuevoDomicilio, loadDistritoOptions, handleDelete, handleAddition, handleDrag, handleChangeHorarios}){
     let inputsueldo = '';
@@ -620,6 +621,24 @@ export default function DatosRequerimientos({url, view, data, show, handleChange
             { (parseInt(data.cuarentena) !== 7) &&
                 <Horarios data={data} onChangeHorario={handleChangeHorarios} onChange={handleChange} view={view} />
             }
+
+            <div className="form-group col-12 col-md-7 mt-10 light-purple-bg padding-y-special">
+                <div className={'row'}>
+                    <label className="col-12 col-md-3 col-form-label align-self-center">Alimentos</label>
+                    <div className="col-md-9 align-self-center">
+                        <ul className="checkbox-alimentos">
+                            {data.alimentos.map((m) => {
+                                return (
+                                    <CheckBoxAlimentos
+                                        handleChange={handleChange}
+                                        m={m}
+                                    />
+                                );
+                            })}
+                        </ul>
+                    </div>
+                </div>
+            </div>
 
             <div className={'form-group col-12 col-md-7'}>
                 <div className={'row'}>

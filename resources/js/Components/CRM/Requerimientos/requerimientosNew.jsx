@@ -131,6 +131,11 @@ class RequerimientosNew extends Component {
             montoComision: 700,
             isUploadingAdjuntoAdelanto: false,
             paises: [],
+            alimentos: [
+                {id: 1, value: "Desayuno", isChecked: false},
+                {id: 2, value: "Almuerzo", isChecked: false},
+                {id: 3, value: "Cena", isChecked: false}
+            ],
 
             keyTab: 'tab1',
         };
@@ -492,6 +497,18 @@ class RequerimientosNew extends Component {
             this.setState({
                 [campo]: e
             });
+
+        }else if(tipo === 'alimentos') {
+
+            let alimentos = this.state.alimentos;
+
+            alimentos.forEach(m => {
+                if (m.value === e.target.value)
+                    m.isChecked = e.target.checked
+            });
+
+            this.setState({alimentos: alimentos});
+
 
         }else if(tipo === 'edad') {
 

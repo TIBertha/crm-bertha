@@ -192,6 +192,34 @@ function getModalidades($modalidades){
     ];
 }
 
+function getAlimentos($alimentos){
+
+    $desayuno = false;
+    $almuerzo = false;
+    $cena = false;
+
+    if($alimentos){
+
+        foreach ($alimentos as $a){
+
+            if($a['id'] == 1){
+                $desayuno = $a['isChecked'];
+            }else if($a['id'] == 2){
+                $almuerzo = $a['isChecked'];
+            }else if($a['id'] == 3){
+                $cena = $a['isChecked'];
+            }
+        }
+
+    }
+
+    return [
+        'desayuno' => $desayuno,
+        'almuerzo' => $almuerzo,
+        'cena' => $cena
+    ];
+}
+
 function getDepartamentoProvinciaDistrito($data){
 
     if(!empty($data)){

@@ -129,6 +129,11 @@ class RequerimientosEdit extends Component{
             comprobanteAdelantoPDF: '',
             postulacionesPrevias: 0,
             paises: [],
+            alimentos: [
+                {id: 1, value: "Desayuno", isChecked: false},
+                {id: 2, value: "Almuerzo", isChecked: false},
+                {id: 3, value: "Cena", isChecked: false}
+            ],
 
             keyTab: 'tab1',
         };
@@ -368,6 +373,18 @@ class RequerimientosEdit extends Component{
             this.setState({
                 [campo]: e
             });
+
+        }else if(tipo === 'alimentos') {
+
+            let alimentos = this.state.alimentos;
+
+            alimentos.forEach(m => {
+                if (m.value === e.target.value)
+                    m.isChecked = e.target.checked
+            });
+
+            this.setState({alimentos: alimentos});
+
 
         }else if(tipo === 'tipoComision'){
 
@@ -800,6 +817,11 @@ class RequerimientosEdit extends Component{
                 this.setDivisaPais(r.data.paispedido_id, r.data.tipobeneficio_id);
 
                 this.setState({
+                    alimentos: [
+                        {id: 1, value: "Desayuno", isChecked: Boolean(r.data.desayuno)},
+                        {id: 2, value: "Almuerzo", isChecked: Boolean(r.data.almuerzo)},
+                        {id: 3, value: "Cena", isChecked: Boolean(r.data.cena)}
+                    ],
                     tipoComision: r.data.tipocomision,
                     inputDomicilio: r.data.input_domicilio,
                     montoComision: r.data.monto_comision,
