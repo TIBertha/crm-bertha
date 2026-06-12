@@ -207,6 +207,7 @@ export default function RequerimientosTable({url, requerimientos, total, page, c
                                 <Td className={'vertical-align-middle'}>
                                     <p>{data.actividad}</p>
                                     <p>{data.modalidad}</p>
+                                    <p className={'font-bold'}>{data.alimentos}</p>
                                 </Td>
 
                                 <Td className={'vertical-align-middle'}>

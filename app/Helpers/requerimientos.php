@@ -953,6 +953,19 @@ function processDataRequerimiento($data){
             ];
         }
 
+        $textoAlimentos = collect([
+            'DESAYUNO' => boolval($d->desayuno),
+            'ALMUERZO' => boolval($d->almuerzo),
+            'CENA'     => boolval($d->cena),
+        ])
+            ->filter() // deja solo los true
+            ->keys()   // obtiene los nombres
+            ->map(fn($k) => ucfirst($k)) // capitaliza
+            ->join(' / ');
+
+        if ($textoAlimentos === '') {
+            $textoAlimentos = 'SIN ALIMENTOS';
+        }
 
 
         $result[] = [
@@ -990,6 +1003,7 @@ function processDataRequerimiento($data){
             'estadoid' => $d->estatusrequerimientoid,
             'estado' => $d->estatusrequerimiento,
             'disponibleentrevista' => $d->disponibleentrevista,
+            'alimentos' => '(' . $textoAlimentos . ')',
         ];
     }
 
