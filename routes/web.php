@@ -83,20 +83,24 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/indicadores', [IndicadoresController::class, 'index'])->name('indicadores');
     Route::post('/ajax-get-indicadores', [IndicadoresController::class, 'ajaxGetIndicadores']);
 
-    //ruta de administrador
-    Route::get('/usu-int', [AdministradorController::class, 'index'])->name('usuarios-internos');
-    Route::get('/usu-int/new', [AdministradorController::class, 'viewNew']);
-    Route::get('/usu-int/edit/{id}/', [AdministradorController::class, 'viewEdit']);
-    Route::post('/ajax-administradores-new', [AdministradorController::class, 'ajaxNew']);
-    Route::post('/ajax-administradores-edit', [AdministradorController::class, 'ajaxEdit']);
-    Route::post('/ajax-refresh-usuarios-internos', [AdministradorController::class, 'ajaxRefreshUsuariosInternos']);
-    Route::post('/ajax-administradores-get', [AdministradorController::class, 'ajaxGet']);
-    Route::post('/ajax-administradores-get-data', [AdministradorController::class, 'ajaxGetData']);
-    Route::post('/ajax-administradores-delete', [AdministradorController::class, 'ajaxDelete']);
-    Route::post('/ajax-administradores-active', [AdministradorController::class, 'ajaxActive']);
-    Route::post('/ajax-get-usuarios-internos', [AdministradorController::class, 'ajaxGetUsuariosInternos']);
-    Route::post('/ajax-administradores-reset', [AdministradorController::class, 'ajaxResetPasswordUserInterno']);
-    Route::post('/ajax-set-password-usuarios-internos', [AdministradorController::class, 'ajaxSetPasswordUsuarioInterno']);
+
+    Route::middleware(['auth', 'check.ids:3,5'])->group(function () {
+        //ruta de administrador
+        Route::get('/usu-int', [AdministradorController::class, 'index'])->name('usuarios-internos');
+        Route::get('/usu-int/new', [AdministradorController::class, 'viewNew']);
+        Route::get('/usu-int/edit/{id}/', [AdministradorController::class, 'viewEdit']);
+        Route::post('/ajax-administradores-new', [AdministradorController::class, 'ajaxNew']);
+        Route::post('/ajax-administradores-edit', [AdministradorController::class, 'ajaxEdit']);
+        Route::post('/ajax-refresh-usuarios-internos', [AdministradorController::class, 'ajaxRefreshUsuariosInternos']);
+        Route::post('/ajax-administradores-get', [AdministradorController::class, 'ajaxGet']);
+        Route::post('/ajax-administradores-get-data', [AdministradorController::class, 'ajaxGetData']);
+        Route::post('/ajax-administradores-delete', [AdministradorController::class, 'ajaxDelete']);
+        Route::post('/ajax-administradores-active', [AdministradorController::class, 'ajaxActive']);
+        Route::post('/ajax-get-usuarios-internos', [AdministradorController::class, 'ajaxGetUsuariosInternos']);
+        Route::post('/ajax-administradores-reset', [AdministradorController::class, 'ajaxResetPasswordUserInterno']);
+        Route::post('/ajax-set-password-usuarios-internos', [AdministradorController::class, 'ajaxSetPasswordUsuarioInterno']);
+    });
+
 
     //ruta CreateStateCity
     Route::post('/ajax-get-paises', [CreateStateCityController::class, 'ajaxGetPaises']);

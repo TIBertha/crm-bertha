@@ -5,7 +5,12 @@ import NavbarDropdown from "./SubComponents/navbarDropdown";
 import { mobileDesktop } from "../../Functions/General";
 import { Modal, ModalBody, ModalTitle } from "react-bootstrap";
 
-export default function Navbar({ url, path, profilename, profilepic }) {
+export default function Navbar({ url, path, profilename, profilepic, userid}) {
+
+    console.log(userid);
+
+    const restringedUsers = [3,5].includes(userid);
+
     const [isClicked, setIsClicked] = useState(false);
     const [openMobileMenu, setOpenMobileMenu] = useState(false);
     let display = mobileDesktop();
@@ -13,7 +18,7 @@ export default function Navbar({ url, path, profilename, profilepic }) {
     function setClick(e) {
         setIsClicked((prev) => !prev);
         const body = document.getElementById("mc");
-        if (isClicked == true) {
+        if (isClicked === true) {
             body.classList.remove("sidebar-collapsed");
         } else {
             body.classList.add("sidebar-collapsed");
@@ -38,6 +43,7 @@ export default function Navbar({ url, path, profilename, profilepic }) {
             href: "/indicadores",
             includedPath: "indicadores",
             drowpdown: false,
+            restringed: false,
             sublist: [],
         },
         {
@@ -46,6 +52,7 @@ export default function Navbar({ url, path, profilename, profilepic }) {
             href: "/usu-int",
             includedPath: "usu-int",
             drowpdown: false,
+            restringed: [3,5].includes(userid),
             sublist: [],
         },
         {
@@ -54,6 +61,7 @@ export default function Navbar({ url, path, profilename, profilepic }) {
             href: "/postulantes",
             includedPath: "postulantes",
             drowpdown: false,
+            restringed: false,
             sublist: [],
         },
         {
@@ -62,6 +70,7 @@ export default function Navbar({ url, path, profilename, profilepic }) {
             href: "/empleadores",
             includedPath: "empleadores",
             drowpdown: false,
+            restringed: false,
             sublist: [],
         },
         {
@@ -70,6 +79,7 @@ export default function Navbar({ url, path, profilename, profilepic }) {
             href: "/requerimientos",
             includedPath: "requerimientos",
             drowpdown: false,
+            restringed: false,
             sublist: [],
         },
         {
@@ -78,6 +88,7 @@ export default function Navbar({ url, path, profilename, profilepic }) {
             href: "/contratos",
             includedPath: "contratos",
             drowpdown: false,
+            restringed: false,
             sublist: [],
         },
         {
@@ -86,6 +97,7 @@ export default function Navbar({ url, path, profilename, profilepic }) {
             href: "",
             includedPath: "testimoniales",
             drowpdown: true,
+            restringed: false,
             sublist: [
                 { label: "Trabajadores", href: "/testimoniales-trabajador" },
                 { label: "Empleadores", href: "/testimoniales-empleador" },
@@ -97,6 +109,7 @@ export default function Navbar({ url, path, profilename, profilepic }) {
             href: "/prensa",
             includedPath: "prensa",
             drowpdown: false,
+            restringed: false,
             sublist: [],
         },
         {
@@ -105,6 +118,7 @@ export default function Navbar({ url, path, profilename, profilepic }) {
             href: "/reclamos",
             includedPath: "reclamos",
             drowpdown: false,
+            restringed: false,
             sublist: [],
         },
         {
@@ -113,6 +127,7 @@ export default function Navbar({ url, path, profilename, profilepic }) {
             href: "/credenciales",
             includedPath: "credenciales",
             drowpdown: false,
+            restringed: false,
             sublist: [],
         },
     ];
@@ -125,7 +140,7 @@ export default function Navbar({ url, path, profilename, profilepic }) {
                         <a
                             className="menu-button"
                             onClick={(e) =>
-                                display == "desktop"
+                                display === "desktop"
                                     ? setClick(e)
                                     : setOpenMobileMenu(true)
                             }
@@ -149,11 +164,11 @@ export default function Navbar({ url, path, profilename, profilepic }) {
                 </div>
             </nav>
 
-            {display == "mobile" && (
+            {display === "mobile" && (
                 <Modal
                     size={"xl"}
                     show={openMobileMenu}
-                    onHide={(e) => setOpenMobileMenu(false)}
+                    onHide={() => setOpenMobileMenu(false)}
                     centered={true}
                     dialogClassName={"navbar-menu-modal"}
                     backdrop="static"
@@ -162,64 +177,42 @@ export default function Navbar({ url, path, profilename, profilepic }) {
                         <div className="bertha-mobile-menu">
                             <div className="menu-title">
                                 <i
-                                    class="close-button fa-solid fa-xmark"
-                                    onClick={(e) => setOpenMobileMenu(false)}
+                                    className="close-button fa-solid fa-xmark"
+                                    onClick={() => setOpenMobileMenu(false)}
                                 ></i>
                                 <p>Menú</p>
                                 <hr />
                             </div>
                             <ul className="menu-list">
-                                {menuList.map((m, index) => {
+                                {menuList.map((m) => {
                                     return (
                                         <>
-                                            {m.drowpdown == true ? (
+                                            {m.drowpdown === true ? (
                                                 <NavbarDropdown
                                                     url={url}
                                                     path={path}
                                                     label={m.label}
-                                                    includedPath={
-                                                        m.includedPath
-                                                    }
+                                                    includedPath={m.includedPath}
                                                     icon={m.icon}
-                                                    buttonStyle={
-                                                        verticalNavbar.button
-                                                    }
-                                                    iconStyle={
-                                                        verticalNavbar.icon
-                                                    }
-                                                    labelStyle={
-                                                        verticalNavbar.label
-                                                    }
+                                                    buttonStyle={verticalNavbar.button}
+                                                    iconStyle={verticalNavbar.icon}
+                                                    labelStyle={verticalNavbar.label}
                                                     sublist={m.sublist}
                                                 />
                                             ) : (
-                                                <li>
-                                                    <a
-                                                        href={m.href}
-                                                        className={
-                                                            verticalNavbar.button +
-                                                            (path.includes(
-                                                                m.includedPath,
-                                                            )
-                                                                ? " selected"
-                                                                : "")
-                                                        }
-                                                    >
-                                                        <i
-                                                            className={
-                                                                m.icon +
-                                                                verticalNavbar.icon
-                                                            }
-                                                        ></i>
-                                                        <span
-                                                            className={
-                                                                verticalNavbar.label
-                                                            }
-                                                        >
+                                                <>
+                                                    {m.restringed === false &&
+                                                        <li>
+                                                            <a href={m.href} className={verticalNavbar.button + (path.includes(m.includedPath) ? " selected" : "")}>
+                                                                <i className={m.icon + verticalNavbar.icon}></i>
+                                                                <span className={verticalNavbar.label}>
                                                             {m.label}
                                                         </span>
-                                                    </a>
-                                                </li>
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                </>
+
                                             )}
                                         </>
                                     );
@@ -230,18 +223,18 @@ export default function Navbar({ url, path, profilename, profilepic }) {
                 </Modal>
             )}
 
-            {display == "desktop" && (
+            {display === "desktop" && (
                 <nav
                     className={
                         "bertha-vertical-navbar navbar-primary" +
-                        (isClicked == true ? " collapsed" : "")
+                        (isClicked === true ? " collapsed" : "")
                     }
                 >
                     <ul className="navbar-primary-menu">
-                        {menuList.map((m, index) => {
+                        {menuList.map((m) => {
                             return (
                                 <>
-                                    {m.drowpdown == true ? (
+                                    {m.drowpdown === true ? (
                                         <NavbarDropdown
                                             url={url}
                                             path={path}
@@ -254,33 +247,17 @@ export default function Navbar({ url, path, profilename, profilepic }) {
                                             sublist={m.sublist}
                                         />
                                     ) : (
-                                        <li>
-                                            <a
-                                                href={m.href}
-                                                className={
-                                                    verticalNavbar.button +
-                                                    (path.includes(
-                                                        m.includedPath,
-                                                    )
-                                                        ? " selected"
-                                                        : "")
-                                                }
-                                            >
-                                                <i
-                                                    className={
-                                                        m.icon +
-                                                        verticalNavbar.icon
-                                                    }
-                                                ></i>
-                                                <span
-                                                    className={
-                                                        verticalNavbar.label
-                                                    }
-                                                >
-                                                    {m.label}
-                                                </span>
-                                            </a>
-                                        </li>
+                                        <>
+                                            {m.restringed === false &&
+                                                <li>
+                                                    <a href={m.href} className={verticalNavbar.button + (path.includes(m.includedPath,) ? " selected" : "")}>
+                                                        <i className={m.icon + verticalNavbar.icon}></i>
+                                                        <span className={verticalNavbar.label}>{m.label}</span>
+                                                    </a>
+                                                </li>
+                                            }
+                                        </>
+
                                     )}
                                 </>
                             );

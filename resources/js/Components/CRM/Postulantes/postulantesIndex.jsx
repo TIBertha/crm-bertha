@@ -544,7 +544,7 @@ export default class PostulantesIndex extends Component {
                         <RegistrarUsuario />
                     </div>
 
-                    
+
                 </div>
 
                 <section className="fichas">

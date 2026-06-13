@@ -16,6 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'S3Uploader' => \App\Facades\S3Uploader::class,
+            'check.ids' => \App\Http\Middleware\CheckUserIds::class,
         ])
         ->redirectGuestsTo('/login')
         ->redirectUsersTo('/postulantes')

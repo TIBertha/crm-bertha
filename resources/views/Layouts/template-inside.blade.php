@@ -32,7 +32,7 @@
 
         <!-- Navbar -->
         <div id="navbar" data-url="{{ url('/') }}" data-path="{{ request()->path() }}"
-            data-profilename="{{ Auth::user()->showNombre() }}" data-profilepic="{{ Auth::user()->showAvatar() }}">
+            data-profilename="{{ Auth::user()->showNombre() }}" data-profilepic="{{ Auth::user()->showAvatar() }}" data-userid="{{Auth::user()->id}}">
         </div>
         <!-- Navbar -->
 

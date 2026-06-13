@@ -20,6 +20,7 @@ const navbarJSX = document.getElementById("navbar");
 if (navbarJSX) {
     const url = navbarJSX.dataset.url;
     const path = navbarJSX.dataset.path;
+    const userid = navbarJSX.dataset.userid;
     const profilename = navbarJSX.dataset.profilename;
     const profilepic = navbarJSX.dataset.profilepic;
     ReactDOM.createRoot(navbarJSX).render(
@@ -28,6 +29,7 @@ if (navbarJSX) {
             path={path}
             profilename={profilename}
             profilepic={profilepic}
+            userid={userid}
         />,
     );
 }

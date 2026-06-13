@@ -623,7 +623,8 @@ class RequerimientosController extends Controller
         $fastsearch = $request->input('fastsearch');
         $offset = $request->input('offset');
         $lista = getNewRequerimientos($fastsearch);
-        $cantidad = $lista->count();
+
+        dd($lista->get());
         $data = getDataRequerimientos($lista, $offset);
 
         $page = 0;
@@ -838,8 +839,6 @@ class RequerimientosController extends Controller
     public function ajaxGetModalidad(Request $request){
 
         $actividad = $request->input('actividad');
-
-        $act = Actividad::find($actividad);
 
         $modalidades = Modalidad::borrado(false)->ordenar()->get();
 

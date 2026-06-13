@@ -28,19 +28,19 @@ function alimentosTextoCopy($data) {
     $seleccionados = $textoAlimentos
         ->filter()
         ->keys()
-        ->map(fn($k) => ucfirst(strtolower($k)))
+        ->map(fn($k) => strtolower($k))
         ->values();
 
     if ($seleccionados->isEmpty()) {
-        return 'No brindará alimentos';
+        return 'No brinda alimentos';
     }
 
     if ($seleccionados->count() === 1) {
-        return 'Brindará únicamente ' . strtolower($seleccionados->first());
+        return 'Brinda únicamente ' . $seleccionados->first();
     }
 
     $ultimo = $seleccionados->pop();
-    return 'Brindará ' . $seleccionados->join(', ') . ' y ' . strtolower($ultimo);
+    return 'Brinda ' . $seleccionados->join(', ') . ' y ' . $ultimo;
 }
 
 function getMonthName($month){

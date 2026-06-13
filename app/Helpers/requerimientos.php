@@ -833,7 +833,7 @@ function getNewRequerimientos($fastsearch = false){
     } elseif ($fastsearch == 'T') {
         $query->whereIn('estatusrequerimientoid', [1, 4])
             ->where('fechaentrevista', '>=', Carbon::now()->subDays(3))
-            ->orWhere('actualizado', '>=', Carbon::now()->subDays(1));
+            ->orWhere('actualizado', '>=', Carbon::now()->subDays(2));
     } else {
         $query->where('actualizado', '>=', Carbon::now()->subDays(3))
             ->orWhereNull('fechaentrevista');
