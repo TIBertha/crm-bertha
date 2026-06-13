@@ -66,18 +66,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/ajax-get-reclamos-pendientes', [ReclamosController::class, 'ajaxGetReclamosPendientes']);
     Route::post('/ajax-get-domicilio-data', [MasterController::class, 'ajaxGetDomicilioData']);
 
-    //ruta de prensa
-    Route::get('/prensa', [PrensaController::class, 'index'])->name('prensa');
-    Route::get('/prensa/new', [PrensaController::class, 'viewNew'])->name('prensa-new');
-    Route::get('/prensa/edit/{id}/', [PrensaController::class, 'viewEdit']);
-    Route::post('/ajax-prensa-new', [PrensaController::class, 'ajaxNew']);
-    Route::post('/ajax-prensa-edit', [PrensaController::class, 'ajaxEdit']);
-    Route::post('/ajax-prensa-get', [PrensaController::class, 'ajaxGet']);
-    Route::post('/ajax-prensa-get-data', [PrensaController::class, 'ajaxGetData']);
-    Route::post('/ajax-prensa-active', [PrensaController::class, 'ajaxActive']);
-    Route::post('/ajax-prensa', [PrensaController::class, 'ajaxPrensa']);
-    Route::post('/ajax-prensa-delete', [PrensaController::class, 'ajaxDelete']);
-    Route::post('/ajax-refresh-prensa', [PrensaController::class, 'ajaxRefreshPrensa']);
+
 
     //ruta Indicadores
     Route::get('/indicadores', [IndicadoresController::class, 'index'])->name('indicadores');
@@ -99,6 +88,19 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/ajax-get-usuarios-internos', [AdministradorController::class, 'ajaxGetUsuariosInternos']);
         Route::post('/ajax-administradores-reset', [AdministradorController::class, 'ajaxResetPasswordUserInterno']);
         Route::post('/ajax-set-password-usuarios-internos', [AdministradorController::class, 'ajaxSetPasswordUsuarioInterno']);
+
+        //ruta de prensa
+        Route::get('/prensa', [PrensaController::class, 'index'])->name('prensa');
+        Route::get('/prensa/new', [PrensaController::class, 'viewNew'])->name('prensa-new');
+        Route::get('/prensa/edit/{id}/', [PrensaController::class, 'viewEdit']);
+        Route::post('/ajax-prensa-new', [PrensaController::class, 'ajaxNew']);
+        Route::post('/ajax-prensa-edit', [PrensaController::class, 'ajaxEdit']);
+        Route::post('/ajax-prensa-get', [PrensaController::class, 'ajaxGet']);
+        Route::post('/ajax-prensa-get-data', [PrensaController::class, 'ajaxGetData']);
+        Route::post('/ajax-prensa-active', [PrensaController::class, 'ajaxActive']);
+        Route::post('/ajax-prensa', [PrensaController::class, 'ajaxPrensa']);
+        Route::post('/ajax-prensa-delete', [PrensaController::class, 'ajaxDelete']);
+        Route::post('/ajax-refresh-prensa', [PrensaController::class, 'ajaxRefreshPrensa']);
     });
 
 

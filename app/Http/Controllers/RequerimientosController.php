@@ -623,8 +623,6 @@ class RequerimientosController extends Controller
         $fastsearch = $request->input('fastsearch');
         $offset = $request->input('offset');
         $lista = getNewRequerimientos($fastsearch);
-
-        dd($lista->get());
         $data = getDataRequerimientos($lista, $offset);
 
         $page = 0;

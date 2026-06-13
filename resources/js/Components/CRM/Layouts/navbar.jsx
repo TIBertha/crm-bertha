@@ -7,9 +7,7 @@ import { Modal, ModalBody, ModalTitle } from "react-bootstrap";
 
 export default function Navbar({ url, path, profilename, profilepic, userid}) {
 
-    console.log(userid);
-
-    const restringedUsers = [3,5].includes(userid);
+    const restringedUsers = ![3,5].includes(Number(userid));
 
     const [isClicked, setIsClicked] = useState(false);
     const [openMobileMenu, setOpenMobileMenu] = useState(false);
@@ -52,7 +50,7 @@ export default function Navbar({ url, path, profilename, profilepic, userid}) {
             href: "/usu-int",
             includedPath: "usu-int",
             drowpdown: false,
-            restringed: [3,5].includes(userid),
+            restringed: restringedUsers,
             sublist: [],
         },
         {
@@ -109,7 +107,7 @@ export default function Navbar({ url, path, profilename, profilepic, userid}) {
             href: "/prensa",
             includedPath: "prensa",
             drowpdown: false,
-            restringed: false,
+            restringed: restringedUsers,
             sublist: [],
         },
         {
