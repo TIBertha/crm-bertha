@@ -540,11 +540,11 @@ export default class PostulantesIndex extends Component {
                         <CalculadoraBeneficio />
                     </div>
 
-                    {access === true && (
-                        <div className="col-12 col-md-auto px-1 my-2 my-md-0">
-                            <RegistrarUsuario />
-                        </div>
-                    )}
+                    <div className="col-12 col-md-auto px-1 my-2 my-md-0">
+                        <RegistrarUsuario />
+                    </div>
+
+                    
                 </div>
 
                 <section className="fichas">
