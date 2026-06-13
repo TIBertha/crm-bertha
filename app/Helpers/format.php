@@ -32,15 +32,15 @@ function alimentosTextoCopy($data) {
         ->values();
 
     if ($seleccionados->isEmpty()) {
-        return 'No brinda alimentos';
+        return '*No brinda alimentos';
     }
 
     if ($seleccionados->count() === 1) {
-        return 'Brinda únicamente ' . $seleccionados->first();
+        return '*Brinda únicamente ' . $seleccionados->first();
     }
 
     $ultimo = $seleccionados->pop();
-    return 'Brinda ' . $seleccionados->join(', ') . ' y ' . $ultimo;
+    return '*Brinda ' . $seleccionados->join(', ') . ' y ' . $ultimo;
 }
 
 function getMonthName($month){
