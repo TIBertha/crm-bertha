@@ -18,6 +18,31 @@ function getDivisaDetails($countryID){
     ];
 }
 
+function alimentosTextoCopy($data) {
+    $textoAlimentos = collect([
+        'desayuno' => boolval($data->desayuno),
+        'almuerzo' => boolval($data->almuerzo),
+        'cena'     => boolval($data->cena),
+    ]);
+
+    $seleccionados = $textoAlimentos
+        ->filter()
+        ->keys()
+        ->map(fn($k) => ucfirst(strtolower($k)))
+        ->values();
+
+    if ($seleccionados->isEmpty()) {
+        return 'No brindará alimentos';
+    }
+
+    if ($seleccionados->count() === 1) {
+        return 'Brindará únicamente ' . strtolower($seleccionados->first());
+    }
+
+    $ultimo = $seleccionados->pop();
+    return 'Brindará ' . $seleccionados->join(', ') . ' y ' . strtolower($ultimo);
+}
+
 function getMonthName($month){
     $meses = array("ENERO","FEBRERO","MARZO","ABRIL","MAYO","JUNIO","JULIO","AGOSTO","SEPTIEMBRE","OCTUBRE","NOVIEMBRE","DICIEMBRE");
     return $meses[($month) - 1];
