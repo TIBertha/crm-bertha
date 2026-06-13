@@ -36,7 +36,7 @@ function alimentosTextoCopy($data) {
     }
 
     if ($seleccionados->count() === 1) {
-        return '*Brinda únicamente ' . $seleccionados->first();
+        return '*Brinda ' . $seleccionados->first();
     }
 
     $ultimo = $seleccionados->pop();
