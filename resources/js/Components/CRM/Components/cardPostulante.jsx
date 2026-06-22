@@ -644,7 +644,7 @@ export default function CardPostulante({
                     <NewCopyIcon
                         icon={"fas fa-file-import"}
                         additonalClass={"icon-action-sm align-self-center"}
-                        copyText={mainWeb + d.token_privado}
+                        copyText={d.token_privado}
                         tooltipText={"Enviar link privado de postulante"}
                         successMsj={"Link copiado"}
                         colorNeutro={"#ffbf36"}
