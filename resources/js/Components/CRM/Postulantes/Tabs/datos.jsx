@@ -458,32 +458,6 @@ export default function Datos({
 
                         <div className="form-group row">
                             <label className="col-12 col-lg-4 col-form-label">
-                                Estado Civil
-                            </label>
-                            <div className="col-12 col-lg-7">
-                                <select
-                                    className="form-control"
-                                    name="estadocivil"
-                                    value={data.estadocivil}
-                                    onChange={handleChange}
-                                    disabled={Boolean(data.show)}
-                                >
-                                    <option key="0" value="">
-                                        Seleccione
-                                    </option>
-                                    {data.estadosciviles.map((ec, index) => {
-                                        return (
-                                            <option key={index} value={ec.id}>
-                                                {ec.nombre}
-                                            </option>
-                                        );
-                                    })}
-                                </select>
-                            </div>
-                        </div>
-
-                        <div className="form-group row">
-                            <label className="col-12 col-lg-4 col-form-label">
                                 Fecha Nacimiento{" "}
                                 <Tooltips
                                     estilo={"tooltip-tc ms-2"}
@@ -530,6 +504,7 @@ export default function Datos({
                             </div>
                         </div>
 
+                        {/*
                         <div className="form-group row">
                             <label className="col-12 col-lg-4 col-form-label">
                                 Tiene Vacuna COVID
@@ -586,6 +561,8 @@ export default function Datos({
                                 />
                             </div>
                         </div>
+                        */}
+
                     </div>
 
                     <div className="col-12 col-lg-6">
@@ -665,9 +642,7 @@ export default function Datos({
                                     : "Lugar Nacimiento"}
                             </label>
                             <div className="col-12 col-lg-7">
-                                {[
-                                    4, 7, 8, 11, 13, 18, 22, 49, 53, 54, 67, 68,
-                                ].includes(pais) ? (
+                                {[4, 7, 8, 11, 13, 18, 22, 49, 53, 54, 67, 68].includes(pais) ? (
                                     <select
                                         className="form-control"
                                         name="departamentonacimiento"

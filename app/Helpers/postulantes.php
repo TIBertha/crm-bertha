@@ -15,7 +15,7 @@ function formatDataPostulante($data){
     if($data){
 
         foreach ($data as $d) {
-            $urlWeb = config('webexperta.url-web');
+            $urlWeb = 'https://holabertha.com';
 
             $diasTrabajoPorDias = null;
 
