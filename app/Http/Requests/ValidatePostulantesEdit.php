@@ -97,7 +97,7 @@ class ValidatePostulantesEdit extends FormRequest
             'data.fechaemisioncertificado'   => $fechaEmisionCertificado,
             'data.verificaciones'            => [new AdjuntoVerificacionesLaborales('edit')],
             'data.niveleducativo'            => 'required',
-            'data.tienevacuna'               => 'required',
+            'data.tienevacuna'               => 'nullable',
         ];
     }
 
@@ -126,7 +126,7 @@ class ValidatePostulantesEdit extends FormRequest
             'data.certificadoantecedente.required' => 'El certificado de antecedente es requerido',
             'data.certificadoantecedentepdf.required' => 'El certificado de antecedente en pdf es requerido',
             'data.fechaemisioncertificado.required' => 'La fecha de emisión del certificado de antecedente es requerida',
-            'data.tienevacuna.required' => 'La respuesta a si tiene vacuna es requerida',
+            //'data.tienevacuna.required' => 'La respuesta a si tiene vacuna es requerida',
         ];
     }
 
