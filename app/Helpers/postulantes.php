@@ -28,9 +28,9 @@ function formatDataPostulante($data){
             }
 
             $linkfirma = getLinkFirma($d->id);
-            $linkficha = $urlWeb . '/ficha-postulante/'. $d->token;
-            $linkform  = $urlWeb . '/registro-postulante/'. $d->token;
-            $linkfichaverificacion = $urlWeb . '/ficha-postulante/'. $d->token;
+            $linkficha = 'https://holabertha.com/ficha-postulante/'. $d->token;
+            $linkform  = 'https://holabertha.com/registro-postulante/'. $d->token;
+            $linkfichaverificacion = 'https://holabertha.com/ficha-postulante/'. $d->token;
 
             $daysPast = $d->certificado_antecedente_fecha ? getDaysPast($d->certificado_antecedente_fecha) : null;
 
