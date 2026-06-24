@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Modal, ModalBody, ModalTitle} from "react-bootstrap";
 import ModalHeader from "react-bootstrap/ModalHeader";
-import { NumericFormat, PatternFormat } from "react-number-format";
+import {NumericFormat} from "react-number-format";
 import {isResponsive} from "../../../Functions/General.jsx";
 import NewCopyButton from "../../Components/newCopyButton.jsx";
 import {getSpeechCotizador} from "../../../Functions/SpeechCotizador.jsx";
@@ -36,26 +36,18 @@ export default function Cotizador({url}) {
         setActividad(1);
     }
 
-    function copyLink(e){
-        setTextoCopiar('Copiado');
-        getData();
-        setTimeout(function () {
-            setTextoCopiar('Copiar');
-        }, 1500);
-    }
-
     function handleChange(e, campo){
-        if (campo == 'sueldo'){
+        if (campo === 'sueldo'){
             setSueldo(e.formattedValue);
         }else{
             let valor = e.target.value;
-            if (campo == 'modalidad'){
+            if (campo === 'modalidad'){
                 setModalidad(valor);
-            }else if (campo == 'actividad'){
+            }else if (campo === 'actividad'){
                 setActividad(valor);
-            }else if (campo == 'frecuencia'){
+            }else if (campo === 'frecuencia'){
                 setFrecuencia(valor);
-            }else if (campo == 'garantia'){
+            }else if (campo === 'garantia'){
                 setGarantia(valor);
             }
         }
@@ -78,9 +70,9 @@ export default function Cotizador({url}) {
     }
 
     let divisa = 'S/.';
-    if (country == 'cl'){
+    if (country === 'cl'){
         divisa = 'CLP$';
-    }else if (country == 'mx'){
+    }else if (country === 'mx'){
         divisa = 'MXN$';
     }
 
@@ -88,12 +80,12 @@ export default function Cotizador({url}) {
 
     return(
         <>
-            <a className={responsive == true ? 'w-100' : ''} role="button" onClick={(e) => openModal()}>
-                <div className={('btn bertha-green-button font-weight-bold font btn-') + (responsive == true ? 'lg w-100' : 'sm text-white')} data-toggle="tooltip" data-placement="bottom" title={conf.title}>
-                    <i className={conf.icon + ' icon-question'}></i> {responsive == true && <span className='ms-2'>{conf.title}</span>}
+            <a className={responsive === true ? 'w-100' : ''} role="button" onClick={() => openModal()}>
+                <div className={('btn bertha-green-button font-weight-bold font btn-') + (responsive === true ? 'lg w-100' : 'sm text-white')} data-toggle="tooltip" data-placement="bottom" title={conf.title}>
+                    <i className={conf.icon + ' icon-question'}></i> {responsive === true && <span className='ms-2'>{conf.title}</span>}
                 </div>
             </a>
-            <Modal size="md" scrollable={false} backdrop="static" keyboard={false} show={show} onHide={(e) => closeModal()} centered={true}>
+            <Modal size="md" scrollable={false} backdrop="static" keyboard={false} show={show} onHide={() => closeModal()} centered={true}>
                 <ModalHeader className="border-0 pb-0" closeButton>
                     <ModalTitle>
                         <h6><i className={conf.icon + ' me-2'}></i>{conf.title}</h6>
@@ -103,11 +95,11 @@ export default function Cotizador({url}) {
 
                     <div className={'my-3'}>
                         <div className={'row mx-0 switch-cotizador'}>
-                            <div className={'col-6 py-1' + (country == 'pe' ? ' selected' : '') } onClick={() => setCountry('pe')}>
+                            <div className={'col-6 py-1' + (country === 'pe' ? ' selected' : '') } onClick={() => setCountry('pe')}>
                                 <span className={'flag-icon flag-icon-pe flag-icon-squared flag-style'}></span>
                                 <span className={'ms-2'}>Perú</span>
                             </div>
-                            <div className={'col-6 py-1' + (country == 'mx' ? ' selected' : '') } onClick={() => setCountry('mx')}>
+                            <div className={'col-6 py-1' + (country === 'mx' ? ' selected' : '') } onClick={() => setCountry('mx')}>
                                 <span className={'flag-icon flag-icon-mx flag-icon-squared flag-style'}></span>
                                 <span className={'ms-2'}>México</span>
                             </div>
@@ -199,7 +191,7 @@ export default function Cotizador({url}) {
                             </div>
                         }
 
-                        { (showButton==true) &&
+                        { (showButton === true) &&
                             <div className="form-group col-12 mb-2">
                                 <NewCopyButton copyText={speech} successMsj={'Speech copiado'} btnText={textoCopiar} btnColor={'purple'} />
                             </div>
