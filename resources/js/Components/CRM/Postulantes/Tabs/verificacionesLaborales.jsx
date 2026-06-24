@@ -457,6 +457,7 @@ export default function VerificacionesLaborales({
                             </div>
                         </div>
 
+                        {/*
                         <div className="form-group row">
                             <label className="col-12 col-md-4 col-form-label">
                                 Motivo Retiro
@@ -473,6 +474,7 @@ export default function VerificacionesLaborales({
                                 />
                             </div>
                         </div>
+                        */}
 
                         <div className="form-group row">
                             <label className="col-12 col-md-4 col-form-label">
