@@ -943,7 +943,7 @@ export default function CardPostulante({
                             </div>
 
                             <div className={"rowDistrito card-text ficha-text"}>
-                                <>Vive:</>
+                                <>Vive en:</>
                                 {data.distrito ? (
                                     <strong className={"text-dark ms-1"}>
                                         {data.distrito}
@@ -972,7 +972,7 @@ export default function CardPostulante({
                                 <span className="mx-1">|</span>
 
                                 <>
-                                    <>Nacimiento:</>
+                                    <>Nació en:</>
                                     {data.departamentoNacimiento ? (
                                         <span className={"font-weight-bold ms-1 text-black"}>
                                             {data.departamentoNacimiento}
