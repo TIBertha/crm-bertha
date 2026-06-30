@@ -943,7 +943,7 @@ export default function CardPostulante({
                             </div>
 
                             <div className={"rowDistrito card-text ficha-text"}>
-                                <>Distrito:</>
+                                <>Vive:</>
                                 {data.distrito ? (
                                     <strong className={"text-dark ms-1"}>
                                         {data.distrito}
@@ -958,7 +958,29 @@ export default function CardPostulante({
                             </div>
 
                             <div className={"rowCovid card-text ficha-text"}>
-                                {rowCovid(data)}
+                                <>
+                                    <>Identidad:</>
+                                    {data.tipodocumento ? (
+                                        <span className={"font-weight-bold ms-1 text-black"}>
+                                            {data.tipodocumento}
+                                        </span>
+                                    ) : (
+                                        <span className={"ms-1"}>-</span>
+                                    )}
+                                </>
+
+                                <span className="mx-1">|</span>
+
+                                <>
+                                    <>Nacimiento:</>
+                                    {data.departamentoNacimiento ? (
+                                        <span className={"font-weight-bold ms-1 text-black"}>
+                                            {data.departamentoNacimiento}
+                                        </span>
+                                    ) : (
+                                        <span className={"ms-1"}>-</span>
+                                    )}
+                                </>
                             </div>
 
                             <div

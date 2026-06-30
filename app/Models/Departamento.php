@@ -11,11 +11,16 @@ class Departamento extends Model
     const CREATED_AT = 'creado';
     const UPDATED_AT = 'actualizado';
 
+    protected $guarded = [];
+
     //scope para buscar por borrado
     public function scopeBorrado($query, $flag) {
         return $query->where('borrado', $flag);
     }
 
-    protected $guarded = [];
+    public function pais()
+    {
+        return $this->belongsTo(Pais::class, 'pais_id', 'id');
+    }
 
 }

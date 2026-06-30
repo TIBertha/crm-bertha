@@ -4,7 +4,7 @@ use App\Models\CambioEstatusTrabajador;
 use App\Models\Views\TransaccionBajaView;
 use App\Models\Views\ContratoView;
 use App\Models\Views\DistritoView;
-use App\Models\Views\RequerimientoPostulacionView;
+use App\Models\Departamento;
 use App\Models\Views\TrabajadorView;
 use Carbon\Carbon;
 
@@ -39,8 +39,12 @@ function formatDataPostulante($data){
             $nullFoto = asset('img/user_icon.svg');
             $n = explode(" ", $d->usuario->nombres);
 
+            $depNac = Departamento::find($d->usuario->departamentonacimiento_id);
+
+
             $result[] = [
                 'dias_contratados_por_dias'  => $diasTrabajoPorDias,
+                'departamentoNacimiento'     => $d->usuario->departamentonacimiento_id ? ($depNac->nombre . ' - ' . $depNac->pais->nombre) : null,
 
                 'telefono_tarjeta'           => separateNumber($d->usuario->telefono),
                 'telefono_tarjeta_whatsapp'  => separateNumber($d->usuario->telefono_whatsapp),
@@ -67,7 +71,7 @@ function formatDataPostulante($data){
 
                 'nacionalidad'               => $d->usuario->nacionalidad->nombre,
                 'tipodocumento_id'           => $d->usuario->tipodocumento_id,
-                'tipodocumento'              => findDocumentAcronym($d->tipodocumento_id),
+                'tipodocumento'              => findDocumentAcronym($d->usuario->tipodocumento_id),
                 'nacionalidadid'             => $d->usuario->nacionalidad_id,
 
                 'edad'                       => $d->usuario && $d->usuario->fecha_nacimiento ? \Carbon\Carbon::parse($d->usuario->fecha_nacimiento)->age : '',
