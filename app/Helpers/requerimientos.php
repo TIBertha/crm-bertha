@@ -404,7 +404,11 @@ function getCopyDetalles($d, $tipo = null, $actExt = null, $actidExt = null, $mo
         }
     }else{
         if ($d->sueldo){
-            $sueldo = ( $mod == 3 ? ('Sueldo por mes (' .  $d->frecuenciaservicio_id . ' veces por 4 semanas = ' . ($d->frecuenciaservicio_id * 4) . ' días): ') : 'Sueldo: ') . $divisa . ' ' . ( $mod == 3 ? numberToCommas($d->sueldo_por_dias) : numberToCommas($d->sueldo) ) . "\r\n" ;
+
+            //dd($d->sueldo_por_dias, $d->sueldo);
+
+            //dd($mod, $d->sueldo, floatval($d->sueldo));
+            $sueldo = ( $mod === 3 ? ('Sueldo por mes (' .  $d->frecuenciaservicio_id . ' veces por 4 semanas = ' . ($d->frecuenciaservicio_id * 4) . ' días): ') : 'Sueldo: ') . $divisa . ' ' . ( $mod === 3 ? numberToCommas($d->sueldo_por_dias) : numberToCommas(floatval($d->sueldo)) ) . "\r\n" ;
 
             if ($mod == 3){
 
@@ -438,7 +442,8 @@ function getCopyDetalles($d, $tipo = null, $actExt = null, $actidExt = null, $mo
                     $mount = $d->sueldo - 2000;
                 }
 
-                $sueldo1ermes = 'Sueldo 1er mes: ' . $divisa . ' ' . numberToCommas($mount) . ($detallesEmpleador == true ? ' (Ahorra ' . $divisa . ' ' . numberToCommas($d->sueldo - $mount) . ')' : null) . "\r\n" ;
+                //dd( floatval(str_replace(',', '', ($d->sueldo))) , $mount);
+                $sueldo1ermes = 'Sueldo 1er mes: ' . $divisa . ' ' . numberToCommas($mount) . ($detallesEmpleador == true ? ' (Ahorra ' . $divisa . ' ' . numberToCommas(floatval(str_replace(',', '', ($d->sueldo))) - $mount) . ')' : null) . "\r\n" ;
 
                 $sueldoenadelante = 'Sueldo 2do mes y en adelante: ' . $divisa . ' ' . numberToCommas($d->sueldo) . "\r\n" ;
 

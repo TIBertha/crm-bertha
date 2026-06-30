@@ -833,7 +833,8 @@ function getEncondedLink($link , $ruta){
 }
 
 function numberToCommas($num){
-     return number_format( $num, 2, ".", ",");
+    $num = str_replace(',', '', $num);
+     return number_format( (float)$num, 2, ".", ",");
 }
 
 function getText1($monto, $frecuencia, $divisa, $cfc){
