@@ -3,7 +3,7 @@
 use App\Models\Comprobante;
 use App\Models\DiaSemana;
 use App\Models\Pais;
-use App\Models\TipoDescanso;
+use App\Models\Departamento;
 use App\Models\Requerimiento;
 use App\Models\Contrato;
 use App\Models\TipoContrato;
@@ -712,7 +712,10 @@ function processDataPostulaciones($data){
             $n = explode(" ", $tra->nombres);
             $daysPast = $tra->certificado_antecedente_fecha ? getDaysPast($tra->certificado_antecedente_fecha) : null;
 
+            $depNac = Departamento::find($tra->usuario->departamentonacimiento_id);
+
             $result[]=[
+                'departamentoNacimiento'        => $tra->usuario->departamentonacimiento_id ? ($depNac->nombre . ' - ' . $depNac->pais->nombre) : null,
                 'diaspasadoscertificadoantecedente' => $daysPast,
                 'contact_name'                  => mb_convert_case(($n[0] . ' ' . $tra->apellidos), MB_CASE_UPPER, "UTF-8"),
                 'flag_emoji'                    => $tra->postulando_pais_id == 11 ? '🇨🇱' : '🇵🇪',
