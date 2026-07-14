@@ -618,6 +618,37 @@ export default function DatosRequerimientos({url, view, data, show, handleChange
                 </div>
             }
 
+            {(data.existModalidadHorario) &&
+                <>
+                    <div className={'form-group col-12 my-1'}>
+                        <hr className={'mt-3 mb-4'}/>
+                    </div>
+
+                    <div className={'mh-form form-group col-12 col-md-7 light-purple-bg'}>
+                        <div className={'row'}>
+                            <label className="col-12 col-md-3 col-form-label align-self-center">Modalidad seleccionada(web)</label>
+                            <div className="col-md-9 align-self-center">
+                                <div className={'row justify-content-around mx-0'}>
+                                    <div className={'col-auto semiModalidad'}>
+                                        {data.semiModalidad}
+                                    </div>
+                                    <div className={'col-auto modalidadHorario'}>
+                                        {data.modalidadHorario}
+                                    </div>
+                                    <div className={'col-auto modalidadHorarioSueldo'}>
+                                        {'S/ ' + data.modalidadHorarioSueldo}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className={'form-group col-12 my-1'}>
+                        <hr className={'mt-3 mb-4'}/>
+                    </div>
+                </>
+            }
+
             { (parseInt(data.cuarentena) !== 7) &&
                 <Horarios data={data} onChangeHorario={handleChangeHorarios} onChange={handleChange} view={view} />
             }

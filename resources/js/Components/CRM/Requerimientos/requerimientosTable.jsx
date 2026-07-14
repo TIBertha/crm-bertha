@@ -208,6 +208,8 @@ export default function RequerimientosTable({url, requerimientos, total, page, c
                                     <p>{data.actividad}</p>
                                     <p>{data.modalidad}</p>
                                     <p className={'font-bold'}>{data.alimentos}</p>
+                                    {data.modalidadhorario && <div className={'mh-div'}>{data.modalidadhorario}</div>}
+
                                 </Td>
 
                                 <Td className={'vertical-align-middle'}>

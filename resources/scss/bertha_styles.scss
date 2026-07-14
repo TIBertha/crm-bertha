@@ -20,6 +20,7 @@ $skblue_hover_bertha: #3880b8;
 $orange_bertha:#f57c31;
 $orange_hover_bertha: #cf692a;
 $gray_bertha:#f5f5f6;
+$gray_bertha2: #b5b5b5;
 
 $red_light_5:#fff1f1;
 $red_light_4:#fdc5c3;
@@ -1795,5 +1796,29 @@ input[type="checkbox"] {
         border: solid white;
         border-width: 0 2px 2px 0;
         transform: rotate(45deg);
+    }
+}
+
+.mh-div{
+    border-radius: 0.625rem;
+    background: $green_bertha;
+    color: white;
+    padding: 5px;
+}
+
+.mh-form{
+    border-radius: 0.625rem;
+    .semiModalidad{
+        color: $purple_bertha;
+        font-weight: bold;
+    }
+    .modalidadHorario{
+        color: black;
+    }
+    .modalidadHorarioSueldo{
+        background-color: $purple_bertha;
+        border-radius: 0.625rem;
+        color: white;
+        font-weight: bold;
     }
 }

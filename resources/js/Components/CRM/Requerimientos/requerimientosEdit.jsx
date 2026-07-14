@@ -134,6 +134,10 @@ class RequerimientosEdit extends Component{
                 {id: 2, value: "Almuerzo", isChecked: false},
                 {id: 3, value: "Cena", isChecked: false}
             ],
+            existModalidadHorario: false,
+            modalidadHorario: '',
+            modalidadHorarioSueldo: '',
+            semiModalidad: '',
 
             keyTab: 'tab1',
         };
@@ -816,6 +820,8 @@ class RequerimientosEdit extends Component{
 
                 this.setDivisaPais(r.data.paispedido_id, r.data.tipobeneficio_id);
 
+                const hasModalidad = !!r.data.modalidadhorario_id;
+
                 this.setState({
                     alimentos: [
                         {id: 1, value: "Desayuno", isChecked: Boolean(r.data.desayuno)},
@@ -894,6 +900,10 @@ class RequerimientosEdit extends Component{
                     access: r.accessCom,
                     montoAdelanto: r.data.monto_adelanto,
                     fechaPagoAdelanto:r.data.fecha_pago_adelanto ? moment(r.data.fecha_pago_adelanto,"YYYY-MM-DD").toDate() : '',
+                    existModalidadHorario: hasModalidad,
+                    modalidadHorario: hasModalidad ? r.data.modalidadhorario : '',
+                    modalidadHorarioSueldo: hasModalidad ? r.data.modalidadhorario_sueldo : '',
+                    semiModalidad: hasModalidad ? r.data.semimodalidad : '',
                 }, () => {
                     if(r.data.modalidad_id !== 3){
 

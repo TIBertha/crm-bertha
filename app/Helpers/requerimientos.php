@@ -998,6 +998,7 @@ function processDataRequerimiento($data){
             'horaentrevista' => $d->horaentrevista ? Carbon::parse($d->horaentrevista)->format('h:i A') : '',
             'estatusempleadorid' => $d->estatusempleadorid,
             'actividad' => $d->actividad,
+            'modalidadhorario'  => $d->modalidadhorario_id ? ($d->semimodalidad . ' ' .$d->modalidadhorario. ' S/ ' .$d->modalidadhorario_sueldo) : null,
             'modalidad' => $d->modalidad,
             'nacionalidad' => $d->nacionalidad,
             'distrito' => $d->distrito,
