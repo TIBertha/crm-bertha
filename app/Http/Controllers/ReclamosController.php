@@ -168,10 +168,10 @@ class ReclamosController extends Controller
             $seguimiento = convertirAdjuntoSeguimiento($data->seguimiento);
             $respuestaAdjuntos = convertirAdjuntosRespuesta($data->adjuntos_respuesta);
 
-            $fecha = $data->fecha;
+            $fecha = $data->fecha ? Carbon::parse($data->fecha) : null;
             $fechaHoy = Carbon::now();
-            $fecha30Dias = $data->fecha->addDays(30);
-            $diasDiferencia = $fechaHoy->diffInDays($fecha30Dias);
+            $fecha30Dias = $fecha->addDays(30);
+            $diasDiferencia = round($fechaHoy->diffInDays($fecha30Dias));
 
             return json_encode([
                 'code' => 200,

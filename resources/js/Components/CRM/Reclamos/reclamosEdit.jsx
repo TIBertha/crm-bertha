@@ -144,7 +144,7 @@ class ReclamosEdit extends Component {
                     nombreapoderado: r.data.nombre_apoderado,
                     tipobien: r.data.tipobien_id,
                     tiporeclamo: r.data.tiporeclamo_id,
-                    fechaincidente: moment(r.data.fecha_incidente, "YYYY-MM-DD HH:mm:ss").toDate(),
+                    fechaincidente: new Date(r.data.fecha_incidente.replace(" ", "T")), //r.data.fecha_incidente.toDate(),
                     lugarincidente: r.data.lugar_incidente,
                     detalle: r.data.detalle,
                     pedido: r.data.pedido,
