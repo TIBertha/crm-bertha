@@ -274,60 +274,23 @@ function getAntecedentesTrabajadorColocado($contrato){
 
         $trabajador = Trabajador::find($contrato->trabajador_id);
 
-        if ($trabajador->antecedente_pdf){
+        if ($trabajador->certificado_antecedente_pdf){
+
+            $daysPast = $trabajador->certificado_antecedente_fecha ? getDaysPast($trabajador->certificado_antecedente_fecha) : null;
 
             $result = [
                 'iconAntecedente'       => 'fas fa-portrait text-success',
                 'msjAntecedente'        => 'Tiene certificado único laboral',
+                'diaspasadoscertificadoantecedente' => $daysPast,
                 'estatusAntecedente'    => 10,
             ];
 
         }else{
-
-            $antecedente = Antecedente::where('trabajador_id', $contrato->trabajador_id)->orderBy('creado', 'DESC')->first();
-
-
-            if ($antecedente){
-                $estatusAntecedente = $antecedente->estatusantecedente_id;
-                $iconAntecedente = null;
-                $msjAntecedente = null;
-
-                if ($estatusAntecedente == 1){
-
-                    $iconAntecedente = 'fas fa-user-clock text-warning';
-                    $msjAntecedente = 'Los antecedentes están pendientes a recibirse.';
-
-                }else if ($estatusAntecedente == 3){
-                    $formatFechaAntecedente = date('d/m/Y', strtotime ($antecedente->fecha_entrega));
-                    $fechaAntecedente = date('Y-m-d', strtotime ($antecedente->fecha_entrega));
-                    $fechaHoy = Carbon::now()->format('Y-m-d');
-
-                    $diff = date_diff(date_create_from_format('Y-m-d', $fechaAntecedente), date_create_from_format('Y-m-d', $fechaHoy));
-
-                    $diasPasados = $diff->days;
-
-                    if($diasPasados <= 90){
-                        $iconAntecedente = 'fas fa-user-check text-success';
-                        $msjAntecedente = 'Antecedentes con emitidos el ' . $formatFechaAntecedente . ' (' .  $diasPasados . ($diasPasados == 1 ? ' día)' : ' días)');
-                    }else{
-                        $iconAntecedente = 'fas fa-user-minus text-secondary';
-                        $msjAntecedente = 'Antecedentes con antiguedad mayor a 90 días, se recomienda solicitar nuevos';
-                    }
-
-                }
-
-                $result = [
-                    'iconAntecedente'       => $iconAntecedente,
-                    'msjAntecedente'        => $msjAntecedente,
-                    'estatusAntecedente'    => $estatusAntecedente
-                ];
-            }else{
-                $result = [
-                    'iconAntecedente'       => 'fas fa-user-times text-secondary',
-                    'msjAntecedente'        => 'No cuenta con antecedentes.',
-                    'estatusAntecedente'    => null
-                ];
-            }
+            $result = [
+                'iconAntecedente'       => 'fas fa-user-times text-secondary',
+                'msjAntecedente'        => 'No cuenta con antecedentes.',
+                'estatusAntecedente'    => null
+            ];
 
         }
 

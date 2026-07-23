@@ -94,31 +94,63 @@ export default function ContratosTable({url, setVerifIngreso, contratos, total, 
             tag.push(<a onClick={(e) => finalizar(e, data.id)} ><i data-toggle="tooltip" data-placement="top" title="Culminar contrato" className={'fas fa-trash-alt icon-action-sm px-2'}></i></a>);
         }
 
+        let antecedentesprops = { iconColor: "", tooltip: "", message: "" };
+
+        if (data.data_trabajador.antecedentes_pdf) {
+            if (
+                data.antecedentes.diaspasadoscertificadoantecedente &&
+                data.antecedentes.diaspasadoscertificadoantecedente >= 0
+            ) {
+                if (data.antecedentes.diaspasadoscertificadoantecedente === 0) {
+                    antecedentesprops.iconColor = "#22af47";
+                    antecedentesprops.iconColorOnCopy = "#146c2f";
+                    antecedentesprops.message =
+                        "Vigencia restante certificado único laboral: " +
+                        (90 - data.antecedentes.diaspasadoscertificadoantecedente) +
+                        " dia(s)";
+                } else if (
+                    parseInt(data.antecedentes.diaspasadoscertificadoantecedente) >= 0 &&
+                    parseInt(data.antecedentes.diaspasadoscertificadoantecedente) <= 84
+                ) {
+                    antecedentesprops.iconColor = "#22af47";
+                    antecedentesprops.iconColorOnCopy = "#146c2f";
+                    antecedentesprops.message =
+                        "Vigencia restante certificado único laboral: " +
+                        (90 - data.antecedentes.diaspasadoscertificadoantecedente) +
+                        " dia(s)";
+                } else if (
+                    data.antecedentes.diaspasadoscertificadoantecedente >= 85 &&
+                    data.antecedentes.diaspasadoscertificadoantecedente <= 89
+                ) {
+                    antecedentesprops.iconColor = "#ffbf36";
+                    antecedentesprops.iconColorOnCopy = "#936d1f";
+                    antecedentesprops.message =
+                        "Vigencia restante certificado único laboral : " +
+                        (90 - data.antecedentes.diaspasadoscertificadoantecedente) +
+                        " dia(s)";
+                } else if (data.antecedentes.diaspasadoscertificadoantecedente >= 90) {
+                    antecedentesprops.iconColor = "#ff0000";
+                    antecedentesprops.iconColorOnCopy = "#b60404";
+                    antecedentesprops.message =
+                        "Certificado único laboral VIGENCIA VENCIDA";
+                }
+            }
+        } else {
+            if (data.data_trabajador.tiene_cuenta !== 0) {
+                antecedentesprops.iconColor = "#ffbf36";
+                antecedentesprops.message =
+                    "Tiene una cuenta registrada. Solicitar su certificado único laboral";
+            } else {
+                antecedentesprops.iconColor = "#606060";
+                antecedentesprops.message =
+                    "No cuenta con certificado único laboral";
+            }
+        }
+
+
         tag.push(
             <>
-                {data.data_trabajador.antecedentes_pdf ?
-                    <>
-                        {data.data_trabajador.numeroDocumento ?
-                            <i data-toggle="tooltip" data-placement="top" title={'Tiene certificado único laboral'} className="fas fa-portrait text-success px-2"></i>
-                            :
-                            <i data-toggle="tooltip" data-placement="top" title={'No cuenta con certificado único laboral'} className="fas fa-portrait text-secondary px-2"></i>
-                        }
-                    </>
-                    :
-                    <>
-                        {data.data_trabajador.tiene_cuenta !== 0 ?
-                            <i data-toggle="tooltip" data-placement="top" title={(firstNamePost(data.data_trabajador.nombres) + ' tiene una cuenta registrada. Solicitar su certificado único laboral')} className="fas fa-portrait text-warning px-2"></i>
-                            :
-                            <>
-                                {[2].includes(data.data_trabajador.certificado_antecedente) ?
-                                    <i data-toggle="tooltip" data-placement="top" title={'Tiene reporte Mak Consulting'} className="fas fa-file-user text-success px-2"></i>
-                                    :
-                                    <i data-toggle="tooltip" data-placement="top" title={'No cuenta con antecedentes'} className="fas fa-portrait text-secondary px-2"></i>
-                                }
-                            </>
-                        }
-                    </>
-                }
+                <i data-toggle="tooltip" data-placement="top" title={antecedentesprops.message} className={'fas fa-portrait px-2 '} style={{color:  antecedentesprops.iconColor}}></i>
             </>
         )
 
