@@ -940,7 +940,7 @@ function processDataRequerimiento($data){
             $divisa = 'S/ ';
 
             $nem = \App\Models\Modalidad::find($d->modalidadid);
-            $newModalidad = $nem->nombre;
+            $newModalidad = $nem ? $nem->nombre : null;
 
             $dist = \App\Models\Views\DistritoView::find($d->distrito_domicilioid);
 
