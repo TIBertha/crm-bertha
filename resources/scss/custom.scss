@@ -1083,9 +1083,15 @@ label {
 }
 
 .dot-recording{
-    border-radius: 1rem;
     background-color: #efefef;
     padding: 0.5rem .75rem;
+
+    border-radius: 1rem;
+
+    @include media-breakpoint-down(md){ /*--Less than 768px---*/
+        border-radius: 50%;
+        
+    }
 
     .dot-title{
         color: $purple_bertha;
@@ -1095,11 +1101,12 @@ label {
 
 .green-dot {
     display: inline-flex;
-    width: 15px;
-    height: 15px;
-    background-color: #3fa73c; /* rojo */
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
+    background-color: #3fa73c; /* rojo */
     animation: blink 1s infinite ease-in-out;
+
 }
 
 @keyframes blink {
