@@ -149,8 +149,11 @@ export default function Navbar({ url, path, profilename, profilepic, userid}) {
                             <img src={imgLogo} className="menu-logo" />
                         </span>
                     </div>
-                    <div className="col-auto p-0">
-                        <span className="red-circle-recording"></span>
+                    <div className="col-auto p-0 align-self-center">
+                        <div className={'dot-recording'}>
+                            <span className="green-dot"></span>
+                            {display === 'desktop' && <span className={'ms-2 dot-title'}>Grabando</span>}
+                        </div>
                     </div>
                     <div className="col-auto p-0">
                         <SessionMenu
