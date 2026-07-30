@@ -147,7 +147,6 @@ export default function ContratosTable({url, setVerifIngreso, contratos, total, 
             }
         }
 
-
         tag.push(
             <>
                 <i data-toggle="tooltip" data-placement="top" title={antecedentesprops.message} className={'fas fa-portrait px-2 '} style={{color:  antecedentesprops.iconColor}}></i>

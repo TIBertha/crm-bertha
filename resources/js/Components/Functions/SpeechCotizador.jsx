@@ -100,7 +100,7 @@ export function getSpeechCotizador(actividadID, modalidadID, sueldoIngresado, fr
 
             '*Después* del primer mes, el precio del reemplazo es de *' + ( slRest ) + ' ' + divisa +'*. Le enviaremos un nuevo trabajador que le pagará ' + ((sl  * frecuencia * 4)) + ' ' + divisa +' y tendrá *un nuevo ahorro de ' + ( slRest ) + ' ' + divisa +'*.' + "\r\n" + "\r\n" +
 
-            '- Pago por beneficios laborales (gratificaciones, CTS y vacaciones): No existe' + "\r\n" +  "\r\n" +
+            //'- Pago por beneficios laborales (gratificaciones, CTS y vacaciones): No existe' + "\r\n" +  "\r\n" +
 
             '*Para atenderle*, solicitamos un adelanto de *100 ' + divisa +'* que serán descontados de la comisión. Le enviaremos los currículos de *2* trabajadores, *sin antecedentes* policiales, judiciales y penales, con *buen carácter* y con *experiencia* laboral. Las *entrevistas* son por *videollamada* o llamada. Luego de escoger, abonará el restante de la comisión (400 ' + divisa +'). Los precios incluyen IGV.' + "\r\n" + "\r\n" +
 

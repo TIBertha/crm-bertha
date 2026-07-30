@@ -923,6 +923,7 @@ function processDataRequerimiento($data){
         $newTerms1711 = isNewTerms1711($d->creado);
         $contract = validateNewContrato($d, $d->paispedido_id, $contratosGroup, $tiposcontratosAll);
         $dataAnuncio = [];
+        $copyAnuncioAI = null;
 
         // Divisa
         if ($d->paispedido_id == 54) {
@@ -953,14 +954,48 @@ function processDataRequerimiento($data){
                 'sueldo'                => in_array($d->modalidadid, [1,2,4,5]) ? ($divisa . number_format($d->sueldo)) : null,
                 'sueldopordia'          => in_array($d->modalidadid, [3]) ? ($divisa . $d->valor_dia_frecuencia . ' x día') : null,
                 'frecuencia'            => in_array($d->modalidadid, [3]) ? ($d->frecuenciaservicio_id . ' ve' . ($d->frecuenciaservicio_id == 1 ? 'z': 'ces') .' x semana') : null,
+
                 'horarioPD'             => in_array($d->modalidadid, [3]) ? setHorarioPorDias($d->horarios) : null,
                 'horarioCF'             => in_array($d->modalidadid, [2,4,5]) ? setHorarioCamaAfuera($d->horarios) : null,
                 'horarioCD'             => in_array($d->modalidadid, [1]) ? setHorarioCamaAdentro($d) : null,
+
                 'distrito'              => $d->distrito_domicilioid ? mb_convert_case( $dist->distritostres, MB_CASE_TITLE, "UTF-8") : null,
                 'domicilioid'           => $d->domicilioid,
                 'referencia'            => $d->referencia ? mb_convert_case( $d->referencia, MB_CASE_TITLE, "UTF-8") : null,
                 'referenciacanvas'      => $d->referenciacanvas ? mb_convert_case( $d->referenciacanvas, MB_CASE_TITLE, "UTF-8") : null,
             ];
+
+
+            $newFrecuenciaCopy = $dataAnuncio['frecuencia'];
+            $newSueldoCopy = $dataAnuncio['sueldo'];
+            $newHorarioCopy = '';
+
+            if($dataAnuncio['modalidadid'] == 1){
+                $h = $dataAnuncio['horarioCD'];
+                $newHorarioCopy = 'Salida: ' . mb_convert_case( $h['diasalida'], MB_CASE_TITLE, "UTF-8")  . ' ' . $h['horasalida'] .  "\r\n" . 'Ingreso: ' . mb_convert_case( $h['diaingreso'], MB_CASE_TITLE, "UTF-8") . ' ' . $h['horaingreso'] .  "\r\n";
+            }else if($dataAnuncio['modalidadid'] == 2){
+                foreach ($dataAnuncio['horarioCF'] as $h) {
+                    $newHorarioCopy .= $h['dia'] . ' de ' . $h['ingreso'] . ' a  ' . $h['salida'] . "\r\n";
+                }
+                $newHorarioCopy = "\r\n" . trim($newHorarioCopy) . "\r\n";
+            }else if($dataAnuncio['modalidadid'] == 3){
+                foreach ($dataAnuncio['horarioPD'] as $h) {
+                    $newHorarioCopy .= $h['dia'] . ' de ' . $h['ingreso'] . ' a  ' . $h['salida'] . "\r\n";
+                }
+                $newHorarioCopy =  "\r\n" . trim($newHorarioCopy) . "\r\n";
+                $newSueldoCopy = $dataAnuncio['sueldopordia'];
+            }
+
+            $copyAnuncioAI =
+                'Generame un banner con los siguientes datos: ' . "\r\n" .
+                'Fecha: ' . $dataAnuncio['fechaentrevista'] . "\r\n" .
+                'Actividad: ' . $dataAnuncio['actividad'] . "\r\n" .
+                ($dataAnuncio['modalidadid'] == 3  ? 'Frecuencia: ' . $newFrecuenciaCopy : 'Modalidad: ' . $dataAnuncio['modalidad']) . "\r\n".
+                'Ubicación: ' . $dataAnuncio['distrito'] . "\r\n" .
+                'Referencia: ' . $dataAnuncio['referencia'] . "\r\n" .
+                'Horario: ' . $newHorarioCopy .
+                'Sueldo: ' . $newSueldoCopy . "\r\n" ;
+
         }
 
         $textoAlimentos = collect([
@@ -980,6 +1015,7 @@ function processDataRequerimiento($data){
 
         $result[] = [
 
+            'copy_anuncio_ai' => $copyAnuncioAI,
             'data_anuncio' => $dataAnuncio,
 
             'postulados' => $postulados[$d->id]->total ?? 0,
