@@ -16,7 +16,8 @@ export default function Cotizador({url}) {
     const [sueldo, setSueldo] = useState('');
     const [frecuencia, setFrecuencia] = useState('');
     const [speech, setSpeech] = useState('');
-    const [textoCopiar, setTextoCopiar] = useState('Copiar');
+    const [speech2, setSpeech2] = useState('');
+
     let conf = {title: 'Cotizador de comisión', icon: 'fas fa-comments-dollar'};
     let responsive = isResponsive();
 
@@ -58,7 +59,8 @@ export default function Cotizador({url}) {
     }, [sueldo, modalidad, frecuencia, garantia, actividad, country]);
 
     function getData(){
-        setSpeech(getSpeechCotizador(actividad, modalidad, sueldo, frecuencia, garantia, country));
+        setSpeech(getSpeechCotizador(actividad, modalidad, sueldo, frecuencia, garantia, country, 'type1'));
+        setSpeech2(getSpeechCotizador(actividad, modalidad, sueldo, frecuencia, garantia, country, 'type2'));
     }
 
     let showButton = false;
@@ -92,19 +94,6 @@ export default function Cotizador({url}) {
                     </ModalTitle>
                 </ModalHeader>
                 <ModalBody className="py-3">
-
-                    <div className={'my-3'}>
-                        <div className={'row mx-0 switch-cotizador'}>
-                            <div className={'col-6 py-1' + (country === 'pe' ? ' selected' : '') } onClick={() => setCountry('pe')}>
-                                <span className={'flag-icon flag-icon-pe flag-icon-squared flag-style'}></span>
-                                <span className={'ms-2'}>Perú</span>
-                            </div>
-                            <div className={'col-6 py-1' + (country === 'mx' ? ' selected' : '') } onClick={() => setCountry('mx')}>
-                                <span className={'flag-icon flag-icon-mx flag-icon-squared flag-style'}></span>
-                                <span className={'ms-2'}>México</span>
-                            </div>
-                        </div>
-                    </div>
 
                     <section className="row justify-content-center">
 
@@ -192,9 +181,15 @@ export default function Cotizador({url}) {
                         }
 
                         { (showButton === true) &&
-                            <div className="form-group col-12 mb-2">
-                                <NewCopyButton copyText={speech} successMsj={'Speech copiado'} btnText={textoCopiar} btnColor={'purple'} />
-                            </div>
+                            <>
+                                <div className="form-group col-12 mb-2">
+                                    <NewCopyButton copyText={speech} successMsj={'Speech copiado'} btnText={'Regular'} btnColor={'purple'} />
+                                </div>
+
+                                <div className="form-group col-12 mb-2">
+                                    <NewCopyButton copyText={speech2} successMsj={'Speech copiado'} btnText={'Designación'} btnColor={'pink'} />
+                                </div>
+                            </>
                         }
 
                     </section>

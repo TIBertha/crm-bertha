@@ -628,7 +628,7 @@ class RequerimientosEdit extends Component{
             });
     }
 
-    handleChangeHorarios(e, id, campo){
+    /*handleChangeHorarios(e, id, campo){
 
         const newHorarios = this.state.horarios.map((item) => {
 
@@ -667,6 +667,37 @@ class RequerimientosEdit extends Component{
 
         this.setState({horarios: newHorarios});
 
+    }*/
+
+    handleChangeHorarios(e, id, campo) {
+
+        const value = campo === 'isDescanso'
+            ? e.target.checked
+            : e ? moment(e).format() : e;
+
+        const newHorarios = this.state.horarios.map(item => {
+
+            // 1. Actualizamos el día que se editó
+            if (item.id === id) {
+                return {
+                    ...item,
+                    [campo]: value,
+                };
+            }
+
+            // 2. Si el día editado es Lunes (id = 1), replicamos a todos los demás
+            if (id === 1 && ['horaingreso', 'horasalida'].includes(campo)) {
+                return {
+                    ...item,
+                    [campo]: value,
+                };
+            }
+
+            // 3. Los demás días quedan igual
+            return item;
+        });
+
+        this.setState({ horarios: newHorarios });
     }
 
     calculoSueldoPorDias(valordia, handle){

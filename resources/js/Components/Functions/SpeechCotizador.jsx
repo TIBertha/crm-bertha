@@ -3,7 +3,7 @@ import axios from "axios";
 import {getActividadName, getModalidadName, findFichaByActividadCamaAdentro, findFichaByActividadCamaAfuera } from "../Helpers/requerimientos.js"
 import {toPesos3} from "./General.jsx"
 
-export function getSpeechCotizador(actividadID, modalidadID, sueldoIngresado, frecuencia, garantia, pais) {
+export function getSpeechCotizador(actividadID, modalidadID, sueldoIngresado, frecuencia, garantia, pais, tipoCotizacion) {
 
     let result = '';
     let actividad = getActividadName(actividadID, pais);
@@ -23,7 +23,8 @@ export function getSpeechCotizador(actividadID, modalidadID, sueldoIngresado, fr
 
         let nuevSueldo = parseInt(sueldoIngresado.replace(',', ''));
 
-        let st = nuevSueldo >= 1400 ? (nuevSueldo - 400) : 930;
+        let st = nuevSueldo >= 1400 ? (nuevSueldo - ( tipoCotizacion = 'type1' ?  400 : 500)) : 930;
+
         let sl = nuevSueldo - 20;
         let slRest = ((nuevSueldo * frecuencia * 4) - (sl  * frecuencia * 4));
 
@@ -60,30 +61,56 @@ export function getSpeechCotizador(actividadID, modalidadID, sueldoIngresado, fr
             '- Actividad: ' + actividad + "\r\n" +
             '- Modalidad: ' + modalidad + "\r\n" +
             '- Sueldo ofrecido: ' + sueldo + ' ' + divisa + "\r\n" +
-            '- Pago a agencia: Le enviamos 3 tipos de comisiones para que escoja la de su preferencia:' + "\r\n" +  "\r\n" +
-            '*Comisión 1*: ' + '*' + com1 + ' ' + divisa +' y ahorra '+ ( nuevSueldo === 1350 ? 350 : (nuevSueldo - st) ) + ' ' + divisa + '*. Bertha cobra por la selección de personal y por brindarle los reemplazos de personal que usted necesite hasta por *3 meses*.' + "\r\n" +  "\r\n" +
+
+            '- Pago a agencia: ' +
+            (
+                tipoCotizacion === 'type1' ?
+                    (' Le enviamos 3 tipos de comisiones para que escoja la de su preferencia:')
+                    :
+                    ('500 soles y ahorra ' + ( nuevSueldo === 1350 ? 350 : (nuevSueldo - st) ) + '. Bertha cobra por la selección de personal y por brindarle los reemplazos de personal que usted necesite hasta por 1 mes. Y le daremos boleta o factura por su abono.')
+            )
+
+            + "\r\n" +  "\r\n" +
+
+
+            (tipoCotizacion === 'type2' ? '' : ('*Comisión 1*: ' + '*' + com1 + ' ' + divisa +' y ahorra '+ ( nuevSueldo === 1350 ? 350 : (nuevSueldo - st) ) + ' ' + divisa + '*. Bertha cobra por la selección de personal y por brindarle los reemplazos de personal que usted necesite hasta por *3 meses*.' + "\r\n" +  "\r\n" )) +
 
             'Usted como empleador puede ofrecer un sueldo de prueba *el primer mes*, lo mínimo es ' + ( nuevSueldo === 1350 ? '1,000' : toPesos3(st)) + ' ' + divisa +'. Así usted tiene un *ahorro de ' + ( nuevSueldo === 1350 ? 350 : (nuevSueldo - st) ) + ' ' + divisa +'* (' + (sueldoIngresado) + ' ' + divisa +' - ' + (nuevSueldo === 1350 ? '1,000' :  toPesos3(st)) + ' ' + divisa +'). El segundo mes, usted le aumenta a ' + sueldo + ' ' + divisa +'.' + "\r\n" + "\r\n" +
 
             'El período de prueba (*primer mes*) le servirá para evaluar al trabajador; si desea despedirle durante este tiempo o si renuncia, le daremos el *reemplazo gratuito* y le pagará sus días laborados de acuerdo a su sueldo de prueba (' + (nuevSueldo === 1350 ? 1000 : toPesos3(st) ) + ' ' + divisa +').' + "\r\n" + "\r\n" +
 
-            '*Después* del primer mes, el precio del reemplazo es de *' + ( nuevSueldo === 1350 ? 350 : (nuevSueldo - st) ) + ' ' + divisa +'*. Le enviaremos un nuevo trabajador que le pagará ' + ( nuevSueldo === 1350 ? toPesos3(1000) : toPesos3(st) ) + ' ' + divisa +' y tendrá *un nuevo ahorro de ' + ( nuevSueldo === 1350 ? 350 :  (nuevSueldo - st) ) + ' ' + divisa +'*. ' + "\r\n" + "\r\n" +
+            (tipoCotizacion === 'type2' ? '' : ('*Después* del primer mes, el precio del reemplazo es de *' + ( nuevSueldo === 1350 ? 350 : (nuevSueldo - st) ) + ' ' + divisa +'*. Le enviaremos un nuevo trabajador que le pagará ' + ( nuevSueldo === 1350 ? toPesos3(1000) : toPesos3(st) ) + ' ' + divisa +' y tendrá *un nuevo ahorro de ' + ( nuevSueldo === 1350 ? 350 :  (nuevSueldo - st) ) + ' ' + divisa +'*. ' + "\r\n" + "\r\n")) +
 
-            '*Para atenderle*, solicitamos un adelanto de *100 ' + divisa +'* que serán descontados de la comisión. Le enviaremos los currículos de *2* trabajadores, *sin antecedentes* policiales, judiciales y penales, con *buen carácter* y con *experiencia* laboral. Las *entrevistas* son por *videollamada* o llamada. Luego de escoger, abonará el restante de la comisión (600 ' + divisa +'). Los precios incluyen IGV.' + "\r\n" + "\r\n" +
+            /**/
+            (
+                tipoCotizacion === 'type1' ?
+                    ('*Para atenderle*, solicitamos un adelanto de *100 ' + divisa +'* que serán descontados de la comisión. Le enviaremos los currículos de *2* trabajadores, *sin antecedentes* policiales, judiciales y penales, con *buen carácter* y con *experiencia* laboral. Las *entrevistas* son por *videollamada* o llamada. Luego de escoger, abonará el restante de la comisión (600 ' + divisa +'). Los precios incluyen IGV.')
+                    :
+                    ('Para atenderle, solicitamos el pago de la comisión por adelantado. Le enviaremos *una* trabajadora *sin antecedentes* policiales, judiciales y penales, con *buen carácter* y con *experiencia* laboral. No hay entrevistas o elección de currículos sino que la agencia designa el personal lo envía al domicilio y minutos antes de su llegada envía los documentos y datos de la empleada. Los precios incluyen IGV.')
 
-            'Bertha realiza la selección en base a documentos como los reportes de antecedentes, *si el empleador rechaza* a las postulantes seleccionadas, podrá abonar *otro adelanto de 100 ' + divisa +'* para que Bertha haga un nuevo proceso.' + "\r\n" + "\r\n" +
+            )
+            + "\r\n" + "\r\n" +
+
+            /**/
+            (
+                tipoCotizacion === 'type1' ?
+                    ('Bertha realiza la selección en base a documentos como los reportes de antecedentes, *si el empleador rechaza* a las postulantes seleccionadas, podrá abonar *otro adelanto de 100 ' + divisa +'* para que Bertha haga un nuevo proceso.')
+                    :
+                    ('Bertha realiza la selección en base a documentos como los reportes de antecedentes, *si el empleador rechaza* a las postulantes seleccionadas, podrá abonar otro adicional de *100 soles* para que Bertha haga un nuevo proceso.')
+            )
+            + "\r\n" + "\r\n" +
 
             'Para que usted tenga una idea de nuestros currículos, le enviamos un ejemplo *(solo referencial)* ' + (modalidadID === 1 ? findFichaByActividadCamaAdentro(actividadID) : findFichaByActividadCamaAfuera(actividadID)) + "\r\n" + "\r\n" +
 
             'Si usted desea conocer más de nuestro servicio, puede ingresar a www.holabertha.com/es-' + pais + '/condiciones o si tiene alguna duda, estamos para ayudarle.' + "\r\n" + "\r\n" +
 
-            'También podemos ayudarle con estos *2 otros tipos de comisiones*:' + "\r\n" + "\r\n" +
+            (tipoCotizacion === 'type2' ? '' : ('También podemos ayudarle con estos *2 otros tipos de comisiones*:' + "\r\n" + "\r\n")) +
 
-            '*Comisión 2*: ' + com2 + ' ' + divisa + ' (100 ' + divisa + ' adelantado + ' + (com2 - 100) + ' *luego de entrevistas*), usted *ahorra ' + ( nuevSueldo === 1350 ? 350 : (nuevSueldo - st) ) + '* el primer mes de la trabajadora. Garantía de reemplazos de *1 mes*.' + "\r\n" + "\r\n" +
+            (tipoCotizacion === 'type2' ? '' : ('*Comisión 2*: ' + com2 + ' ' + divisa + ' (100 ' + divisa + ' adelantado + ' + (com2 - 100) + ' *luego de entrevistas*), usted *ahorra ' + ( nuevSueldo === 1350 ? 350 : (nuevSueldo - st) ) + '* el primer mes de la trabajadora. Garantía de reemplazos de *1 mes*.' + "\r\n" + "\r\n")) +
 
-            '*Comisión 3 (Precio más bajo)*: *' + com3 + ' ' + divisa + ' (por adelantado)*. Luego de enviados los currículos, usted escoge viendo fotos, videos, documentos del currículo. *No hay entrevistas laborales*. Usted *ahorra ' + ( nuevSueldo === 1350 ? 350 : (nuevSueldo - st) ) + '* el primer mes de la trabajadora. Garantía de reemplazos de *1 mes*.' + "\r\n" + "\r\n" +
+            (tipoCotizacion === 'type2' ? '' : ('*Comisión 3 (Precio más bajo)*: *' + com3 + ' ' + divisa + ' (por adelantado)*. Luego de enviados los currículos, usted escoge viendo fotos, videos, documentos del currículo. *No hay entrevistas laborales*. Usted *ahorra ' + ( nuevSueldo === 1350 ? 350 : (nuevSueldo - st) ) + '* el primer mes de la trabajadora. Garantía de reemplazos de *1 mes*.' + "\r\n" + "\r\n")) +
 
-            'Usted puede escoger la comisión 1, 2 o 3 (menor precio) y agendaremos su atención por favor.'
+            (tipoCotizacion === 'type2' ? '' : ('Usted puede escoger la comisión 1, 2 o 3 (menor precio) y agendaremos su atención por favor.'))
         ;
 
         speechPH =
@@ -91,32 +118,50 @@ export function getSpeechCotizador(actividadID, modalidadID, sueldoIngresado, fr
             '- Actividad: ' + actividad + "\r\n" +
             '- Modalidad: ' + modalidad + "\r\n" +
             '- Sueldo ofrecido: ' + sueldo + ' al día, ' + ((nuevSueldo * frecuencia * 4)) + ' al mes (' + frecuencia + ' veces a la semana x 4 semanas = 1 mes). ' + (frecuencia === 1234 ? 'Puede escoger Martes y jueves, Martes y sábado o Jueves y sábado.' : '') + "\r\n" +
-            '- Pago a agencia: Le enviamos 3 tipos de comisiones para que escoja la de su preferencia:' + "\r\n" +  "\r\n" +
-            '*Comisión 1*: ' + '*500 ' + divisa + ' y ahorra ' + ( slRest ) + ' ' + divisa +'*. Bertha cobra por la selección de personal y por brindarle los reemplazos de personal que usted necesite hasta por *3 meses*.' + "\r\n" + "\r\n" +
+            '- Pago a agencia: ' +
+            (
+                tipoCotizacion === 'type1' ?
+                ('Le enviamos 3 tipos de comisiones para que escoja la de su preferencia:' )
+            :
+                ('Pago a agencia: 500 soles y ahorra ' + ( slRest ) + '. Bertha cobra por la selección de personal y por brindarle los reemplazos de personal que usted necesite hasta por 1 mes. Y le daremos boleta o factura por su abono.')
+            )
+            + "\r\n" +  "\r\n" +
+
+            (tipoCotizacion === 'type2' ? '' : ('*Comisión 1*: ' + '*500 ' + divisa + ' y ahorra ' + ( slRest ) + ' ' + divisa +'*. Bertha cobra por la selección de personal y por brindarle los reemplazos de personal que usted necesite hasta por *3 meses*.' + "\r\n" + "\r\n")) +
 
             'Usted como empleador puede ofrecer un sueldo de prueba *el primer mes*, lo mínimo es ' + (toPesos3(sl  * frecuencia * 4)) + ' ' + divisa +'. Así usted tiene un *ahorro de ' + ( slRest ) + ' ' + divisa +'* (' + ( (nuevSueldo * frecuencia * 4) ) + ' - ' + ( toPesos3(sl  * frecuencia * 4) ) + ' ' + divisa +'). El segundo mes, usted le aumenta a ' + (nuevSueldo * frecuencia * 4) + ' ' + divisa +'.' + "\r\n" + "\r\n" +
 
             'El período de prueba (*primer mes*) le servirá para evaluar al trabajador; si desea despedirle durante este tiempo o si renuncia, le daremos el *reemplazo gratuito* y le pagará sus días laborados de acuerdo a su sueldo de prueba (' + ((sl  * frecuencia * 4)) + ' ' + divisa +').' + "\r\n" + "\r\n" +
 
-            '*Después* del primer mes, el precio del reemplazo es de *' + ( slRest ) + ' ' + divisa +'*. Le enviaremos un nuevo trabajador que le pagará ' + ((sl  * frecuencia * 4)) + ' ' + divisa +' y tendrá *un nuevo ahorro de ' + ( slRest ) + ' ' + divisa +'*.' + "\r\n" + "\r\n" +
+            (tipoCotizacion === 'type2' ? '' : ('*Después* del primer mes, el precio del reemplazo es de *' + ( slRest ) + ' ' + divisa +'*. Le enviaremos un nuevo trabajador que le pagará ' + ((sl  * frecuencia * 4)) + ' ' + divisa +' y tendrá *un nuevo ahorro de ' + ( slRest ) + ' ' + divisa +'*.' + "\r\n" + "\r\n")) +
 
             //'- Pago por beneficios laborales (gratificaciones, CTS y vacaciones): No existe' + "\r\n" +  "\r\n" +
 
-            '*Para atenderle*, solicitamos un adelanto de *100 ' + divisa +'* que serán descontados de la comisión. Le enviaremos los currículos de *2* trabajadores, *sin antecedentes* policiales, judiciales y penales, con *buen carácter* y con *experiencia* laboral. Las *entrevistas* son por *videollamada* o llamada. Luego de escoger, abonará el restante de la comisión (400 ' + divisa +'). Los precios incluyen IGV.' + "\r\n" + "\r\n" +
+            (tipoCotizacion === 'type1' ?
+                ('*Para atenderle*, solicitamos un adelanto de *100 ' + divisa +'* que serán descontados de la comisión. Le enviaremos los currículos de *2* trabajadores, *sin antecedentes* policiales, judiciales y penales, con *buen carácter* y con *experiencia* laboral. Las *entrevistas* son por *videollamada* o llamada. Luego de escoger, abonará el restante de la comisión (400 ' + divisa +'). Los precios incluyen IGV.')
+            :
+                ('Bertha realiza la selección en base a documentos como los reportes de antecedentes, *si el empleador rechaza* a las postulantes seleccionadas, podrá abonar otro adicional de *100 soles* para que Bertha haga un nuevo proceso.'))
 
-            'Bertha realiza la selección en base a documentos como los reportes de antecedentes, *si el empleador rechaza* a las postulantes seleccionadas, podrá abonar *otro adelanto de 100 ' + divisa +'* para que Bertha haga un nuevo proceso.' + "\r\n" + "\r\n" +
+            + "\r\n" + "\r\n" +
+
+            (tipoCotizacion === 'type1' ?
+                ('Bertha realiza la selección en base a documentos como los reportes de antecedentes, *si el empleador rechaza* a las postulantes seleccionadas, podrá abonar *otro adelanto de 100 ' + divisa +'* para que Bertha haga un nuevo proceso.')
+                :
+                ('Para atenderle, solicitamos el pago de la comisión por adelantado. Le enviaremos *una* trabajadora *sin antecedentes* policiales, judiciales y penales, con *buen carácter* y con *experiencia* laboral. No hay entrevistas o elección de currículos sino que la agencia designa el personal lo envía al domicilio y minutos antes de su llegada envía los documentos y datos de la empleada. Los precios incluyen IGV.'))
+
+            + "\r\n" + "\r\n" +
 
             'Para que usted tenga una idea de nuestros currículos, le enviamos un ejemplo *(solo referencial)* ' + (findFichaByActividadCamaAfuera(actividadID)) + "\r\n" + "\r\n" +
 
             'Si usted desea conocer más de nuestro servicio, puede ingresar a www.holabertha.com/es-' + pais + '/condiciones o si tiene alguna duda, estamos para ayudarle.' + "\r\n" + "\r\n" +
 
-            'También podemos ayudarle con estos *2 otros tipos de comisiones*:' + "\r\n" + "\r\n" +
+            (tipoCotizacion === 'type2' ? '' : ('También podemos ayudarle con estos *2 otros tipos de comisiones*:' + "\r\n" + "\r\n")) +
 
-            '*Comisión 2*: ' + com2 + ' ' + divisa + ' (100 ' + divisa + ' adelantado + ' + (com2 - 100) + ' *luego de entrevistas*), usted *ahorra ' + ( slRest ) + '* el primer mes de la trabajadora. Garantía de reemplazos de *1 mes*.' + "\r\n" + "\r\n" +
+            (tipoCotizacion === 'type2' ? '' : ('*Comisión 2*: ' + com2 + ' ' + divisa + ' (100 ' + divisa + ' adelantado + ' + (com2 - 100) + ' *luego de entrevistas*), usted *ahorra ' + ( slRest ) + '* el primer mes de la trabajadora. Garantía de reemplazos de *1 mes*.' + "\r\n" + "\r\n")) +
 
-            '*Comisión 3 (Precio más bajo)*: *' + com3 + ' ' + divisa + ' (por adelantado)*. Luego de enviados los currículos, usted escoge viendo fotos, videos, documentos del currículo. *No hay entrevistas laborales*. Usted *ahorra ' + ( slRest ) + '* el primer mes de la trabajadora. Garantía de reemplazos de *1 mes*.' + "\r\n" + "\r\n" +
+            (tipoCotizacion === 'type2' ? '' : ('*Comisión 3 (Precio más bajo)*: *' + com3 + ' ' + divisa + ' (por adelantado)*. Luego de enviados los currículos, usted escoge viendo fotos, videos, documentos del currículo. *No hay entrevistas laborales*. Usted *ahorra ' + ( slRest ) + '* el primer mes de la trabajadora. Garantía de reemplazos de *1 mes*.' + "\r\n" + "\r\n")) +
 
-            'Usted puede escoger la comisión 1, 2 o 3 (menor precio) y agendaremos su atención por favor.'
+            (tipoCotizacion === 'type2' ? '' : ('Usted puede escoger la comisión 1, 2 o 3 (menor precio) y agendaremos su atención por favor.'))
         ;
 
         speechPH1VezPorSemana =
@@ -124,32 +169,49 @@ export function getSpeechCotizador(actividadID, modalidadID, sueldoIngresado, fr
             '- Actividad: ' + actividad + "\r\n" +
             '- Modalidad: ' + modalidad + "\r\n" +
             '- Sueldo ofrecido: ' + sueldo + ' al día, ' + ((nuevSueldo * frecuencia * 4)) + ' al mes (' + frecuencia + ' vez a la semana x 4 semanas = 1 mes). ' + "\r\n" +
-            '- Pago a agencia: Le enviamos 3 tipos de comisiones para que escoja la de su preferencia:' + "\r\n" +  "\r\n" +
-            '*Comisión 1*: ' + '*500 ' + divisa + ' y ahorra ' + ( slRest ) + ' ' + divisa +'*. Bertha cobra por la selección de personal y por brindarle los reemplazos de personal que usted necesite hasta por *3 meses*.' + "\r\n" + "\r\n" +
+            '- Pago a agencia: ' +
+                (
+                    tipoCotizacion === 'type1' ?
+                        ('Le enviamos 3 tipos de comisiones para que escoja la de su preferencia:' )
+                        :
+                        ('Pago a agencia: 500 soles y ahorra ' + ( slRest ) + '. Bertha cobra por la selección de personal y por brindarle los reemplazos de personal que usted necesite hasta por 1 mes. Y le daremos boleta o factura por su abono.')
+                )
+            + "\r\n" +  "\r\n" +
+
+
+            (tipoCotizacion === 'type2' ? '' : ('*Comisión 1*: ' + '*500 ' + divisa + ' y ahorra ' + ( slRest ) + ' ' + divisa +'*. Bertha cobra por la selección de personal y por brindarle los reemplazos de personal que usted necesite hasta por *3 meses*.' + "\r\n" + "\r\n")) +
 
             'Usted como empleador puede ofrecer un sueldo de prueba *el primer mes*, lo mínimo es ' + (toPesos3(sl  * frecuencia * 4)) + ' ' + divisa +'. Así usted tiene un *ahorro de ' + ( slRest ) + ' ' + divisa +'* (' + ( (nuevSueldo * frecuencia * 4) ) + ' - ' + ( toPesos3(sl  * frecuencia * 4) ) + ' ' + divisa +'). El segundo mes, usted le aumenta a ' + (nuevSueldo * frecuencia * 4) + ' ' + divisa +'.' + "\r\n" + "\r\n" +
 
             'El período de prueba (*primer mes*) le servirá para evaluar al trabajador; si desea despedirle durante este tiempo o si renuncia, le daremos el *reemplazo gratuito* y le pagará sus días laborados de acuerdo a su sueldo de prueba (' + ((sl  * frecuencia * 4)) + ' ' + divisa +').' + "\r\n" + "\r\n" +
 
-            '*Después* del primer mes, el precio del reemplazo es de *' + ( slRest ) + ' ' + divisa +'*. Le enviaremos un nuevo trabajador que le pagará ' + ((sl  * frecuencia * 4)) + ' ' + divisa +' y tendrá *un nuevo ahorro de ' + ( slRest ) + ' ' + divisa +'*.' + "\r\n" + "\r\n" +
+            (tipoCotizacion === 'type2' ? '' : ('*Después* del primer mes, el precio del reemplazo es de *' + ( slRest ) + ' ' + divisa +'*. Le enviaremos un nuevo trabajador que le pagará ' + ((sl  * frecuencia * 4)) + ' ' + divisa +' y tendrá *un nuevo ahorro de ' + ( slRest ) + ' ' + divisa +'*.' + "\r\n" + "\r\n")) +
 
-            '- Pago por beneficios laborales (gratificaciones, CTS y vacaciones): No existe' + "\r\n" +  "\r\n" +
+            //'- Pago por beneficios laborales (gratificaciones, CTS y vacaciones): No existe' + "\r\n" +  "\r\n" +
 
-            '*Para atenderle*, solicitamos un adelanto de *100 ' + divisa +'* que serán descontados de la comisión. Le enviaremos los currículos de *2* trabajadores, *sin antecedentes* policiales, judiciales y penales, con *buen carácter* y con *experiencia* laboral. Las *entrevistas* son por *videollamada* o llamada. Luego de escoger, abonará el restante de la comisión (400 ' + divisa +'). Los precios incluyen IGV.' + "\r\n" + "\r\n" +
+            (tipoCotizacion === 'type1' ?
+                ('*Para atenderle*, solicitamos un adelanto de *100 ' + divisa +'* que serán descontados de la comisión. Le enviaremos los currículos de *2* trabajadores, *sin antecedentes* policiales, judiciales y penales, con *buen carácter* y con *experiencia* laboral. Las *entrevistas* son por *videollamada* o llamada. Luego de escoger, abonará el restante de la comisión (400 ' + divisa +'). Los precios incluyen IGV.')
+                :
+                ('Bertha realiza la selección en base a documentos como los reportes de antecedentes, *si el empleador rechaza* a las postulantes seleccionadas, podrá abonar otro adicional de *100 soles* para que Bertha haga un nuevo proceso.'))
+            + "\r\n" + "\r\n" +
 
-            'Bertha realiza la selección en base a documentos como los reportes de antecedentes, *si el empleador rechaza* a las postulantes seleccionadas, podrá abonar *otro adelanto de 100 ' + divisa +'* para que Bertha haga un nuevo proceso.' + "\r\n" + "\r\n" +
+            (tipoCotizacion === 'type1' ?
+                ('Bertha realiza la selección en base a documentos como los reportes de antecedentes, *si el empleador rechaza* a las postulantes seleccionadas, podrá abonar *otro adelanto de 100 ' + divisa +'* para que Bertha haga un nuevo proceso.')
+                :
+                ('Para atenderle, solicitamos el pago de la comisión por adelantado. Le enviaremos *una* trabajadora *sin antecedentes* policiales, judiciales y penales, con *buen carácter* y con *experiencia* laboral. No hay entrevistas o elección de currículos sino que la agencia designa el personal lo envía al domicilio y minutos antes de su llegada envía los documentos y datos de la empleada. Los precios incluyen IGV.'))
+            + "\r\n" + "\r\n" +
 
             'Para que usted tenga una idea de nuestros currículos, le enviamos un ejemplo *(solo referencial)* ' + (findFichaByActividadCamaAfuera(actividadID)) + "\r\n" + "\r\n" +
 
             'Si usted desea conocer más de nuestro servicio, puede ingresar a www.holabertha.com/es-' + pais + '/condiciones o si tiene alguna duda, estamos para ayudarle.' + "\r\n" + "\r\n" +
 
-            'También podemos ayudarle con estos *2 otros tipos de comisiones*:' + "\r\n" + "\r\n" +
+            (tipoCotizacion === 'type2' ? '' : ('También podemos ayudarle con estos *2 otros tipos de comisiones*:' + "\r\n" + "\r\n")) +
 
-            '*Comisión 2*: ' + com2 + ' ' + divisa + ' (100 ' + divisa + ' adelantado + ' + (com2 - 100) + ' *luego de entrevistas*), usted *ahorra ' + ( slRest ) + '* el primer mes de la trabajadora. Garantía de reemplazos de *1 mes*.' + "\r\n" + "\r\n" +
+            (tipoCotizacion === 'type2' ? '' : ('*Comisión 2*: ' + com2 + ' ' + divisa + ' (100 ' + divisa + ' adelantado + ' + (com2 - 100) + ' *luego de entrevistas*), usted *ahorra ' + ( slRest ) + '* el primer mes de la trabajadora. Garantía de reemplazos de *1 mes*.' + "\r\n" + "\r\n")) +
 
-            '*Comisión 3 (Precio más bajo)*: *' + com3 + ' ' + divisa + ' (por adelantado)*. Luego de enviados los currículos, usted escoge viendo fotos, videos, documentos del currículo. *No hay entrevistas laborales*. Usted *ahorra ' + ( slRest ) + '* el primer mes de la trabajadora. Garantía de reemplazos de *1 mes*.' + "\r\n" + "\r\n" +
+            (tipoCotizacion === 'type2' ? '' : ('*Comisión 3 (Precio más bajo)*: *' + com3 + ' ' + divisa + ' (por adelantado)*. Luego de enviados los currículos, usted escoge viendo fotos, videos, documentos del currículo. *No hay entrevistas laborales*. Usted *ahorra ' + ( slRest ) + '* el primer mes de la trabajadora. Garantía de reemplazos de *1 mes*.' + "\r\n" + "\r\n")) +
 
-            'Usted puede escoger la comisión 1, 2 o 3 (menor precio) y agendaremos su atención por favor.'
+            (tipoCotizacion === 'type2' ? '' : ('Usted puede escoger la comisión 1, 2 o 3 (menor precio) y agendaremos su atención por favor.'))
         ;
 
         speechPH3VecesPorSemana =
@@ -157,32 +219,53 @@ export function getSpeechCotizador(actividadID, modalidadID, sueldoIngresado, fr
             '- Actividad: ' + actividad + "\r\n" +
             '- Modalidad: ' + modalidad + "\r\n" +
             '- Sueldo ofrecido: ' + sueldo + ' al día, ' + ((nuevSueldo * frecuencia * 4).toFixed(1)) + ' al mes (' + frecuencia + ' veces a la semana x 4 semanas = 12 servicios o 1 mes). ' + "\r\n" +
-            '- Pago a agencia: Le enviamos 3 tipos de comisiones para que escoja la de su preferencia:' + "\r\n" +  "\r\n" +
-            '*Comisión 1*: ' + '*500 ' + divisa + ' y ahorra ' + ( slRest ) + ' ' + divisa +'*. Bertha cobra por la selección de personal y por brindarle los reemplazos de personal que usted necesite hasta por *3 meses*.' + "\r\n" + "\r\n" +
+
+            '- Pago a agencia: ' +
+            (
+                tipoCotizacion === 'type1' ?
+                    ('Le enviamos 3 tipos de comisiones para que escoja la de su preferencia:' )
+                    :
+                    ('Pago a agencia: 500 soles y ahorra ' + ( slRest ) + '. Bertha cobra por la selección de personal y por brindarle los reemplazos de personal que usted necesite hasta por 1 mes. Y le daremos boleta o factura por su abono.')
+            )
+            + "\r\n" +  "\r\n" +
+
+            (tipoCotizacion === 'type2' ? '' : ('*Comisión 1*: ' + '*500 ' + divisa + ' y ahorra ' + ( slRest ) + ' ' + divisa +'*. Bertha cobra por la selección de personal y por brindarle los reemplazos de personal que usted necesite hasta por *3 meses*.' + "\r\n" + "\r\n")) +
 
             'Usted como empleador puede ofrecer un sueldo de prueba *el primer mes*, lo mínimo es ' + (toPesos3(sl  * frecuencia * 4)) + ' ' + divisa +'. Así usted tiene un *ahorro de ' + ( slRest ) + ' ' + divisa +'* (' + ( (nuevSueldo * frecuencia * 4) ) + ' - ' + ( toPesos3(sl  * frecuencia * 4) ) + ' ' + divisa +'). El segundo mes, usted le aumenta a ' + (nuevSueldo * frecuencia * 4) + ' ' + divisa +'.' + "\r\n" + "\r\n" +
 
             'El período de prueba (*primer mes*) le servirá para evaluar al trabajador; si desea despedirle durante este tiempo o si renuncia, le daremos el *reemplazo gratuito* y le pagará sus días laborados de acuerdo a su sueldo de prueba (' + ((sl  * frecuencia * 4)) + ' ' + divisa +').' + "\r\n" + "\r\n" +
 
-            '*Después* del primer mes, el precio del reemplazo es de *' + ( slRest ) + ' ' + divisa +'*. Le enviaremos un nuevo trabajador que le pagará ' + ((sl  * frecuencia * 4)) + ' ' + divisa +' y tendrá *un nuevo ahorro de ' + ( slRest ) + ' ' + divisa +'*.' + "\r\n" + "\r\n" +
+            (tipoCotizacion === 'type2' ? '' : ('*Después* del primer mes, el precio del reemplazo es de *' + ( slRest ) + ' ' + divisa +'*. Le enviaremos un nuevo trabajador que le pagará ' + ((sl  * frecuencia * 4)) + ' ' + divisa +' y tendrá *un nuevo ahorro de ' + ( slRest ) + ' ' + divisa +'*.' + "\r\n" + "\r\n")) +
 
-            '- Pago por beneficios laborales (gratificaciones, CTS y vacaciones): No existe' + "\r\n" +  "\r\n" +
+            //'- Pago por beneficios laborales (gratificaciones, CTS y vacaciones): No existe' + "\r\n" +  "\r\n" +
 
-            '*Para atenderle*, solicitamos un adelanto de *100 ' + divisa +'* que serán descontados de la comisión. Le enviaremos los currículos de *2* trabajadores, *sin antecedentes* policiales, judiciales y penales, con *buen carácter* y con *experiencia* laboral. Las *entrevistas* son por *videollamada* o llamada. Luego de escoger, abonará el restante de la comisión (400 ' + divisa +'). Los precios incluyen IGV.' + "\r\n" + "\r\n" +
+            (
+                tipoCotizacion === 'type1' ?
+                    ('*Para atenderle*, solicitamos un adelanto de *100 ' + divisa +'* que serán descontados de la comisión. Le enviaremos los currículos de *2* trabajadores, *sin antecedentes* policiales, judiciales y penales, con *buen carácter* y con *experiencia* laboral. Las *entrevistas* son por *videollamada* o llamada. Luego de escoger, abonará el restante de la comisión (400 ' + divisa +'). Los precios incluyen IGV.')
+                    :
+                    ('Bertha realiza la selección en base a documentos como los reportes de antecedentes, *si el empleador rechaza* a las postulantes seleccionadas, podrá abonar otro adicional de *100 soles* para que Bertha haga un nuevo proceso.')
+            )
+            + "\r\n" + "\r\n" +
 
-            'Bertha realiza la selección en base a documentos como los reportes de antecedentes, *si el empleador rechaza* a las postulantes seleccionadas, podrá abonar *otro adelanto de 100 ' + divisa +'* para que Bertha haga un nuevo proceso.' + "\r\n" + "\r\n" +
+            (
+                tipoCotizacion === 'type1' ?
+                    ('Bertha realiza la selección en base a documentos como los reportes de antecedentes, *si el empleador rechaza* a las postulantes seleccionadas, podrá abonar *otro adelanto de 100 ' + divisa +'* para que Bertha haga un nuevo proceso.')
+                    :
+                    ('Para atenderle, solicitamos el pago de la comisión por adelantado. Le enviaremos *una* trabajadora *sin antecedentes* policiales, judiciales y penales, con *buen carácter* y con *experiencia* laboral. No hay entrevistas o elección de currículos sino que la agencia designa el personal lo envía al domicilio y minutos antes de su llegada envía los documentos y datos de la empleada. Los precios incluyen IGV.')
+            )
+            + "\r\n" + "\r\n" +
 
             'Para que usted tenga una idea de nuestros currículos, le enviamos un ejemplo *(solo referencial)* ' + (findFichaByActividadCamaAfuera(actividadID)) + "\r\n" + "\r\n" +
 
             'Si usted desea conocer más de nuestro servicio, puede ingresar a www.holabertha.com/es-' + pais + '/condiciones o si tiene alguna duda, estamos para ayudarle.' + "\r\n" + "\r\n" +
 
-            'También podemos ayudarle con estos *2 otros tipos de comisiones*:' + "\r\n" + "\r\n" +
+            (tipoCotizacion === 'type2' ? '' : ('También podemos ayudarle con estos *2 otros tipos de comisiones*:' + "\r\n" + "\r\n")) +
 
-            '*Comisión 2*: ' + com2 + ' ' + divisa + ' (100 ' + divisa + ' adelantado + ' + (com2 - 100) + ' *luego de entrevistas*), usted *ahorra ' + ( slRest ) + '* el primer mes de la trabajadora. Garantía de reemplazos de *1 mes*.' + "\r\n" + "\r\n" +
+            (tipoCotizacion === 'type2' ? '' : ('*Comisión 2*: ' + com2 + ' ' + divisa + ' (100 ' + divisa + ' adelantado + ' + (com2 - 100) + ' *luego de entrevistas*), usted *ahorra ' + ( slRest ) + '* el primer mes de la trabajadora. Garantía de reemplazos de *1 mes*.' + "\r\n" + "\r\n")) +
 
-            '*Comisión 3 (Precio más bajo)*: *' + com3 + ' ' + divisa + ' (por adelantado)*. Luego de enviados los currículos, usted escoge viendo fotos, videos, documentos del currículo. *No hay entrevistas laborales*. Usted *ahorra ' + ( slRest ) + '* el primer mes de la trabajadora. Garantía de reemplazos de *1 mes*.' + "\r\n" + "\r\n" +
+            (tipoCotizacion === 'type2' ? '' : ('*Comisión 3 (Precio más bajo)*: *' + com3 + ' ' + divisa + ' (por adelantado)*. Luego de enviados los currículos, usted escoge viendo fotos, videos, documentos del currículo. *No hay entrevistas laborales*. Usted *ahorra ' + ( slRest ) + '* el primer mes de la trabajadora. Garantía de reemplazos de *1 mes*.' + "\r\n" + "\r\n")) +
 
-            'Usted puede escoger la comisión 1, 2 o 3 (menor precio) y agendaremos su atención por favor.'
+            (tipoCotizacion === 'type2' ? '' : ('Usted puede escoger la comisión 1, 2 o 3 (menor precio) y agendaremos su atención por favor.'))
         ;
 
     }
