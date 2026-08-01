@@ -1,14 +1,14 @@
-import React, {useRef, useState} from "react";
+import React, {useState} from "react";
 import {Modal, ModalBody, ModalTitle} from "react-bootstrap";
 import ModalHeader from "react-bootstrap/ModalHeader";
-import Canvas from "../../Components/canvas.jsx";
+import NewCanvas from "../Components/Canvas/newCanvas.jsx";
 
 export default function CrearAnuncioRequerimiento({dataReq}) {
     const [show, setShow] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const conf = {title: 'Generar anuncio', icon: 'fas fa-image'};
 
-    function openModal(e){
+    function openModal(){
         setShow(true);
     }
 
@@ -25,17 +25,17 @@ export default function CrearAnuncioRequerimiento({dataReq}) {
             <a role="button" onClick={(e) => openModal(e)}>
                 <i data-toggle="tooltip" data-placement="top" title={conf.title} className={conf.icon + ' icon-action px-2 text-success'}></i>
             </a>
-            <Modal size="lg" show={show} onHide={(e) => setShow(false)} centered={true} backdrop="static">
+            <Modal size="lg" show={show} onHide={() => setShow(false)} centered={true} backdrop="static">
                 <ModalHeader className="border-0" closeButton>
                     <ModalTitle>
                         <h6><i className={conf.icon + ' me-2' }></i>{conf.title}</h6>
                     </ModalTitle>
                 </ModalHeader>
                 <ModalBody className="py-20 text-center">
-                    {(isLoading == true) ?
+                    {(isLoading === true) ?
                         viewLoading()
                         :
-                        <Canvas dataReq={dataReq} />
+                        <NewCanvas dataReq={dataReq} />
                     }
                 </ModalBody>
             </Modal>

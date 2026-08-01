@@ -106,12 +106,12 @@ export default function RequerimientosTable({url, requerimientos, total, page, c
             );
         }
 
-        if (data.copy_anuncio_ai){
+        /*if (data.copy_anuncio_ai){
             tag.push(
                 <NewCopyIcon copyText={data.copy_anuncio_ai} icon={'fa-brands fa-openai'} additonalClass={'icon-action-sm'} tooltipText={'Copy para banner - COPILOT'} successMsj={'Copy para banner copiado'} />
             );
 
-        }
+        }*/
 
         tag.push(
             <DuplicarRequerimiento url={url} idRequerimiento={data.id} />
