@@ -1,6 +1,6 @@
-import drawCamaAfuera from "./templates/camaAfuera.js";
-import drawCamaAdentro from "./templates/camaAdentro.js";
-import drawPorDia from "./templates/porDias.js";
+import drawCamaAfuera from "./Templates/camaAfuera.js";
+import drawCamaAdentro from "./Templates/camaAdentro.js";
+import drawPorDia from "./Templates/porDias.js";
 
 export function drawTemplate(ctx, dataReq) {
     const tipo = dataReq.tiporeq || "cama_afuera";
