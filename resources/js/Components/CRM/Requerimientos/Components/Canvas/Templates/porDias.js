@@ -1,4 +1,4 @@
-import { drawAutoText, drawList, drawSalary, drawCenteredText } from "../helpers/text.js";
+import { drawAutoText, drawList, drawSalary, drawCenteredText } from "../Helpers/text.js";
 
 export default function drawPorDias(ctx, data) {
     const template = new Image();
