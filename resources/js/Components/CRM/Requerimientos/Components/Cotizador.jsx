@@ -61,6 +61,8 @@ export default function Cotizador({url}) {
     function getData(){
         setSpeech(getSpeechCotizador(actividad, modalidad, sueldo, frecuencia, garantia, country, 'type1'));
         setSpeech2(getSpeechCotizador(actividad, modalidad, sueldo, frecuencia, garantia, country, 'type2'));
+
+
     }
 
     let showButton = false;
@@ -183,11 +185,11 @@ export default function Cotizador({url}) {
                         { (showButton === true) &&
                             <>
                                 <div className="form-group col-12 mb-2">
-                                    <NewCopyButton copyText={speech} successMsj={'Speech copiado'} btnText={'Regular'} btnColor={'purple'} />
+                                    <NewCopyButton copyText={getSpeechCotizador(actividad, modalidad, sueldo, frecuencia, garantia, country, 'type1')} successMsj={'Speech copiado'} btnText={'Regular'} btnColor={'purple'} />
                                 </div>
 
                                 <div className="form-group col-12 mb-2">
-                                    <NewCopyButton copyText={speech2} successMsj={'Speech copiado'} btnText={'Designación'} btnColor={'pink'} />
+                                    <NewCopyButton copyText={getSpeechCotizador(actividad, modalidad, sueldo, frecuencia, garantia, country, 'type2')} successMsj={'Speech copiado'} btnText={'Designación'} btnColor={'pink'} />
                                 </div>
                             </>
                         }

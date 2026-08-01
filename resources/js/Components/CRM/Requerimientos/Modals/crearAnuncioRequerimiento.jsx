@@ -6,7 +6,7 @@ import NewCanvas from "../Components/Canvas/newCanvas.jsx";
 export default function CrearAnuncioRequerimiento({dataReq}) {
     const [show, setShow] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const conf = {title: 'Generar anuncio', icon: 'fas fa-image'};
+    const conf = {title: 'Generar anuncio', icon: 'fa-regular fa-images'};
 
     function openModal(){
         setShow(true);

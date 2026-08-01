@@ -23,7 +23,7 @@ export function getSpeechCotizador(actividadID, modalidadID, sueldoIngresado, fr
 
         let nuevSueldo = parseInt(sueldoIngresado.replace(',', ''));
 
-        let st = nuevSueldo >= 1400 ? (nuevSueldo - ( tipoCotizacion = 'type1' ?  400 : 500)) : 930;
+        let st = nuevSueldo >= 1400 ? (nuevSueldo - 400) : 930;
 
         let sl = nuevSueldo - 20;
         let slRest = ((nuevSueldo * frecuencia * 4) - (sl  * frecuencia * 4));
@@ -73,13 +73,17 @@ export function getSpeechCotizador(actividadID, modalidadID, sueldoIngresado, fr
             + "\r\n" +  "\r\n" +
 
 
-            (tipoCotizacion === 'type2' ? '' : ('*Comisión 1*: ' + '*' + com1 + ' ' + divisa +' y ahorra '+ ( nuevSueldo === 1350 ? 350 : (nuevSueldo - st) ) + ' ' + divisa + '*. Bertha cobra por la selección de personal y por brindarle los reemplazos de personal que usted necesite hasta por *3 meses*.' + "\r\n" +  "\r\n" )) +
+            ((tipoCotizacion === 'type2') ? ('') : ('*Comisión 1*: ' + '*' + com1 + ' ' + divisa +' y ahorra '+ ( nuevSueldo === 1350 ? 350 : (nuevSueldo - st) ) + ' ' + divisa + '*. Bertha cobra por la selección de personal y por brindarle los reemplazos de personal que usted necesite hasta por *3 meses*.' + "\r\n" +  "\r\n" ))
+
+            +
 
             'Usted como empleador puede ofrecer un sueldo de prueba *el primer mes*, lo mínimo es ' + ( nuevSueldo === 1350 ? '1,000' : toPesos3(st)) + ' ' + divisa +'. Así usted tiene un *ahorro de ' + ( nuevSueldo === 1350 ? 350 : (nuevSueldo - st) ) + ' ' + divisa +'* (' + (sueldoIngresado) + ' ' + divisa +' - ' + (nuevSueldo === 1350 ? '1,000' :  toPesos3(st)) + ' ' + divisa +'). El segundo mes, usted le aumenta a ' + sueldo + ' ' + divisa +'.' + "\r\n" + "\r\n" +
 
             'El período de prueba (*primer mes*) le servirá para evaluar al trabajador; si desea despedirle durante este tiempo o si renuncia, le daremos el *reemplazo gratuito* y le pagará sus días laborados de acuerdo a su sueldo de prueba (' + (nuevSueldo === 1350 ? 1000 : toPesos3(st) ) + ' ' + divisa +').' + "\r\n" + "\r\n" +
 
-            (tipoCotizacion === 'type2' ? '' : ('*Después* del primer mes, el precio del reemplazo es de *' + ( nuevSueldo === 1350 ? 350 : (nuevSueldo - st) ) + ' ' + divisa +'*. Le enviaremos un nuevo trabajador que le pagará ' + ( nuevSueldo === 1350 ? toPesos3(1000) : toPesos3(st) ) + ' ' + divisa +' y tendrá *un nuevo ahorro de ' + ( nuevSueldo === 1350 ? 350 :  (nuevSueldo - st) ) + ' ' + divisa +'*. ' + "\r\n" + "\r\n")) +
+            (tipoCotizacion === 'type2' ? '' : ('*Después* del primer mes, el precio del reemplazo es de *' + ( nuevSueldo === 1350 ? 350 : (nuevSueldo - st) ) + ' ' + divisa +'*. Le enviaremos un nuevo trabajador que le pagará ' + ( nuevSueldo === 1350 ? toPesos3(1000) : toPesos3(st) ) + ' ' + divisa +' y tendrá *un nuevo ahorro de ' + ( nuevSueldo === 1350 ? 350 :  (nuevSueldo - st) ) + ' ' + divisa +'*. ' + "\r\n" + "\r\n"))
+
+            +
 
             /**/
             (
