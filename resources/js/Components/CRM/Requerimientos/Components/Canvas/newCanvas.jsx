@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from "react";
-import { drawTemplate } from "../Canvas/canvasEngine.js";
+import { drawTemplate } from "./canvasEngine.js";
 
 export default function NewCanvas({ dataReq }) {
     const canvasRef = useRef();
