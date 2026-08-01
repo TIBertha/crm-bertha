@@ -127,7 +127,7 @@ export function getSpeechCotizador(actividadID, modalidadID, sueldoIngresado, fr
                 tipoCotizacion === 'type1' ?
                 ('Le enviamos 3 tipos de comisiones para que escoja la de su preferencia:' )
             :
-                ('*500 soles y ahorra ' + ( slRest ) + '*. Bertha cobra por la selección de personal y por brindarle los reemplazos de personal que usted necesite hasta por *1 mes*. Y le daremos boleta o factura por su abono.')
+                ('*400 soles y ahorra ' + ( slRest ) + '*. Bertha cobra por la selección de personal y por brindarle los reemplazos de personal que usted necesite hasta por *1 mes*. Y le daremos boleta o factura por su abono.')
             )
             + "\r\n" +  "\r\n" +
 
@@ -182,7 +182,7 @@ export function getSpeechCotizador(actividadID, modalidadID, sueldoIngresado, fr
                     tipoCotizacion === 'type1' ?
                         ('Le enviamos 3 tipos de comisiones para que escoja la de su preferencia:' )
                         :
-                        ('*500 soles y ahorra ' + ( slRest ) + '*. Bertha cobra por la selección de personal y por brindarle los reemplazos de personal que usted necesite hasta por *1 mes*. Y le daremos boleta o factura por su abono.')
+                        ('*400 soles y ahorra ' + ( slRest ) + '*. Bertha cobra por la selección de personal y por brindarle los reemplazos de personal que usted necesite hasta por *1 mes*. Y le daremos boleta o factura por su abono.')
                 )
             + "\r\n" +  "\r\n" +
 
@@ -239,7 +239,7 @@ export function getSpeechCotizador(actividadID, modalidadID, sueldoIngresado, fr
                 tipoCotizacion === 'type1' ?
                     ('Le enviamos 3 tipos de comisiones para que escoja la de su preferencia:' )
                     :
-                    ('Pago a agencia: 500 soles y ahorra ' + ( slRest ) + '. Bertha cobra por la selección de personal y por brindarle los reemplazos de personal que usted necesite hasta por 1 mes. Y le daremos boleta o factura por su abono.')
+                    ('Pago a agencia: 400 soles y ahorra ' + ( slRest ) + '. Bertha cobra por la selección de personal y por brindarle los reemplazos de personal que usted necesite hasta por 1 mes. Y le daremos boleta o factura por su abono.')
             )
             + "\r\n" +  "\r\n" +
 
