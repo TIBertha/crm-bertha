@@ -45,7 +45,7 @@ export default function NewCopyButton({
         backgroundColor: bgButton,
     };
 
-    function handleCopy(e) {
+    function handleCopy() {
         navigator.clipboard.writeText(copyText);
 
         toast(successMsj, { icon: "✅" });
