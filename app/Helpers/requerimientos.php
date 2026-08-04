@@ -246,7 +246,7 @@ function getCopyDetalles($d, $tipo = null, $actExt = null, $actidExt = null, $mo
         }
 
         if ($d->fechaentrevista && $d->horaentrevista){
-            $entrevista = $stringFecha . $fecha . ' - ' . $hora . "\r\n" ;
+            $entrevista = $stringFecha . $fecha .  ($d->tipocomision == 4 ? '' : (' - ' . $hora )) . "\r\n" ;
         }else{
             if ($d->fechaentrevista){
                 $entrevista = $stringFecha  . $fecha . "\r\n" ;

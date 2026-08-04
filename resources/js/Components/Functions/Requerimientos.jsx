@@ -429,6 +429,12 @@ export function getMontoComision(inputComision, inputSueldo, inputModalidad, dat
         }else{
             com = 350;
         }
+    }else if (parseInt(newComision) === 4){
+        if ([1,2,5].includes(parseInt(newModalidad))){
+            com = 500;
+        }else{
+            com = 400;
+        }
     }
 
     return com;

@@ -646,13 +646,13 @@ class ContratosNew extends Component{
 
         let garantiaNew = '';
 
-        if(tipocomision == 1){
+        if(tipocomision === 1){
             garantiaNew = 6;
-        }else if(tipocomision == 2){
+        }else if(tipocomision === 2){
             garantiaNew = 3;
-        }else if(tipocomision == 3 ){
+        }else if(tipocomision === 3 ){
             garantiaNew = 1;
-        }else if(tipocomision == 4 ){
+        }else if(tipocomision === 4 ){
             garantiaNew = 1;
         }
 

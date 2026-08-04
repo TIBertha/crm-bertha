@@ -811,6 +811,7 @@ export default function DatosRequerimientos({url, view, data, show, handleChange
                             <option key="1" value="1">Comisión 1 C/Entrevista</option>
                             <option key="2" value="2">Comisión 2 C/Entrevista</option>
                             <option key="3" value="3">Comisión 3 S/Entrevista</option>
+                            <option key="4" value="4">Comisión 4 S/Entrevista</option>
                         </select>
                     </div>
                 </div>
