@@ -1,8 +1,9 @@
 import { drawAutoText, drawList, drawSalary, drawCenteredText } from "../Helpers/text.js";
 
 export default function drawPorDias(ctx, data) {
+    console.log('felipe')
     const template = new Image();
-    template.src = "https://adjuntosexperta.s3.amazonaws.com/Adjuntos/anuncio-template-por-dia.jpg";
+    template.src = "https://adjuntosexperta.s3.amazonaws.com/Adjuntos/anuncio-template.jpg";
 
     template.onload = () => {
         ctx.clearRect(0, 0, 600, 600);

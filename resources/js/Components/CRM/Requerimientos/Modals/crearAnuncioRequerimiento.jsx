@@ -23,7 +23,7 @@ export default function CrearAnuncioRequerimiento({dataReq}) {
     return(
         <>
             <a role="button" onClick={(e) => openModal(e)}>
-                <i data-toggle="tooltip" data-placement="top" title={conf.title} className={conf.icon + ' icon-action px-2 text-success'}></i>
+                <i data-toggle="tooltip" data-placement="top" title={conf.title} className={conf.icon + ' icon-action mx-1 text-success'}></i>
             </a>
             <Modal size="lg" show={show} onHide={() => setShow(false)} centered={true} backdrop="static">
                 <ModalHeader className="border-0" closeButton>

@@ -2,7 +2,7 @@ import { drawAutoText, drawList, drawSalary, drawCenteredText } from "../Helpers
 
 export default function drawCamaAdentro(ctx, data) {
     const template = new Image();
-    template.src = "https://adjuntosexperta.s3.amazonaws.com/Adjuntos/anuncio-template-cama-adentro.jpg";
+    template.src = "https://adjuntosexperta.s3.amazonaws.com/Adjuntos/anuncio-template.jpg";
 
     template.onload = () => {
         ctx.clearRect(0, 0, 600, 600);

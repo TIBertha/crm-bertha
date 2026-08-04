@@ -12,7 +12,9 @@ export default function drawCamaAfuera(ctx, data) {
 
         drawCenteredText(ctx, data.fechaentrevista, { x: 300, y: 72.5, size: 40 });
 
-        y = drawAutoText(ctx, data.frecuencia || data.modalidad, { x: 25, y: 150, maxWidth: 550, fontWeight: "bold"});
+        y = drawAutoText(ctx, data.actividad, { x: 25, y: 140, maxWidth: 550, fontWeight: "bold" });
+
+        y = drawAutoText(ctx, data.frecuencia || data.modalidad, { x: 25, y: y + 10, maxWidth: 550, fontWeight: "bold"});
 
         y = drawAutoText(ctx, data.distrito, { x: 25, y, maxWidth: 550, baseSize: 32, maxLines: 2, fontWeight: "bold"});
 
