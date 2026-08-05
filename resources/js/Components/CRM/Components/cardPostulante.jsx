@@ -184,7 +184,7 @@ export default function CardPostulante({
                 <NewCopyIcon
                     icon={"far fa-file"}
                     additonalClass={"icon-action-sm px-0 ms-1"}
-                    copyText={"PO " + nombrePostulante  + ( d.telefono ? '' : (" " + d.telefono)) + " " + d.flag_emoji}
+                    copyText={"PO " + nombrePostulante  + ( d.telefono ?(" " + d.telefono) : '') + " " + d.flag_emoji}
                     tooltipText={"Copiar nombre en Google"}
                     successMsj={"Nombre(s) para Google copiado"}
                 />
