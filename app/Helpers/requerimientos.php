@@ -153,17 +153,12 @@ function getDetallesCopyEmpleador($data, $terminos){
 
 
     $t5 = '*Solicitamos elegir una opción “a”* (de mayor preferencia) *y una opción “b”*. Si sucede una enfermedad, accidente o emergencia y la opción “a” no asiste a su inicio de labores, enviaremos a la opción “b” para que usted reciba apoyo.' . "\r\n" ;
-    if($data->paispedido_id == 54){
-        $t2 = 'Bertha *enviará los currículos* seleccionados *a la fecha y hora agendada*. Si escogió postulantes desde nuestra web, les presentaremos su requerimiento, *si no aceptan, buscaremos un reemplazo*.' . "\r\n"   . "\r\n" ;
-        $t3 = 'Bertha selecciona trabajadoras sin antecedentes, buen carácter y experiencia. *Por ley*, *no* selecciona en base a edades, cantidad de hijos, estado civil, lugar de nacimiento o vivienda, peso, color de piel u otro.' . "\r\n"   . "\r\n" ;
-        $t4 = ($data->tipocomision == 3 ? '' : 'Para *las entrevistas*, no necesita descargar aplicaciones. Bertha le enviará *un link*, *le dará clic* y podrá entrevistar a las postulantes por separado. ') . '*Luego* de enviado los currículos, agradecemos dar *respuesta en máximo 30 minutos*, ya que las trabajadoras postulan a varios empleos y empresas para conseguir un empleo por necesidad. Luego de esa hora, si la trabajadora ya no se encuentra disponible, se considerará como ofrecido el servicio.' . "\r\n"   . "\r\n" ;
-    }else{
-        $t2 = '*Bertha enviará los currículos* seleccionados *a la fecha y hora agendada*, usted *podrá ver fotos, videos y documentos*. Si escogió postulantes desde nuestra web, les presentaremos su requerimiento, si no aceptan, buscaremos un reemplazo.' . "\r\n"   . "\r\n" ;
-        $t3 = 'Bertha selecciona trabajadoras sin antecedentes, buen carácter y experiencia. *Por ley, no* selecciona en base a edades, cantidad de hijos, estado civil, lugar de nacimiento o vivienda, peso, color de piel u otro.' . "\r\n"   . "\r\n" ;
-        $t4 = '*Luego de enviados los currículos*, agradecemos *dar respuesta en máximo 30 minutos*, ya que las trabajadoras postulan a varios empleos y empresas para conseguir un empleo por necesidad. Luego de esa hora, si la trabajadora ya no se encuentra disponible, se considerará como ofrecido el servicio.' . "\r\n"   . "\r\n" ;
-    }
+    $t2 = 'Bertha *enviará ' . ($data->tipocomision == 4 ? 'el currículo* seleccionado' :'los currículos* seleccionados') . ' *a la fecha y hora agendada*. Si escogió postulantes desde nuestra web, les presentaremos su requerimiento, *si no aceptan, buscaremos un reemplazo*.' . "\r\n"   . "\r\n" ;
 
-    return $t1 . $copy . $comprobante . ($data->estatusrequerimientoid == 4 ? '' : ($t2 . $t3 . $t4 . $t5) );
+    $t3 = 'Bertha selecciona trabajadoras sin antecedentes, buen carácter y experiencia. *Por ley*, *no* selecciona en base a edades, cantidad de hijos, estado civil, lugar de nacimiento o vivienda, peso, color de piel u otro.' . "\r\n"   . "\r\n" ;
+    $t4 = ($data->tipocomision == 3 ? '' : 'Para *las entrevistas*, no necesita descargar aplicaciones. Bertha le enviará *un link*, *le dará clic* y podrá entrevistar a las postulantes por separado. ') . '*Luego* de enviado los currículos, agradecemos dar *respuesta en máximo 30 minutos*, ya que las trabajadoras postulan a varios empleos y empresas para conseguir un empleo por necesidad. Luego de esa hora, si la trabajadora ya no se encuentra disponible, se considerará como ofrecido el servicio.' . "\r\n"   . "\r\n" ;
+
+    return $t1 . $copy . $comprobante . ($data->estatusrequerimientoid == 4 ? '' : ($t2 . $t3 . ($data->tipocomision == 4 ? '' : ($t4 . $t5))) );
 
 }
 
@@ -203,13 +198,13 @@ function getCopyDetalles($d, $tipo = null, $actExt = null, $actidExt = null, $mo
     $observacionesWeb = '';
     $mapa = '';
 
-    if ($d->observaciones_web and $detallesEmpleador == false){
+    if ($d->observaciones_web and $detallesEmpleador === false){
         $observacionesWeb = 'Observaciones: ' . $d->observaciones_web . "\r\n" ;;
     }
 
     $tipoBeneficiosLey = '';
 
-    if ($showFechaEntrevista == true ){
+    if ($showFechaEntrevista === true ){
         $fecha = '';
         $hora= '';
 
@@ -222,38 +217,56 @@ function getCopyDetalles($d, $tipo = null, $actExt = null, $actidExt = null, $mo
             $hora = Carbon::parse($d->horaentrevista)->format('h:i A');
         }
 
-        if ($detallesEmpleador == true){
-            //$d->tipocomision == 3
-            if ($d->paispedido_id == 54){
-                if ($d->tipocomision == 3){
-                    $stringFecha = 'Fecha de envío de currículos (no reagendable): ';
-                }else{
-                    $stringFecha = 'Envío de CV y entrevista por videollamada (no reagendable): ';
-                }
-            }else{
+        if ($detallesEmpleador === true){
+            if ($d->tipocomision == 3){
                 $stringFecha = 'Fecha de envío de currículos (no reagendable): ';
+            }else{
+                $stringFecha = 'Envío de CV y entrevista por videollamada (no reagendable): ';
             }
         }else{
-            if ($d->paispedido_id == 54){
-                if ($d->tipocomision == 3){
-                    $stringFecha = 'Fecha de envío de currículos (*no hay entrevista*): ';
-                }else{
-                    $stringFecha = 'Entrevista por videollamada (*no reagendable*): ';
-                }
+            if ($d->tipocomision == 3){
+                $stringFecha = 'Fecha de envío de currículos (*no hay entrevista*): ';
             }else{
-                $stringFecha = 'Fecha límite de postulación ('. ($d->tipocomision == 3 ? '*no hay entrevista*' : 'no reagendable') .'): ';
+                $stringFecha = 'Entrevista por videollamada (*no reagendable*): ';
             }
         }
 
-        if ($d->fechaentrevista && $d->horaentrevista){
-            $entrevista = $stringFecha . $fecha .  ($d->tipocomision == 4 ? '' : (' - ' . $hora )) . "\r\n" ;
+        if ($d->tipocomision == 4){
+
+            $fechaInicio = '';
+            if ($d->modalidadid === 1){
+                $dt = Carbon::parse($d->hora_ingreso)->subMinutes(15);
+            }else{
+                $horario = json_decode($d->horarios, true);
+                $primero = collect($horario)->firstWhere('isDescanso', false);
+                $dt = Carbon::parse($primero['horaingreso'])->subMinutes(15);
+            }
+
+            $horaIngreso = $dt->format('h:i A');
+
+            if ($d->fecha_inicio_labores){
+                $f = formatFecha($d->fecha_inicio_labores);
+                $fechaInicio = ( mb_convert_case($f['nombreDia'], MB_CASE_TITLE, "UTF-8") . ', ' . $f['numeroDia'] . ' de ' . $f['nombreMes'] . ' del ' . $f['numeroAnio'] );
+            }
+
+
+            if ($detallesEmpleador === true){
+                $entrevista = 'Envío de CV: ' . $fechaInicio . ' - ' . $horaIngreso . "\r\n" ;
+            }
         }else{
-            if ($d->fechaentrevista){
-                $entrevista = $stringFecha  . $fecha . "\r\n" ;
-            }else if ($d->horaentrevista){
-                $entrevista = 'Hora de entrevista: ' . $hora . "\r\n" ;
+            if ($d->fechaentrevista && $d->horaentrevista){
+                $entrevista = $stringFecha . $fecha .  ' - ' . $hora . "\r\n" ;
+            }else{
+                if ($d->fechaentrevista){
+                    $entrevista = $stringFecha  . $fecha . "\r\n" ;
+                }else if ($d->horaentrevista){
+                    $entrevista = 'Hora de entrevista: ' . $hora . "\r\n" ;
+                }
             }
         }
+
+
+
     }
 
     if ($d->fecha_inicio_labores){
@@ -299,7 +312,7 @@ function getCopyDetalles($d, $tipo = null, $actExt = null, $actidExt = null, $mo
         $ben = 930;
     }
 
-    if ($detallesEmpleador == true){
+    if ($detallesEmpleador === true){
 
         $tb = 'Beneficios laborales: Antigua ley' . "\r\n" ;
 
@@ -553,7 +566,7 @@ function getCopyDetalles($d, $tipo = null, $actExt = null, $actidExt = null, $mo
 
             if(in_array($mod, [1,2, 5])){
 
-                if ($detallesEmpleador == true){
+                if ($detallesEmpleador === true){
                     $horarios .=  (!($h['isDescanso']) ? ( ($h['dia']). ': '  . ( Carbon::parse($h['horaingreso'])->format('h:i A') . ' - '. Carbon::parse($h['horasalida'])->format('h:i A') . "\r\n" ) ) : '')  ;
                 }else{
                     $horarios .= ($h['dia']). ': '  . ($h['isDescanso'] ? ' Descanso' : ( Carbon::parse($h['horaingreso'])->format('h:i A') . ' - '. Carbon::parse($h['horasalida'])->format('h:i A') ) ) . "\r\n" ;
@@ -575,7 +588,7 @@ function getCopyDetalles($d, $tipo = null, $actExt = null, $actidExt = null, $mo
 
     $alimentos = alimentosTextoCopy($d) . "\r\n" ;
 
-    $question = $camesFromCont == true ? null : ($detallesEmpleador == false ? ('*¿Postulas?*' . "\r\n") : '');
+    $question = $camesFromCont === true ? null : ($detallesEmpleador === false ? ('*¿Postulas?*' . "\r\n") : '');
 
     $periodoPago = 'Período de pago: Quincenal (fracción correspondiente)' . "\r\n" ;
 
@@ -597,32 +610,34 @@ function getCopyDetalles($d, $tipo = null, $actExt = null, $actidExt = null, $mo
             $horaretorno = 'Hora de retorno: ' . Carbon::parse($d->hora_ingreso)->format('h:i A') . "\r\n" ;
         }
 
-        return $question . ($tipo ? '' : ($camesFromCont == true ? null : $empleador) . $modalidad . $actividad) . $nacionalidad . $tipovivienda . $numpisos . $numpacientes .
+        return $question . ($tipo ? '' : ($camesFromCont === true ? null : $empleador) . $modalidad . $actividad) . $nacionalidad . $tipovivienda . $numpisos . $numpacientes .
             $edadpacientes . $diagnostico . $numadultos . $numninos . $edadninos . $detalleNinos .  $nummascotas . $tipodescanso .
-            ($d->tiempo_cuarentena == 7 ? null : ($diasalida . $horasalida . $diaretorno . $horaretorno)) . $alimentos . ( $sueldo1ermes . $sueldoenadelante . $periodoPago ) . ($detallesEmpleador == true ? ($d->estatusrequerimientoid != 1 ? $tipoBeneficiosLey : '') : '') . ($d->estatusrequerimientoid == 1 ? $tipoBeneficiosLey : '') . $tipobeneficio . $ganancia .
-            ($camesFromCont == true ? null : ($distrito . $domicilio . $referenciadomicilio . $mapa . $requisitos . $entrevista . $inicioLabores)) . $observacionesWeb;
+            ($d->tiempo_cuarentena == 7 ? null : ($diasalida . $horasalida . $diaretorno . $horaretorno)) . $alimentos . ( $sueldo1ermes . $sueldoenadelante . $periodoPago ) . ($detallesEmpleador === true ? ($d->estatusrequerimientoid != 1 ? $tipoBeneficiosLey : '') : '') . ($d->estatusrequerimientoid == 1 ? $tipoBeneficiosLey : '') . $tipobeneficio . $ganancia .
+            ($camesFromCont === true ? null : ($distrito . $domicilio . $referenciadomicilio . $mapa . $requisitos . $entrevista . $inicioLabores)) . $observacionesWeb;
 
     }else if (in_array($mod, [2,5])/*Cama Afuera*/){
 
-        return $question . ($tipo ? '' : ($camesFromCont == true ? null : $empleador) . $modalidad . $actividad) . $nacionalidad . $tipovivienda . $numpisos . $numpacientes .
-            $edadpacientes . $diagnostico . $numadultos . $numninos . $edadninos . $detalleNinos . $nummascotas . $horarios . $alimentos . ( $newTerms == true ? ( $sueldo1ermes . $sueldoenadelante . $periodoPago ) : $sueldo) . ($detallesEmpleador == true ? ($d->estatusrequerimientoid != 1 ? $tipoBeneficiosLey : '') : '' ) . ($d->estatusrequerimientoid == 1 ? $tipoBeneficiosLey : '') . $tipobeneficio . $ganancia .
-            ($camesFromCont == true ? null : ($distrito . $domicilio . $referenciadomicilio . $mapa . $requisitos . $entrevista . $inicioLabores)) . $observacionesWeb;
+        return $question . ($tipo ? '' : ($camesFromCont === true ? null : $empleador) . $modalidad . $actividad) . $nacionalidad . $tipovivienda . $numpisos . $numpacientes .
+            $edadpacientes . $diagnostico . $numadultos . $numninos . $edadninos . $detalleNinos . $nummascotas . $horarios . $alimentos . ( $newTerms === true ? ( $sueldo1ermes . $sueldoenadelante . $periodoPago ) : $sueldo) . ($detallesEmpleador === true ? ($d->estatusrequerimientoid != 1 ? $tipoBeneficiosLey : '') : '' ) . ($d->estatusrequerimientoid == 1 ? $tipoBeneficiosLey : '') . $tipobeneficio . $ganancia .
+            ($camesFromCont === true ? null : ($distrito . $domicilio . $referenciadomicilio . $mapa . $requisitos . $entrevista . $inicioLabores)) . $observacionesWeb;
 
     }else if($mod == 3/*Por Dias*/){
 
         $frecuencia = 'Frecuencia: ' . ($d->frecuenciaservicio ? $d->frecuenciaservicio : ' - ') . "\r\n" ;
 
-        return $question . ($tipo ? '' : ($camesFromCont == true ? null : $empleador) . $modalidad . $actividad) . $nacionalidad . $tipovivienda . $numpisos . $numpacientes .
-            $edadpacientes . $diagnostico . $numadultos . $numninos . $edadninos . $detalleNinos . $nummascotas . $frecuencia . $horarios . $alimentos . $sueldoPD . ( $sueldo1ermes . $sueldoenadelante . $periodoPago ) . (($d->paispedido_id == 54) ? ($detallesEmpleador == true ? $NoHayBeneficios : '' ) : null) . ($detallesEmpleador == false ? $tipobeneficio : '') . $ganancia .
-            ($camesFromCont == true ? null : ($distrito . $domicilio . $referenciadomicilio . $mapa . $requisitos . $entrevista .  $inicioLabores)) . $observacionesWeb;
+        return $question . ($tipo ? '' : ($camesFromCont === true ? null : $empleador) . $modalidad . $actividad) . $nacionalidad . $tipovivienda . $numpisos . $numpacientes .
+            $edadpacientes . $diagnostico . $numadultos . $numninos . $edadninos . $detalleNinos . $nummascotas . $frecuencia . $horarios . $alimentos . $sueldoPD . ( $sueldo1ermes . $sueldoenadelante . $periodoPago ) . (($d->paispedido_id == 54) ? ($detallesEmpleador === true ? $NoHayBeneficios : '' ) : null) . ($detallesEmpleador === false ? $tipobeneficio : '') . $ganancia .
+            ($camesFromCont === true ? null : ($distrito . $domicilio . $referenciadomicilio . $mapa . $requisitos . $entrevista .  $inicioLabores)) . $observacionesWeb;
 
     }else if($mod == 4/*24X24*/){
 
-        return $question . ($tipo ? '' : ($camesFromCont == true ? null : $empleador) . $modalidad . $actividad) . $nacionalidad . $tipovivienda . $numpisos . $numpacientes . $edadpacientes .
-            $diagnostico . $numadultos . $numninos . $edadninos . $detalleNinos . $nummascotas . $alimentos .  ( $sueldo1ermes . $sueldoenadelante . $periodoPago ) . (($d->paispedido_id == 54) ? ($detallesEmpleador == true ? $NoHayBeneficios : '' ) : null) . $ganancia . ($detallesEmpleador == false ? $tipobeneficio : '') .
-            ($camesFromCont == true ? null : ($distrito . $domicilio . $referenciadomicilio . $mapa . $requisitos . $entrevista . $inicioLabores)) . $observacionesWeb;
+        return $question . ($tipo ? '' : ($camesFromCont === true ? null : $empleador) . $modalidad . $actividad) . $nacionalidad . $tipovivienda . $numpisos . $numpacientes . $edadpacientes .
+            $diagnostico . $numadultos . $numninos . $edadninos . $detalleNinos . $nummascotas . $alimentos .  ( $sueldo1ermes . $sueldoenadelante . $periodoPago ) . (($d->paispedido_id == 54) ? ($detallesEmpleador === true ? $NoHayBeneficios : '' ) : null) . $ganancia . ($detallesEmpleador === false ? $tipobeneficio : '') .
+            ($camesFromCont === true ? null : ($distrito . $domicilio . $referenciadomicilio . $mapa . $requisitos . $entrevista . $inicioLabores)) . $observacionesWeb;
 
     }
+
+    return '';
 
 }
 

@@ -79,7 +79,7 @@ export default function EmpleadoresTable({handleRefresh, url, empleadores, activ
                                 <Td className={'vertical-align-middle'}>
                                     <div className="row mx-0">
                                         <NewCopyIcon icon={'fas fa-user-tag'} additonalClass={'col-auto px-1 my-auto icon-action align-self-center'} copyText={data.empleador} tooltipText={'Copiar nombre empleador'} successMsj={'Nombre empleador copiado'}/>
-                                        <NewCopyIcon icon={'fas fa-copy'} additonalClass={'col-auto px-1 my-auto icon-action align-self-center'} copyText={'CL ' + data.contact_name + ' ' + data.flag_emoji} tooltipText={'Copiar nombre en Google'} successMsj={'Nombre en Google copiado'}/>
+                                        <NewCopyIcon icon={'fas fa-copy'} additonalClass={'col-auto px-1 my-auto icon-action align-self-center'} copyText={'CL ' + data.contact_name + ' ' + data.telefono + ' ' + data.flag_emoji} tooltipText={'Copiar nombre en Google'} successMsj={'Nombre en Google copiado'}/>
                                         <div className={'col-auto px-1 nombre-empleador' + ((!data.domicilio || !data.contrato) ? ' text-red' : '')}>{data.nombrecorto ? data.nombrecorto : data.empleador }</div>
                                         {data.new === true ? <i data-toggle="tooltip" data-placement="top" title="Nuevo empleador con los TC" className="col-auto px-1 my-auto fas fa-star text-warning"></i> : null}
                                     </div>

@@ -1,11 +1,9 @@
-import React, {useState} from "react";
+import React from "react";
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table';
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
 import {Link} from "react-router-dom";
 import ReactPaginate from 'react-paginate';
-
 import {isResponsive} from "../../Functions/General.jsx";
-import {firstNamePost} from "../../Helpers/strings.js";
 import NewCopyIcon from "../Components/newCopyIcon.jsx";
 import ModalContratosDetalles from "./Components/modalContratosDetalles.jsx";
 import CambiarEstadoContrato from "./Modals/cambiarEstadoContrato.jsx";
@@ -22,7 +20,7 @@ export default function ContratosTable({url, setVerifIngreso, contratos, total, 
         return (
             <div className="row mx-0">
                 <NewCopyIcon icon={'fas fa-user-tag'} additonalClass={'col-auto px-1 my-auto icon-action-sm align-self-center'} copyText={data.trabajador_contact_data.nombres} tooltipText={'Copiar nombre trabajador'} successMsj={'Nombre trabajador copiado'} />
-                <NewCopyIcon icon={'fas fa-copy'} additonalClass={'col-auto px-1 my-auto icon-action-sm align-self-center'} copyText={'PO ' + data.trabajador_contact_data.nombres + ' ' + data.trabajador_contact_data.flag_emoji } tooltipText={'Copiar nombre trabajador en Google'} successMsj={'Nombre trabajador para Google Copiado'} />
+                <NewCopyIcon icon={'fas fa-copy'} additonalClass={'col-auto px-1 my-auto icon-action-sm align-self-center'} copyText={'PO ' + data.trabajador_contact_data.nombres + ' ' + data.trabajador_contact_data.telefono_whatsapp + ' ' + data.trabajador_contact_data.flag_emoji } tooltipText={'Copiar nombre trabajador en Google'} successMsj={'Nombre trabajador para Google Copiado'} />
                 <div className={'col-auto px-1 my-auto ' + (data.verif_ingreso === 1 ? '' : 'text-danger')}>{data.trabajador_contact_data.short_name}</div>
                 <NewCopyIcon icon={'fas fa-mobile-alt'} additonalClass={'col-auto px-1 my-auto icon-action-sm align-self-center'} copyText={data.trabajador_contact_data.telefono_whatsapp} tooltipText={'Copiar teléfono trabajador'} successMsj={'Teléfono trabajador copiado'} />
             </div>
@@ -35,7 +33,7 @@ export default function ContratosTable({url, setVerifIngreso, contratos, total, 
                 return (
                     <div className="row mx-0">
                         <NewCopyIcon icon={'fas fa-user-tag'} additonalClass={'col-auto px-1 my-auto icon-action-sm align-self-center'} copyText={trabajador_contact_data.nombres} tooltipText={'Copiar nombre trabajador ' + tipo} successMsj={'Nombre trabajador ' + tipo + ' copiado'}/>
-                        <NewCopyIcon icon={'fas fa-copy'} additonalClass={'col-auto px-1 my-auto icon-action-sm align-self-center'} copyText={'PO ' + trabajador_contact_data.nombres + ' ' + trabajador_contact_data.flag_emoji } tooltipText={'Copiar nombre trabajador ' + tipo + ' en Google'} successMsj={'Nombre trabajador ' + tipo + ' en Google copiado'}/>
+                        <NewCopyIcon icon={'fas fa-copy'} additonalClass={'col-auto px-1 my-auto icon-action-sm align-self-center'} copyText={'PO ' + trabajador_contact_data.nombres + ' ' + trabajador_contact_data.telefono_whatsapp + ' ' + trabajador_contact_data.flag_emoji } tooltipText={'Copiar nombre trabajador ' + tipo + ' en Google'} successMsj={'Nombre trabajador ' + tipo + ' en Google copiado'}/>
                         <div className={'col-auto px-1 my-auto'}>{trabajador_contact_data.short_name}</div>
                         <NewCopyIcon icon={'fas fa-mobile-alt'} additonalClass={'col-auto px-1 my-auto icon-action-sm align-self-center'} copyText={trabajador_contact_data.telefono_whatsapp} tooltipText={'Copiar teléfono trabajador ' + tipo} successMsj={'teléfono trabajador ' + tipo + ' copiado'} />
                     </div>
@@ -209,7 +207,7 @@ export default function ContratosTable({url, setVerifIngreso, contratos, total, 
                                 <Td className={'vertical-align-middle'}>
                                     <div className="row mx-0">
                                         <NewCopyIcon icon={'fas fa-user-tag'} additonalClass={'col-auto px-1 my-auto icon-action-sm align-self-center'} copyText={data.empleador_contact_data.nombres} tooltipText={'Copiar nombre empleador'} successMsj={'Nombre empleador copiado'} />
-                                        <NewCopyIcon icon={'fas fa-copy'} additonalClass={'col-auto px-1 my-auto icon-action-sm align-self-center'} copyText={'CL ' + data.empleador_contact_data.nombres + ' ' + data.empleador_contact_data.flag_emoji } tooltipText={'Copiar nombre empleador en Google'} successMsj={'Nombre empleador en Google copiado'} />
+                                        <NewCopyIcon icon={'fas fa-copy'} additonalClass={'col-auto px-1 my-auto icon-action-sm align-self-center'} copyText={'CL ' + data.empleador_contact_data.nombres + ' ' + data.empleador_contact_data.telefono + ' ' + data.empleador_contact_data.flag_emoji } tooltipText={'Copiar nombre empleador en Google'} successMsj={'Nombre empleador en Google copiado'} />
                                         <div className={"col-auto px-1 my-auto"}>{data.empleador}</div>
                                         <NewCopyIcon icon={'fas fa-mobile-alt'} additonalClass={'col-auto px-1 my-auto icon-action-sm align-self-center'} copyText={data.empleador_contact_data.telefono} tooltipText={'Copiar teléfono empleador'} successMsj={'Teléfono empleador copiado'}/>
                                     </div>

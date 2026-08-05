@@ -1,9 +1,9 @@
 import React, { Component, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 
-export default function CopyNombrePostulante({ nombres, flagEmoji }) {
+export default function CopyNombrePostulante({ nombres, flagEmoji, telefono }) {
     const [iconCopy, setIconCopy] = useState("far fa-file");
-    let copyText = "PO " + nombres + " " + flagEmoji;
+    let copyText = "PO " + nombres  + ( telefono ? '' : (" " + telefono)) + " " + flagEmoji;
 
     function handleCopy(e) {
         navigator.clipboard.writeText(copyText);

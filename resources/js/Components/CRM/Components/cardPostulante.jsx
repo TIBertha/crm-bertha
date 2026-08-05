@@ -4,12 +4,10 @@ import { isResponsive } from "../../Functions/General";
 import ModalHistorialContactoCardPostulante from "./modalHistorialContactoCardPostulante";
 import {
     firstNamePost,
-    getCovidCons,
     GetSpeechCerti,
     str_limit,
 } from "../../Helpers/strings";
 import NewCopyIcon from "./newCopyIcon";
-import CopyNombrePostulante from "./copyNombrePostulante";
 import BajasPostulante from "../Postulantes/Modals/bajasPostulante";
 import DataRestantePostulante from "../Postulantes/Modals/dataRestantePostulante";
 import EliminarPostulante from "../Postulantes/Modals/eliminarPostulante";
@@ -34,8 +32,6 @@ export default function CardPostulante({
     selectWp,
     removePostulante,
 }) {
-
-    let mainWeb = 'https://holabertha.com';
 
     let responsive = isResponsive();
     let fechaPostulacion = data.fecha_postulacion
@@ -184,27 +180,22 @@ export default function CardPostulante({
                     tooltipText={"Copiar nombre postulante"}
                     successMsj={"Nombre(s) copiado"}
                 />
-                <CopyNombrePostulante
-                    nombres={nombrePostulante}
-                    flagEmoji={d.flag_emoji}
+
+                <NewCopyIcon
+                    icon={"far fa-file"}
+                    additonalClass={"icon-action-sm px-0 ms-1"}
+                    copyText={"PO " + nombrePostulante  + ( d.telefono ? '' : (" " + d.telefono)) + " " + d.flag_emoji}
+                    tooltipText={"Copiar nombre en Google"}
+                    successMsj={"Nombre(s) para Google copiado"}
                 />
-                <>
-                    {d.videointroduccion && !d.video_introduccion_youtube ? (
-                        <i className="fas fa-video ms-1"></i>
-                    ) : (
-                        ""
-                    )}
-                </>
-                <>
-                    {d.video_introduccion_youtube ? (
-                        <i
-                            className="fab fa-youtube ms-1"
-                            style={{ color: "red" }}
-                        ></i>
-                    ) : (
-                        ""
-                    )}
-                </>
+
+                {d.videointroduccion && !d.video_introduccion_youtube && (
+                    <i className="fas fa-video ms-1"></i>
+                )}
+
+                {d.video_introduccion_youtube && (
+                    <i className="fab fa-youtube ms-1" style={{ color: "red" }}></i>
+                )}
 
                 {d.antecedentes_pdf ? (
                     <>
@@ -354,46 +345,6 @@ export default function CardPostulante({
                 </>
             );
         }
-    }
-
-    function rowCovid(d) {
-        let COVID = getCovidCons(d);
-
-        return (
-            <>
-                <>
-                    <>Identidad:</>
-                    {d.tipodocumento ? (
-                        <span className={"font-weight-bold ms-1 text-black"}>
-                            {d.tipodocumento}
-                        </span>
-                    ) : (
-                        <span className={"ms-1"}>-</span>
-                    )}
-                </>
-
-                <span className="mx-1">|</span>
-
-                <>
-                    <>Vacuna:</>
-                    {d.tiene_vacuna ? (
-                        <>
-                            <span
-                                className={
-                                    "font-weight-bold ms-1 text-" +
-                                    COVID.tieneVacunaColor
-                                }
-                            >
-                                {COVID.tieneVacuna}
-                            </span>
-                            {/*<i className={'far fa-id-card ms-2 text-' + COVID.tieneVacunaIconColor} data-toggle="tooltip" data-placement="bottom" title={COVID.tieneVacunaIconTitle}></i>*/}
-                        </>
-                    ) : (
-                        <span className={"ms-1"}>-</span>
-                    )}
-                </>
-            </>
-        );
     }
 
     function rowVerif(d) {

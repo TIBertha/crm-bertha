@@ -106,13 +106,6 @@ export default function RequerimientosTable({url, requerimientos, total, page, c
             );
         }
 
-        /*if (data.copy_anuncio_ai){
-            tag.push(
-                <NewCopyIcon copyText={data.copy_anuncio_ai} icon={'fa-brands fa-openai'} additonalClass={'icon-action-sm'} tooltipText={'Copy para banner - COPILOT'} successMsj={'Copy para banner copiado'} />
-            );
-
-        }*/
-
         tag.push(
             <DuplicarRequerimiento url={url} idRequerimiento={data.id} />
         );
@@ -120,24 +113,6 @@ export default function RequerimientosTable({url, requerimientos, total, page, c
         [1,4].includes(estatusID) ? tag.push(<a onClick={(e) => changeEstadoRequerimiento(e, data.id, 3)} ><i data-toggle="tooltip" data-placement="top" title="Desistir" className="fas fa-trash-alt icon-action px-2"></i></a>) : '';
 
         [3].includes(estatusID) ? (data.distrito ? (tag.push(<a onClick={(e) => changeEstadoRequerimiento(e, data.id,1)} ><i data-toggle="tooltip" data-placement="top" title="Pendiente" className="fas fa-hourglass-end icon-action px-2"></i></a>) ) : '' ) : '';
-
-        {/*
-        if (data.estadoid === 1) {
-            const isActive = Boolean(data.disponibleentrevista);
-
-            tag.push(
-                <a
-                    className="col-auto px-0"
-                    onClick={(e) => habilitarEntrevista(e, data.id, isActive)}
-                    data-toggle="tooltip"
-                    data-placement="bottom"
-                    title={(isActive ? 'Desactivar' : 'Activar') + ' publicación'}
-                >
-                    <i className={'fas ' + (isActive ? 'fa-toggle-on text-success' : 'fa-toggle-off text-secondary') + ' icon-action px-2'}/>
-                </a>
-            );
-        }
-        */}
 
         tag.push(
             <a onClick={(e) => handleEliminarRequerimiento(e, data.id)} >
@@ -202,7 +177,7 @@ export default function RequerimientosTable({url, requerimientos, total, page, c
                                 <Td className={'vertical-align-middle'}>
                                     <div className="row mx-0">
                                         <NewCopyIcon icon={'fas fa-user-tag'} additonalClass={'col-auto px-1 my-auto icon-action align-self-center'} copyText={data.empleador_contact_data.nombres} tooltipText={'Copiar nombre empleador'} successMsj={'Nombre empleador copiado'}/>
-                                        <NewCopyIcon icon={'fas fa-copy'} additonalClass={'col-auto px-1 my-auto icon-action align-self-center'} copyText={'CL ' + data.empleador_contact_data.nombres + ' ' + data.empleador_contact_data.flag_emoji } tooltipText={'Copiar nombre en Google'} successMsj={'Nombre en google copiado'}/>
+                                        <NewCopyIcon icon={'fas fa-copy'} additonalClass={'col-auto px-1 my-auto icon-action align-self-center'} copyText={'CL ' + data.empleador_contact_data.nombres + ' ' + data.empleador_contact_data.telefono + ' ' + data.empleador_contact_data.flag_emoji } tooltipText={'Copiar nombre en Google'} successMsj={'Nombre en google copiado'}/>
                                         <div className={"col-auto px-1 my-auto " + ((data.estatusempleadorid === 2) ? '' : 'text-red') }>{data.empleador}</div>
                                     </div>
                                     <div className="row mx-0">
