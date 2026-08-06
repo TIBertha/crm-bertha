@@ -235,10 +235,7 @@ function getConstDetallesEmpleador($d){
     $trabajador = '';
     $telefono = '';
     $whatsApp = '';
-    $exempleadores = '';
     $fechaIngreso = '';
-    $pdfFichaTrabajador = '';
-    $pdfComprobante = '';
     $trabajadorData = \App\Models\Views\TrabajadorView::find($d->trabajadorid);
     $adjuntoAntecedente = ($trabajadorData->antecedente_pdf ? ' - Antecedentes Adjunto: ' . getEncondedLink($d->id, 'mis-contratos/antecedentes-trabajador') . "\r\n"  : null);
     $domicilioTrabajador = ' - Domicilio: ' . $trabajadorData->direccion . ', ' . $trabajadorData->distrito_direccion . ', ' . $trabajadorData->provincia_direccion . ', ' . $trabajadorData->departamento_direccion . ', ' . $trabajadorData->distrito_pais . "\r\n" ;
@@ -310,29 +307,9 @@ function getConstDetallesEmpleador($d){
         $finGarantia = ' - Fin de garantía: ' . $fecha2 . "\r\n";
     }
 
-    if ($d->pdf_contrato){
-        $pdfContrato = ' - Contrato de selección: ' . getEncondedLink($d->id, 'pdf/ver-contrato') . "\r\n" ;
-    }
-
-    $comprobante = \App\Models\Comprobante::where('mediofacturacion', $d->id)->where('estatuscomprobante_id', 1)->first();
-
-    if ($d->monto_total_contrato != 0){
-        if ($d->paispedido_id == 54){
-            if ($d->pdf_comprobante_ext){
-                $pdfComprobante = ' - Comprobante: ' . getEncondedLink($d->id, 'pdf/ver-comprobante') . "\r\n" ;
-            }else{
-                if ($comprobante){
-                    $pdfComprobante = ' - Comprobante: ' . getEncondedLink($d->id, 'pdf/ver-comprobante') . "\r\n" ;
-                }
-            }
-        }else{
-            $pdfComprobante = ' - Recibo de pago: ' . getEncondedLink($d->id, 'pdf/ver-recib-opago') . "\r\n" ;
-        }
-    }
-
     $t4 = "\r\n" . '*Puntos importantes*:' . "\r\n" ;
     $t5 = 'a. *Le hemos enviado el celular y WhatsApp del postulante*. Ella ya recibió su celular, su dirección y un mapa. Pero *necesitará de su guía para llegar a su domicilio*.' . "\r\n" ;
-    $t6 = 'b. *Bertha no puede controlar accidentes, enfermedades o emergencias personales de un postulante*, por lo tanto *no es responsable de la ausencia o duración de una trabajadora*. Solicitamos escoger opciones (a) y (b) para disminuir el ausentismo. Si desea un *reemplazo en el futuro*, el tiempo de una nueva selección es de *mínimo 3 días* y máximo 7, de acuerdo a disponibilidad.' . "\r\n" ;
+    $t6 = 'b. *Bertha no puede controlar accidentes, enfermedades o emergencias personales de un postulante*, por lo tanto *no es responsable de la ausencia o duración de una trabajadora*. ' . ($d->tipocomision_req === 4 ? '' : 'Solicitamos escoger opciones (a) y (b) para disminuir el ausentismo.') . ' Si desea un *reemplazo en el futuro*, el tiempo de una nueva selección es de *mínimo 3 días* y máximo 7, de acuerdo a disponibilidad.' . "\r\n" ;
     $t7 = 'c. *No* brinde *adelantos* de sueldo o *préstamos* a su trabajadora.' . "\r\n" ;
     $t8 = 'd. *No* compre *uniforme* o hágalo hasta después del período de prueba, ya que el uniforme no es descontable y si usted la despide o ella renuncia, la nueva trabajadora no querrá vestir un uniforme usado. ' . "\r\n" ;
     $t9 = 'e. Toda la comunicación de *Bertha* será con el titular del contrato (*no terceros*) y *a través del Canal Chat*, así generamos un historial escrito de los acuerdos. El canal telefónico y/o de videollamadas se usan solo para entrevistas.' . "\r\n" ;

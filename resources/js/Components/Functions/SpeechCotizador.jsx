@@ -131,7 +131,7 @@ export function getSpeechCotizador(actividadID, modalidadID, sueldoIngresado, fr
             )
             + "\r\n" +  "\r\n" +
 
-            (tipoCotizacion === 'type2' ? '' : ('*Comisión 1*: ' + '*500 ' + divisa + ' y ahorra ' + ( slRest ) + ' ' + divisa +'*. Bertha cobra por la selección de personal y por brindarle los reemplazos de personal que usted necesite hasta por *3 meses*.' + "\r\n" + "\r\n")) +
+            (tipoCotizacion === 'type2' ? '' : ('*Comisión 1*: ' + '*400 ' + divisa + ' y ahorra ' + ( slRest ) + ' ' + divisa +'*. Bertha cobra por la selección de personal y por brindarle los reemplazos de personal que usted necesite hasta por *3 meses*.' + "\r\n" + "\r\n")) +
 
             'Usted como empleador puede ofrecer un sueldo de prueba *el primer mes*, lo mínimo es ' + (toPesos3(sl  * frecuencia * 4)) + ' ' + divisa +'. *Así usted tiene un ahorro de ' + ( slRest ) + ' ' + divisa +'* (' + ( (nuevSueldo * frecuencia * 4) ) + ' - ' + ( toPesos3(sl  * frecuencia * 4) ) + ' ' + divisa +'). El segundo mes, usted le aumenta a ' + (nuevSueldo * frecuencia * 4) + ' ' + divisa +'.' + "\r\n" + "\r\n" +
 
@@ -143,7 +143,7 @@ export function getSpeechCotizador(actividadID, modalidadID, sueldoIngresado, fr
 
             (
                 tipoCotizacion === 'type1' ?
-                    ('*Para atenderle*, solicitamos un adelanto de *100 ' + divisa +'* que serán descontados de la comisión. Le enviaremos los currículos de *2* trabajadores, *sin antecedentes* policiales, judiciales y penales, con *buen carácter* y con *experiencia* laboral. Las *entrevistas* son por *videollamada* o llamada. Luego de escoger, abonará el restante de la comisión (600 ' + divisa +'). Los precios incluyen IGV.')
+                    ('*Para atenderle*, solicitamos un adelanto de *100 ' + divisa +'* que serán descontados de la comisión. Le enviaremos los currículos de *2* trabajadores, *sin antecedentes* policiales, judiciales y penales, con *buen carácter* y con *experiencia* laboral. Las *entrevistas* son por *videollamada* o llamada. Luego de escoger, abonará el restante de la comisión (400 ' + divisa +'). Los precios incluyen IGV.')
                     :
                     ('*Para atenderle*, solicitamos el pago de la comisión por adelantado. Le enviaremos *una* trabajadora *sin antecedentes* policiales, judiciales y penales, con *buen carácter* y con *experiencia* laboral. No hay entrevistas o elección de currículos sino que la agencia designa el personal, lo envía al domicilio y minutos antes de su llegada envía los documentos y datos de la empleada. Los precios incluyen IGV.')
 
@@ -187,7 +187,7 @@ export function getSpeechCotizador(actividadID, modalidadID, sueldoIngresado, fr
             + "\r\n" +  "\r\n" +
 
 
-            (tipoCotizacion === 'type2' ? '' : ('*Comisión 1*: ' + '*500 ' + divisa + ' y ahorra ' + ( slRest ) + ' ' + divisa +'*. Bertha cobra por la selección de personal y por brindarle los reemplazos de personal que usted necesite hasta por *3 meses*.' + "\r\n" + "\r\n")) +
+            (tipoCotizacion === 'type2' ? '' : ('*Comisión 1*: ' + '*400 ' + divisa + ' y ahorra ' + ( slRest ) + ' ' + divisa +'*. Bertha cobra por la selección de personal y por brindarle los reemplazos de personal que usted necesite hasta por *3 meses*.' + "\r\n" + "\r\n")) +
 
             'Usted como empleador puede ofrecer un sueldo de prueba *el primer mes*, lo mínimo es ' + (toPesos3(sl  * frecuencia * 4)) + ' ' + divisa +'. Así usted tiene un *ahorro de ' + ( slRest ) + ' ' + divisa +'* (' + ( (nuevSueldo * frecuencia * 4) ) + ' - ' + ( toPesos3(sl  * frecuencia * 4) ) + ' ' + divisa +'). El segundo mes, usted le aumenta a ' + (nuevSueldo * frecuencia * 4) + ' ' + divisa +'.' + "\r\n" + "\r\n" +
 
@@ -199,7 +199,7 @@ export function getSpeechCotizador(actividadID, modalidadID, sueldoIngresado, fr
 
             (
                 tipoCotizacion === 'type1' ?
-                    ('*Para atenderle*, solicitamos un adelanto de *100 ' + divisa +'* que serán descontados de la comisión. Le enviaremos los currículos de *2* trabajadores, *sin antecedentes* policiales, judiciales y penales, con *buen carácter* y con *experiencia* laboral. Las *entrevistas* son por *videollamada* o llamada. Luego de escoger, abonará el restante de la comisión (600 ' + divisa +'). Los precios incluyen IGV.')
+                    ('*Para atenderle*, solicitamos un adelanto de *100 ' + divisa +'* que serán descontados de la comisión. Le enviaremos los currículos de *2* trabajadores, *sin antecedentes* policiales, judiciales y penales, con *buen carácter* y con *experiencia* laboral. Las *entrevistas* son por *videollamada* o llamada. Luego de escoger, abonará el restante de la comisión (400 ' + divisa +'). Los precios incluyen IGV.')
                     :
                     ('*Para atenderle*, solicitamos el pago de la comisión por adelantado. Le enviaremos *una* trabajadora *sin antecedentes* policiales, judiciales y penales, con *buen carácter* y con *experiencia* laboral. No hay entrevistas o elección de currículos sino que la agencia designa el personal, lo envía al domicilio y minutos antes de su llegada envía los documentos y datos de la empleada. Los precios incluyen IGV.')
 
@@ -243,7 +243,7 @@ export function getSpeechCotizador(actividadID, modalidadID, sueldoIngresado, fr
             )
             + "\r\n" +  "\r\n" +
 
-            (tipoCotizacion === 'type2' ? '' : ('*Comisión 1*: ' + '*500 ' + divisa + ' y ahorra ' + ( slRest ) + ' ' + divisa +'*. Bertha cobra por la selección de personal y por brindarle los reemplazos de personal que usted necesite hasta por *3 meses*.' + "\r\n" + "\r\n")) +
+            (tipoCotizacion === 'type2' ? '' : ('*Comisión 1*: ' + '*400 ' + divisa + ' y ahorra ' + ( slRest ) + ' ' + divisa +'*. Bertha cobra por la selección de personal y por brindarle los reemplazos de personal que usted necesite hasta por *3 meses*.' + "\r\n" + "\r\n")) +
 
             'Usted como empleador puede ofrecer un sueldo de prueba *el primer mes*, lo mínimo es ' + (toPesos3(sl  * frecuencia * 4)) + ' ' + divisa +'. Así usted tiene un *ahorro de ' + ( slRest ) + ' ' + divisa +'* (' + ( (nuevSueldo * frecuencia * 4) ) + ' - ' + ( toPesos3(sl  * frecuencia * 4) ) + ' ' + divisa +'). El segundo mes, usted le aumenta a ' + (nuevSueldo * frecuencia * 4) + ' ' + divisa +'.' + "\r\n" + "\r\n" +
 
@@ -257,15 +257,17 @@ export function getSpeechCotizador(actividadID, modalidadID, sueldoIngresado, fr
                 tipoCotizacion === 'type1' ?
                     ('*Para atenderle*, solicitamos un adelanto de *100 ' + divisa +'* que serán descontados de la comisión. Le enviaremos los currículos de *2* trabajadores, *sin antecedentes* policiales, judiciales y penales, con *buen carácter* y con *experiencia* laboral. Las *entrevistas* son por *videollamada* o llamada. Luego de escoger, abonará el restante de la comisión (400 ' + divisa +'). Los precios incluyen IGV.')
                     :
-                    ('Bertha realiza la selección en base a documentos como los reportes de antecedentes, *si el empleador rechaza* a las postulantes seleccionadas, podrá abonar otro adicional de *100 soles* para que Bertha haga un nuevo proceso.')
+                    ('*Para atenderle*, solicitamos el pago de la comisión por adelantado. Le enviaremos *una* trabajadora *sin antecedentes* policiales, judiciales y penales, con *buen carácter* y con *experiencia* laboral. No hay entrevistas o elección de currículos sino que la agencia designa el personal, lo envía al domicilio y minutos antes de su llegada envía los documentos y datos de la empleada. Los precios incluyen IGV.')
+
             )
             + "\r\n" + "\r\n" +
 
+            /**/
             (
                 tipoCotizacion === 'type1' ?
                     ('Bertha realiza la selección en base a documentos como los reportes de antecedentes, *si el empleador rechaza* a las postulantes seleccionadas, podrá abonar *otro adelanto de 100 ' + divisa +'* para que Bertha haga un nuevo proceso.')
                     :
-                    ('Para atenderle, solicitamos el pago de la comisión por adelantado. Le enviaremos *una* trabajadora *sin antecedentes* policiales, judiciales y penales, con *buen carácter* y con *experiencia* laboral. No hay entrevistas o elección de currículos sino que la agencia designa el personal, lo envía al domicilio y minutos antes de su llegada envía los documentos y datos de la empleada. Los precios incluyen IGV.')
+                    ('Bertha realiza la selección en base a documentos como los reportes de antecedentes, *si el empleador rechaza* a las postulantes seleccionadas, podrá abonar otro adicional de *100 soles* para que Bertha haga un nuevo proceso.')
             )
             + "\r\n" + "\r\n" +
 
