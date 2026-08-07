@@ -15,9 +15,8 @@ function isCambioAplicable($contrato)
     $fechaActual = Carbon::now()->startOfDay();
 
     // Clonar para no modificar la fecha original
-    $fechaContratoAddMonth = Carbon::parse($contrato->fecha)->addMonth()->startOfDay();
 
-    return $fechaActual->isBetween($fechaContrato, $fechaContratoAddMonth, true);
+    return $fechaActual->isBetween($fechaContrato, Carbon::parse($contrato->fecha)->addMonth()->startOfDay(), true);
 }
 
 function getNewContratos(){
@@ -116,98 +115,6 @@ function processDataContrato($data){
     return $result;
 }
 
-function showDiasHorariosContrato($modalidad, $horarios, $diaretorno = null, $diasalida = null, $tipo = 'descanso'){
-
-    $result = [];
-
-    if($modalidad == 1){
-
-        $dia_r = $diaretorno ? \App\Models\DiaSemana::find($diaretorno)->nombre : '';
-        $dia_s = $diasalida ? \App\Models\DiaSemana::find($diasalida)->nombre : '';
-
-        $result = ($dia_r AND $dia_s) ? ( ($dia_s == $dia_r) ? $dia_r : ($dia_r . ' A ' . $dia_s) ) : ' - ';
-
-    }else{
-
-        if($horarios){
-
-            foreach (json_decode($horarios, true) as $h){
-
-                if($tipo == 'descanso'){
-
-                    if($h['isDescanso']){
-
-                        $result[] = mb_substr( mb_strtoupper($h['dia']) , 0, 3);
-                    }
-
-                }else if($tipo == 'laboral'){
-
-                    if(!$h['isDescanso']){
-                        $result[] = mb_substr( mb_strtoupper($h['dia']) , 0, 3);
-                    }
-
-                }
-
-            }
-
-            $result = implode(' | ',$result);
-
-        }
-
-    }
-
-    return $result;
-}
-
-function getTerminoID($requerimientoid){
-
-    $lastApertura = \App\Models\Contrato::borrado(false)->where('requerimiento_id',  $requerimientoid )->where('tipocontrato_id', 1)->orderBy('creado', 'desc')->first();
-
-    if($lastApertura){
-
-        $fechaContrato = $lastApertura->fecha;
-
-        $fechaNewTerminos05062020 = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', '2020-06-05 00:00:00');
-        $fechaNewTerminos04082020 = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', '2020-08-04 00:00:00');
-        $fechaNewTerminos05042021 = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', '2021-04-05 00:00:00');
-
-        if( ($fechaContrato->gte($fechaNewTerminos05062020)) AND $fechaContrato->lt($fechaNewTerminos05042021)){
-            return 2;
-        }else if($fechaContrato->gte($fechaNewTerminos05042021)){
-            return 4;
-        }else if($fechaContrato->gte($fechaNewTerminos04082020)){
-            return 3;
-        }else{
-            return 1;
-        }
-
-    }else{
-        return 3;
-    }
-
-}
-
-function getNumeroPostulantes($requerimientoid){
-
-    $lastApertura = \App\Models\Contrato::where('requerimiento_id',  $requerimientoid )->where('tipocontrato_id', 1)->orderBy('creado', 'desc')->first();
-
-    if($lastApertura){
-
-        $fechaContrato = $lastApertura->fecha;
-        $fechaNewTerminos = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', '2020-07-15 00:00:00');
-
-        if($fechaContrato->gte($fechaNewTerminos)){
-            return mesesEnLetra(3);
-        }else{
-            return mesesEnLetra(5);
-        }
-
-    }else{
-        return mesesEnLetra(3);
-    }
-
-}
-
 function getCopyTrabajadorBC($token, $opcion){
     $t1 = 'Estamos tratando de comunicarnos con ella y no nos responde.' . "\r\n" . "\r\n";
     $t2 = 'Lamentamos la inasistencia de la trabajadora y las demoras que esto pueda ocasionar.' . "\r\n" . "\r\n";
@@ -251,8 +158,6 @@ function getConstDetallesEmpleador($d){
     }
 
     $pdfFichaTrabajador = ' - Ficha web:  https://holabertha.com/ficha-postulante/' . $trabajadorData->token . "\r\n" ;
-
-
 
     $t1 = 'Información de su contrato:' . "\r\n" . "\r\n";
     $t2 = '*- DETALLES DE LA TRABAJADORA:*' . "\r\n";

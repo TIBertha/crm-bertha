@@ -131,15 +131,13 @@ export function getSpeechCotizador(actividadID, modalidadID, sueldoIngresado, fr
             )
             + "\r\n" +  "\r\n" +
 
-            (tipoCotizacion === 'type2' ? '' : ('*Comisión 1*: ' + '*400 ' + divisa + ' y ahorra ' + ( slRest ) + ' ' + divisa +'*. Bertha cobra por la selección de personal y por brindarle los reemplazos de personal que usted necesite hasta por *3 meses*.' + "\r\n" + "\r\n")) +
+            (tipoCotizacion === 'type2' ? '' : ('*Comisión 1*: ' + '*500 ' + divisa + ' y ahorra ' + ( slRest ) + ' ' + divisa +'*. Bertha cobra por la selección de personal y por brindarle los reemplazos de personal que usted necesite hasta por *3 meses*.' + "\r\n" + "\r\n")) +
 
             'Usted como empleador puede ofrecer un sueldo de prueba *el primer mes*, lo mínimo es ' + (toPesos3(sl  * frecuencia * 4)) + ' ' + divisa +'. *Así usted tiene un ahorro de ' + ( slRest ) + ' ' + divisa +'* (' + ( (nuevSueldo * frecuencia * 4) ) + ' - ' + ( toPesos3(sl  * frecuencia * 4) ) + ' ' + divisa +'). El segundo mes, usted le aumenta a ' + (nuevSueldo * frecuencia * 4) + ' ' + divisa +'.' + "\r\n" + "\r\n" +
 
             'El período de prueba (*primer mes*) le servirá para evaluar al trabajador; si desea despedirle durante este tiempo o si renuncia, le daremos el *reemplazo gratuito* y le pagará sus días laborados de acuerdo a su sueldo de prueba (' + ((sl  * frecuencia * 4)) + ' ' + divisa +').' + "\r\n" + "\r\n" +
 
             (tipoCotizacion === 'type2' ? '' : ('*Después* del primer mes, el precio del reemplazo es de *' + ( slRest ) + ' ' + divisa +'*. Le enviaremos un nuevo trabajador que le pagará ' + ((sl  * frecuencia * 4)) + ' ' + divisa +' y tendrá *un nuevo ahorro de ' + ( slRest ) + ' ' + divisa +'*.' + "\r\n" + "\r\n")) +
-
-            //'- Pago por beneficios laborales (gratificaciones, CTS y vacaciones): No existe' + "\r\n" +  "\r\n" +
 
             (
                 tipoCotizacion === 'type1' ?
@@ -150,7 +148,6 @@ export function getSpeechCotizador(actividadID, modalidadID, sueldoIngresado, fr
             )
             + "\r\n" + "\r\n" +
 
-            /**/
             (
                 tipoCotizacion === 'type1' ?
                     ('Bertha realiza la selección en base a documentos como los reportes de antecedentes, *si el empleador rechaza* a las postulantes seleccionadas, podrá abonar *otro adelanto de 100 ' + divisa +'* para que Bertha haga un nuevo proceso.')
@@ -187,15 +184,13 @@ export function getSpeechCotizador(actividadID, modalidadID, sueldoIngresado, fr
             + "\r\n" +  "\r\n" +
 
 
-            (tipoCotizacion === 'type2' ? '' : ('*Comisión 1*: ' + '*400 ' + divisa + ' y ahorra ' + ( slRest ) + ' ' + divisa +'*. Bertha cobra por la selección de personal y por brindarle los reemplazos de personal que usted necesite hasta por *3 meses*.' + "\r\n" + "\r\n")) +
+            (tipoCotizacion === 'type2' ? '' : ('*Comisión 1*: ' + '*500 ' + divisa + ' y ahorra ' + ( slRest ) + ' ' + divisa +'*. Bertha cobra por la selección de personal y por brindarle los reemplazos de personal que usted necesite hasta por *3 meses*.' + "\r\n" + "\r\n")) +
 
             'Usted como empleador puede ofrecer un sueldo de prueba *el primer mes*, lo mínimo es ' + (toPesos3(sl  * frecuencia * 4)) + ' ' + divisa +'. Así usted tiene un *ahorro de ' + ( slRest ) + ' ' + divisa +'* (' + ( (nuevSueldo * frecuencia * 4) ) + ' - ' + ( toPesos3(sl  * frecuencia * 4) ) + ' ' + divisa +'). El segundo mes, usted le aumenta a ' + (nuevSueldo * frecuencia * 4) + ' ' + divisa +'.' + "\r\n" + "\r\n" +
 
             'El período de prueba (*primer mes*) le servirá para evaluar al trabajador; si desea despedirle durante este tiempo o si renuncia, le daremos el *reemplazo gratuito* y le pagará sus días laborados de acuerdo a su sueldo de prueba (' + ((sl  * frecuencia * 4)) + ' ' + divisa +').' + "\r\n" + "\r\n" +
 
             (tipoCotizacion === 'type2' ? '' : ('*Después* del primer mes, el precio del reemplazo es de *' + ( slRest ) + ' ' + divisa +'*. Le enviaremos un nuevo trabajador que le pagará ' + ((sl  * frecuencia * 4)) + ' ' + divisa +' y tendrá *un nuevo ahorro de ' + ( slRest ) + ' ' + divisa +'*.' + "\r\n" + "\r\n")) +
-
-            //'- Pago por beneficios laborales (gratificaciones, CTS y vacaciones): No existe' + "\r\n" +  "\r\n" +
 
             (
                 tipoCotizacion === 'type1' ?
@@ -206,7 +201,6 @@ export function getSpeechCotizador(actividadID, modalidadID, sueldoIngresado, fr
             )
             + "\r\n" + "\r\n" +
 
-            /**/
             (
                 tipoCotizacion === 'type1' ?
                     ('Bertha realiza la selección en base a documentos como los reportes de antecedentes, *si el empleador rechaza* a las postulantes seleccionadas, podrá abonar *otro adelanto de 100 ' + divisa +'* para que Bertha haga un nuevo proceso.')
@@ -243,15 +237,13 @@ export function getSpeechCotizador(actividadID, modalidadID, sueldoIngresado, fr
             )
             + "\r\n" +  "\r\n" +
 
-            (tipoCotizacion === 'type2' ? '' : ('*Comisión 1*: ' + '*400 ' + divisa + ' y ahorra ' + ( slRest ) + ' ' + divisa +'*. Bertha cobra por la selección de personal y por brindarle los reemplazos de personal que usted necesite hasta por *3 meses*.' + "\r\n" + "\r\n")) +
+            (tipoCotizacion === 'type2' ? '' : ('*Comisión 1*: ' + '*500 ' + divisa + ' y ahorra ' + ( slRest ) + ' ' + divisa +'*. Bertha cobra por la selección de personal y por brindarle los reemplazos de personal que usted necesite hasta por *3 meses*.' + "\r\n" + "\r\n")) +
 
             'Usted como empleador puede ofrecer un sueldo de prueba *el primer mes*, lo mínimo es ' + (toPesos3(sl  * frecuencia * 4)) + ' ' + divisa +'. Así usted tiene un *ahorro de ' + ( slRest ) + ' ' + divisa +'* (' + ( (nuevSueldo * frecuencia * 4) ) + ' - ' + ( toPesos3(sl  * frecuencia * 4) ) + ' ' + divisa +'). El segundo mes, usted le aumenta a ' + (nuevSueldo * frecuencia * 4) + ' ' + divisa +'.' + "\r\n" + "\r\n" +
 
             'El período de prueba (*primer mes*) le servirá para evaluar al trabajador; si desea despedirle durante este tiempo o si renuncia, le daremos el *reemplazo gratuito* y le pagará sus días laborados de acuerdo a su sueldo de prueba (' + ((sl  * frecuencia * 4)) + ' ' + divisa +').' + "\r\n" + "\r\n" +
 
             (tipoCotizacion === 'type2' ? '' : ('*Después* del primer mes, el precio del reemplazo es de *' + ( slRest ) + ' ' + divisa +'*. Le enviaremos un nuevo trabajador que le pagará ' + ((sl  * frecuencia * 4)) + ' ' + divisa +' y tendrá *un nuevo ahorro de ' + ( slRest ) + ' ' + divisa +'*.' + "\r\n" + "\r\n")) +
-
-            //'- Pago por beneficios laborales (gratificaciones, CTS y vacaciones): No existe' + "\r\n" +  "\r\n" +
 
             (
                 tipoCotizacion === 'type1' ?
@@ -262,7 +254,6 @@ export function getSpeechCotizador(actividadID, modalidadID, sueldoIngresado, fr
             )
             + "\r\n" + "\r\n" +
 
-            /**/
             (
                 tipoCotizacion === 'type1' ?
                     ('Bertha realiza la selección en base a documentos como los reportes de antecedentes, *si el empleador rechaza* a las postulantes seleccionadas, podrá abonar *otro adelanto de 100 ' + divisa +'* para que Bertha haga un nuevo proceso.')
@@ -285,7 +276,6 @@ export function getSpeechCotizador(actividadID, modalidadID, sueldoIngresado, fr
         ;
 
     }
-
 
     if (sueldoIngresado && modalidadID && actividadID){
         if (pais === 'pe'){
