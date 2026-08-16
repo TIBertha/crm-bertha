@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import ReactDOM from "react-dom/client";
 import { Modal, ModalBody, ModalTitle, ModalHeader } from "react-bootstrap";
 
 export default function SessionMenu({ url, profilename, profilepic }) {

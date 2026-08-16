@@ -21,6 +21,10 @@ body{
     user-select: none; /* Standard syntax */
 }
 
+body.modal-open {
+    padding-right: unset !important;
+}
+
 .login-div{
     background-color: $white_bertha;
     border-radius: 0.625rem;

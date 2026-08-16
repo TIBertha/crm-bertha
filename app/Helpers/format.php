@@ -1189,7 +1189,7 @@ function getEmpleadorContactData($contratoData){
 
     return [
         'id'                        => $contratoData->empleador->id,
-        'nombres'                   => $contratoData->empleador->usuario->nombres,
+        'nombres'                   => $contratoData->empleador->usuario->nombres . ' ' . $contratoData->empleador->usuario->apellidos,
         'flag_emoji'                => $contratoData->empleador->pais_pedido_id ? ($contratoData->empleador->pais_pedido_id == 11 ? '🇨🇱' : '🇵🇪') : '🇵🇪',
         'telefono'                  => $contratoData->empleador->usuario->telefono,
 
