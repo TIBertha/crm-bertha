@@ -746,6 +746,12 @@ function processDataPostulaciones($data){
 
             $depNac = Departamento::find($tra->usuario->departamentonacimiento_id);
 
+            $fechaOriginal = $a->fecha_postulacion; // "2026-08-17 06:53:52"
+
+            $fechaNueva = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $fechaOriginal)
+                ->subHours(4)
+                ->format('d/m/Y h:i a');
+
             $result[]=[
                 'departamentoNacimiento'        => $tra->usuario->departamentonacimiento_id ? ($depNac->nombre . ' - ' . $depNac->pais->nombre) : null,
                 'diaspasadoscertificadoantecedente' => $daysPast,
@@ -777,7 +783,7 @@ function processDataPostulaciones($data){
                 'estatus_postulante'            => $tra->estatusPostulante ? $tra->estatusPostulante->nombre : '',
                 'foto'                          => $tra->foto,
                 'usuario_id'                    => $tra->usuario_id,
-                'fecha_postulacion'             => $a->fecha_postulacion,
+                'fecha_postulacion'             => $fechaNueva,
                 'activo'                        => $a->activo,
                 'borrado'                       => $a->borrado,
                 'creado'                        => $a->creado,

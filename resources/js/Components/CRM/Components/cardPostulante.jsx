@@ -1,5 +1,5 @@
 import React from "react";
-import {format, parseISO} from 'date-fns';
+import { parse, format } from "date-fns";
 import { isResponsive } from "../../Functions/General";
 import ModalHistorialContactoCardPostulante from "./modalHistorialContactoCardPostulante";
 import {
@@ -34,9 +34,14 @@ export default function CardPostulante({
 }) {
 
     let responsive = isResponsive();
-    let fechaPostulacion = data.fecha_postulacion
-        ? format(parseISO(data.fecha_postulacion), "dd/MM/yyyy h:mm aa")
-        : null;
+    /*let fechaPostulacion = data.fecha_postulacion
+        ? format(
+            parse(data.fecha_postulacion, "yyyy-MM-dd HH:mm:ss", new Date()),
+            "dd/MM/yyyy h:mm aa"
+        )
+        : null;*/
+
+    let fechaPostulacion = data.fecha_postulacion ?? null;
 
     let foto = data.foto ? data.foto : fotoExample;
     let nombrePostulante =
