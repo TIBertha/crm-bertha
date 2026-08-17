@@ -327,15 +327,7 @@ function getCopyDetalles($d, $tipo = null, $actExt = null, $actidExt = null, $mo
         }
 
         if($d->estatusrequerimientoid == 4){
-            $nacionalidad = '*Postulante peruana/extranjera/ambas*:' . "\r\n" ;
-
-            if ($d->paispedido_id == 54){
-                if($d->tipobeneficio_id){
-                    $tipobeneficio = $tb;
-                }else{
-                    $tipobeneficio = 'Beneficios laborales: Nueva ley' . "\r\n" ;
-                }
-            }
+            $nacionalidad = getNacionalidadGrupo($d->id);
 
         }else{
 
@@ -610,29 +602,54 @@ function getCopyDetalles($d, $tipo = null, $actExt = null, $actidExt = null, $mo
             $horaretorno = 'Hora de retorno: ' . Carbon::parse($d->hora_ingreso)->format('h:i A') . "\r\n" ;
         }
 
+        if ($d->estatusrequerimientoid === 4 && $detallesEmpleador === true && intval($d->pedido_web) === 1 && $d->modalidadhorario){
+            $newHor = 'Horario: ' . $d->modalidadhorario  . "\r\n";
+        }else{
+            $newHor = ($diasalida . $horasalida . $diaretorno . $horaretorno);
+        }
+
         return $question . ($tipo ? '' : ($camesFromCont === true ? null : $empleador) . $modalidad . $actividad) . $nacionalidad . $tipovivienda . $numpisos . $numpacientes .
             $edadpacientes . $diagnostico . $numadultos . $numninos . $edadninos . $detalleNinos .  $nummascotas . $tipodescanso .
-            ($d->tiempo_cuarentena == 7 ? null : ($diasalida . $horasalida . $diaretorno . $horaretorno)) . $alimentos . ( $sueldo1ermes . $sueldoenadelante . $periodoPago ) . ($detallesEmpleador === true ? ($d->estatusrequerimientoid != 1 ? $tipoBeneficiosLey : '') : '') . ($d->estatusrequerimientoid == 1 ? $tipoBeneficiosLey : '') . $tipobeneficio . $ganancia .
+            $newHor . $alimentos . ( $sueldo1ermes . $sueldoenadelante . $periodoPago ) . ($detallesEmpleador === true ? ($d->estatusrequerimientoid != 1 ? $tipoBeneficiosLey : '') : '') . ($d->estatusrequerimientoid == 1 ? $tipoBeneficiosLey : '') . $tipobeneficio . $ganancia .
             ($camesFromCont === true ? null : ($distrito . $domicilio . $referenciadomicilio . $mapa . $requisitos . $entrevista . $inicioLabores)) . $observacionesWeb;
 
     }else if (in_array($mod, [2,5])/*Cama Afuera*/){
 
+        if ($d->estatusrequerimientoid === 4 && $detallesEmpleador === true && intval($d->pedido_web) === 1 && $d->modalidadhorario){
+            $newHor = 'Horario: ' . $d->modalidadhorario  . "\r\n";
+        }else{
+            $newHor = $horarios;
+        }
+
         return $question . ($tipo ? '' : ($camesFromCont === true ? null : $empleador) . $modalidad . $actividad) . $nacionalidad . $tipovivienda . $numpisos . $numpacientes .
-            $edadpacientes . $diagnostico . $numadultos . $numninos . $edadninos . $detalleNinos . $nummascotas . $horarios . $alimentos . ( $newTerms === true ? ( $sueldo1ermes . $sueldoenadelante . $periodoPago ) : $sueldo) . ($detallesEmpleador === true ? ($d->estatusrequerimientoid != 1 ? $tipoBeneficiosLey : '') : '' ) . ($d->estatusrequerimientoid == 1 ? $tipoBeneficiosLey : '') . $tipobeneficio . $ganancia .
+            $edadpacientes . $diagnostico . $numadultos . $numninos . $edadninos . $detalleNinos . $nummascotas . $newHor . $alimentos .
+            ( $newTerms === true ? ( $sueldo1ermes . $sueldoenadelante . $periodoPago ) : $sueldo) .
+            ($detallesEmpleador === true ? ($d->estatusrequerimientoid != 1 ? $tipoBeneficiosLey : '') : '' ) . ($d->estatusrequerimientoid == 1 ? $tipoBeneficiosLey : '') .
+            $tipobeneficio . $ganancia .
             ($camesFromCont === true ? null : ($distrito . $domicilio . $referenciadomicilio . $mapa . $requisitos . $entrevista . $inicioLabores)) . $observacionesWeb;
 
     }else if($mod == 3/*Por Dias*/){
 
+        if ($d->estatusrequerimientoid === 4 && $detallesEmpleador === true && intval($d->pedido_web) === 1 && $d->modalidadhorario){
+            $newHor = 'Horario: ' . $d->modalidadhorario  . "\r\n";
+        }else{
+            $newHor = $horarios;
+        }
+
         $frecuencia = 'Frecuencia: ' . ($d->frecuenciaservicio ? $d->frecuenciaservicio : ' - ') . "\r\n" ;
 
         return $question . ($tipo ? '' : ($camesFromCont === true ? null : $empleador) . $modalidad . $actividad) . $nacionalidad . $tipovivienda . $numpisos . $numpacientes .
-            $edadpacientes . $diagnostico . $numadultos . $numninos . $edadninos . $detalleNinos . $nummascotas . $frecuencia . $horarios . $alimentos . $sueldoPD . ( $sueldo1ermes . $sueldoenadelante . $periodoPago ) . (($d->paispedido_id == 54) ? ($detallesEmpleador === true ? $NoHayBeneficios : '' ) : null) . ($detallesEmpleador === false ? $tipobeneficio : '') . $ganancia .
+            $edadpacientes . $diagnostico . $numadultos . $numninos . $edadninos . $detalleNinos . $nummascotas . $frecuencia . $newHor . $alimentos . $sueldoPD .
+            ( $sueldo1ermes . $sueldoenadelante . $periodoPago ) . (($d->paispedido_id == 54) ? ($detallesEmpleador === true ? $NoHayBeneficios : '' ) : null) .
+            ($detallesEmpleador === false ? $tipobeneficio : '') . $ganancia .
             ($camesFromCont === true ? null : ($distrito . $domicilio . $referenciadomicilio . $mapa . $requisitos . $entrevista .  $inicioLabores)) . $observacionesWeb;
 
     }else if($mod == 4/*24X24*/){
 
-        return $question . ($tipo ? '' : ($camesFromCont === true ? null : $empleador) . $modalidad . $actividad) . $nacionalidad . $tipovivienda . $numpisos . $numpacientes . $edadpacientes .
-            $diagnostico . $numadultos . $numninos . $edadninos . $detalleNinos . $nummascotas . $alimentos .  ( $sueldo1ermes . $sueldoenadelante . $periodoPago ) . (($d->paispedido_id == 54) ? ($detallesEmpleador === true ? $NoHayBeneficios : '' ) : null) . $ganancia . ($detallesEmpleador === false ? $tipobeneficio : '') .
+        return $question . ($tipo ? '' : ($camesFromCont === true ? null : $empleador) . $modalidad . $actividad) . $nacionalidad . $tipovivienda . $numpisos .
+            $numpacientes . $edadpacientes .
+            $diagnostico . $numadultos . $numninos . $edadninos . $detalleNinos . $nummascotas . $alimentos .  ( $sueldo1ermes . $sueldoenadelante . $periodoPago ) .
+            (($d->paispedido_id == 54) ? ($detallesEmpleador === true ? $NoHayBeneficios : '' ) : null) . $ganancia . ($detallesEmpleador === false ? $tipobeneficio : '') .
             ($camesFromCont === true ? null : ($distrito . $domicilio . $referenciadomicilio . $mapa . $requisitos . $entrevista . $inicioLabores)) . $observacionesWeb;
 
     }
@@ -938,7 +955,6 @@ function processDataRequerimiento($data){
         $newTerms1711 = isNewTerms1711($d->creado);
         $contract = validateNewContrato($d, $d->paispedido_id, $contratosGroup, $tiposcontratosAll);
         $dataAnuncio = [];
-        $copyAnuncioAI = null;
 
         // Divisa
         if ($d->paispedido_id == 54) {
@@ -980,37 +996,6 @@ function processDataRequerimiento($data){
                 'referenciacanvas'      => $d->referenciacanvas ? mb_convert_case( $d->referenciacanvas, MB_CASE_TITLE, "UTF-8") : null,
             ];
 
-
-            $newFrecuenciaCopy = $dataAnuncio['frecuencia'];
-            $newSueldoCopy = $dataAnuncio['sueldo'];
-            $newHorarioCopy = '';
-
-            if($dataAnuncio['modalidadid'] == 1){
-                $h = $dataAnuncio['horarioCD'];
-                $newHorarioCopy = 'Salida: ' . mb_convert_case( $h['diasalida'], MB_CASE_TITLE, "UTF-8")  . ' ' . $h['horasalida'] .  "\r\n" . 'Ingreso: ' . mb_convert_case( $h['diaingreso'], MB_CASE_TITLE, "UTF-8") . ' ' . $h['horaingreso'] .  "\r\n";
-            }else if($dataAnuncio['modalidadid'] == 2){
-                foreach ($dataAnuncio['horarioCF'] as $h) {
-                    $newHorarioCopy .= $h['dia'] . ' de ' . $h['ingreso'] . ' a  ' . $h['salida'] . "\r\n";
-                }
-                $newHorarioCopy = "\r\n" . trim($newHorarioCopy) . "\r\n";
-            }else if($dataAnuncio['modalidadid'] == 3){
-                foreach ($dataAnuncio['horarioPD'] as $h) {
-                    $newHorarioCopy .= $h['dia'] . ' de ' . $h['ingreso'] . ' a  ' . $h['salida'] . "\r\n";
-                }
-                $newHorarioCopy =  "\r\n" . trim($newHorarioCopy) . "\r\n";
-                $newSueldoCopy = $dataAnuncio['sueldopordia'];
-            }
-
-            $copyAnuncioAI =
-                'Generame un banner con los siguientes datos: ' . "\r\n" .
-                'Fecha: ' . $dataAnuncio['fechaentrevista'] . "\r\n" .
-                'Actividad: ' . $dataAnuncio['actividad'] . "\r\n" .
-                ($dataAnuncio['modalidadid'] == 3  ? 'Frecuencia: ' . $newFrecuenciaCopy : 'Modalidad: ' . $dataAnuncio['modalidad']) . "\r\n".
-                'Ubicación: ' . $dataAnuncio['distrito'] . "\r\n" .
-                'Referencia: ' . $dataAnuncio['referencia'] . "\r\n" .
-                'Horario: ' . $newHorarioCopy .
-                'Sueldo: ' . $newSueldoCopy . "\r\n" ;
-
         }
 
         $textoAlimentos = collect([
@@ -1029,9 +1014,8 @@ function processDataRequerimiento($data){
 
 
         $result[] = [
-
-            'copy_anuncio_ai' => $copyAnuncioAI,
             'data_anuncio' => $dataAnuncio,
+            'pedido_web' => boolval($d->pedido_web),
 
             'postulados' => $postulados[$d->id]->total ?? 0,
             'empleador_contact_data' => $empleadores[$d->empleadorid] ?? null,

@@ -8,6 +8,7 @@ use App\Models\Views\TrabajadorView;
 use App\Models\Views\EmpleadorView;
 use App\Models\Views\DistritoView;
 use App\Models\Trabajador;
+use App\Models\RequerimientoPostulacion;
 use Carbon\Carbon;
 
 function getDivisaDetails($countryID){
@@ -32,15 +33,63 @@ function alimentosTextoCopy($data) {
         ->values();
 
     if ($seleccionados->isEmpty()) {
-        return '*No brinda alimentos';
+        return '*No brinda alimentos*';
     }
 
     if ($seleccionados->count() === 1) {
-        return '*Brinda ' . $seleccionados->first();
+        return '*Brinda ' . $seleccionados->first() . '*';
     }
 
     $ultimo = $seleccionados->pop();
-    return '*Brinda ' . $seleccionados->join(', ') . ' y ' . $ultimo;
+    return '*Brinda ' . $seleccionados->join(', ') . ' y ' . $ultimo . '*';
+}
+
+function getNacionalidadGrupo($requerimientoId)
+{
+    // 1. Obtener los trabajadores asociados al requerimiento
+    $trabajadoresIds = RequerimientoPostulacion::where('requerimiento_id', $requerimientoId)
+        ->pluck('trabajador_id')
+        ->toArray();
+
+    // Si no hay trabajadores → null
+    if (empty($trabajadoresIds)) {
+        return null;
+    }
+
+    // 2. Obtener nacionalidades desde TrabajadoresView
+    $nacionalidades = TrabajadorView::whereIn('id', $trabajadoresIds)
+        ->pluck('nacionalidad')
+        ->toArray();
+
+    // Si no hay nacionalidades → null
+    if (empty($nacionalidades)) {
+        return null;
+    }
+
+    // 3. Normalizar (mayúsculas, sin espacios)
+    $nacionalidades = array_map('trim', array_map('strtoupper', $nacionalidades));
+
+    // Filtrar vacíos
+    $nacionalidades = array_filter($nacionalidades, fn($n) => $n !== '');
+
+    // Si después de filtrar sigue vacío → null
+    if (empty($nacionalidades)) {
+        return null;
+    }
+
+    // 4. Lógica de clasificación
+    $total = count($nacionalidades);
+    $totalPeruanos = count(array_filter($nacionalidades, fn($n) => $n === 'PERUANA'));
+
+    if ($totalPeruanos === $total) {
+        return 'Postulante nacional/extranjera/ambas: NACIONAL' . "\r\n";
+    }
+
+    if ($totalPeruanos === 0) {
+        return 'Postulante nacional/extranjera/ambas: EXTRANJERA' . "\r\n";
+    }
+
+    return 'Postulante nacional/extranjera/ambas: AMBAS' . "\r\n";
 }
 
 function getMonthName($month){

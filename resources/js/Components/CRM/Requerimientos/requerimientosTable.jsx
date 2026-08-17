@@ -81,9 +81,15 @@ export default function RequerimientosTable({url, requerimientos, total, page, c
         if (!cls) return null;
 
         return (
-            <span className={'badge ' + cls + ' badge-dt'}>
-                {data.estado}
-            </span>
+            <>
+                <span className={'badge ' + cls + ' badge-dt'}>
+                    {data.estado}
+                </span>
+
+                {data.pedido_web === true &&
+                <p className={'badge text-bg-warning badge-dt'}>PEDIDO WEB</p>
+                }
+            </>
         );
     }
 
