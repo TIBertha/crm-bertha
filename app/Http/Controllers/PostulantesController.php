@@ -382,7 +382,7 @@ class PostulantesController extends Controller
 
     public function ajaxGetDataInicial(){
 
-        $nacionalidades = Nacionalidad::borrado(false)->orderBy('nombre', 'asc')->get();
+        $nacionalidades = Nacionalidad::whereIn('id', [1,2])->orderBy('nombre', 'asc')->get();
         $actividades = Actividad::borrado(false)->ordenar()->get();
         $modalidades = Modalidad::ordenar()->get();
         $estados = EstatusPostulante::borrado(false)->orderBy('nombre', 'asc')->get();
@@ -548,11 +548,20 @@ class PostulantesController extends Controller
         $query->when($paispostulacion, fn($q) => $q->where('postulando_pais_id', $paispostulacion));
         $query->when($estado, fn($q) => $q->where('estatuspostulante_id', $estado));
 
+        // Opción 1 → Solo peruanos (paisnacimiento_id = 54)
         $query->when($nacionalidad == 1, function ($q) {
             $q->whereHas('usuario', function ($u) {
                 $u->where('paisnacimiento_id', 54);
             });
         });
+
+        // Opción 2 → Solo extranjeros (paisnacimiento_id != 54)
+        $query->when($nacionalidad == 2, function ($q) {
+            $q->whereHas('usuario', function ($u) {
+                $u->where('paisnacimiento_id', '!=', 54);
+            });
+        });
+        
         //$query->when(in_array($nacionalidad, [1,2]), fn($q) => $q->where('nacionalidad_id', $nacionalidad));
         $query->when($resultadocovid, fn($q) => $q->where('resultado_covid', $resultadocovid));
         $query->when($tuvocovid, fn($q) => $q->where('tuvo_covid', $tuvocovid));
