@@ -472,7 +472,7 @@ class EmpleadoresIndex extends Component{
         let {url, sideBar, viewModalFormRequerimiento, textoresultados, exist, linkFormRequerimiento, modalGenerateLinkFormRequerimiento, isLoading, empleadores, totalempleadores, page, isBusqueda} = this.state;
 
         let links = {
-            ElDNI: 'https://dniperu.com/buscar-dni-nombres-apellidos/',
+            ElDNI: 'https://eldni.com',
             SIS: 'http://app.sis.gob.pe/SisConsultaEnLinea/Consulta/frmConsultaEnLinea.aspx',
             RUN: 'https://consulta.servel.cl'
         };

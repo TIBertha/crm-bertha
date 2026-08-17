@@ -547,7 +547,13 @@ class PostulantesController extends Controller
         $query->when($token, fn($q) => $q->where('token', $token));
         $query->when($paispostulacion, fn($q) => $q->where('postulando_pais_id', $paispostulacion));
         $query->when($estado, fn($q) => $q->where('estatuspostulante_id', $estado));
-        $query->when(in_array($nacionalidad, [1,2]), fn($q) => $q->where('nacionalidad_id', $nacionalidad));
+
+        $query->when($nacionalidad == 1, function ($q) {
+            $q->whereHas('usuario', function ($u) {
+                $u->where('paisnacimiento_id', 54);
+            });
+        });
+        //$query->when(in_array($nacionalidad, [1,2]), fn($q) => $q->where('nacionalidad_id', $nacionalidad));
         $query->when($resultadocovid, fn($q) => $q->where('resultado_covid', $resultadocovid));
         $query->when($tuvocovid, fn($q) => $q->where('tuvo_covid', $tuvocovid));
 
