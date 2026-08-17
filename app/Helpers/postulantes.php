@@ -69,7 +69,7 @@ function formatDataPostulante($data){
 
                 'nombres'                    => $d->usuario->nombres . ' ' . $d->usuario->apellidos,
 
-                'nacionalidad'               => $d->usuario->nacionalidad->nombre,
+                'nacionalidad'               => $d->usuario->nacionalidad->nombre ?? 'NO NOMBRES',
                 'tipodocumento_id'           => $d->usuario->tipodocumento_id,
                 'tipodocumento'              => findDocumentAcronym($d->usuario->tipodocumento_id),
                 'nacionalidadid'             => $d->usuario->nacionalidad_id,

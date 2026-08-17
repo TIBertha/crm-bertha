@@ -86,7 +86,7 @@ export default function RequerimientosTable({url, requerimientos, total, page, c
                     {data.estado}
                 </span>
 
-                {data.pedido_web === true &&
+                {(data.estadoid === 4 && data.pedido_web === true) &&
                 <p className={'badge text-bg-warning badge-dt'}>PEDIDO WEB</p>
                 }
             </>
