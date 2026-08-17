@@ -102,7 +102,7 @@ class RequerimientosNew extends Component {
             horaretorno: setHours(setMinutes(new Date(), 0), 7),
             diassemana: [],
             horarios: armarHorarioRequerimiento(1),
-            tipoBeneficio: '',
+            tipoBeneficio: 2,
             tiposBeneficios: [],
             linkDomicilio: '',
             domicilio: '',
@@ -610,15 +610,16 @@ class RequerimientosNew extends Component {
                 actividad: e.target.value
             }, this.getModalidad );
 
-        }else if(tipo === 'modalidad'){
+        }else if(tipo === 'modalidad') {
+
+            const modalidad = Number(e.target.value);
 
             this.setState({
                 modalidad: e.target.value,
                 montoComision: getMontoComision(null, null, e.target.value, this.state),
             }, () => {
-                this.changeModalidad(e.target.value)
+                this.changeModalidad(modalidad);
             });
-
         }else if (tipo === 'paispedido'){
 
             let value = parseInt(e.target.value);
@@ -908,8 +909,14 @@ class RequerimientosNew extends Component {
     }
 
     changeModalidad(modalidad){
+        const beneficioMap = {
+            1: 2,
+            2: 1
+        };
+
         this.setSelectionModCount(modalidad,null);
         this.setState({
+            tipoBeneficio: beneficioMap[modalidad] ?? 4,
             frecuencia: '',
             valordiafrecuencia: 80,
             cuarentena: (modalidad === 1) ? 1 : '',
