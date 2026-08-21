@@ -138,6 +138,8 @@ class RequerimientosEdit extends Component{
             modalidadHorario: '',
             modalidadHorarioSueldo: '',
             semiModalidad: '',
+            detalleMascotas: '',
+            detalleTrabajadoraExtra: '',
 
             keyTab: 'tab1',
         };
@@ -859,6 +861,8 @@ class RequerimientosEdit extends Component{
                         {id: 2, value: "Almuerzo", isChecked: Boolean(r.data.almuerzo)},
                         {id: 3, value: "Cena", isChecked: Boolean(r.data.cena)}
                     ],
+                    detalleMascotas: r.data.detalle_mascotas,
+                    detalleTrabajadoraExtra: r.data.detalle_trabajadora_extra,
                     tipoComision: r.data.tipocomision,
                     inputDomicilio: r.data.input_domicilio,
                     montoComision: r.data.monto_comision,

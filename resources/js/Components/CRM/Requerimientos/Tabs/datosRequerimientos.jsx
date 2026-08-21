@@ -602,21 +602,45 @@ export default function DatosRequerimientos({url, view, data, show, handleChange
                 <Edades url={url} campo={data.edadbebes} name={'edadbebes'} labelEdad={'Edad Bebes'} onDelete={handleDelete} onAddition={handleAddition} onDrag={handleDrag} />
             }
 
-            { ([1,5,9,13,14].includes(actividad)) &&
-                <div className={'form-group col-12 col-md-7'}>
-                    <div className={'row'}>
-                        <label className="col-12 col-md-3 col-form-label align-self-center">N° Mascotas</label>
-                        <div className="col-md-9 align-self-center">
-                            <select className="form-control"  name="nummascotas" value={data.nummascotas} onChange={handleChange} disabled={show == true ? true : false}>
-                                <option key="0" value="">Seleccione</option>
-                                {data.cantidades.map((number, index) => {
-                                    return <option key={index} value={number} >{ (number) }</option>
-                                })}
-                            </select>
-                        </div>
+            <div className={'form-group col-12 col-md-7'}>
+                <div className={'row'}>
+                    <label className="col-12 col-md-3 col-form-label align-self-center">N° Mascotas</label>
+                    <div className="col-md-9 align-self-center">
+                        <select className="form-control"  name="nummascotas" value={data.nummascotas} onChange={handleChange} disabled={show == true ? true : false}>
+                            <option key="0" value="">Seleccione</option>
+                            {data.cantidades.map((number, index) => {
+                                return <option key={index} value={number} >{ (number) }</option>
+                            })}
+                        </select>
                     </div>
                 </div>
-            }
+            </div>
+
+            {((view == 'edit') && (data.detalleMascotas)) ?
+                <div className={'form-group col-12 col-md-7'}>
+                    <div className={'row'}>
+                        <label className="col-12 col-md-3 col-form-label align-self-center">Detalle Mascotas(web)</label>
+                        <div className="col-md-9 align-self-center">
+                            <div className={'row mx-0'}>
+                                <div className={'col ps-0 pe-1'}>
+                                    <input type="text" className="form-control" id="detalleMascotas" name="detalleMascotas" value={data.detalleMascotas} onChange={handleChange} placeholder="Detalles Mascotas" disabled={true} />
+                                </div>
+                                <div className='col-auto pe-0 ps-1'>
+                                    <NewCopyButton
+                                        icon={'fas fa-link'}
+                                        additionalClass={'alignButtonReq icon-question'}
+                                        copyText={data.detalleMascotas}
+                                        successMsj={'Link copiado exitosamente'}
+                                        btnColor={'purple'}
+                                        tooltipText={'Copiar domicilio'}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                : ''}
 
             {(data.existModalidadHorario) &&
                 <>
@@ -652,6 +676,32 @@ export default function DatosRequerimientos({url, view, data, show, handleChange
             { (parseInt(data.cuarentena) !== 7) &&
                 <Horarios data={data} onChangeHorario={handleChangeHorarios} onChange={handleChange} view={view} />
             }
+
+            {((view == 'edit') && (data.detalleTrabajadoraExtra)) ?
+                <div className={'form-group col-12 col-md-7'}>
+                    <div className={'row'}>
+                        <label className="col-12 col-md-3 col-form-label align-self-center">Detalles Otra Trabajadora(web)</label>
+                        <div className="col-md-9 align-self-center">
+                            <div className={'row mx-0'}>
+                                <div className={'col ps-0 pe-1'}>
+                                    <input type="text" className="form-control" id="detalleTrabajadoraExtra" name="detalleTrabajadoraExtra" value={data.detalleTrabajadoraExtra} onChange={handleChange} placeholder="Detalles Otra Trabajadora" disabled={true} />
+                                </div>
+                                <div className='col-auto pe-0 ps-1'>
+                                    <NewCopyButton
+                                        icon={'fas fa-link'}
+                                        additionalClass={'alignButtonReq icon-question'}
+                                        copyText={data.detalleTrabajadoraExtra}
+                                        successMsj={'Link copiado exitosamente'}
+                                        btnColor={'purple'}
+                                        tooltipText={'Copiar domicilio'}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                : ''}
 
             <div className="form-group col-12 col-md-7 mt-10 light-purple-bg padding-y-special">
                 <div className={'row'}>

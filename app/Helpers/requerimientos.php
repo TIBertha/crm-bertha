@@ -191,6 +191,8 @@ function getCopyDetalles($d, $tipo = null, $actExt = null, $actidExt = null, $mo
     $referenciadomicilio = '';
     $domicilio = '';
     $nacionalidad = '';
+    $detalleTrabajadorExtra = '';
+    $datalleMascotas = '';
     $requisitos = '' ;
     $inicioLabores = '';
     $ganancia = '';
@@ -329,6 +331,11 @@ function getCopyDetalles($d, $tipo = null, $actExt = null, $actidExt = null, $mo
         if($d->estatusrequerimientoid == 4){
             $nacionalidad = getNacionalidadGrupo($d->id);
 
+            $datalleMascotas = ' (' . $d->detalle_mascotas . ')';
+
+            if ($d->detalle_trabajadora_extra){
+                $detalleTrabajadorExtra = 'Tiene otra trabajadora adicional: Sí (' . $d->detalle_trabajadora_extra . ')' . "\r\n" ;
+            }
         }else{
 
             if ( $d->nacionalidadid ){
@@ -516,7 +523,7 @@ function getCopyDetalles($d, $tipo = null, $actExt = null, $actidExt = null, $mo
     }
 
     if($act == 1){
-        $nummascotas = ($d->num_mascotas != null  ? ('Cantidad de mascotas: ' . $d->num_mascotas . "\r\n") : ($detallesEmpleador == true ? ('*Cantidad de mascotas:*' . "\r\n") : ''));
+        $nummascotas = ($d->num_mascotas != null  ? ('Cantidad de mascotas: ' . $d->num_mascotas . $datalleMascotas . "\r\n") : ($detallesEmpleador == true ? ('*Cantidad de mascotas:*' . "\r\n") : ''));
     }
 
     if (in_array($act, [1,2,4,5,6,7,8,9])){
@@ -610,7 +617,7 @@ function getCopyDetalles($d, $tipo = null, $actExt = null, $actidExt = null, $mo
 
         return $question . ($tipo ? '' : ($camesFromCont === true ? null : $empleador) . $modalidad . $actividad) . $nacionalidad . $tipovivienda . $numpisos . $numpacientes .
             $edadpacientes . $diagnostico . $numadultos . $numninos . $edadninos . $detalleNinos .  $nummascotas . $tipodescanso .
-            $newHor . $alimentos . ( $sueldo1ermes . $sueldoenadelante . $periodoPago ) . ($detallesEmpleador === true ? ($d->estatusrequerimientoid != 1 ? $tipoBeneficiosLey : '') : '') . ($d->estatusrequerimientoid == 1 ? $tipoBeneficiosLey : '') . $tipobeneficio . $ganancia .
+            $newHor . $detalleTrabajadorExtra . $alimentos . ( $sueldo1ermes . $sueldoenadelante . $periodoPago ) . ($detallesEmpleador === true ? ($d->estatusrequerimientoid != 1 ? $tipoBeneficiosLey : '') : '') . ($d->estatusrequerimientoid == 1 ? $tipoBeneficiosLey : '') . $tipobeneficio . $ganancia .
             ($camesFromCont === true ? null : ($distrito . $domicilio . $referenciadomicilio . $mapa . $requisitos . $entrevista . $inicioLabores)) . $observacionesWeb;
 
     }else if (in_array($mod, [2,5])/*Cama Afuera*/){
@@ -622,7 +629,7 @@ function getCopyDetalles($d, $tipo = null, $actExt = null, $actidExt = null, $mo
         }
 
         return $question . ($tipo ? '' : ($camesFromCont === true ? null : $empleador) . $modalidad . $actividad) . $nacionalidad . $tipovivienda . $numpisos . $numpacientes .
-            $edadpacientes . $diagnostico . $numadultos . $numninos . $edadninos . $detalleNinos . $nummascotas . $newHor . $alimentos .
+            $edadpacientes . $diagnostico . $numadultos . $numninos . $edadninos . $detalleNinos . $nummascotas . $newHor . $detalleTrabajadorExtra . $alimentos .
             ( $newTerms === true ? ( $sueldo1ermes . $sueldoenadelante . $periodoPago ) : $sueldo) .
             ($detallesEmpleador === true ? ($d->estatusrequerimientoid != 1 ? $tipoBeneficiosLey : '') : '' ) . ($d->estatusrequerimientoid == 1 ? $tipoBeneficiosLey : '') .
             $tipobeneficio . $ganancia .
@@ -639,7 +646,7 @@ function getCopyDetalles($d, $tipo = null, $actExt = null, $actidExt = null, $mo
         $frecuencia = 'Frecuencia: ' . ($d->frecuenciaservicio ? $d->frecuenciaservicio : ' - ') . "\r\n" ;
 
         return $question . ($tipo ? '' : ($camesFromCont === true ? null : $empleador) . $modalidad . $actividad) . $nacionalidad . $tipovivienda . $numpisos . $numpacientes .
-            $edadpacientes . $diagnostico . $numadultos . $numninos . $edadninos . $detalleNinos . $nummascotas . $frecuencia . $newHor . $alimentos . $sueldoPD .
+            $edadpacientes . $diagnostico . $numadultos . $numninos . $edadninos . $detalleNinos . $nummascotas . $frecuencia . $newHor . $detalleTrabajadorExtra . $alimentos . $sueldoPD .
             ( $sueldo1ermes . $sueldoenadelante . $periodoPago ) . (($d->paispedido_id == 54) ? ($detallesEmpleador === true ? $NoHayBeneficios : '' ) : null) .
             ($detallesEmpleador === false ? $tipobeneficio : '') . $ganancia .
             ($camesFromCont === true ? null : ($distrito . $domicilio . $referenciadomicilio . $mapa . $requisitos . $entrevista .  $inicioLabores)) . $observacionesWeb;
@@ -648,7 +655,7 @@ function getCopyDetalles($d, $tipo = null, $actExt = null, $actidExt = null, $mo
 
         return $question . ($tipo ? '' : ($camesFromCont === true ? null : $empleador) . $modalidad . $actividad) . $nacionalidad . $tipovivienda . $numpisos .
             $numpacientes . $edadpacientes .
-            $diagnostico . $numadultos . $numninos . $edadninos . $detalleNinos . $nummascotas . $alimentos .  ( $sueldo1ermes . $sueldoenadelante . $periodoPago ) .
+            $diagnostico . $numadultos . $numninos . $edadninos . $detalleNinos . $nummascotas . $detalleTrabajadorExtra . $alimentos .  ( $sueldo1ermes . $sueldoenadelante . $periodoPago ) .
             (($d->paispedido_id == 54) ? ($detallesEmpleador === true ? $NoHayBeneficios : '' ) : null) . $ganancia . ($detallesEmpleador === false ? $tipobeneficio : '') .
             ($camesFromCont === true ? null : ($distrito . $domicilio . $referenciadomicilio . $mapa . $requisitos . $entrevista . $inicioLabores)) . $observacionesWeb;
 
