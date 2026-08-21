@@ -86,7 +86,7 @@ function getNacionalidadGrupo($requerimientoId)
     }
 
     if ($totalPeruanos === 0) {
-        return 'Postulante nacional/extranjera/ambas: EXTRANJERA' . "\r\n";
+        return 'Postulante nacional/extranjera/ambas: AMBAS' . "\r\n"; //POR ALGUNA COJUDA RAZON SE CAMBIO PERO ERA EXTRANJERA
     }
 
     return 'Postulante nacional/extranjera/ambas: AMBAS' . "\r\n";
