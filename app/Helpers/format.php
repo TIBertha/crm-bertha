@@ -33,15 +33,15 @@ function alimentosTextoCopy($data) {
         ->values();
 
     if ($seleccionados->isEmpty()) {
-        return '*No brinda alimentos*';
+        return '*No brinda alimentos*' . "\r\n" ;
     }
 
     if ($seleccionados->count() === 1) {
-        return '*Brinda ' . $seleccionados->first() . '*';
+        return '*Brinda ' . $seleccionados->first() . '*' . "\r\n" ;
     }
 
     $ultimo = $seleccionados->pop();
-    return '*Brinda ' . $seleccionados->join(', ') . ' y ' . $ultimo . '*';
+    return '*Brinda ' . $seleccionados->join(', ') . ' y ' . $ultimo . '*' . "\r\n" ;
 }
 
 function getNacionalidadGrupo($requerimientoId)

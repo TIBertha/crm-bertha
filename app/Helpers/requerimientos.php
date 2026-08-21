@@ -583,7 +583,7 @@ function getCopyDetalles($d, $tipo = null, $actExt = null, $actidExt = null, $mo
 
     $NoHayBeneficios = 'Beneficios laborales: No aplica (No gratificaciones, No CTS, No vacaciones)' . "\r\n" ;
 
-    $alimentos = alimentosTextoCopy($d) . "\r\n" ;
+    $alimentos = alimentosTextoCopy($d);
 
     $question = $camesFromCont === true ? null : ($detallesEmpleador === false ? ('*¿Postulas?*' . "\r\n") : '');
 
@@ -607,27 +607,32 @@ function getCopyDetalles($d, $tipo = null, $actExt = null, $actidExt = null, $mo
             $horaretorno = 'Hora de retorno: ' . Carbon::parse($d->hora_ingreso)->format('h:i A') . "\r\n" ;
         }
 
+        $newAlimentos = '' ;
+
         if ($d->estatusrequerimientoid === 4 && $detallesEmpleador === true && intval($d->pedido_web) === 1 && $d->modalidadhorario){
             $newHor = 'Horario: ' . $d->modalidadhorario  . "\r\n";
+            $newAlimentos = $alimentos;
         }else{
             $newHor = ($diasalida . $horasalida . $diaretorno . $horaretorno);
         }
 
         return $question . ($tipo ? '' : ($camesFromCont === true ? null : $empleador) . $modalidad . $actividad) . $nacionalidad . $tipovivienda . $numpisos . $numpacientes .
             $edadpacientes . $diagnostico . $numadultos . $numninos . $edadninos . $detalleNinos .  $nummascotas . $tipodescanso .
-            $newHor . $detalleTrabajadorExtra /*. $alimentos */ . ( $sueldo1ermes . $sueldoenadelante . $periodoPago ) . ($detallesEmpleador === true ? ($d->estatusrequerimientoid != 1 ? $tipoBeneficiosLey : '') : '') . ($d->estatusrequerimientoid == 1 ? $tipoBeneficiosLey : '') . $tipobeneficio . $ganancia .
+            $newHor . $detalleTrabajadorExtra . $newAlimentos . ( $sueldo1ermes . $sueldoenadelante . $periodoPago ) . ($detallesEmpleador === true ? ($d->estatusrequerimientoid != 1 ? $tipoBeneficiosLey : '') : '') . ($d->estatusrequerimientoid == 1 ? $tipoBeneficiosLey : '') . $tipobeneficio . $ganancia .
             ($camesFromCont === true ? null : ($distrito . $domicilio . $referenciadomicilio . $mapa . $requisitos . $entrevista . $inicioLabores)) . $observacionesWeb;
 
     }else if (in_array($mod, [2,5])/*Cama Afuera*/){
 
+        $newAlimentos = '' ;
         if ($d->estatusrequerimientoid === 4 && $detallesEmpleador === true && intval($d->pedido_web) === 1 && $d->modalidadhorario){
             $newHor = 'Horario: ' . $d->modalidadhorario  . "\r\n";
+            $newAlimentos = $alimentos;
         }else{
             $newHor = $horarios;
         }
 
         return $question . ($tipo ? '' : ($camesFromCont === true ? null : $empleador) . $modalidad . $actividad) . $nacionalidad . $tipovivienda . $numpisos . $numpacientes .
-            $edadpacientes . $diagnostico . $numadultos . $numninos . $edadninos . $detalleNinos . $nummascotas . $newHor . $detalleTrabajadorExtra /*. $alimentos */.
+            $edadpacientes . $diagnostico . $numadultos . $numninos . $edadninos . $detalleNinos . $nummascotas . $newHor . $detalleTrabajadorExtra . $newAlimentos .
             ( $newTerms === true ? ( $sueldo1ermes . $sueldoenadelante . $periodoPago ) : $sueldo) .
             ($detallesEmpleador === true ? ($d->estatusrequerimientoid != 1 ? $tipoBeneficiosLey : '') : '' ) . ($d->estatusrequerimientoid == 1 ? $tipoBeneficiosLey : '') .
             $tipobeneficio . $ganancia .
@@ -635,8 +640,10 @@ function getCopyDetalles($d, $tipo = null, $actExt = null, $actidExt = null, $mo
 
     }else if($mod == 3/*Por Dias*/){
 
+        $newAlimentos = '' ;
         if ($d->estatusrequerimientoid === 4 && $detallesEmpleador === true && intval($d->pedido_web) === 1 && $d->modalidadhorario){
             $newHor = 'Horario: ' . $d->modalidadhorario  . "\r\n";
+            $newAlimentos = $alimentos;
         }else{
             $newHor = $horarios;
         }
@@ -644,16 +651,23 @@ function getCopyDetalles($d, $tipo = null, $actExt = null, $actidExt = null, $mo
         $frecuencia = 'Frecuencia: ' . ($d->frecuenciaservicio ? $d->frecuenciaservicio : ' - ') . "\r\n" ;
 
         return $question . ($tipo ? '' : ($camesFromCont === true ? null : $empleador) . $modalidad . $actividad) . $nacionalidad . $tipovivienda . $numpisos . $numpacientes .
-            $edadpacientes . $diagnostico . $numadultos . $numninos . $edadninos . $detalleNinos . $nummascotas . $frecuencia . $newHor . $detalleTrabajadorExtra /*. $alimentos */. $sueldoPD .
+            $edadpacientes . $diagnostico . $numadultos . $numninos . $edadninos . $detalleNinos . $nummascotas . $frecuencia . $newHor . $detalleTrabajadorExtra . $newAlimentos . $sueldoPD .
             ( $sueldo1ermes . $sueldoenadelante . $periodoPago ) . (($d->paispedido_id == 54) ? ($detallesEmpleador === true ? $NoHayBeneficios : '' ) : null) .
             ($detallesEmpleador === false ? $tipobeneficio : '') . $ganancia .
             ($camesFromCont === true ? null : ($distrito . $domicilio . $referenciadomicilio . $mapa . $requisitos . $entrevista .  $inicioLabores)) . $observacionesWeb;
 
     }else if($mod == 4/*24X24*/){
 
+        $newAlimentos = '' ;
+        if ($d->estatusrequerimientoid === 4 && $detallesEmpleador === true && intval($d->pedido_web) === 1){
+            $newAlimentos = $alimentos;
+        }else{
+            $newHor = $horarios;
+        }
+
         return $question . ($tipo ? '' : ($camesFromCont === true ? null : $empleador) . $modalidad . $actividad) . $nacionalidad . $tipovivienda . $numpisos .
             $numpacientes . $edadpacientes .
-            $diagnostico . $numadultos . $numninos . $edadninos . $detalleNinos . $nummascotas . $detalleTrabajadorExtra /*. $alimentos */.  ( $sueldo1ermes . $sueldoenadelante . $periodoPago ) .
+            $diagnostico . $numadultos . $numninos . $edadninos . $detalleNinos . $nummascotas . $detalleTrabajadorExtra . $newAlimentos .  ($sueldo1ermes . $sueldoenadelante . $periodoPago) .
             (($d->paispedido_id == 54) ? ($detallesEmpleador === true ? $NoHayBeneficios : '' ) : null) . $ganancia . ($detallesEmpleador === false ? $tipobeneficio : '') .
             ($camesFromCont === true ? null : ($distrito . $domicilio . $referenciadomicilio . $mapa . $requisitos . $entrevista . $inicioLabores)) . $observacionesWeb;
 
