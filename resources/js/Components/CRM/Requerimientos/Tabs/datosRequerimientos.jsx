@@ -404,7 +404,7 @@ export default function DatosRequerimientos({url, view, data, show, handleChange
             {((view == 'edit') && (data.inputDomicilio)) ?
                 <div className={'form-group col-12 col-md-7'}>
                     <div className={'row'}>
-                        <label className="col-12 col-md-3 col-form-label align-self-center">Domicilio(web)</label>
+                        <label className="col-12 col-md-3 col-form-label align-self-center">Domicilio (web)</label>
                         <div className="col-md-9 align-self-center">
                             <div className={'row mx-0'}>
                                 <div className={'col ps-0 pe-1'}>
@@ -412,7 +412,7 @@ export default function DatosRequerimientos({url, view, data, show, handleChange
                                 </div>
                                 <div className='col-auto pe-0 ps-1'>
                                     <NewCopyButton
-                                        icon={'fas fa-link'}
+                                        icon={'far fa-clone'}
                                         additionalClass={'alignButtonReq icon-question'}
                                         copyText={data.inputDomicilio}
                                         successMsj={'Link copiado exitosamente'}
@@ -619,7 +619,7 @@ export default function DatosRequerimientos({url, view, data, show, handleChange
             {((view == 'edit') && (data.detalleMascotas)) ?
                 <div className={'form-group col-12 col-md-7'}>
                     <div className={'row'}>
-                        <label className="col-12 col-md-3 col-form-label align-self-center">Detalle Mascotas(web)</label>
+                        <label className="col-12 col-md-3 col-form-label align-self-center">Mascota (web)</label>
                         <div className="col-md-9 align-self-center">
                             <div className={'row mx-0'}>
                                 <div className={'col ps-0 pe-1'}>
@@ -627,7 +627,7 @@ export default function DatosRequerimientos({url, view, data, show, handleChange
                                 </div>
                                 <div className='col-auto pe-0 ps-1'>
                                     <NewCopyButton
-                                        icon={'fas fa-link'}
+                                        icon={'far fa-clone'}
                                         additionalClass={'alignButtonReq icon-question'}
                                         copyText={data.detalleMascotas}
                                         successMsj={'Link copiado exitosamente'}
@@ -650,7 +650,7 @@ export default function DatosRequerimientos({url, view, data, show, handleChange
 
                     <div className={'mh-form form-group col-12 col-md-7 light-purple-bg'}>
                         <div className={'row'}>
-                            <label className="col-12 col-md-3 col-form-label align-self-center">Modalidad seleccionada(web)</label>
+                            <label className="col-12 col-md-3 col-form-label align-self-center">Modalidad (web)</label>
                             <div className="col-md-9 align-self-center">
                                 <div className={'row justify-content-around mx-0'}>
                                     <div className={'col-auto semiModalidad'}>
@@ -680,7 +680,7 @@ export default function DatosRequerimientos({url, view, data, show, handleChange
             {((view == 'edit') && (data.detalleTrabajadoraExtra)) ?
                 <div className={'form-group col-12 col-md-7'}>
                     <div className={'row'}>
-                        <label className="col-12 col-md-3 col-form-label align-self-center">Detalles Otra Trabajadora(web)</label>
+                        <label className="col-12 col-md-3 col-form-label align-self-center">Otra trabajadora (web)</label>
                         <div className="col-md-9 align-self-center">
                             <div className={'row mx-0'}>
                                 <div className={'col ps-0 pe-1'}>
@@ -688,7 +688,7 @@ export default function DatosRequerimientos({url, view, data, show, handleChange
                                 </div>
                                 <div className='col-auto pe-0 ps-1'>
                                     <NewCopyButton
-                                        icon={'fas fa-link'}
+                                        icon={'far fa-clone'}
                                         additionalClass={'alignButtonReq icon-question'}
                                         copyText={data.detalleTrabajadoraExtra}
                                         successMsj={'Link copiado exitosamente'}
