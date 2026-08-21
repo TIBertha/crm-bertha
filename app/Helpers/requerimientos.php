@@ -607,11 +607,11 @@ function getCopyDetalles($d, $tipo = null, $actExt = null, $actidExt = null, $mo
             $horaretorno = 'Hora de retorno: ' . Carbon::parse($d->hora_ingreso)->format('h:i A') . "\r\n" ;
         }
 
-        $newAlimentos = '' ;
+        $newAlimentos = $alimentos ;
 
         if ($d->estatusrequerimientoid === 4 && $detallesEmpleador === true && intval($d->pedido_web) === 1 && $d->modalidadhorario){
             $newHor = 'Horario: ' . $d->modalidadhorario  . "\r\n";
-            $newAlimentos = $alimentos;
+            $newAlimentos = '';
         }else{
             $newHor = ($diasalida . $horasalida . $diaretorno . $horaretorno);
         }
@@ -623,10 +623,10 @@ function getCopyDetalles($d, $tipo = null, $actExt = null, $actidExt = null, $mo
 
     }else if (in_array($mod, [2,5])/*Cama Afuera*/){
 
-        $newAlimentos = '' ;
+        $newAlimentos = $alimentos ;
         if ($d->estatusrequerimientoid === 4 && $detallesEmpleador === true && intval($d->pedido_web) === 1 && $d->modalidadhorario){
             $newHor = 'Horario: ' . $d->modalidadhorario  . "\r\n";
-            $newAlimentos = $alimentos;
+            $newAlimentos = '';
         }else{
             $newHor = $horarios;
         }
@@ -640,10 +640,10 @@ function getCopyDetalles($d, $tipo = null, $actExt = null, $actidExt = null, $mo
 
     }else if($mod == 3/*Por Dias*/){
 
-        $newAlimentos = '' ;
+        $newAlimentos = $alimentos;
         if ($d->estatusrequerimientoid === 4 && $detallesEmpleador === true && intval($d->pedido_web) === 1 && $d->modalidadhorario){
             $newHor = 'Horario: ' . $d->modalidadhorario  . "\r\n";
-            $newAlimentos = $alimentos;
+            $newAlimentos = '';
         }else{
             $newHor = $horarios;
         }
@@ -658,9 +658,9 @@ function getCopyDetalles($d, $tipo = null, $actExt = null, $actidExt = null, $mo
 
     }else if($mod == 4/*24X24*/){
 
-        $newAlimentos = '' ;
+        $newAlimentos = $alimentos ;
         if ($d->estatusrequerimientoid === 4 && $detallesEmpleador === true && intval($d->pedido_web) === 1){
-            $newAlimentos = $alimentos;
+            $newAlimentos = '';
         }else{
             $newHor = $horarios;
         }
