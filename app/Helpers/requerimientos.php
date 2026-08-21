@@ -616,7 +616,7 @@ function getCopyDetalles($d, $tipo = null, $actExt = null, $actidExt = null, $mo
             $newHor = ($diasalida . $horasalida . $diaretorno . $horaretorno);
         }
 
-        return $question . ($tipo ? '' : ($camesFromCont === true ? null : $empleador) . $modalidad . $actividad) . $nacionalidad . $tipovivienda . $numpisos . $numpacientes .
+        return $question . ($tipo ? '' : ($camesFromCont === true ? null : $empleador) . ($d->estatusrequerimientoid === 4 && $detallesEmpleador === true ? '' : $modalidad) . $actividad) . $nacionalidad . $tipovivienda . $numpisos . $numpacientes .
             $edadpacientes . $diagnostico . $numadultos . $numninos . $edadninos . $detalleNinos .  $nummascotas . $tipodescanso .
             $newHor . $detalleTrabajadorExtra . $newAlimentos . ( $sueldo1ermes . $sueldoenadelante . $periodoPago ) . ($detallesEmpleador === true ? ($d->estatusrequerimientoid != 1 ? $tipoBeneficiosLey : '') : '') . ($d->estatusrequerimientoid == 1 ? $tipoBeneficiosLey : '') . $tipobeneficio . $ganancia .
             ($camesFromCont === true ? null : ($distrito . $domicilio . $referenciadomicilio . $mapa . $requisitos . $entrevista . $inicioLabores)) . $observacionesWeb;
@@ -631,7 +631,7 @@ function getCopyDetalles($d, $tipo = null, $actExt = null, $actidExt = null, $mo
             $newHor = $horarios;
         }
 
-        return $question . ($tipo ? '' : ($camesFromCont === true ? null : $empleador) . $modalidad . $actividad) . $nacionalidad . $tipovivienda . $numpisos . $numpacientes .
+        return $question . ($tipo ? '' : ($camesFromCont === true ? null : $empleador) . ($d->estatusrequerimientoid === 4 && $detallesEmpleador === true ? '' : $modalidad) . $actividad) . $nacionalidad . $tipovivienda . $numpisos . $numpacientes .
             $edadpacientes . $diagnostico . $numadultos . $numninos . $edadninos . $detalleNinos . $nummascotas . $newHor . $detalleTrabajadorExtra . $newAlimentos .
             ( $newTerms === true ? ( $sueldo1ermes . $sueldoenadelante . $periodoPago ) : $sueldo) .
             ($detallesEmpleador === true ? ($d->estatusrequerimientoid != 1 ? $tipoBeneficiosLey : '') : '' ) . ($d->estatusrequerimientoid == 1 ? $tipoBeneficiosLey : '') .
@@ -650,7 +650,7 @@ function getCopyDetalles($d, $tipo = null, $actExt = null, $actidExt = null, $mo
 
         $frecuencia = 'Frecuencia: ' . ($d->frecuenciaservicio ? $d->frecuenciaservicio : ' - ') . "\r\n" ;
 
-        return $question . ($tipo ? '' : ($camesFromCont === true ? null : $empleador) . $modalidad . $actividad) . $nacionalidad . $tipovivienda . $numpisos . $numpacientes .
+        return $question . ($tipo ? '' : ($camesFromCont === true ? null : $empleador) . ($d->estatusrequerimientoid === 4 && $detallesEmpleador === true ? '' : $modalidad) . $actividad) . $nacionalidad . $tipovivienda . $numpisos . $numpacientes .
             $edadpacientes . $diagnostico . $numadultos . $numninos . $edadninos . $detalleNinos . $nummascotas . $frecuencia . $newHor . $detalleTrabajadorExtra . $newAlimentos . $sueldoPD .
             ( $sueldo1ermes . $sueldoenadelante . $periodoPago ) . (($d->paispedido_id == 54) ? ($detallesEmpleador === true ? $NoHayBeneficios : '' ) : null) .
             ($detallesEmpleador === false ? $tipobeneficio : '') . $ganancia .
@@ -665,7 +665,7 @@ function getCopyDetalles($d, $tipo = null, $actExt = null, $actidExt = null, $mo
             $newHor = $horarios;
         }
 
-        return $question . ($tipo ? '' : ($camesFromCont === true ? null : $empleador) . $modalidad . $actividad) . $nacionalidad . $tipovivienda . $numpisos .
+        return $question . ($tipo ? '' : ($camesFromCont === true ? null : $empleador) . ($d->estatusrequerimientoid === 4 && $detallesEmpleador === true ? '' : $modalidad) . $actividad) . $nacionalidad . $tipovivienda . $numpisos .
             $numpacientes . $edadpacientes .
             $diagnostico . $numadultos . $numninos . $edadninos . $detalleNinos . $nummascotas . $detalleTrabajadorExtra . $newAlimentos .  ($sueldo1ermes . $sueldoenadelante . $periodoPago) .
             (($d->paispedido_id == 54) ? ($detallesEmpleador === true ? $NoHayBeneficios : '' ) : null) . $ganancia . ($detallesEmpleador === false ? $tipobeneficio : '') .
