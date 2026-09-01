@@ -1183,25 +1183,8 @@ function setHorarioCamaAfuera($horario){
 
     $hr = json_decode($horario,true);
 
-    if ($hr[0]['isDescanso'] == false && $hr[1]['isDescanso'] == false && $hr[2]['isDescanso'] == false && $hr[3]['isDescanso'] == false && $hr[4]['isDescanso'] == false && $hr[5]['isDescanso'] == true){
-        $result1 = [
-            'dia'           => 'Lunes a Viernes',
-            'ingreso'       => formatHora($hr[0]['horaingreso']),
-            'salida'        => formatHora($hr[0]['horasalida']),
-        ];
-
-        array_push($result, $result1);
-    }else if ($hr[0]['isDescanso'] == false && $hr[1]['isDescanso'] == false && $hr[2]['isDescanso'] == false && $hr[3]['isDescanso'] == false && $hr[4]['isDescanso'] == false && $hr[5]['isDescanso'] == false){
-
-        if ((formatHora($hr[0]['horaingreso']) == formatHora($hr[5]['horaingreso'])) && (formatHora($hr[0]['horasalida']) == formatHora($hr[5]['horasalida']))){
-            $result1 = [
-                'dia'           => 'Lunes a Sábados',
-                'ingreso'       => formatHora($hr[0]['horaingreso']),
-                'salida'        => formatHora($hr[0]['horasalida']),
-            ];
-
-            array_push($result, $result1);
-        }else{
+    if ($hr){
+        if ($hr[0]['isDescanso'] == false && $hr[1]['isDescanso'] == false && $hr[2]['isDescanso'] == false && $hr[3]['isDescanso'] == false && $hr[4]['isDescanso'] == false && $hr[5]['isDescanso'] == true){
             $result1 = [
                 'dia'           => 'Lunes a Viernes',
                 'ingreso'       => formatHora($hr[0]['horaingreso']),
@@ -1209,24 +1192,43 @@ function setHorarioCamaAfuera($horario){
             ];
 
             array_push($result, $result1);
+        }else if ($hr[0]['isDescanso'] == false && $hr[1]['isDescanso'] == false && $hr[2]['isDescanso'] == false && $hr[3]['isDescanso'] == false && $hr[4]['isDescanso'] == false && $hr[5]['isDescanso'] == false){
 
-            $result2 = [
-                'dia'           => 'Sábados',
-                'ingreso'       => formatHora($hr[5]['horaingreso']),
-                'salida'        => formatHora($hr[5]['horasalida']),
-            ];
-
-            array_push($result, $result2);
-        }
-    }else {
-        foreach ($hr as $key => $h){
-            if ($h['isDescanso'] == false){
-                $data = [
-                    'dia'          => $h['dia'],
-                    'ingreso'      => formatHora($h['horaingreso']),
-                    'salida'       => formatHora($h['horasalida'])
+            if ((formatHora($hr[0]['horaingreso']) == formatHora($hr[5]['horaingreso'])) && (formatHora($hr[0]['horasalida']) == formatHora($hr[5]['horasalida']))){
+                $result1 = [
+                    'dia'           => 'Lunes a Sábados',
+                    'ingreso'       => formatHora($hr[0]['horaingreso']),
+                    'salida'        => formatHora($hr[0]['horasalida']),
                 ];
-                array_push($result, $data);
+
+                array_push($result, $result1);
+            }else{
+                $result1 = [
+                    'dia'           => 'Lunes a Viernes',
+                    'ingreso'       => formatHora($hr[0]['horaingreso']),
+                    'salida'        => formatHora($hr[0]['horasalida']),
+                ];
+
+                array_push($result, $result1);
+
+                $result2 = [
+                    'dia'           => 'Sábados',
+                    'ingreso'       => formatHora($hr[5]['horaingreso']),
+                    'salida'        => formatHora($hr[5]['horasalida']),
+                ];
+
+                array_push($result, $result2);
+            }
+        }else {
+            foreach ($hr as $key => $h){
+                if ($h['isDescanso'] == false){
+                    $data = [
+                        'dia'          => $h['dia'],
+                        'ingreso'      => formatHora($h['horaingreso']),
+                        'salida'       => formatHora($h['horasalida'])
+                    ];
+                    array_push($result, $data);
+                }
             }
         }
     }
