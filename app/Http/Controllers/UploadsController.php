@@ -52,6 +52,10 @@ class UploadsController extends Controller
 
         DB::beginTransaction();
 
+
+        dd('ENTRO');
+
+
         try{
 
             $type = $request->input('type');
