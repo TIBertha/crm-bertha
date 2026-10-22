@@ -28,10 +28,10 @@ class ValidatePostulantesEdit extends FormRequest
         // Cargar trabajador
         $trabajador = TrabajadorView::find($traID);
 
-        // Normalizar hijos
+        /*// Normalizar hijos
         if (!empty($data['numhijos']) && $data['numhijos'] > 0) {
             $data['edadhijos_required'] = true;
-        }
+        }*/
 
         // Normalizar país de nacimiento
         if (isset($data['paisprocedencia'])) {
@@ -60,8 +60,8 @@ class ValidatePostulantesEdit extends FormRequest
         $phoneWhatsappRule = "nullable|unique:usuarios,telefono_whatsapp,{$trabajador->usuario_id},id";
         $documentoRule = "required|unique:usuarios,numero_documento,{$trabajador->usuario_id},id";
 
-        // Reglas dinámicas de hijos
-        $edadHijosRule = !empty($data['edadhijos_required']) ? 'required' : 'nullable';
+        /*// Reglas dinámicas de hijos
+        $edadHijosRule = !empty($data['edadhijos_required']) ? 'required' : 'nullable';*/
 
         // Reglas dinámicas de nacimiento
         $departamentoNacimiento = !empty($data['departamento_required']) ? 'required' : 'nullable';
@@ -80,8 +80,8 @@ class ValidatePostulantesEdit extends FormRequest
             'data.tipodocumento'             => 'required',
             'data.numerodocumento'           => $documentoRule,
             'data.fechanacimiento'           => 'required',
-            'data.numhijos'                  => 'nullable',
-            'data.edadhijos'                 => $edadHijosRule,
+            //'data.numhijos'                  => 'nullable',
+            //'data.edadhijos'                 => $edadHijosRule,
             'data.paisprocedencia'           => 'required',
             'data.nacionalidad'              => 'required',
             'data.departamentonacimiento'    => $departamentoNacimiento,
@@ -121,7 +121,7 @@ class ValidatePostulantesEdit extends FormRequest
             'data.distrito.required' => 'El distrito donde vive es requerido',
             'data.direccion.required' => 'La dirección donde vive es requerida',
             'data.modalidad.required' => 'La modalidad es requerida',
-            'data.edadhijos.required' => 'La edad de los hijos es requerida',
+            //'data.edadhijos.required' => 'La edad de los hijos es requerida',
             'data.foto.required' => 'El retrato del postulante es requerido',
             'data.certificadoantecedente.required' => 'El certificado de antecedente es requerido',
             'data.certificadoantecedentepdf.required' => 'El certificado de antecedente en pdf es requerido',

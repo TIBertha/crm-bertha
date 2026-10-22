@@ -196,8 +196,8 @@ class PostulantesController extends Controller
                 'provincia_id'                  => $dom ? $dom['provincia'] : null,
                 'distrito_id'                   => $dom ? $dom['distrito'] : null,
                 'usuario_id'                    => $idusuario,
-                'numero_hijos'                  => $data['numhijos'],
-                'edad_hijos'                    => $data['edadhijos'],
+                //'numero_hijos'                  => $data['numhijos'],
+                //'edad_hijos'                    => $data['edadhijos'],
                 'foto'                          => $foto,
                 'contactos'                     => saveFormatContactos($data['contactos']),
                 'verificaciones_laborales'      => saveFormatVerificaciones($verificacioneslaborales),
@@ -311,8 +311,8 @@ class PostulantesController extends Controller
                 'departamento_id'               => $dom ? $dom['departamento'] : null,
                 'provincia_id'                  => $dom ? $dom['provincia'] : null,
                 'distrito_id'                   => $dom ? $dom['distrito'] : null,
-                'numero_hijos'                  => $data['numhijos'],
-                'edad_hijos'                    => $data['edadhijos'],
+                //'numero_hijos'                  => $data['numhijos'],
+                //'edad_hijos'                    => $data['edadhijos'],
                 'foto'                          => $foto,
                 'tiene_vacuna'                  => $tieneVacuna,
                 'cartilla_verificada'           => $data['cartillaverificada'] ? ($data['cartillaverificada'] == true ? 1 : 0 ) : null,
@@ -561,7 +561,7 @@ class PostulantesController extends Controller
                 $u->where('paisnacimiento_id', '!=', 54);
             });
         });
-        
+
         //$query->when(in_array($nacionalidad, [1,2]), fn($q) => $q->where('nacionalidad_id', $nacionalidad));
         $query->when($resultadocovid, fn($q) => $q->where('resultado_covid', $resultadocovid));
         $query->when($tuvocovid, fn($q) => $q->where('tuvo_covid', $tuvocovid));
