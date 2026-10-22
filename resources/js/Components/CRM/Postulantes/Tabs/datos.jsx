@@ -566,6 +566,8 @@ export default function Datos({
                     </div>
 
                     <div className="col-12 col-lg-6">
+
+                        {/*
                         <div className="form-group row">
                             <label className="col-12 col-lg-4 col-form-label">
                                 Nº de Hijos
@@ -608,6 +610,7 @@ export default function Datos({
                                 </div>
                             </div>
                         )}
+                        */}
 
                         <div className="form-group row">
                             <label className="col-12 col-lg-4 col-form-label">
