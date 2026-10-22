@@ -51,11 +51,7 @@ class UploadsController extends Controller
     public function ajaxUploadAdjunto(Request $request){
 
         DB::beginTransaction();
-
-
-        dd('ENTRO');
-
-
+        
         try{
 
             $type = $request->input('type');
