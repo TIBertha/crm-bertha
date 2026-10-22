@@ -23,10 +23,10 @@ class ValidatePostulantesNew extends FormRequest
     {
         $data = $this->input('data', []);
 
-        // Normalizar hijos
+        /*// Normalizar hijos
         if (!empty($data['numhijos']) && $data['numhijos'] > 0) {
             $data['edadhijos_required'] = true;
-        }
+        }*/
 
         // Normalizar país de nacimiento
         if (isset($data['paisprocedencia'])) {
@@ -68,8 +68,8 @@ class ValidatePostulantesNew extends FormRequest
         $certificadoAntecedentePdf = !empty($data['certificado_required']) ? 'required' : 'nullable';
         $fechaEmisionCertificado = !empty($data['certificado_required']) ? 'required' : 'nullable';
 
-        // Reglas dinámicas de hijos
-        $edadHijosRule = !empty($data['edadhijos_required']) ? 'required' : 'nullable';
+        /*// Reglas dinámicas de hijos
+        $edadHijosRule = !empty($data['edadhijos_required']) ? 'required' : 'nullable';*/
 
         // Reglas dinámicas de nacimiento
         $departamentoNacimiento = !empty($data['departamento_required']) ? 'required' : 'nullable';
@@ -98,8 +98,8 @@ class ValidatePostulantesNew extends FormRequest
             'data.tipodocumento'             => 'required',
             'data.numerodocumento'           => $documentoRule,
             'data.fechanacimiento'           => 'required',
-            'data.numhijos'                  => 'required',
-            'data.edadhijos'                 => $edadHijosRule,
+            //'data.numhijos'                  => 'required',
+            //'data.edadhijos'                 => $edadHijosRule,
             'data.paisprocedencia'           => 'required',
             'data.paispostulando'            => 'required',
             'data.nacionalidad'              => 'required',
@@ -146,8 +146,8 @@ class ValidatePostulantesNew extends FormRequest
             'data.paispostulando.required' => 'El país al que postulará es requerido',
             'data.nacionalidad.required' => 'La nacionalidad es requerida',
             'data.actividad.required' => 'La actividad es requerida',
-            'data.numhijos.required' => 'La cantidad de hijos es requerida',
-            'data.edadhijos.required' => 'La edad de los hijos es requerida',
+            //'data.numhijos.required' => 'La cantidad de hijos es requerida',
+            //'data.edadhijos.required' => 'La edad de los hijos es requerida',
             'data.certificadoantecedente.required' => 'El certificado de antecedente es requerido',
             'data.certificadoantecedentepdf.required' => 'El certificado de antecedente en pdf es requerido',
             'data.fechaemisioncertificado.required' => 'La fecha de emisión del certificado de antecedente es requerida',
