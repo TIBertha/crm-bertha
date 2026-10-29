@@ -583,6 +583,14 @@ export default function DatosRequerimientos({url, view, data, show, handleChange
                 </>
             }
 
+            { ([1,2,4,5,6,9,13,14].includes(actividad)) &&
+                <Edades url={url} campo={data.edadninos} name={'edadninos'} labelEdad={'Edad Niños'} onDelete={handleDelete} onAddition={handleAddition} onDrag={handleDrag} />
+            }
+
+            { ([4,7,8,13,14].includes(actividad)) &&
+                <Edades url={url} campo={data.edadbebes} name={'edadbebes'} labelEdad={'Edad Bebes'} onDelete={handleDelete} onAddition={handleAddition} onDrag={handleDrag} />
+            }
+
 
             {data.datoadultomayor.length !== 0 &&
                 <>
@@ -628,13 +636,7 @@ export default function DatosRequerimientos({url, view, data, show, handleChange
                 </div>
             }
 
-            { ([1,2,4,5,6,9,13,14].includes(actividad)) &&
-                <Edades url={url} campo={data.edadninos} name={'edadninos'} labelEdad={'Edad Niños'} onDelete={handleDelete} onAddition={handleAddition} onDrag={handleDrag} />
-            }
 
-            { ([4,7,8,13,14].includes(actividad)) &&
-                <Edades url={url} campo={data.edadbebes} name={'edadbebes'} labelEdad={'Edad Bebes'} onDelete={handleDelete} onAddition={handleAddition} onDrag={handleDrag} />
-            }
 
             <div className={'form-group col-12 col-md-7'}>
                 <div className={'row'}>
