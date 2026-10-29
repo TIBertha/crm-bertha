@@ -129,6 +129,7 @@ class RequerimientosEdit extends Component{
             comprobanteAdelantoPDF: '',
             postulacionesPrevias: 0,
             paises: [],
+            datoadultomayor: [],
             alimentos: [
                 {id: 1, value: "Desayuno", isChecked: false},
                 {id: 2, value: "Almuerzo", isChecked: false},
@@ -861,6 +862,7 @@ class RequerimientosEdit extends Component{
                         {id: 2, value: "Almuerzo", isChecked: Boolean(r.data.almuerzo)},
                         {id: 3, value: "Cena", isChecked: Boolean(r.data.cena)}
                     ],
+                    datoadultomayor: r.datoadultomayor,
                     detalleMascotas: r.data.detalle_mascotas,
                     detalleTrabajadoraExtra: r.data.detalle_trabajadora_extra,
                     tipoComision: r.data.tipocomision,

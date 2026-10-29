@@ -931,3 +931,65 @@ function getCopyCalculoLiquidacion($calculo, $version){
     return ($t1 . "\r\n"  . $t2 . "\r\n" . "\r\n"  . $fechaIngreso . "\r\n"  . $fechaSalida . "\r\n"  . $tiempo  . "\r\n"  . $sueldo . "\r\n"  . "\r\n"  . $t3 . "\r\n" . $gfp . "\r\n" . $t4 . "\r\n" . $gn . "\r\n" . $t5 . "\r\n" . $cts . "\r\n" . $t6 . "\r\n" . $v);
 
 }
+
+function convertFormatSingleDatoAdultoMayor($data)
+{
+    if (!$data) {
+        return null;
+    }
+
+    $sexoLabels = [
+        1 => 'Varón',
+        2 => 'Mujer',
+    ];
+
+    $siNoLabels = [
+        1 =>'SI',
+        0 => 'NO',
+    ];
+
+    $result = [];
+
+    foreach (json_decode($data, true) ?? [] as $d) {
+
+        if (!array_filter($d)) {
+            continue;
+        }
+
+        $result[] = [
+            'edad' => $d['edad'] ?? '',
+
+            'sexo' => isset($d['sexo'])
+                ? [
+                    'label' => $sexoLabels[$d['sexo']] ?? '',
+                    'value' => $d['sexo']
+                ]
+                : (object)[],
+
+            'diagnostico' => $d['diagnostico'] ?? '',
+
+            'caminar' => isset($d['caminar'])
+                ? [
+                    'label' => $siNoLabels[$d['caminar']] ?? '',
+                    'value' => $d['caminar']
+                ]
+                : (object)[],
+
+            'panal' => isset($d['panal'])
+                ? [
+                    'label' => $siNoLabels[$d['panal']] ?? '',
+                    'value' => $d['panal']
+                ]
+                : (object)[],
+
+            'ayuda' => isset($d['ayuda'])
+                ? [
+                    'label' => $siNoLabels[$d['ayuda']] ?? '',
+                    'value' => $d['ayuda']
+                ]
+                : (object)[],
+        ];
+    }
+
+    return empty($result) ? null : $result;
+}

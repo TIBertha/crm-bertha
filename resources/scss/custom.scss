@@ -1130,3 +1130,17 @@ label {
 .font-bold{
     font-weight: bold;
 }
+
+.ad-title{
+    padding: .5rem 0.75rem;
+    color: $purple_bertha;
+}
+
+.ad-data{
+    border-radius: 0.625rem;
+    border: solid 2px $purple_bertha !important;
+    padding: 0.75rem;
+    p:last-child{
+        margin-bottom: 0 !important;
+    }
+}

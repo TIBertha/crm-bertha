@@ -480,6 +480,7 @@ class RequerimientosController extends Controller
             return response()->json([
                 'code' => 200,
                 'data' => $data,
+                'datoadultomayor' => ($data->dato_adulto_mayor AND $data->dato_adulto_mayor != '[]') ? convertFormatSingleDatoAdultoMayor($data->dato_adulto_mayor) : [],
                 'postulacionesPrevias' => getNumeroPostulacionesPrevias($data->empleadorid, $data->id),
                 'divisa' => getDivisaDetails($data->paispedido_id),
                 'supervisor' => $supervisor,

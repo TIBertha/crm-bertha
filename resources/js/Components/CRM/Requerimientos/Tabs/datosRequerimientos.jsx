@@ -583,6 +583,40 @@ export default function DatosRequerimientos({url, view, data, show, handleChange
                 </>
             }
 
+
+            {data.datoadultomayor.length !== 0 &&
+                <>
+                    <div className={'form-group col-12 my-1'}>
+                        <hr className={'mt-3 mb-4'}/>
+                    </div>
+
+                    <div className={'form-group col-12 col-md-7 p-0'}>
+                        <div className={'mh-form light-purple-bg ad-title'}>
+                            Adultos mayores (web): <strong>{data.datoadultomayor.length + ' REGISTRADO(S)'}</strong>
+                        </div>
+
+                        <div className={'row px-3 pt-4'}>
+                            {data.datoadultomayor.map((dam, key) => (
+                                <div className={'col-4'}>
+                                    <div className={'ad-data'}>
+                                        <p><strong>Edad: </strong>{dam.edad}</p>
+                                        <p><strong>Sexo: </strong>{dam.sexo.label}</p>
+                                        <p><strong>Diagnóstico o condición de salud: </strong>{dam.diagnostico}</p>
+                                        <p><strong>¿Puede caminar?: </strong>{dam.caminar.label}</p>
+                                        <p><strong>¿Usa pañal?: </strong>{dam.panal.label}</p>
+                                        <p><strong>¿Requiere ayuda para bañarse?: </strong>{dam.ayuda.label}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className={'form-group col-12 my-1'}>
+                        <hr className={'mt-3 mb-4'}/>
+                    </div>
+                </>
+            }
+
             { ([3,10].includes(actividad)) &&
                 <div className={'form-group col-12 col-md-7'}>
                     <div className={'row'}>

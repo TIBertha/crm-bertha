@@ -18,6 +18,8 @@ function createArrayCantidad($number, $inicio = 0){
 
 }
 
+
+
 function saveUbicacion($ubicacion, $tipo){
     $result = null;
     if ($ubicacion){
