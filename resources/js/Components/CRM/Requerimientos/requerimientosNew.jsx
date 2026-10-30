@@ -131,6 +131,8 @@ class RequerimientosNew extends Component {
             montoComision: 700,
             isUploadingAdjuntoAdelanto: false,
             paises: [],
+
+            datoadultomayor: [],
             alimentos: [
                 {id: 1, value: "Desayuno", isChecked: false},
                 {id: 2, value: "Almuerzo", isChecked: false},
