@@ -54,13 +54,15 @@ export function getModalidadName(val, pais) {
 export function findFichaByActividadCamaAdentro(id){
     let result = '';
 
-    if(id === 1){
+    let num = Number(id);
+
+    if(num === 1){
         result =  'https://holabertha.com/ficha-postulante/veli-m-GNTFsV';
-    }else if (id === 3){
+    }else if (num === 3){
         result =  'https://holabertha.com/ficha-postulante/luisa-i-pKqST2';
-    }else if (id === 6){
+    }else if (num === 6){
         result =  'https://holabertha.com/ficha-postulante/yesica-c-TZfyow';
-    }else if (id === 10){
+    }else if (num === 10){
         result =  'https://holabertha.com/ficha-postulante/celia-o-Mi6YrY';
     }
 
@@ -70,13 +72,15 @@ export function findFichaByActividadCamaAdentro(id){
 export function findFichaByActividadCamaAfuera(id){
     let result = '';
 
-    if(id === 1){
+    let num = Number(id);
+
+    if(num === 1){
         result =  'https://holabertha.com/ficha-postulante/margaret-c-yCUIE6';
-    }else if (id === 3){
+    }else if (num === 3){
         result =  'https://holabertha.com/ficha-postulante/milagros-m-RIR6U5';
-    }else if (id === 6){
+    }else if (num === 6){
         result =  'https://holabertha.com/ficha-postulante/ana-a-y2fnME';
-    }else if (id === 10){
+    }else if (num === 10){
         result =  'https://holabertha.com/ficha-postulante/celia-o-Mi6YrY';
     }
 

@@ -56,6 +56,8 @@ export function getSpeechCotizador(actividadID, modalidadID, sueldoIngresado, fr
             com3 = 350;
         }
 
+        //console.log(actividadID, modalidadID, (modalidadID === 1 ? findFichaByActividadCamaAdentro(actividadID) : findFichaByActividadCamaAfuera(actividadID)));
+
         speechCDCF =
             'Le enviamos la cotización:' + "\r\n" + "\r\n" +
             '- Actividad: ' + actividad + "\r\n" +
