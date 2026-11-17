@@ -18,21 +18,12 @@ use App\Models\Views\TrabajadorView;
 use Carbon\Carbon;
 
 function getCopyDetallesCrearContrato($d, $tipo = null){
-    $domicilioReferencia = '';
-    $domicilioMapa = '';
-    $domicilioDistrito = '';
 
     $empleadorData = EmpleadorView::find($d->empleadorid);
     $empleadorNombres = '';
     $empleadorDocumento = '';
-    $empleadorFechaNacimiento = '';
-    $empleadorLugarNacimiento = '';
-    $empleadorEstadoCivil = '';
-    //$empleadorCorreo = '';
 
     $comprobante = '';
-
-    $requerimientoDomicilio = '';
 
     $fecha = '';
 
@@ -48,46 +39,10 @@ function getCopyDetallesCrearContrato($d, $tipo = null){
         $empleadorNombres = 'Nombres y apellidos: ' . $d->empleadornombres . ' ' . $d->empleadorapellidos . "\r\n" ;
         $varDoc = ($empleadorData->tipodocumento ? ($empleadorData->tipodocumento) : '*DNI*' ) . ': ' . ($empleadorData->numero_documento ? $empleadorData->numero_documento : '') . "\r\n" ;
         $empleadorDocumento = (($empleadorData->numero_documento) ? ($varDoc) : ('*Número de DNI:* ' . "\r\n" ));
-        $empleadorFechaNacimiento = ($empleadorData->fecha_nacimiento ? 'Fecha de nacimiento: ' : '*Fecha de nacimiento:* ') . ($empleadorData->fecha_nacimiento ? date("d/m/Y", strtotime($empleadorData->fecha_nacimiento)) : '') . "\r\n" ;
-        $requerimientoDomicilio = ($d->domicilio ? 'Domicilio: ' : '*Domicilio:* ') . ($d->domicilio ? $d->domicilio : '') . (($d->distrito_domicilio && $d->domicilio) ? ' ' . $d->distrito_domicilio : '') . "\r\n" ;
-        $empleadorLugarNacimiento = ($empleadorData->paisnacimiento_id ? 'Lugar de nacimiento: ' : '*Lugar de nacimiento:* ') . ($empleadorData->paisnacimiento_id ? ($empleadorData->paisnacimiento_id == 54 ? ($empleadorData->departamentonacimiento ? $empleadorData->departamentonacimiento : '') : ($empleadorData->lugar_nacimiento ? $empleadorData->lugar_nacimiento : '') ) : '' ) . "\r\n" ;
-        $empleadorEstadoCivil = ($empleadorData->estadocivil ? 'Estado civil: ' : '*Estado civil:* ') . ($empleadorData->estadocivil ? $empleadorData->estadocivil : '') . "\r\n" ;
-        //$empleadorCorreo = ($empleadorData->correo ? 'Correo electrónico: ' : '*Correo electrónico:* ') . ($empleadorData->correo ? $empleadorData->correo : '') . "\r\n" ;
         $comprobante = '*Boleta o factura' . ($empleadorData->rucempresa ? '(RUC: ' . $empleadorData->rucempresa .'):*' : ' (si es factura, ingresar ruc por favor):*') . "\r\n" ;
     }
 
-    if ($d->distrito_domicilio){
-        $domicilioDistrito = ($d->distrito_domicilio ? 'Distrito: ' : '*Distrito:* ') . ($d->distrito_domicilio ? $d->distrito_domicilio : '') . "\r\n" ;
-    }else{
-        if ($d->distrito){
-            $domicilioDistrito = ($d->distrito ? 'Distrito: ' : '*Distrito:* ') . ($d->distrito ? $d->distrito : '') . "\r\n" ;
-        }
-    }
-
-    if ($d->referencia){
-        $domicilioReferencia = ($d->referencia ? 'Referencia: ' : '*Referencia:* ') . $d->referencia . "\r\n" ;
-    }
-
-    if ($d->domicilioid){
-        $dom = Domicilio::find($d->domicilioid);
-        $dist = findDistrito($dom->distrito_id);
-        $viewDom = str_replace(' ', '%20',generateLinkGoogleMapCopy( $dom->direccion, $dist['distritos']));
-
-        if ($dom->link_opcional){
-            $domicilioMapa = 'Mapa: ' . $dom->link_opcional;
-        }else{
-            $domicilioMapa = 'Mapa: ' . str_replace(' ', '%20',generateLinkGoogleMapCopy( $dom->direccion, $dist['distritos'])) . "\r\n" ;
-        }
-
-    }
-
     $t1 = 'Para generar su contrato, revise y complete los datos por favor. ' . "\r\n" . "\r\n" ;
-
-    $t2 =
-        'Le enviaremos por correo, su comprobante, su contrato, la ficha y el compromiso de su trabajador(a) del hogar. Le recordamos algunos *puntos importantes*:' . "\r\n" .
-        'a. Le hemos enviado el *celular* y *WhatsApp del postulante*. Ella ya recibió su celular, su dirección y un mapa. Pero *necesitará de su guía para llegar a su domicilio*.' . "\r\n" .
-        'b. *Bertha no puede controlar accidentes*, enfermedades o emergencias personales de un postulante, por lo tanto *no es responsable de la ausencia o duración de una trabajadora*. Solicitamos escoger opciones (a) y (b) para disminuir el ausentismo. Si desea un *reemplazo en el futuro*, el tiempo de una nueva selección es de *mínimo 3 días* y máximo 7, de acuerdo a disponibilidad.' . "\r\n" .
-        'c. No brinde *adelantos* de sueldo o *préstamos* a su trabajadora.';
 
     return  $t1 . $empleadorNombres . $empleadorDocumento . $comprobante . $inicioLabores;
 
@@ -95,39 +50,69 @@ function getCopyDetallesCrearContrato($d, $tipo = null){
 
 function getCopyDetallesFinalizacionEntrevista($data, $tipoContrato){
 
-    $abono = ($data->tipocomision == 3) ? $data->monto_comision : (intval($data->monto_comision) - 100);
 
-    if ($data->modalidadid == 3){
-        //$abono = 400;
-        $primerSueldo = ($data->valor_dia_frecuencia - 20) * $data->frecuenciaservicio_id * 4;
-        $sueldoEnAdelante = $data->valor_dia_frecuencia * $data->frecuenciaservicio_id * 4;
-        $ahorro = $sueldoEnAdelante - $primerSueldo;
-    }else{
-        //$abono = 600;
-        $sueldoEnAdelante = $data->sueldo;
-        if(intval($data->sueldo) >= 1400){
-            $ahorro = 400;
-            $primerSueldo = intval($data->sueldo) - 400;
-        }else if(intval($data->sueldo) == 1350){
-            $ahorro = 350;
-            $primerSueldo = 1000;
+
+    $divisa = $data->paispedido_id == 54 ? 'S/ ':'$ ';
+
+    if ($data->paispedido_id == 54){
+        $abono = ($data->tipocomision == 3) ? $data->monto_comision : (intval($data->monto_comision) - 100);
+        if ($data->modalidadid == 3){
+            //$abono = 400;
+            $primerSueldo = ($data->valor_dia_frecuencia - 20) * $data->frecuenciaservicio_id * 4;
+            $sueldoEnAdelante = $data->valor_dia_frecuencia * $data->frecuenciaservicio_id * 4;
+            $ahorro = $sueldoEnAdelante - $primerSueldo;
         }else{
-            $ahorro = intval($data->sueldo) - 930;
-            $primerSueldo = 930;
+            //$abono = 600;
+            $sueldoEnAdelante = $data->sueldo;
+            if(intval($data->sueldo) >= 1400){
+                $ahorro = 400;
+                $primerSueldo = intval($data->sueldo) - 400;
+            }else if(intval($data->sueldo) == 1350){
+                $ahorro = 350;
+                $primerSueldo = 1000;
+            }else{
+                $ahorro = intval($data->sueldo) - 930;
+                $primerSueldo = 930;
+            }
+        }
+    }else if($data->paispedido_id == 49){
+        if ($data->modalidadid == 3){
+            $abono = 1800;
+            $primerSueldo = ($data->valor_dia_frecuencia - 100) * $data->frecuenciaservicio_id * 4;
+            $sueldoEnAdelante = $data->valor_dia_frecuencia * $data->frecuenciaservicio_id * 4;
+            $ahorro = $sueldoEnAdelante - $primerSueldo;
+        }else{
+            $abono = 2000;
+            $sueldoEnAdelante = $data->sueldo;
+            $ahorro = 2000;
+            $primerSueldo = intval($data->sueldo) - 2000;
         }
     }
+
+
 
     $t1 = 'Hemos finalizado las entrevistas. *Solicitamos elegir una opción “a” (de mayor preferencia), “b” y “c”*. Si sucede una enfermedad, accidente o emergencia y la opción “a” no asiste a su inicio de labores, enviaremos a la opción “b” o “c” para que usted reciba apoyo.' . "\r\n"   . "\r\n" ;
 
     $t2 = 'Agradecemos dar respuesta en máximo 30 minutos, ya que las trabajadoras postulan a varios empleos y empresas para conseguir un empleo por necesidad. Luego de esa hora, si la trabajadora ya no se encuentra disponible, se considerará como ofrecido el servicio.' . "\r\n"   . "\r\n" ;
 
-    $t3 = 'Para enviarle el contrato, comprobante y datos completos de postulante debe abonar S/ ' . $abono . ($data->frecuenciaservicio_id == 1 ? '.' : ('. Recuerde que usted tendrá un ahorro de S/ ' . $ahorro . ' porque al final del primer mes pagará a la postulante S/ ' . $primerSueldo . ' y el segundo mes le pagará S/ ' . $sueldoEnAdelante . '.') ) . "\r\n"   . "\r\n" ;
-
+    $t3 = 'Para enviarle el contrato, comprobante y datos completos de postulante debe abonar '
+        . $divisa . number_format($abono, 0, '.', ',')
+        . ($data->frecuenciaservicio_id == 1
+            ? '.'
+            : '. Recuerde que usted tendrá un ahorro de '
+            . $divisa . number_format($ahorro, 0, '.', ',')
+            . ' porque al final del primer mes pagará a la postulante '
+            . $divisa . number_format($primerSueldo, 0, '.', ',')
+            . ' y el segundo mes le pagará '
+            . $divisa . number_format($sueldoEnAdelante, 0, '.', ',')
+            . '.'
+        )
+        . "\r\n\r\n";
     $t4 = 'Le enviamos nuestra cuenta bancaria y/o interbancaria' . ($tipoContrato == 1 ? ' inmediata' : '') . ':' . "\r\n" . "\r\n";
 
     $t5 = 'https://holabertha.com/cuenta-bancaria *(Dar clic)*' . "\r\n" . "\r\n";
 
-    $t6 = 'También puede usar YAPE a este número corporativo a nombre de *Empleos Residencial La Molina*: 999256807' . "\r\n" . "\r\n";
+    $t6 = 'También puede usar YAPE a este número corporativo a nombre de *Empleos Residencial La Molina*: 999256807';
 
     if ($tipoContrato == 1){
         $result = $t1 . $t2 . (($data->tipocomision == 3) ? '' : $t3 . $t4 . $t5 . $t6);
@@ -982,10 +967,15 @@ function processDataRequerimiento($data){
         $dataAnuncio = [];
 
         // Divisa
+
+
         if ($d->paispedido_id == 54) {
             $divisa = 'S/';
             $tooltipdivisa = 'NUEVOS SOLES - PERÚ';
-        } else {
+        }else if($d->paispedido_id == 49) {
+            $divisa = '$';
+            $tooltipdivisa = $d->divisa_paispedido . ' - ' . $d->paispedido;
+        }else{
             $divisa = $d->codigo_iso_divisa_paispedido;
             $tooltipdivisa = $d->divisa_paispedido . ' - ' . $d->paispedido;
         }
@@ -993,8 +983,6 @@ function processDataRequerimiento($data){
         $n = explode(" ", $d->empleadornombres);
 
         if ($d->estatusrequerimientoid === 1){
-
-            $divisa = 'S/ ';
 
             $nem = \App\Models\Modalidad::find($d->modalidadid);
             $newModalidad = $nem ? $nem->nombre : null;
@@ -1065,7 +1053,7 @@ function processDataRequerimiento($data){
             'tipobeneficio' => $d->tipobeneficio ?: ' - ',
             'tipocomision' => $d->tipocomision,
             'divisa' => $divisa,
-            'monto_comision' => $d->monto_comision,
+            'monto_comision' => number_format((float) $d->monto_comision, 0, '.', ','),
             'tooltip_divisa' => $tooltipdivisa,
             'newTerms1711' => $newTerms1711,
             'tipocontratoid' => $contract['tipocontratodefault'],

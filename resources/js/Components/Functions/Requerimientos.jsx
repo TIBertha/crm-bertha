@@ -406,15 +406,24 @@ export function getMontoComision(inputComision, inputSueldo, inputModalidad, dat
             com = 500;
         }
     }else if (parseInt(newComision) === 2){
-        if ([1,2,5].includes(parseInt(newModalidad))){
-            if (newSueldo === 1150){
-                com = 500;
+        if (dataReq.paispedido === 49){
+            if (dataReq.modalidad === 3){
+                com = 1800;
             }else{
-                com = (newSueldo >= 1200) ? 500 : 400
+                com = 2000;
             }
-        }else{
-            com = 400;
+        }else if (dataReq.paispedido === 54){
+            if ([1,2,5].includes(parseInt(newModalidad))){
+                if (newSueldo === 1150){
+                    com = 500;
+                }else{
+                    com = (newSueldo >= 1200) ? 500 : 400
+                }
+            }else{
+                com = 400;
+            }
         }
+
     }else if (parseInt(newComision) === 3){
         if ([1,2,5].includes(parseInt(newModalidad))){
             if(newSueldo >= 1200 && newSueldo <= 1250){

@@ -247,7 +247,7 @@ class RequerimientosController extends Controller
                 'confirmacion_adelanto'  => $data['confirmacionAdelanto'],
                 'actividad_id'     => $data['actividad'],
                 'modalidad_id'     => $modalidad,
-                'tipobeneficio_id' => $data['paispedido'] == 54 ? $data['tipoBeneficio'] : null,
+                'tipobeneficio_id' => $data['tipoBeneficio'],
                 'edad_nino'        => $listaEdadNinos,
                 'edad_adulto'      => $listaEdadAdulto,
                 'numero_adultos'   => (in_array($actividadid, [3,10])) ? countList($listaEdadAdulto) : ($data['numadultos']),

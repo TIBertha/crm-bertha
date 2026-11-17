@@ -696,7 +696,7 @@ export default function DatosRequerimientos({url, view, data, show, handleChange
                                         {data.modalidadHorario}
                                     </div>
                                     <div className={'col-auto modalidadHorarioSueldo'}>
-                                        {'S/ ' + data.modalidadHorarioSueldo}
+                                        {(data.paispedido === 51 ? 'S/ ' : '$ ') + (data.modalidadHorarioSueldo).toLocaleString('en-US')}
                                     </div>
                                 </div>
                             </div>
@@ -892,12 +892,18 @@ export default function DatosRequerimientos({url, view, data, show, handleChange
                 <div className={'row'}>
                     <label className="col-12 col-md-3 col-form-label align-self-center">Tipo Comisión</label>
                     <div className="col-md-9 align-self-center">
-                        <select className="form-control"  name="tipoComision" value={data.tipoComision} onChange={(e) => handleChange(e, 'tipoComision')} disabled={(parseInt(data.tipocontrato) == 1) ? false : false}>
+                        <select className="form-control"  name="tipoComision" value={data.tipoComision} onChange={(e) => handleChange(e, 'tipoComision')} disabled={(parseInt(data.tipocontrato) === 1) ? false : false}>
                             <option key="0" value="">Seleccione</option>
-                            <option key="1" value="1">Comisión 1 C/Entrevista</option>
-                            <option key="2" value="2">Comisión 2 C/Entrevista</option>
-                            <option key="3" value="3">Comisión 3 S/Entrevista</option>
-                            <option key="4" value="4">Comisión 4 S/Entrevista</option>
+                            {Number(data.paispedido) === 49 ? (
+                                <option value="2">Comisión 2 C/Entrevista</option>
+                            ) : (
+                                <>
+                                    <option value="1">Comisión 1 C/Entrevista</option>
+                                    <option value="2">Comisión 2 C/Entrevista</option>
+                                    <option value="3">Comisión 3 S/Entrevista</option>
+                                    <option value="4">Comisión 4 S/Entrevista</option>
+                                </>
+                            )}
                         </select>
                     </div>
                 </div>
