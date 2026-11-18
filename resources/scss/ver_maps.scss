@@ -1,0 +1,60 @@
+.mapas-modal {
+    width: calc(100% - 24px);
+    max-width: 1100px;
+    margin-right: auto;
+    margin-left: auto;
+
+    .modal-content {
+        max-height: calc(100dvh - 32px);
+        overflow: hidden;
+    }
+
+    .modal-header {
+        flex-shrink: 0;
+        padding: 16px 20px;
+    }
+
+    .modal-title {
+        margin: 0;
+        padding-right: 12px;
+    }
+}
+
+// Lima es vertical; México incluye una leyenda horizontal.
+.mapas-modal-pe {
+    max-width: 760px;
+}
+
+.mapas-modal-mx {
+    max-width: 1400px;
+}
+
+.mapas-modal-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 0;
+    padding: 0 16px 16px;
+    overflow: auto;
+}
+
+.mapas-modal-image {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: calc(100dvh - 120px);
+    object-fit: contain;
+}
+
+@media (max-width: 767.98px) {
+    .mapas-modal {
+        .modal-header {
+            padding: 12px;
+        }
+    }
+
+    .mapas-modal-body {
+        padding: 0 8px 12px;
+    }
+}

@@ -1014,7 +1014,8 @@ class RequerimientosController extends Controller
     public function ajaxNotificacionesRequerimientos()
     {
         // Desde hoy a las 00:00, según la zona horaria de Laravel.
-        $desde = Carbon::today();
+        //$desde = Carbon::today();
+        $desde = Carbon::today()->subDays(7);
 
         $requerimientos = Requerimiento::query()
             ->leftJoin(
@@ -1032,8 +1033,9 @@ class RequerimientosController extends Controller
             ->where('requerimientos.pedido_web', true)
             ->where('requerimientos.estatusrequerimiento_id', 4)
             ->where('requerimientos.borrado', false)
+            //->where('requerimientos.actualizado', '>=', $desde)
+            //->orderBy('requerimientos.actualizado', 'desc')
             ->where('requerimientos.actualizado', '>=', $desde)
-            ->orderBy('requerimientos.actualizado', 'desc')
             ->orderBy('requerimientos.id', 'desc')
             ->get([
                 'requerimientos.id',
