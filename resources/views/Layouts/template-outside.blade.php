@@ -14,7 +14,7 @@
     <!-- Apple Icon -->
     <link rel="apple-touch-icon"
           sizes="180x180"
-          href="{{ asset('img/apple-touch-icon.png') }}">
+          href="{{ asset('img/logo-app.png') }}">
 
     <meta name="apple-mobile-web-app-title" content="Bertha CRM">
 
