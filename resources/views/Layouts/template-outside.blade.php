@@ -11,13 +11,20 @@
     <!-- Favicon -->
     <link rel="icon" href="{{ asset('img/favicon.ico') }}" type="image/x-icon">
 
+    <!-- Apple Icon -->
+    <link rel="apple-touch-icon"
+          sizes="180x180"
+          href="{{ asset('img/apple-touch-icon.png') }}">
+
+    <meta name="apple-mobile-web-app-title" content="Bertha CRM">
+
    <!-- Prueba  -->
 
     <!-- Custom CSS -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    
+
 
     <!-- Vite React -->
     @viteReactRefresh
