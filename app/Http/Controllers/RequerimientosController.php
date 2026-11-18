@@ -46,9 +46,15 @@ class RequerimientosController extends Controller
         return redirect('/requerimientos');
     }
 
-    public function viewEdit($id){
+    /*public function viewEdit($id){
 
         return redirect('/requerimientos');
+    }*/
+
+    public function viewEdit($id){
+        Requerimiento::findOrFail($id);
+
+        return view('Requerimientos.index');
     }
 
     public function ajaxNew(ValidateRequerimientosNew $request){
@@ -1003,5 +1009,75 @@ class RequerimientosController extends Controller
             'code' => 500,
             'msj'  => 'Error al eliminar el requerimiento. Consulte al Administrador.'
         ]);
+    }
+
+    public function ajaxNotificacionesRequerimientos()
+    {
+        // Desde hoy a las 00:00, según la zona horaria de Laravel.
+        $desde = Carbon::today();
+
+        $requerimientos = Requerimiento::query()
+            ->leftJoin(
+                'empleadores',
+                'empleadores.id',
+                '=',
+                'requerimientos.empleador_id'
+            )
+            ->leftJoin(
+                'usuarios',
+                'usuarios.id',
+                '=',
+                'empleadores.usuario_id'
+            )
+            ->where('requerimientos.pedido_web', true)
+            ->where('requerimientos.estatusrequerimiento_id', 4)
+            ->where('requerimientos.borrado', false)
+            ->where('requerimientos.actualizado', '>=', $desde)
+            ->orderBy('requerimientos.actualizado', 'desc')
+            ->orderBy('requerimientos.id', 'desc')
+            ->get([
+                'requerimientos.id',
+                'requerimientos.paispedido_id',
+                'requerimientos.actualizado',
+                'usuarios.nombres',
+                'usuarios.apellidos',
+            ]);
+
+        $paises = [
+            54 => ['code' => 'pe', 'nombre' => 'Perú'],
+            49 => ['code' => 'mx', 'nombre' => 'México'],
+            11 => ['code' => 'cl', 'nombre' => 'Chile'],
+        ];
+
+        $notificaciones = $requerimientos->map(function ($req) use ($paises) {
+            $pais = $paises[(int) $req->paispedido_id] ?? [
+                'code' => null,
+                'nombre' => 'Otro país',
+            ];
+
+            $nombre = trim(
+                ($req->nombres ?? '') . ' ' . ($req->apellidos ?? '')
+            );
+
+            $fecha = Carbon::parse($req->actualizado);
+
+            return [
+                'id' => $req->id,
+                'empleador' => $nombre
+                    ? mb_convert_case($nombre, MB_CASE_TITLE, 'UTF-8')
+                    : 'Empleador sin nombre',
+                'country' => $pais['code'],
+                'pais' => $pais['nombre'],
+                'actualizado' => $fecha->toIso8601String(),
+                'tiempo' => $fecha->locale('es')->diffForHumans(),
+                'url' => url('/requerimientos/edit/' . $req->id),
+            ];
+        })->values();
+
+        return response()->json([
+            'code' => 200,
+            'total' => $notificaciones->count(),
+            'notificaciones' => $notificaciones,
+        ])->header('Cache-Control', 'no-store');
     }
 }

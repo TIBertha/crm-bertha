@@ -183,6 +183,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/ajax-eliminar-data-empleador', [EmpleadoresController::class, 'ajaxEliminarDataEmpleador']);
 
     //ruta de requerimientos
+
+    Route::get('/ajax-notificaciones-requerimientos', [RequerimientosController::class, 'ajaxNotificacionesRequerimientos']);
+
     Route::get('/requerimientos', [RequerimientosController::class, 'index'])->name('requerimientos');
     Route::get('/requerimientos/new', [RequerimientosController::class, 'viewNew'])->name('requerimientos-new');
     Route::post('/ajax-requerimientos-new', [RequerimientosController::class, 'ajaxNew']);

@@ -34,7 +34,7 @@ export function getModalidadName(val, pais) {
         }
     }else if (['mx'].includes(pais)){
         if (parseInt(val) === 1){
-            return 'DE QUEDADA';
+            return 'DE PLANTA';
         }else if (parseInt(val) === 2){
             return 'ENTRADA POR SALIDA';
         }else if (parseInt(val) === 3){

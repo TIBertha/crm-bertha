@@ -1,9 +1,10 @@
 import React, {useState } from "react";
 import imgLogo from "../../../../../public/img/logo.png";
-import SessionMenu from "./sessionMenu";
-import NavbarDropdown from "./SubComponents/navbarDropdown";
-import { mobileDesktop } from "../../Functions/General";
+import SessionMenu from "./sessionMenu.jsx";
+import NavbarDropdown from "./SubComponents/navbarDropdown.jsx";
+import { mobileDesktop } from "../../Functions/General.jsx";
 import { Modal, ModalBody, ModalTitle } from "react-bootstrap";
+import NotificacionesRequerimientos from "./SubComponents/notificacionesRequerimientos.jsx";
 
 export default function Navbar({ url, path, profilename, profilepic, userid}) {
 
@@ -155,7 +156,9 @@ export default function Navbar({ url, path, profilename, profilepic, userid}) {
                             {display === 'desktop' && <span className={'ms-2 dot-title'}>Grabando</span>}
                         </div>
                     </div>
-                    <div className="col-auto p-0">
+                    <div className="col-auto p-0 d-flex align-items-center gap-2">
+                        <NotificacionesRequerimientos url={url} />
+
                         <SessionMenu
                             url={url}
                             profilename={profilename}

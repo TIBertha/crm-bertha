@@ -6,7 +6,6 @@ import Flyer from "../Components/flyer.jsx";
 import NoDataLabel from "../Components/noDatalabel.jsx";
 import RequerimientosSearchSideBar from "./requerimientosSearchSideBar.jsx";
 import VerMaps from "../Components/verMaps.jsx";
-import Cotizador from "./Components/Cotizador.jsx";
 import RequerimientosTable from "./requerimientosTable.jsx";
 import RequerimientosSearch from "./requerimientosSearch.jsx";
 import {
@@ -20,6 +19,8 @@ import {useNavigate, useParams} from "react-router-dom";
 import {showAlert, showAlertConfirmRedirectReactRouter} from "../../Helpers/alerts.js";
 import {setEstadosRequerimientoName} from "../../Helpers/bd.js";
 import global from "../../Helpers/constantes.js";
+import CotizadorPeru from "./Components/CotizadorPeru.jsx";
+import CotizadorMexico from "./Components/CotizadorMexico.jsx";
 
 export function withRouter(Component) {
     return props => {
@@ -418,7 +419,11 @@ class RequerimientosIndex extends Component{
                     />
 
                     <div className="col-12 col-md-auto px-1 my-2 my-md-0">
-                        <Cotizador url={url}/>
+                        <CotizadorPeru />
+                    </div>
+
+                    <div className="col-12 col-md-auto px-1 my-2 my-md-0">
+                        <CotizadorMexico />
                     </div>
 
                     <div className={'col-12 col-md-auto px-1 my-2 my-md-0'}>
