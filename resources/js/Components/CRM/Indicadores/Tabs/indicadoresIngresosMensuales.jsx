@@ -1,37 +1,60 @@
 import React from "react";
 
-export default function IndicadoresIngresosMensuales({indicadores}) {
-    function IndicadoresCard(data){
+export default function IndicadoresIngresosMensuales({
+     indicadores = [],
+ }) {
+    return (
+        <section className="indicadores-ventas">
 
-        let dataIndicadores = "Contratos: " + data.tiempocompleto + '\r\n' + "Sanciones:" + data.pagosanciones + '\r\n' + "Adelantos:" + data.adelantos + '\r\n' + "Liquidaciones:" + data.pagoLiquidaciones;
+            <div className="indicadores-ventas__grid">
+                {indicadores.map((item, index) => {
+                    const desglose = [
+                        `Contratos: ${item.tiempocompleto ?? "—"}`,
+                        `Sanciones: ${item.pagosanciones ?? "—"}`,
+                        `Adelantos: ${item.adelantos ?? "—"}`,
+                        `Liquidaciones: ${item.pagoLiquidaciones ?? "—"}`,
+                    ].join("\n");
 
-        return(
-            <div className={'col-12 col-sm-6 col-md-4 col-lg-3 px-1'}>
-                <div className={'indicador-card-style'} data-bs-toggle="tooltip" data-bs-placement="bottom" title={dataIndicadores}>
-                    <h5 className="mb-4">{data.mes}</h5>
+                    return (
+                        <article
+                            key={`${item.mes}-${index}`}
+                            className="indicadores-ventas__tarjeta"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            title={desglose}
+                        >
+                            <h3 className="indicadores-ventas__mes">
+                                {item.mes}
+                            </h3>
 
-                    <div>
-                        <div className="card shadow-lg rounded indicadores">
-                            <div className="card-body d-flex justify-content-center text-center">
+                            <div className="indicadores-ventas__contenido">
+                                <span
+                                    className="indicadores-ventas__icono"
+                                    aria-hidden="true"
+                                >
+                                    <i className="fa-solid fa-coins"></i>
+                                </span>
 
-                                <div>
-                                    <div className="indicadores-title-card">{'Venta Total'}</div>
-                                    <div className={'indicadores-price-card text-pink-bertha'}>S/. {data.total}</div>
+                                <div className="indicadores-ventas__datos">
+                                    <span className="indicadores-ventas__etiqueta">
+                                        Venta total
+                                    </span>
+
+                                    <strong className="indicadores-ventas__monto">
+                                        <span className="indicadores-ventas__moneda">
+                                            S/.
+                                        </span>
+
+                                        <span>
+                                            {item.total ?? "—"}
+                                        </span>
+                                    </strong>
                                 </div>
-
                             </div>
-                        </div>
-                    </div>
-                </div>
+                        </article>
+                    );
+                })}
             </div>
-        )
-    }
-
-    return(
-        <div className={'mt-30 row mx-0'}>
-            {indicadores.map((i, key) => {
-                return (IndicadoresCard(i))
-            })}
-        </div>
-    )
+        </section>
+    );
 }
