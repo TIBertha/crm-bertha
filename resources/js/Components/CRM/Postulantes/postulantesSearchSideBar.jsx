@@ -186,6 +186,8 @@ export default function PostulantesSearchSideBar({ data, sideBar, handleChange, 
 
                                     <div className="col-12 form-group">
                                         <AsyncSelect
+                                            className="bertha-select"
+                                            classNamePrefix="bertha-select"
                                             loadOptions={loadDistritoOptions}
                                             isClearable
                                             isMulti

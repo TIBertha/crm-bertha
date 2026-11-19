@@ -161,6 +161,8 @@ export default function FormularioAgregarDomicilioReq({
                 </label>
 
                 <AsyncSelect
+                    className="bertha-select"
+                    classNamePrefix="bertha-select"
                     loadOptions={loadDistritoOptions}
                     isClearable
                     noOptionsMessage={() => null}
@@ -277,6 +279,8 @@ const Search = ({ panTo, domicilio, setValues }) => {
             <div className="form-group">
                 <label className="col-form-label col-form-label-sm">Dirección</label>
                 <AsyncSelect
+                    className="bertha-select"
+                    classNamePrefix="bertha-select"
                     cacheOptions
                     loadOptions={async (inputValue) => {
                         setValue(inputValue);

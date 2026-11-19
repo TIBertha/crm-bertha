@@ -36,6 +36,8 @@ export default function DatosTestimonialesEmpleador({data, handleChange, handleS
                     <label className="col-12 col-md-3 col-form-label align-self-center">Empleador</label>
                     <div className="col-md-9 align-self-center">
                         <AsyncSelect
+                            className="bertha-select"
+                            classNamePrefix="bertha-select"
                             loadOptions={loadEmpleadoresOptions}
                             noOptionsMessage={() => null}
                             defaultOptions={false}

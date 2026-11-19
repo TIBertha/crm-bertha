@@ -302,6 +302,8 @@ export default function VerificacionesLaborales({
                             </label>
                             <div className="col-sm-8 col-md-7">
                                 <AsyncSelect
+                                    className="bertha-select"
+                                    classNamePrefix="bertha-select"
                                     loadOptions={loadDistritoOptions}
                                     isClearable
                                     defaultOptions={false}

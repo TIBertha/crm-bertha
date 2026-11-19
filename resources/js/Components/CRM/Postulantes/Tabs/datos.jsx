@@ -718,6 +718,8 @@ export default function Datos({
                             </label>
                             <div className="col-12 col-lg-7">
                                 <AsyncSelect
+                                    className="bertha-select"
+                                    classNamePrefix="bertha-select"
                                     loadOptions={loadDistritoOptions}
                                     isClearable
                                     noOptionsMessage={() => null}
@@ -776,6 +778,8 @@ export default function Datos({
                             </label>
                             <div className="col-12 col-lg-7">
                                 <Select
+                                    className="bertha-select"
+                                    classNamePrefix="bertha-select"
                                     value={data.actividad}
                                     //isDisabled={data.show == true ? true : false }
                                     isDisabled={Boolean(data.show)}

@@ -91,6 +91,8 @@ export default function DatosRequerimientos({url, view, data, show, handleChange
 
                             <div className={'col ps-0 pe-1'}>
                                 <AsyncSelect
+                                    className="bertha-select"
+                                    classNamePrefix="bertha-select"
                                     loadOptions={loadEmpleadoresOptions}
                                     noOptionsMessage={() => null}
                                     defaultOptions={false}
@@ -492,6 +494,8 @@ export default function DatosRequerimientos({url, view, data, show, handleChange
                     <label className="col-12 col-md-3 col-form-label align-self-center">Distrito</label>
                     <div className="col-md-9 align-self-center">
                         <AsyncSelect
+                            className="bertha-select"
+                            classNamePrefix="bertha-select"
                             loadOptions={loadDistritoOptions}
                             isClearable
                             noOptionsMessage={() => null}
