@@ -144,6 +144,8 @@ export default function EliminarPostulante({
                     <h6 className={'font-bold'}>Transferir data a nuevo registro:</h6>
                     <div className={"mt-2"}>
                         <Select
+                            className="bertha-select"
+                            classNamePrefix="bertha-select"
                             value={postSelected}
                             isMulti={false}
                             isSearchable

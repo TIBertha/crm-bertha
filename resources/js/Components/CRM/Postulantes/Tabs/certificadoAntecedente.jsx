@@ -12,6 +12,8 @@ export default function CertificadoAntecedente({
     handleSingularDelete,
     changeEstatusCUL,
 }) {
+
+    console.log(data.paispostulando);
     return (
         <div className="mt-45">
             <LabelNombre
@@ -26,8 +28,8 @@ export default function CertificadoAntecedente({
                     <div className="col-12 mb-4 px-0">
                         <CamposDocumento
                             data={data}
-                            buttonText={"Solicitar certificado"}
-                            link={"https://www.empleosperu.gob.pe/#/login"}
+                            buttonText={"Solicitar certificado - " + (data.paispostulando === 54 ? "Perú" : "México")}
+                            link={data.paispostulando === 54 ? "https://www.empleosperu.gob.pe/#/login" : "https://noantecedentes.cdmx.gob.mx"}
                             showEmail={false}
                             type={"certi"}
                         />

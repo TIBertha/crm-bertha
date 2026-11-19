@@ -334,6 +334,8 @@ export default function VerificacionesLaborales({
                             </label>
                             <div className="col-sm-8 col-md-7">
                                 <Select
+                                    className="bertha-select"
+                                    classNamePrefix="bertha-select"
                                     value={verif.actividad}
                                     isMulti={true}
                                     isSearchable

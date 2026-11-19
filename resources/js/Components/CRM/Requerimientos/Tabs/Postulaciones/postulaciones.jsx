@@ -213,7 +213,7 @@ export default function Postulaciones({data, requerimientoid, empleador}) {
 
     return (
 
-        <div className="pb-4 pt-35">
+        <div className="requerimiento-postulaciones pb-4 pt-35">
 
             <div className="alert alert-secondary mt-35 mb-40" role="alert">
                 {(totalPostulaciones > 0) ?
@@ -291,10 +291,16 @@ export default function Postulaciones({data, requerimientoid, empleador}) {
 
                     <div className="col-12 col-sm-12 col-md-2 d-flex justify-content-md-end">
 
-                        <select className="custom-select w-100" name="filtro" value={filtro} onChange={ (e) => changeFiltro(e)}>
-                            <option key="1" value='1'>POSTULADOS</option>
-                            <option key="2" value='0'>DESCARTADOS</option>
-                            <option key="3" value='2'>MOSTRADOS</option>
+                        <select
+                            className="form-select"
+                            name="filtro"
+                            value={filtro}
+                            onChange={changeFiltro}
+                            aria-label="Filtrar postulaciones"
+                        >
+                            <option value="1">POSTULADOS</option>
+                            <option value="0">DESCARTADOS</option>
+                            <option value="2">MOSTRADOS</option>
                         </select>
 
                     </div>
@@ -304,9 +310,18 @@ export default function Postulaciones({data, requerimientoid, empleador}) {
 
                 {postulacionesFiltered.length > 0 ?
                     <div className="row clearfix">
-                        {postulacionesFiltered.map((data, key) =>
-                            <CardPostulante data={data} modelCard={3} filtro={filtro} removePostulante={removePostulante} ascenderPostulante={ascenderPostulante} selectWp={selectWp} />
-                        )}
+                        {postulacionesFiltered.map((postulacion, index) => (
+                            <CardPostulante
+                                key={postulacion.id ?? index}
+                                variant="postulaciones"
+                                data={postulacion}
+                                modelCard={3}
+                                filtro={filtro}
+                                removePostulante={removePostulante}
+                                ascenderPostulante={ascenderPostulante}
+                                selectWp={selectWp}
+                            />
+                        ))}
                     </div>
                     :
                     <div className="alert alert-secondary mb-40" role="alert">

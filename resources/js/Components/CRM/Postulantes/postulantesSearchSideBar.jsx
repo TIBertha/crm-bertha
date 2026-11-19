@@ -26,14 +26,19 @@ export default function PostulantesSearchSideBar({ data, sideBar, handleChange, 
 
                                 <div className="layout-form-search-side">
                                     <div className="col-12 form-group">
-                                        <select className="form-control form-control-sm" name="paispostulacion" value={data.paispostulacion} onChange={(e) => handleChange(e)} >
+                                        <select 
+                                            className="bertha-select form-control-sm"
+                                            classNamePrefix="bertha-select" name="paispostulacion" value={data.paispostulacion} onChange={(e) => handleChange(e)} >
                                             <option key="0" value="">
                                                 Seleccione País postulación
                                             </option>
                                             <option key="1" value={11}>
                                                 CHILE
                                             </option>
-                                            <option key="2" value={54}>
+                                            <option key="2" value={49}>
+                                                MÉXICO
+                                            </option>
+                                            <option key="3" value={54}>
                                                 PERÚ
                                             </option>
                                         </select>
@@ -71,7 +76,8 @@ export default function PostulantesSearchSideBar({ data, sideBar, handleChange, 
 
                                     <div className="col-12 form-group">
                                         <select
-                                            className="form-control form-control-sm"
+                                            className="bertha-select form-control-sm"
+                                            classNamePrefix="bertha-select"
                                             name="nacionalidad"
                                             value={data.nacionalidad}
                                             onChange={(e) => handleChange(e)}
@@ -128,6 +134,8 @@ export default function PostulantesSearchSideBar({ data, sideBar, handleChange, 
 
                                     <div className="col-12 form-group">
                                         <Select
+                                            className="bertha-select"
+                                            classNamePrefix="bertha-select"
                                             value={data.actividad}
                                             isMulti
                                             onChange={(e) =>
@@ -152,7 +160,8 @@ export default function PostulantesSearchSideBar({ data, sideBar, handleChange, 
 
                                     <div className="col-12 form-group">
                                         <select
-                                            className="form-control form-control-sm"
+                                            className="bertha-select"
+                                            classNamePrefix="bertha-select form-control-sm"
                                             name="modalidad"
                                             value={data.modalidad}
                                             onChange={(e) => handleChange(e)}
@@ -204,7 +213,8 @@ export default function PostulantesSearchSideBar({ data, sideBar, handleChange, 
 
                                     <div className="col-12 form-group">
                                         <select
-                                            className="form-control form-control-sm"
+                                            className="bertha-select form-control-sm"
+                                            classNamePrefix="bertha-select"
                                             name="estado"
                                             value={data.estado}
                                             onChange={(e) => handleChange(e)}

@@ -1520,7 +1520,7 @@ class PostulantesEdit extends Component {
 
                         <HistorialContacto historial={historialContacto} handleContactado={this.handleContactado} trabajador={nombres + ' ' + apellidos}/>
 
-                        <Tabs defaultActiveKey={diaspasadoscertificadoantecedente >=85 ? 'tab3' :keyTab} onSelect={ (k) => this.setState({keyTab: k}) } className="tabs-pink nav-white-style">
+                        <Tabs defaultActiveKey={diaspasadoscertificadoantecedente >=85 ? 'tab3' :keyTab} onSelect={ (k) => this.setState({keyTab: k}) } className="tabs-pink nav-white-style mt-3">
 
                             <Tab eventKey="tab1" title={<span>Datos</span>}>
                                 <Datos

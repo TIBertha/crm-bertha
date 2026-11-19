@@ -586,7 +586,7 @@ $pink_add:#E663C3;
     }
 }
 
-.card-postulante{
+/*.card-postulante{
     padding: 5px;
 
     .badge{
@@ -625,11 +625,9 @@ $pink_add:#E663C3;
         margin-top: 0;
         margin-bottom: 2px;
     }
-}
 
-@media (min-width: 475px){
+    @media (min-width: 475px){
 
-    .card-postulante{
         padding: 7.5px;
 
         &.card-body{
@@ -650,9 +648,9 @@ $pink_add:#E663C3;
             margin-top: 0;
             margin-bottom: 2px;
         }
-    }
 
-}
+    }
+}*/
 
 .shadow-pe{
     box-shadow: 0 2px 6px #c70303 !important;
@@ -733,7 +731,7 @@ $pink_add:#E663C3;
     }
 }
 
-.historialContacto{
+/*.historialContacto{
 
     &.cardPostulante{
         text-align: -webkit-center;
@@ -783,7 +781,7 @@ $pink_add:#E663C3;
             background-color: #6c6c6c;
         }
     }
-}
+}*/
 
 .card {
 	border:none;
@@ -1500,11 +1498,11 @@ $pink_add:#E663C3;
 }
 
 .btn-postulantesAntiguas{
-    background: black;
     font-size: 16px;
 
     &, &:hover{
         color: white;
+        background: black;
     }
 }
 

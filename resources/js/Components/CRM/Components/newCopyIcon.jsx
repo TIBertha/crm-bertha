@@ -44,7 +44,7 @@ export default function NewCopyIcon({
                 data-toggle="tooltip"
                 data-placement="top"
                 title={tooltipText}
-                className={icon + (additonalClass ? " " + additonalClass : "")}
+                className={"new-copy-icon " + icon + (additonalClass ? " " + additonalClass : "")}
                 style={iconStyleColor}
             ></i>
             <Toaster position="top-right" reverseOrder={false} />

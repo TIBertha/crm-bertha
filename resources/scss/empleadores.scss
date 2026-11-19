@@ -1,0 +1,259 @@
+.empleadores-domicilios-tab {
+    // Colores del componente.
+    $text: #282829;
+    $muted: #777;
+    $border: #e6dfed;
+    $soft: #f5f0fa;
+
+    margin-top: 1.75rem;
+    color: $text;
+
+    .domicilios-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 1.25rem;
+
+        h3 {
+            margin: 0;
+            color: $purple_bertha;
+            font-size: 1.15rem;
+            font-weight: 700;
+        }
+    }
+
+    .domicilios-add,
+    .domicilios-action {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: .5rem;
+        min-height: 42px;
+        padding: .55rem .9rem;
+        border: 1px solid currentColor;
+        border-radius: 6px;
+        background: transparent;
+        font: inherit;
+        font-size: .9rem;
+        font-weight: 600;
+        line-height: 1.2;
+        text-align: center;
+        text-decoration: none;
+        cursor: pointer;
+
+        transition:
+            background-color .2s ease,
+            color .2s ease;
+
+        &:hover {
+            text-decoration: none;
+        }
+
+        &:focus-visible {
+            outline: 2px solid currentColor;
+            outline-offset: 3px;
+        }
+
+        i {
+            flex-shrink: 0;
+        }
+    }
+
+    .domicilios-add {
+        color: $pink_bertha;
+
+        &:hover {
+            background: $pink_bertha;
+            color: white;
+            border-color: $pink_bertha;
+        }
+    }
+
+    .domicilios-list {
+        display: grid;
+        gap: 1.25rem;
+    }
+
+    .domicilios-card {
+        min-width: 0;
+        border: 1px solid $border;
+        border-radius: 10px;
+        background: white;
+        box-shadow: 0 3px 10px rgba(40, 20, 65, .06);
+    }
+
+    .domicilios-card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 1rem;
+        padding: 0.75rem 1.25rem;
+        border-bottom: 1px solid $border;
+        border-radius: 10px 10px 0 0;
+        background: $soft;
+
+        h4 {
+            display: flex;
+            align-items: center;
+            gap: .65rem;
+            margin: 0;
+            color: $purple_bertha;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+    }
+
+    .domicilios-actions {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: .65rem;
+    }
+
+    .domicilios-action {
+        color: $purple;
+        background: white;
+
+        &:hover {
+            border-color: $purple_bertha;
+            background: $purple_bertha;
+            color: white;
+        }
+
+        &.domicilios-action-delete {
+            color: $red_bertha;
+
+            &:hover {
+                border-color: $red_bertha;
+                background: $red_bertha;
+                color: white;
+            }
+        }
+    }
+
+    .domicilios-details {
+        margin: 0;
+        padding: .25rem 1.25rem;
+    }
+
+    .domicilios-field {
+        padding: 0.75rem 0 0 0;
+
+        & + .domicilios-field {
+            border-top: 1px solid $border;
+        }
+
+        dt {
+            margin-bottom: .35rem;
+            color: black;
+            font-size: .75rem;
+            font-weight: bold;
+            letter-spacing: .03em;
+            text-transform: uppercase;
+        }
+
+        dd {
+            margin: 0;
+            color: $text;
+            font-size: .95rem;
+            line-height: 1.6;
+            white-space: pre-line;
+            overflow-wrap: anywhere;
+        }
+    }
+
+    .domicilios-country {
+        display: flex;
+        align-items: center;
+        gap: .6rem;
+
+        .flag-icon {
+            flex-shrink: 0;
+        }
+    }
+
+    .domicilios-empty {
+        padding: 2.5rem 1rem;
+        border: 1px dashed $border;
+        border-radius: 10px;
+        background: $soft;
+        text-align: center;
+
+        > i {
+            margin-bottom: 1rem;
+            color: $purple_bertha;
+            font-size: 1.75rem;
+        }
+
+        p {
+            margin: 0 0 .35rem;
+            color: $purple_bertha;
+            font-weight: 600;
+        }
+
+        > span {
+            color: $muted;
+            font-size: .9rem;
+        }
+    }
+
+    .domicilios-location-row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 1.5rem;
+        border-bottom: 1px solid $selected_purple_bertha;
+
+        > .domicilios-field {
+            min-width: 0;
+            border-top: 0;
+        }
+    }
+
+    @media (max-width: 767.98px) {
+        margin-top: 1.25rem;
+
+        .domicilios-card-header {
+            padding: 1rem;
+        }
+
+        .domicilios-actions {
+            width: 100%;
+        }
+
+        .domicilios-action {
+            flex: 1 1 auto;
+        }
+
+        .domicilios-details {
+            padding-right: 1rem;
+            padding-left: 1rem;
+        }
+
+        .domicilios-location-row {
+            grid-template-columns: minmax(0, 1fr);
+            gap: 0;
+
+            > .domicilios-field + .domicilios-field {
+                border-top: 1px solid $selected_purple_bertha;
+            }
+        }
+    }
+
+    @media (max-width: 575.98px) {
+        .domicilios-add {
+            width: 100%;
+        }
+
+        .domicilios-actions {
+            gap: .5rem;
+        }
+
+        .domicilios-action {
+            padding: .6rem;
+            font-size: .8rem;
+        }
+    }
+}

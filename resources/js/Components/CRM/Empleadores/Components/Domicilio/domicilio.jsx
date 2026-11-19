@@ -1,99 +1,169 @@
-import React, {useState} from "react";
+import React, { useState } from 'react';
 import DomicilioModal from './domicilioModal.jsx';
 
-export default function Domicilio({ domicilios, add, edit, delete: deleteItem }) {
+export default function Domicilio({
+  domicilios = [],
+  add,
+  edit,
+  delete: deleteItem,
+}) {
     const [dataEdit, setDataEdit] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const openModal = (e, data = '') => {
-        setIsModalOpen(true);
+    const openModal = (data = '') => {
         setDataEdit(data);
+        setIsModalOpen(true);
     };
 
-    const closeModal = () => setIsModalOpen(false);
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
 
     return (
-        <div className="row mt-30">
-            <div className="col-sm">
+        <section className="empleadores-domicilios-tab">
+            <DomicilioModal
+                show={isModalOpen}
+                close={closeModal}
+                dataEdit={dataEdit}
+                add={add}
+                edit={edit}
+            />
 
-                <DomicilioModal
-                    show={isModalOpen}
-                    close={closeModal}
-                    dataEdit={dataEdit}
-                    add={add}
-                    edit={edit}
-                />
+            <div className="domicilios-heading">
+                <h3>{"Domicilios registrados" + (domicilios.length > 0 ? ' (' + domicilios.length + ')' : '')}</h3>
 
-                <div className="container-fluid">
-                    <div className="row">
-                        <div className="col-lg-12">
-                            <div className="wrapper wrapper-content">
-                                <div className="ibox-content">
-
-                                    {domicilios.map((dom, key) => {
-                                        const link = dom.linkOpcional
-                                            ? dom.linkOpcional
-                                            : `https://www.google.com/maps/search/?api=1&query=${dom.direccion}%2C${dom.nombredistrito}`;
-
-                                        return (
-                                            <div key={key} className="domicilio-card">
-                                                <div className="row">
-
-                                                    <div className="col-auto">
-                                                        <div className="icon">
-                                                            <i className="fas fa-address-book"></i>
-                                                        </div>
-                                                    </div>
-
-                                                    <div className="col">
-                                                        <div className="item-title">DIRECCIÓN {key + 1}</div>
-                                                        <div className="item-direc font-weight-500">{dom.direccion}</div>
-                                                        <div className="item-refer">{dom.nombredistrito || '--'}</div>
-                                                        <div className="item-refer">{`REF: ${dom.referencia || '--'}`}</div>
-
-                                                        <div className="item-actions">
-                                                            <i className="fas fa-edit" onClick={(e) => openModal(e, dom)}></i>
-
-                                                            <a
-                                                                href={link}
-                                                                className="link-map ms-3"
-                                                                target="_blank"
-                                                                rel="noopener noreferrer"
-                                                            >
-                                                                <i className="fas fa-map-marked-alt"></i>
-                                                            </a>
-
-                                                            {dom.delete && (
-                                                                <i
-                                                                    className="fas fa-trash-alt ms-3"
-                                                                    onClick={() => deleteItem(key, dom.id)}
-                                                                ></i>
-                                                            )}
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                        );
-                                    })}
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="form-group row">
-                    <div className="col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                        <div className="mb-4">
-                            <div className="add-item" onClick={(e) => openModal(e)}>
-                                <i className="fas fa-plus"></i> Adicionar nuevo
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+                <button
+                    type="button"
+                    className="domicilios-add"
+                    onClick={() => openModal()}
+                >
+                    <i className="fas fa-plus" aria-hidden="true" />
+                    <span>Agregar domicilio</span>
+                </button>
             </div>
-        </div>
+
+            <div className="domicilios-list">
+                {domicilios.length === 0 ? (
+                    <div className="domicilios-empty">
+                        <i
+                            className="fas fa-map-marker-alt"
+                            aria-hidden="true"
+                        />
+                        <p>No hay domicilios registrados.</p>
+                        <span>
+                            Agrega el primer domicilio del empleador.
+                        </span>
+                    </div>
+                ) : (
+                    domicilios.map((dom, index) => {
+                        const ubicacion = [
+                            dom.direccion,
+                            dom.nombredistrito,
+                        ].filter(Boolean).join(', ');
+
+                        const link = dom.linkOpcional
+                            || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(ubicacion)}`;
+
+                        return (
+                            <article
+                                key={dom.id ?? index}
+                                className="domicilios-card"
+                            >
+                                <header className="domicilios-card-header">
+                                    <h4>
+                                        <i
+                                            className="fas fa-map-marker-alt"
+                                            aria-hidden="true"
+                                        />
+                                        Dirección {index + 1}
+                                    </h4>
+
+                                    <div className="domicilios-actions">
+                                        <button
+                                            type="button"
+                                            className="domicilios-action"
+                                            onClick={() => openModal(dom)}
+                                            aria-label={`Editar dirección ${index + 1}`}
+                                        >
+                                            <i
+                                                className="fas fa-edit"
+                                                aria-hidden="true"
+                                            />
+                                            <span>Editar</span>
+                                        </button>
+
+                                        <a
+                                            href={link}
+                                            className="domicilios-action"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            aria-label={`Ver dirección ${index + 1} en el mapa`}
+                                        >
+                                            <i
+                                                className="fas fa-map-marked-alt"
+                                                aria-hidden="true"
+                                            />
+                                            <span>Ver mapa</span>
+                                        </a>
+
+                                        {dom.delete && (
+                                            <button
+                                                type="button"
+                                                className="domicilios-action domicilios-action-delete"
+                                                onClick={() =>
+                                                    deleteItem(index, dom.id)
+                                                }
+                                                aria-label={`Eliminar dirección ${index + 1}`}
+                                            >
+                                                <i
+                                                    className="fas fa-trash-alt"
+                                                    aria-hidden="true"
+                                                />
+                                                <span>Eliminar</span>
+                                            </button>
+                                        )}
+                                    </div>
+                                </header>
+
+                                <dl className="domicilios-details">
+
+                                    <div className="domicilios-location-row">
+                                        <div className="domicilios-field">
+                                            <dt>País</dt>
+
+                                            <dd className="domicilios-country">
+                                                {dom.paiscode && (
+                                                    <span
+                                                        className={`flag-icon flag-icon-${dom.paiscode.toLowerCase()}`}
+                                                        aria-hidden="true"
+                                                    />
+                                                )}
+
+                                                <span>{dom.pais || '—'}</span>
+                                            </dd>
+                                        </div>
+
+                                        <div className="domicilios-field">
+                                            <dt>Distrito</dt>
+                                            <dd>{dom.nombredistrito || '—'}</dd>
+                                        </div>
+                                    </div>
+
+                                    <div className="domicilios-field">
+                                        <dt>Dirección</dt>
+                                        <dd>{dom.direccion || '—'}</dd>
+                                    </div>
+
+                                    <div className="domicilios-field">
+                                        <dt>Referencia</dt>
+                                        <dd>{dom.referencia || '—'}</dd>
+                                    </div>
+                                </dl>
+                            </article>
+                        );
+                    })
+                )}
+            </div>
+        </section>
     );
 }

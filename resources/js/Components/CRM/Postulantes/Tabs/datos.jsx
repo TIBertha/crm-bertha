@@ -236,8 +236,8 @@ export default function Datos({
                                         ]}
                                         inputClass="w-100 input-countrycode"
                                         enableLongNumbers={true}
-                                        containerClass={
-                                            view === "New"
+                                        containerClass={"px-0 " +
+                                            (view === "New"
                                                 ? "px-0 col" +
                                                   (data.telefono.length > 0
                                                       ? " modified-border "
@@ -250,7 +250,7 @@ export default function Datos({
                                                   2
                                                       ? " green-line "
                                                       : "")
-                                                : ""
+                                                : "")
                                         }
                                     />
 

@@ -1,0 +1,354 @@
+.postulantes-card {
+    width: 100%;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    background: $white_bertha;
+    color: $black_bertha;
+    border: 1px solid rgba($purple_bertha, 0.12);
+    border-radius: 10px;
+    box-shadow: 0 3px 12px rgba($black_bertha, 0.06);
+    overflow: hidden;
+
+    &--seleccionada {
+        border-color: $purple_bertha;
+    }
+
+    &__contenido {
+        display: grid;
+        grid-template-columns: 110px minmax(0, 1fr);
+        align-items: center;
+        gap: 16px;
+        padding: 18px 16px;
+        flex: 1;
+    }
+
+    &__perfil {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        align-self: center;
+        gap: 16px;
+        min-width: 0;
+    }
+
+    &__foto {
+        display: block;
+        width: 110px;
+        height: 110px;
+        flex-shrink: 0;
+        object-fit: cover;
+        object-position: center;
+        border-radius: 50%;
+        border: 3px solid $white_bertha;
+        box-shadow: 0 0 0 1px rgba($purple_bertha, 0.14);
+    }
+
+    &__contacto {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+
+        .historialContacto.cardPostulante {
+            ul > li.contacto-historial-trigger {
+                display: inline-flex !important;
+                align-items: center;
+                justify-content: center;
+                width: auto !important;
+                height: auto !important;
+                min-width: 0 !important;
+                min-height: 0 !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                border: 0 !important;
+                border-radius: 0 !important;
+                background: transparent !important;
+                box-shadow: none !important;
+
+                &::before,
+                &::after {
+                    content: none !important;
+                }
+
+                > .contacto-historial-trigger__boton {
+                    box-sizing: border-box;
+                    margin: 0;
+                    padding: 0;
+                }
+            }
+
+            ul > li.Uncontacted {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                box-sizing: border-box;
+                width: 42px;
+                height: 42px;
+                margin: 0 !important;
+                padding: 0 !important;
+                border: 2px solid $purple_bertha !important;
+                border-radius: 10px;
+                background: $white_bertha !important;
+                color: $purple_bertha !important;
+                box-shadow: none !important;
+                cursor: default;
+
+                i {
+                    color: $purple_bertha !important;
+                    font-size: 17px;
+                    line-height: 1;
+                }
+
+                &:hover {
+                    background: $white_bertha !important;
+                    border-color: $purple_bertha !important;
+                    color: $purple_bertha !important;
+                    box-shadow: none !important;
+                    transform: none;
+                }
+            }
+        }
+    }
+
+    &__datos {
+        min-width: 0;
+    }
+
+    &__cabecera {
+        margin-bottom: 10px;
+    }
+
+    &__nombre {
+        margin: 0 0 4px;
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 1.4;
+        color: $purple_bertha;
+        white-space: normal;
+        overflow-wrap: anywhere;
+    }
+
+    &__procedencia {
+        font-size: 12px;
+        line-height: 1.5;
+        color: $dkgray_bertha;
+        overflow-wrap: anywhere;
+    }
+
+    &__indicadores {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 7px;
+        margin-top: 6px;
+        font-size: 13px;
+
+        > i,
+        > a,
+        > span {
+            margin-left: 0 !important;
+        }
+
+        .icon-action-sm {
+            margin: 0 !important;
+        }
+    }
+
+    &__campo {
+        min-width: 0;
+        margin-bottom: 6px;
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    &__etiqueta {
+        display: inline;
+        margin-right: 5px;
+        color: $dkgray_bertha;
+        font-size: 12px;
+        font-weight: 400;
+
+        &::after {
+            content: ":";
+        }
+    }
+
+    &__valor {
+        display: inline;
+        color: $black_bertha;
+        font-size: 12px;
+        line-height: 1.5;
+        overflow-wrap: anywhere;
+        font-weight: bold;
+
+        .badge {
+            white-space: normal;
+            line-height: 1.4;
+        }
+    }
+
+    // Actividad y modalidad se reconocen sin repetir etiquetas.
+    &__cabecera + &__campo,
+    &__cabecera + &__campo + &__campo {
+        margin-bottom: 4px;
+
+        .postulantes-card__etiqueta {
+            display: none;
+        }
+    }
+
+    &__telefonos {
+        margin: 9px 0;
+        font-size: 13px;
+
+        .row {
+            align-items: center;
+            row-gap: 4px;
+        }
+
+        a {
+            color: $pink_bertha;
+            overflow-wrap: anywhere;
+
+            &:hover {
+                color: $pink_hover_bertha;
+            }
+        }
+    }
+
+    &__identidad {
+        display: flex;
+        flex-wrap: wrap;
+        column-gap: 12px;
+        row-gap: 0;
+
+        .postulantes-card__campo {
+            margin-bottom: 5px;
+        }
+    }
+
+    &__estado {
+        margin: 3px 0 6px;
+
+        .badge {
+            max-width: 100%;
+            padding: 4px 7px;
+            font-size: 11px;
+            font-weight: 700;
+            line-height: 1.3;
+            white-space: normal;
+            border-radius: 5px;
+        }
+    }
+
+    &__verificaciones,
+    &__bajas,
+    &__educacion {
+        font-size: 12px;
+        line-height: 1.5;
+        overflow-wrap: anywhere;
+    }
+
+    &__verificaciones {
+        color: $dkgray_bertha;
+    }
+
+    &__bajas,
+    &__educacion {
+        margin-top: 4px;
+    }
+
+    &__acciones {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 5px;
+        margin-top: auto;
+        padding: 7px 12px;
+        border-top: 1px solid rgba($purple_bertha, 0.1);
+        background: rgba($selected_purple_bertha, 0.18);
+
+        > a,
+        > button,
+        > .new-copy-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 32px;
+            min-height: 34px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.15s ease;
+
+            &:hover {
+                background: $selected_purple_bertha;
+            }
+
+            &:focus-visible {
+                outline: 2px solid $purple_bertha;
+                outline-offset: 2px;
+            }
+        }
+
+        .icon-action,
+        .icon-action-sm {
+            margin: 0 !important;
+            font-size: 15px;
+        }
+    }
+
+    &__etiquetas {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        width: 100%;
+
+        .badge {
+            max-width: 100%;
+            padding: 5px 6px;
+            font-size: 10px;
+            line-height: 1.4;
+            white-space: normal;
+            overflow-wrap: anywhere;
+        }
+    }
+
+    &__fecha {
+        margin-top: 8px;
+        color: $dkgray_bertha;
+        font-size: 12px;
+        line-height: 1.5;
+        overflow-wrap: anywhere;
+    }
+
+    @media (max-width: 575.98px) {
+        &__contenido {
+            grid-template-columns: 68px minmax(0, 1fr);
+            gap: 12px;
+            padding: 16px 12px;
+        }
+
+        &__foto {
+            width: 66px;
+            height: 66px;
+        }
+
+        &__nombre {
+            font-size: 13px;
+        }
+
+        &__acciones {
+            gap: 3px;
+            padding: 6px 8px;
+
+            > a,
+            > button,
+            > .new-copy-icon {
+                min-width: 36px;
+                min-height: 44px;
+            }
+        }
+    }
+}

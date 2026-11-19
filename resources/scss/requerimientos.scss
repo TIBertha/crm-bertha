@@ -1,0 +1,27 @@
+.requerimiento-postulaciones {
+    .form-control,
+    .form-select {
+        height: 40px;
+        min-height: 40px;
+        padding: 8px 12px;
+        border: 1px solid rgba($black_bertha, 0.15);
+        border-radius: 6px;
+        background-color: $white_bertha;
+        color: $black_bertha;
+        font-size: 14px;
+        line-height: 22px;
+
+        &:focus {
+            border-color: $purple_bertha;
+            box-shadow: 0 0 0 3px rgba($purple_bertha, 0.1);
+        }
+    }
+
+    .form-select {
+        padding-right: 36px;
+    }
+
+    .form-control::placeholder {
+        color: $dkgray_bertha;
+    }
+}

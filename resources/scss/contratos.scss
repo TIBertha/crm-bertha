@@ -1,0 +1,354 @@
+.modal-contratos-detalles {
+    color: $black_bertha;
+
+    .modal-dialog {
+        max-width: 760px;
+    }
+
+    .modal-content {
+        border: 0;
+        border-radius: 12px;
+        box-shadow: 0 12px 40px rgba($black_bertha, .2);
+    }
+
+    .modal-header {
+        align-items: center;
+        gap: 1rem;
+        padding: 1.1rem 1.25rem;
+        border-bottom: 1px solid $selected_purple_bertha;
+    }
+
+    .modal-title {
+        margin: 0;
+        color: $purple_bertha;
+        font-size: 1.15rem;
+        font-weight: 700;
+        line-height: 1.4;
+    }
+
+    .modal-body {
+        padding: 1.25rem;
+    }
+
+    .modal-footer {
+        padding: .85rem 1.25rem;
+        border-top: 1px solid $selected_purple_bertha;
+    }
+
+    .detalles-secciones {
+        display: grid;
+        gap: 1rem;
+    }
+
+    .detalle-seccion {
+        min-width: 0;
+        border: 1px solid $selected_purple_bertha;
+        border-radius: 8px;
+    }
+
+    .detalle-titulo {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: .75rem;
+        margin: 0;
+        padding: .7rem 1rem;
+        border-radius: 7px 7px 0 0;
+        background: $selected_purple_bertha;
+        color: $purple_bertha;
+        font-size: 1rem;
+        font-weight: 700;
+    }
+
+    .detalle-contador {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 24px;
+        height: 24px;
+        padding: 0 .4rem;
+        border-radius: 20px;
+        background: $white_bertha;
+        color: $purple_bertha;
+        font-size: .75rem;
+    }
+
+    .detalles-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem 1.5rem;
+        margin: 0;
+        padding: 1rem;
+    }
+
+    .detalle-campo {
+        min-width: 0;
+
+        &.completo {
+            grid-column: 1 / -1;
+        }
+
+        dt {
+            margin-bottom: .3rem;
+            color: $dkgray_bertha;
+            font-size: .8rem;
+            font-weight: 600;
+        }
+
+        dd {
+            margin: 0;
+            color: $black_bertha;
+            font-size: .95rem;
+            line-height: 1.5;
+            overflow-wrap: anywhere;
+        }
+
+        a {
+            color: $purple_bertha;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+
+            &:hover {
+                color: $purple_hover_bertha;
+            }
+        }
+    }
+
+    .detalle-fecha {
+        display: inline-flex;
+        align-items: center;
+        gap: .5rem;
+        padding: .3rem .6rem;
+        border-radius: 5px;
+        background: rgba($selected_purple_bertha, .65);
+        color: $purple_bertha;
+        font-weight: 600;
+    }
+
+    .detalles-historial {
+        display: grid;
+        gap: .75rem;
+        padding: 1rem;
+    }
+
+    .historial-vacio {
+        margin: 0;
+        color: $dkgray_bertha;
+        font-size: .9rem;
+        text-align: center;
+    }
+
+    .detalles-loading,
+    .detalles-error {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        min-height: 180px;
+        padding: 1.5rem;
+        text-align: center;
+    }
+
+    .detalles-loading {
+        color: $purple_bertha;
+
+        i {
+            font-size: 2rem;
+        }
+    }
+
+    .detalles-error {
+        color: $black_bertha;
+
+        p {
+            margin: 0;
+        }
+    }
+
+    .detalles-cerrar,
+    .detalles-reintentar {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: .5rem;
+        min-height: 42px;
+        padding: .55rem 1.15rem;
+        border: 1px solid $purple_bertha;
+        border-radius: 6px;
+        background: $purple_bertha;
+        color: $white_bertha;
+        font: inherit;
+        font-weight: 600;
+        cursor: pointer;
+
+        transition:
+            background-color .2s ease,
+            border-color .2s ease;
+
+        &:hover {
+            border-color: $purple_hover_bertha;
+            background: $purple_hover_bertha;
+        }
+
+        &:focus-visible {
+            outline: 2px solid $purple_bertha;
+            outline-offset: 3px;
+        }
+    }
+
+    .historial-card {
+        min-width: 0;
+        border: 1px solid $selected_purple_bertha;
+        border-radius: 8px;
+        background: $white_bertha;
+        overflow: hidden;
+
+        &.es-actual {
+            border-color: $purple_bertha;
+        }
+
+        a {
+            color: $purple_bertha;
+            text-decoration: none;
+
+            &:hover {
+                color: $purple_hover_bertha;
+                text-decoration: underline;
+            }
+
+            &:focus-visible {
+                outline: 2px solid $purple_bertha;
+                outline-offset: 3px;
+            }
+        }
+    }
+
+    .historial-card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: .5rem;
+        padding: .75rem 1rem;
+        border-bottom: 1px solid $selected_purple_bertha;
+        background: $gray_bertha;
+    }
+
+    .historial-identificador {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: .6rem;
+
+        > a {
+            font-weight: 700;
+        }
+    }
+
+    .historial-actual {
+        padding: .2rem .5rem;
+        border-radius: 5px;
+        background: $selected_purple_bertha;
+        color: $purple_bertha;
+        font-size: .7rem;
+        font-weight: 700;
+    }
+
+    .historial-fecha {
+        color: $dkgray_bertha;
+        font-size: .8rem;
+    }
+
+    .historial-card-body {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: .4rem;
+        padding: 1rem;
+    }
+
+    .historial-label {
+        display: block;
+        color: $dkgray_bertha;
+        font-size: .75rem;
+        font-weight: 600;
+    }
+
+    .historial-trabajador {
+        max-width: 100%;
+        font-size: .95rem;
+        font-weight: 700;
+        overflow-wrap: anywhere;
+    }
+
+    .historial-telefono {
+        display: inline-flex;
+        align-items: center;
+        gap: .5rem;
+        max-width: 100%;
+        font-size: .9rem;
+        overflow-wrap: anywhere;
+    }
+
+    .historial-card-footer {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 1rem;
+        padding: .85rem 1rem;
+        border-top: 1px solid $selected_purple_bertha;
+
+        > div {
+            min-width: 0;
+        }
+    }
+
+    .historial-tipo {
+        display: block;
+        margin-top: .25rem;
+        color: $purple_bertha;
+        font-size: .85rem;
+        font-weight: 600;
+    }
+
+    .historial-sueldo {
+        margin-left: auto;
+        text-align: right;
+
+        strong {
+            display: block;
+            margin-top: .25rem;
+            color: $purple_bertha;
+            font-size: .95rem;
+            overflow-wrap: anywhere;
+        }
+    }
+
+    @media (max-width: 767.98px) {
+        .modal-dialog {
+            margin: .75rem;
+        }
+
+        .modal-header,
+        .modal-body,
+        .modal-footer {
+            padding: 1rem;
+        }
+
+        .modal-title {
+            font-size: 1rem;
+        }
+
+        .detalles-grid {
+            gap: 1rem;
+        }
+    }
+
+    @media (max-width: 399.98px) {
+        .detalles-grid {
+            grid-template-columns: minmax(0, 1fr);
+        }
+    }
+}

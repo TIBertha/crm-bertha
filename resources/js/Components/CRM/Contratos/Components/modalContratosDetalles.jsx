@@ -1,189 +1,330 @@
-import React, {useState} from 'react';
-import {Modal, ModalBody, ModalTitle} from "react-bootstrap";
-import ModalHeader from "react-bootstrap/ModalHeader";
-import moment from "moment";
-import {currencySoles} from "../../../Helpers/strings.js";
-import {ajaxGetDataModalDetallesContratos} from "../../../Functions/Contratos.jsx";
-import {isResponsive} from "../../../Functions/General.jsx";
-import CardContratoDetalles from "./cardContratoDetalles.jsx";
+import React, { useState } from 'react';
+import {
+    Modal,
+    ModalBody,
+    ModalTitle,
+    ModalFooter,
+} from 'react-bootstrap';
+import ModalHeader from 'react-bootstrap/ModalHeader';
+import moment from 'moment';
+import { currencySoles } from '../../../Helpers/strings.js';
+import { ajaxGetDataModalDetallesContratos } from '../../../Functions/Contratos.jsx';
+import { isResponsive } from '../../../Functions/General.jsx';
+import CardContratoDetalles from './cardContratoDetalles.jsx';
 
-export default function ModalContratosDetalles({idCont}) {
+function CampoDetalle({ label, children, completo = false }) {
+    return (
+        <div className={`detalle-campo${completo ? ' completo' : ''}`}>
+            <dt>{label}</dt>
+            <dd>{children ?? '—'}</dd>
+        </div>
+    );
+}
 
+function formatFecha(fecha) {
+    if (!fecha) return '—';
+
+    const valor = moment(fecha);
+
+    return valor.isValid()
+        ? valor.format('DD/MM/YYYY')
+        : '—';
+}
+
+function obtenerHistorial(historial) {
+    if (Array.isArray(historial)) return historial;
+    if (!historial) return [];
+
+    try {
+        const resultado = JSON.parse(historial);
+        return Array.isArray(resultado) ? resultado : [];
+    } catch {
+        return [];
+    }
+}
+
+export default function ModalContratosDetalles({ idCont }) {
     const [show, setShow] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [data, setData] = useState([]);
-    let responsive = isResponsive();
-    let conf = {title: ('Ver detalles del contrato N°' + idCont), icon: 'fas fa-info-circle'};
+    const [data, setData] = useState(null);
+    const [error, setError] = useState('');
 
-    function openModal(e) {
+    const responsive = isResponsive();
+    const title = `Detalles del contrato #${idCont}`;
+
+    const historial = obtenerHistorial(data?.historial);
+
+    async function openModal() {
         setShow(true);
         setIsLoading(true);
-        ajaxGetDataModalDetallesContratos(idCont).then(r => {
-            if (r.code === 200){
-                setData(r.data);
-                setIsLoading(false);
-            }else{
-                setIsLoading(false);
+        setData(null);
+        setError('');
+
+        try {
+            const respuesta = await ajaxGetDataModalDetallesContratos(idCont);
+
+            if (respuesta.code !== 200 || !respuesta.data) {
+                throw new Error('No se encontraron los datos del contrato.');
             }
-        }).catch(function (error) {
 
+            setData(respuesta.data);
+        } catch {
+            setError('No pudimos cargar los detalles del contrato.');
+        } finally {
             setIsLoading(false);
-        })
-    }
-
-    function viewLoading(){
-        return(
-            <section className={'w-100 text-center'}>
-                <i className="fas fa-sync fa-spin" style={{fontSize: "35px"}}></i>
-            </section>
-        )
+        }
     }
 
     return (
         <>
-            <a className="button-information-modal text-white" role="button" onClick={(e) => openModal(e)}>
-                <i className={conf.icon + ' me-2 me-md-0'}></i>
-                {responsive && <span className='ms-2'>{conf.title}</span>}
+            <a
+                className="button-information-modal text-white"
+                role="button"
+                tabIndex={0}
+                onClick={openModal}
+                onKeyDown={e => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        openModal();
+                    }
+                }}
+                aria-label={title}
+                title={title}
+            >
+                <i
+                    className="fas fa-info-circle"
+                    aria-hidden="true"
+                />
+
+                {responsive && (
+                    <span className="ms-2">{title}</span>
+                )}
             </a>
 
-            <Modal size="md" show={show} onHide={(e) => setShow(false)} centered={true}>
-                <ModalHeader className="border-0" closeButton>
-                    <ModalTitle>
-                        <h6><i className={conf.icon + ' me-2'}></i>{conf.title}</h6>
+            <Modal
+                size="lg"
+                className="modal-contratos-detalles"
+                show={show}
+                onHide={() => setShow(false)}
+                aria-labelledby={`contrato-detalles-title-${idCont}`}
+                centered
+                scrollable
+            >
+                <ModalHeader closeButton>
+                    <ModalTitle
+                        id={`contrato-detalles-title-${idCont}`}
+                    >
+                        {title}
                     </ModalTitle>
                 </ModalHeader>
-                <ModalBody className="py-20">
-                    {(isLoading == true) && viewLoading()}
 
-                    {(isLoading == false) &&
-                        <section className="row justify-content-center section-information-modal">
+                <ModalBody>
+                    {isLoading ? (
+                        <div className="detalles-loading" role="status">
+                            <i
+                                className="fas fa-spinner fa-spin"
+                                aria-hidden="true"
+                            />
+                            <span>Cargando detalles…</span>
+                        </div>
+                    ) : error ? (
+                        <div className="detalles-error" role="alert">
+                            <p>{error}</p>
 
-                            <div className="col-12 pb-4">
-                                <div className="text-center h6 mb-4">Datos Requerimiento</div>
+                            <button
+                                type="button"
+                                className="detalles-reintentar"
+                                onClick={openModal}
+                            >
+                                <i
+                                    className="fas fa-sync-alt"
+                                    aria-hidden="true"
+                                />
+                                Reintentar
+                            </button>
+                        </div>
+                    ) : data ? (
+                        <div className="detalles-secciones">
+                            <section className="detalle-seccion">
+                                <h3 className="detalle-titulo">
+                                    Requerimiento
+                                </h3>
 
-                                <div className="col-12 col-sm-12 col-md-12 col-lg-12 row">
-                                    <div className="col-6 label">NUMERO</div>
-                                    <div className="col-6">{data.requerimiento_id}</div>
-                                </div>
+                                <dl className="detalles-grid">
+                                    <CampoDetalle label="Número">
+                                        {data.requerimiento_id}
+                                    </CampoDetalle>
 
-                                <div className="col-12 col-sm-12 col-md-12 col-lg-12 row">
-                                    <div className="col-6 label">MODALIDAD</div>
-                                    <div className="col-6">{data.modalidad}</div>
-                                </div>
+                                    <CampoDetalle label="Modalidad">
+                                        {data.modalidad}
+                                    </CampoDetalle>
 
-                                {data.frecuencia_servicio &&
-                                    <div className="col-12 col-sm-12 col-md-12 col-lg-12 row">
-                                        <div className="col-6 label">FRECUENCIA</div>
-                                        <div className="col-6">{data.frecuencia_servicio}</div>
-                                    </div>
-                                }
-
-                                {data.valor_dia_frecuencia &&
-                                    <div className="col-12 col-sm-12 col-md-12 col-lg-12 row">
-                                        <div className="col-6 label">PAGO POR DÍA</div>
-                                        <div className="col-6">{data.valor_dia_frecuencia}</div>
-                                    </div>
-                                }
-
-                                {data.dias_frecuencia &&
-                                    <div className="col-12 col-sm-12 col-md-12 col-lg-12 row">
-                                        <div className="col-6 label">DIAS LABORABLES</div>
-                                        <div className="col-6">{data.dias_frecuencia}</div>
-                                    </div>
-                                }
-
-                                { (data.sueldo && data.modalidad_id == 3) &&
-                                    <div className="col-12 col-sm-12 col-md-12 col-lg-12 row">
-                                        <div className="col-6 label">SUELDO BASE</div>
-                                        <div className="col-6">{data.sueldo}</div>
-                                    </div>
-                                }
-                            </div>
-
-                            <div className="col-12 pb-4">
-                                <div className="text-center h6 mb-4 mt-5">Datos Empleador</div>
-
-                                <div className="col-12 col-sm-12 col-md-12 col-lg-12 row">
-                                    <div className="col-6 label">Nº DOCUMENTO</div>
-                                    <div className="col-6">{data.empleador_num_doc ? data.empleador_num_doc : ' - '}</div>
-                                </div>
-
-                                <div className="col-12 col-sm-12 col-md-12 col-lg-12 row">
-                                    <div className="col-6 label">TELEFONO</div>
-                                    <div className="col-6">{data.empleador_tel ? data.empleador_tel : ' - '}</div>
-                                </div>
-                                <div className="col-12 col-sm-12 col-md-12 col-lg-12 row">
-                                    <div className="col-6 label">CORREO</div>
-                                    <div className="col-6">{data.empleador_mail ? data.empleador_mail : ' - '}</div>
-                                </div>
-                            </div>
-
-                            <div className="col-12 pb-4">
-
-                                <div className="text-center h6 mb-4">Datos Contrato</div>
-
-                                <div className="col-12 col-sm-12 col-md-12 col-lg-12 row">
-                                    <div className="col-6 label">N° CONTRATO</div>
-                                    <div className="col-6">{data.id}</div>
-                                </div>
-                                <div className="col-12 col-sm-12 col-md-12 col-lg-12 row">
-                                    <div className="col-6 label">GARANTIA</div>
-                                    <div className="col-6">{data.garantia} {data.garantia > 1 ? 'MESES' : 'MES'}</div>
-                                </div>
-                                <div className="col-12 col-sm-12 col-md-12 col-lg-12 row">
-                                    <div className="col-6 label">INICIO GARANTIA</div>
-                                    <div className="col-6">{data.fecha_inicio_garantia ? moment(data.fecha_inicio_garantia, "YYYY-MM-DD").format('DD/MM/YYYY') : ' - '}</div>
-                                </div>
-                                <div className="col-12 col-sm-12 col-md-12 col-lg-12 row">
-                                    <div className="col-6 label">FIN GARANTIA</div>
-                                    <div className="col-6">{data.fecha_fin_garantia ? moment(data.fecha_fin_garantia, "YYYY-MM-DD").format('DD/MM/YYYY') : ' - '}</div>
-                                </div>
-
-                                { (data.forma_pago_id == 2) &&
-                                    <>
-                                        <div className="col-12 col-sm-12 col-md-12 col-lg-12 row">
-                                            <div className="col-6 label">ADELANTO</div>
-                                            <div className="col-6">{data.adelanto ? currencySoles(data.adelanto) : currencySoles(0)}</div>
-                                        </div>
-
-                                        <div className="col-12 col-sm-12 col-md-12 col-lg-12 row">
-                                            <div className="col-6 label">DEBE</div>
-                                            <div className="col-6">{data.debe ? currencySoles(data.debe) : currencySoles(0)}</div>
-                                        </div>
-
-                                        <div className="col-12 col-sm-12 col-md-12 col-lg-12 row">
-                                            <div className="col-6 label">MODO ADELANTO</div>
-                                            <div className="col-6">{data.modo_pago_adelanto ? data.modo_pago_adelanto : ' - '}</div>
-                                        </div>
-
-                                        <div className="col-12 col-sm-12 col-md-12 col-lg-12 row">
-                                            <div className="col-6 label">MODO DEBE</div>
-                                            <div className="col-6">{data.modo_pago_debe ? data.modo_pago_debe : ' - '}</div>
-                                        </div>
-
-                                        <div className="col-12 col-sm-12 col-md-12 col-lg-12 row">
-                                            <div className="col-6 label">FECHA ADELANTO</div>
-                                            <div className="col-6">{data.fecha_pago_adelanto ? moment(data.fecha_pago_adelanto, "YYYY-MM-DD").format('DD/MM/YYYY')  : ' - '}</div>
-                                        </div>
-
-                                        <div className="col-12 col-sm-12 col-md-12 col-lg-12 row">
-                                            <div className="col-6 label">FECHA DEBE</div>
-                                            <div className="col-6">{data.fecha_pago_debe ? moment(data.fecha_pago_debe, "YYYY-MM-DD").format('DD/MM/YYYY')  : ' - '}</div>
-                                        </div>
-                                    </>
-                                }
-                            </div>
-
-                            {data.historial &&
-                                <div className="col-12">
-                                    <div className="h6 text-center mb-4">Historial</div>
-                                    {JSON.parse(data.historial).map((item, key) =>
-                                        <CardContratoDetalles data={item} actual={data.id == item.id ? true : false}/>
+                                    {data.frecuencia_servicio && (
+                                        <CampoDetalle label="Frecuencia">
+                                            {data.frecuencia_servicio}
+                                        </CampoDetalle>
                                     )}
-                                </div>
-                            }
-                        </section>
-                    }
+
+                                    {data.valor_dia_frecuencia && (
+                                        <CampoDetalle label="Pago por día">
+                                            {data.valor_dia_frecuencia}
+                                        </CampoDetalle>
+                                    )}
+
+                                    {data.dias_frecuencia && (
+                                        <CampoDetalle
+                                            label="Días laborables"
+                                            completo
+                                        >
+                                            {data.dias_frecuencia}
+                                        </CampoDetalle>
+                                    )}
+
+                                    {data.sueldo
+                                        && Number(data.modalidad_id) === 3
+                                        && (
+                                            <CampoDetalle label="Sueldo base">
+                                                {data.sueldo}
+                                            </CampoDetalle>
+                                        )}
+                                </dl>
+                            </section>
+
+                            <section className="detalle-seccion">
+                                <h3 className="detalle-titulo">
+                                    Empleador
+                                </h3>
+
+                                <dl className="detalles-grid">
+                                    <CampoDetalle label="N.º de documento">
+                                        {data.empleador_num_doc || '—'}
+                                    </CampoDetalle>
+
+                                    <CampoDetalle label="Teléfono">
+                                        {data.empleador_tel ? (
+                                            <a href={`tel:${data.empleador_tel}`}>
+                                                {data.empleador_tel}
+                                            </a>
+                                        ) : '—'}
+                                    </CampoDetalle>
+
+                                    <CampoDetalle label="Correo" completo>
+                                        {data.empleador_mail ? (
+                                            <a href={`mailto:${data.empleador_mail}`}>
+                                                {data.empleador_mail}
+                                            </a>
+                                        ) : '—'}
+                                    </CampoDetalle>
+                                </dl>
+                            </section>
+
+                            <section className="detalle-seccion">
+                                <h3 className="detalle-titulo">
+                                    Contrato
+                                </h3>
+
+                                <dl className="detalles-grid">
+                                    <CampoDetalle label="N.º de contrato">
+                                        {data.id}
+                                    </CampoDetalle>
+
+                                    <CampoDetalle label="Garantía">
+                                        {data.garantia != null
+                                            ? `${data.garantia} ${
+                                                Number(data.garantia) === 1
+                                                    ? 'mes'
+                                                    : 'meses'
+                                            }`
+                                            : '—'}
+                                    </CampoDetalle>
+
+                                    <CampoDetalle label="Inicio de garantía">
+                                        <span className="detalle-fecha">
+                                            <i
+                                                className="far fa-calendar-alt"
+                                                aria-hidden="true"
+                                            />
+                                            {formatFecha(data.fecha_inicio_garantia)}
+                                        </span>
+                                    </CampoDetalle>
+
+                                    <CampoDetalle label="Fin de garantía">
+                                        <span className="detalle-fecha">
+                                            <i
+                                                className="far fa-calendar-alt"
+                                                aria-hidden="true"
+                                            />
+                                            {formatFecha(data.fecha_fin_garantia)}
+                                        </span>
+                                    </CampoDetalle>
+                                </dl>
+                            </section>
+
+                            {Number(data.forma_pago_id) === 2 && (
+                                <section className="detalle-seccion">
+                                    <h3 className="detalle-titulo">
+                                        Pagos
+                                    </h3>
+
+                                    <dl className="detalles-grid">
+                                        <CampoDetalle label="Adelanto">
+                                            {currencySoles(data.adelanto || 0)}
+                                        </CampoDetalle>
+
+                                        <CampoDetalle label="Debe">
+                                            {currencySoles(data.debe || 0)}
+                                        </CampoDetalle>
+
+                                        <CampoDetalle label="Modo adelanto">
+                                            {data.modo_pago_adelanto || '—'}
+                                        </CampoDetalle>
+
+                                        <CampoDetalle label="Modo debe">
+                                            {data.modo_pago_debe || '—'}
+                                        </CampoDetalle>
+
+                                        <CampoDetalle label="Fecha adelanto">
+                                            {formatFecha(data.fecha_pago_adelanto)}
+                                        </CampoDetalle>
+
+                                        <CampoDetalle label="Fecha debe">
+                                            {formatFecha(data.fecha_pago_debe)}
+                                        </CampoDetalle>
+                                    </dl>
+                                </section>
+                            )}
+
+                            {data.historial && (
+                                <section className="detalle-seccion">
+                                    <h3 className="detalle-titulo">
+                                        Historial
+                                        <span className="detalle-contador">
+                                            {historial.length}
+                                        </span>
+                                    </h3>
+
+                                    <div className="detalles-historial">
+                                        {historial.length > 0 ? (
+                                            historial.map((item, index) => (
+                                                <CardContratoDetalles
+                                                    key={`${item.id ?? 'contrato'}-${index}`}
+                                                    data={item}
+                                                    actual={
+                                                        Number(data.id)
+                                                        === Number(item.id)
+                                                    }
+                                                />
+                                            ))
+                                        ) : (
+                                            <p className="historial-vacio">
+                                                No hay registros en el historial.
+                                            </p>
+                                        )}
+                                    </div>
+                                </section>
+                            )}
+                        </div>
+                    ) : null}
                 </ModalBody>
             </Modal>
         </>

@@ -79,6 +79,7 @@ function convertDomiciliosToObject($data){
             $distrito = \App\Models\Distrito::find($d->distrito_id);
             $provincia = \App\Models\Provincia::find($distrito->provincia_id);
             $departamento = \App\Models\Departamento::find($provincia->departamento_id);
+            $pais = \App\Models\Pais::find($departamento->pais_id);
 
             $distritoObject = [
                 'label' => ((($distrito->nombre))) . ' - ' . ((($provincia->nombre))) . ' - ' .((($departamento->nombre))),
@@ -87,6 +88,9 @@ function convertDomiciliosToObject($data){
 
             $result[] = [
                 'id' => $d->id,
+                'pais' => mb_convert_case($pais->nombre === 'PERU' ? 'PERÚ' : $pais->nombre, MB_CASE_TITLE),
+                'paisid' => $pais->id,
+                'paiscode' => strtolower($pais->country_code ?? ''),
                 'distrito' => $distritoObject,
                 'nombredistrito' => $distrito->nombre,
                 'direccion' => $d->direccion,

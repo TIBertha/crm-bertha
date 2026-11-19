@@ -1,36 +1,65 @@
 import React from "react";
 import VerHistorialContacto from "../Modals/verHistorialContacto.jsx";
-import {getStatusContact} from "../../../Helpers/postulantes.js";
+import { getStatusContact } from "../../../Helpers/postulantes.js";
 
-export default function HistorialContacto({historial, handleContactado, trabajador}) {
-    let wereContacted = (historial.length != 0 ? true : false);
+export default function HistorialContacto({
+                                              historial = [],
+                                              handleContactado,
+                                              trabajador,
+                                          }) {
+    const contactos = Array.isArray(historial) ? historial : [];
+    const lastContact = contactos[contactos.length - 1] ?? null;
 
-    let lastContact = null;
-    let statusContact = getStatusContact(historial);
+    let statusContact = getStatusContact(contactos);
 
-    if (wereContacted === true){
-        lastContact = historial[historial.length - 1];
+    if (lastContact) {
+        const dias = Number(lastContact.diasPasados);
 
-        if (lastContact.diasPasados >= 0 && lastContact.diasPasados <=30){
-            statusContact = 'fresh';
-        }else if (lastContact.diasPasados >= 31 && lastContact.diasPasados <=60){
-            statusContact = 'mid';
-        }else if (lastContact.diasPasados >= 61){
-            statusContact = 'raw';
+        if (dias >= 0 && dias <= 30) {
+            statusContact = "fresh";
+        } else if (dias >= 31 && dias <= 60) {
+            statusContact = "mid";
+        } else if (dias >= 61) {
+            statusContact = "raw";
         }
     }
 
-    return(
-        <div className={'historialContacto'}>
-            <ul>
-                <li onClick={(e) => handleContactado(e)} className={(wereContacted == true ? ('contacted ' + statusContact) : '')} data-toggle="tooltip" data-placement="bottom" title={lastContact ? (lastContact.diasPasados == 0 ? 'Hoy fue contactada la trabajadora' : 'La trabajadora fue contactada hace ' + lastContact.diasPasados + ' día(s)') : 'La trabajadora aún no es contactada'}>
-                    <i className="fas fa-phone-alt"></i>
+    const tooltip = lastContact
+        ? Number(lastContact.diasPasados) === 0
+            ? "Hoy fue contactada la trabajadora"
+            : `La trabajadora fue contactada hace ${lastContact.diasPasados} día(s)`
+        : "La trabajadora aún no es contactada";
+
+    return (
+        <div className="postulante-contacto">
+            <ul className="postulante-contacto__lista">
+                <li className="postulante-contacto__item">
+                    <button
+                        type="button"
+                        className={
+                            "postulante-contacto__boton" +
+                            (lastContact
+                                ? ` es-${statusContact}`
+                                : " es-sin-contacto")
+                        }
+                        onClick={handleContactado}
+                        title={tooltip}
+                        aria-label={`${tooltip}. Registrar contacto`}
+                    >
+                        <i
+                            className="fas fa-phone-alt"
+                            aria-hidden="true"
+                        ></i>
+                    </button>
                 </li>
 
-                {(wereContacted === true) &&
-                    <VerHistorialContacto historial={historial} trabajador={trabajador}/>
-                }
+                {lastContact && (
+                    <VerHistorialContacto
+                        historial={contactos}
+                        trabajador={trabajador}
+                    />
+                )}
             </ul>
         </div>
-    )
+    );
 }

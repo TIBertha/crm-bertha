@@ -1,0 +1,855 @@
+
+.contacto-historial-trigger {
+    // Neutraliza los estilos anteriores aplicados al li.
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    width: auto !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    list-style: none;
+
+    &__boton {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 42px;
+        height: 42px;
+        padding: 0;
+        border: 1px solid rgba($purple_bertha, 0.2);
+        border-radius: 10px;
+        background: $selected_purple_bertha;
+        color: $purple_bertha;
+        font-size: 17px;
+        line-height: 1;
+        cursor: pointer;
+        transition:
+            background-color 0.15s ease,
+            border-color 0.15s ease,
+            box-shadow 0.15s ease;
+
+        i {
+            color: inherit;
+            font-size: inherit;
+            line-height: 1;
+            pointer-events: none;
+        }
+
+        &:hover {
+            background: darken($selected_purple_bertha, 4%);
+            border-color: $purple_bertha;
+        }
+
+        &:focus-visible {
+            outline: 2px solid $purple_bertha;
+            outline-offset: 3px;
+        }
+
+        &.es-fresh {
+            color: $white_bertha;
+
+            &, &:hover {
+                background: $green_bertha;
+                border-color: $green_bertha;
+            }
+        }
+
+        &.es-mid {
+            color: $white_bertha;
+
+            &, &:hover {
+                background: $yellow_bertha;
+                border-color: $yellow_bertha;
+            }
+        }
+
+        &.es-raw {
+            color: $white_bertha;
+
+            &, &:hover {
+                background: $dkgray_bertha;
+                border-color: $dkgray_bertha;
+            }
+        }
+    }
+}
+
+.postulante-contacto {
+    display: inline-flex;
+    max-width: 100%;
+
+    &__lista {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+
+        > li {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+    }
+
+    &__item {
+        border: 0;
+        background: transparent;
+    }
+
+    &__boton {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+        width: 42px;
+        height: 42px;
+        margin: 0;
+        padding: 0;
+        border: 2px solid $purple_bertha;
+        border-radius: 10px;
+        background: $white_bertha;
+        color: $purple_bertha;
+        font-size: 17px;
+        line-height: 1;
+        cursor: pointer;
+        transition:
+            background-color 0.15s ease,
+            border-color 0.15s ease;
+
+        i {
+            color: inherit;
+            font-size: inherit;
+            line-height: 1;
+            pointer-events: none;
+        }
+
+        &:focus-visible {
+            outline: 2px solid $purple_bertha;
+            outline-offset: 3px;
+        }
+
+        &.es-sin-contacto {
+            &:hover {
+                background: $white_bertha;
+                border-color: $purple_bertha;
+                color: $purple_bertha;
+            }
+        }
+
+        &.es-fresh {
+            color: $white_bertha;
+
+            &, &:hover {
+                background: $green_bertha;
+                border-color: $green_bertha;
+            }
+        }
+
+        &.es-mid {
+            color: $white_bertha;
+
+            &, &:hover {
+                background: $yellow_bertha;
+                border-color: $yellow_bertha;
+            }
+        }
+
+        &.es-raw {
+            color: $white_bertha;
+
+            &, &:hover {
+                background: $dkgray_bertha;
+                border-color: $dkgray_bertha;
+            }
+        }
+    }
+
+    // Disparador del modal VerHistorialContacto si devuelve un li.
+    &__lista > li:not(.postulante-contacto__item) {
+        box-sizing: border-box;
+        width: 42px;
+        height: 42px;
+        border: 1px solid rgba($purple_bertha, 0.2);
+        border-radius: 10px;
+        background: $selected_purple_bertha;
+        color: $purple_bertha;
+        cursor: pointer;
+        transition: background-color 0.15s ease;
+
+        i {
+            color: inherit;
+            font-size: 17px;
+        }
+
+        &:hover {
+            background: $purple_bertha;
+            color: $white_bertha;
+        }
+    }
+}
+
+.modal-historial-contacto {
+    .modal-dialog {
+        max-width: 580px;
+    }
+
+    .modal-content {
+        border: 0;
+        border-radius: 14px;
+        box-shadow: 0 12px 40px rgba($black_bertha, 0.18);
+        overflow: hidden;
+    }
+
+    .modal-header {
+        align-items: flex-start;
+        gap: 12px;
+        padding: 20px;
+        border-bottom: 1px solid rgba($purple_bertha, 0.12);
+
+        .btn-close {
+            flex-shrink: 0;
+            margin: 0 0 0 auto;
+            padding: 8px;
+        }
+    }
+
+    .modal-title {
+        margin: 0;
+        color: $purple_bertha;
+        font-size: 19px;
+        font-weight: 700;
+        line-height: 1.35;
+    }
+
+    .modal-body {
+        padding: 20px;
+    }
+
+    .modal-footer {
+        padding: 14px 20px;
+        border-top: 1px solid rgba($purple_bertha, 0.12);
+    }
+
+    &__cabecera {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+    }
+
+    &__icono {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        width: 46px;
+        height: 46px;
+        border-radius: 10px;
+        background: $selected_purple_bertha;
+        color: $purple_bertha;
+        font-size: 22px;
+    }
+
+    &__titulos {
+        min-width: 0;
+
+        p {
+            margin: 5px 0 0;
+            color: $black_bertha;
+            font-size: 13px;
+            line-height: 1.5;
+            overflow-wrap: anywhere;
+        }
+    }
+
+    &__resumen {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 16px;
+    }
+
+    &__cantidad {
+        color: $black_bertha;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    &__badge {
+        display: inline-flex;
+        align-items: center;
+        align-self: center;
+        flex-shrink: 0;
+        padding: 6px 9px;
+        border-radius: 6px;
+        background: $gray_bertha;
+        color: $dkgray_hover_bertha;
+        font-size: 11px;
+        font-weight: 600;
+        line-height: 1.4;
+
+        &.es-fresh {
+            background: rgba($green_bertha, 0.12);
+            color: $green_hover_bertha;
+        }
+
+        &.es-mid {
+            background: rgba($yellow_bertha, 0.2);
+            color: $yellow_hover_bertha;
+        }
+
+        &.es-raw {
+            background: rgba($dkgray_bertha, 0.12);
+            color: $dkgray_hover_bertha;
+        }
+    }
+
+    &__lista {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    &__registro {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 16px;
+        border: 1px solid rgba($purple_bertha, 0.18);
+        border-radius: 10px;
+        background: $white_bertha;
+    }
+
+    &__datos {
+        min-width: 0;
+    }
+
+    &__colaborador {
+        margin: 0 0 6px;
+        color: $black_bertha;
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 1.4;
+        overflow-wrap: anywhere;
+    }
+
+    &__fecha {
+        display: flex;
+        align-items: baseline;
+        gap: 7px;
+        color: $dkgray_bertha;
+        font-size: 12px;
+        line-height: 1.5;
+
+        i {
+            flex-shrink: 0;
+            color: $purple_bertha;
+        }
+
+        span {
+            overflow-wrap: anywhere;
+        }
+    }
+
+    &__vacio {
+        margin: 0;
+        padding: 24px 12px;
+        text-align: center;
+        color: $dkgray_bertha;
+        font-size: 14px;
+    }
+
+    &__cerrar {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 42px;
+        padding: 9px 20px;
+        border: 1px solid $purple_bertha;
+        border-radius: 7px;
+        background: $purple_bertha;
+        color: $white_bertha;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition:
+            background-color 0.15s ease,
+            border-color 0.15s ease;
+
+        &:hover {
+            background: $purple_hover_bertha;
+            border-color: $purple_hover_bertha;
+        }
+
+        &:focus-visible {
+            outline: 2px solid $purple_bertha;
+            outline-offset: 3px;
+        }
+    }
+
+    @media (max-width: 575.98px) {
+        .modal-dialog {
+            margin: 16px;
+        }
+
+        .modal-header,
+        .modal-body {
+            padding: 16px;
+        }
+
+        .modal-title {
+            font-size: 17px;
+        }
+
+        .modal-footer {
+            padding: 12px 16px;
+        }
+
+        &__icono {
+            width: 40px;
+            height: 40px;
+            font-size: 19px;
+        }
+
+        &__resumen {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        &__resumen > &__badge {
+            align-self: flex-start;
+        }
+
+        &__registro {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 14px;
+        }
+
+        &__registro > &__badge {
+            align-self: flex-start;
+        }
+
+        &__cerrar {
+            width: 100%;
+            margin: 0;
+        }
+    }
+}
+
+.modal-postulados {
+    .modal-dialog {
+        width: calc(100% - 32px);
+        max-width: 820px;
+        margin-right: auto;
+        margin-left: auto;
+    }
+
+    .modal-content {
+        border: 0;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 12px 40px rgba($black_bertha, 0.18);
+    }
+
+    .modal-header {
+        align-items: flex-start;
+        gap: 16px;
+        padding: 20px 24px;
+        border-bottom: 1px solid rgba($purple_bertha, 0.12);
+
+        .btn-close {
+            flex-shrink: 0;
+            margin: 0 0 0 auto;
+            padding: 8px;
+        }
+    }
+
+    .modal-title {
+        color: $purple_bertha;
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 1.4;
+    }
+
+    .modal-body {
+        padding: 20px 24px;
+        background: $gray_bertha;
+    }
+
+    .modal-footer {
+        padding: 12px 24px;
+        border-top: 1px solid rgba($purple_bertha, 0.12);
+    }
+
+    &__cabecera {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+    }
+
+    &__icono {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        width: 46px;
+        height: 46px;
+        border-radius: 10px;
+        background: $selected_purple_bertha;
+        color: $purple_bertha;
+        font-size: 22px;
+    }
+
+    &__titulos {
+        min-width: 0;
+    }
+
+    &__empleador {
+        margin: 0;
+        color: $black_bertha;
+        font-size: 14px;
+        font-weight: 600;
+        overflow-wrap: anywhere;
+    }
+
+    &__requerimiento {
+        color: $dkgray_bertha;
+        font-size: 12px;
+    }
+
+    &__cantidad {
+        margin-bottom: 14px;
+        color: $purple_bertha;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .historialContacto.cardPostulante {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+
+        ul {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+    }
+
+    &__lista {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        min-width: 0;
+
+        // Ajustes exclusivos de las tarjetas dentro de este modal.
+        > .card-postulante {
+            width: 100%;
+            min-width: 0;
+            margin: 0;
+            padding: 0 !important;
+
+            > .card {
+                border: 1px solid rgba($purple_bertha, 0.12);
+                border-radius: 10px !important;
+                background: $white_bertha;
+                box-shadow: 0 3px 12px
+                rgba($black_bertha, 0.05) !important;
+
+                > .row {
+                    padding: 16px 12px;
+                }
+            }
+
+            .card-body {
+                padding: 4px 12px 12px;
+                min-width: 0;
+            }
+
+            .card-title {
+                color: $purple_bertha;
+                font-size: 15px;
+                font-weight: 700;
+                line-height: 1.5;
+                overflow-wrap: anywhere;
+            }
+
+            .ficha-text {
+                font-size: 13px;
+                line-height: 1.6;
+                overflow-wrap: anywhere;
+            }
+
+            .rowTelefonos {
+                margin: 10px 0;
+            }
+
+            .rowFechaPostulacion {
+                margin-top: 8px;
+                color: $dkgray_bertha;
+                font-size: 12px;
+            }
+
+            .card-img {
+                display: block;
+                width: 110px;
+                height: 110px;
+                margin: 0 auto;
+                object-fit: cover;
+            }
+
+            .purple-border-postulado {
+                border-color: $purple_bertha;
+            }
+        }
+    }
+
+    &__mensaje {
+        padding: 30px 12px;
+        text-align: center;
+        color: $dkgray_bertha;
+
+        > i {
+            margin-bottom: 12px;
+            color: $purple_bertha;
+            font-size: 28px;
+        }
+
+        p {
+            margin: 0 0 12px;
+        }
+    }
+
+    &__boton {
+        min-height: 42px;
+        padding: 9px 20px;
+        border: 1px solid $purple_bertha;
+        border-radius: 7px;
+        background: $purple_bertha;
+        color: $white_bertha;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+
+        &:hover {
+            background: $purple_hover_bertha;
+            border-color: $purple_hover_bertha;
+        }
+
+        &:focus-visible {
+            outline: 2px solid $purple_bertha;
+            outline-offset: 3px;
+        }
+    }
+
+    @media (max-width: 575.98px) {
+        .modal-header,
+        .modal-body {
+            padding: 16px;
+        }
+
+        .modal-footer {
+            padding: 12px 16px;
+        }
+
+        &__lista > .card-postulante {
+            > .card > .row {
+                padding: 12px 6px;
+            }
+
+            .card-body {
+                padding: 4px 8px 12px;
+            }
+        }
+
+        &__boton {
+            width: 100%;
+            margin: 0;
+        }
+    }
+}
+
+.bertha-select {
+    width: 100%;
+    min-width: 0;
+    font-size: 14px;
+    color: $black_bertha;
+
+    .bertha-select__control {
+        min-height: 40px;
+        border: 1px solid rgba($black_bertha, 0.15);
+        border-radius: 6px;
+        background: $white_bertha;
+        box-shadow: none;
+        transition:
+            border-color 0.15s ease,
+            box-shadow 0.15s ease;
+
+        &:hover {
+            border-color: $dkgray_bertha;
+        }
+
+        &--is-focused {
+            border-color: $purple_bertha;
+            box-shadow: 0 0 0 3px rgba($purple_bertha, 0.1);
+
+            &:hover {
+                border-color: $purple_bertha;
+            }
+        }
+
+        &--is-disabled {
+            background: $gray_bertha;
+            border-color: rgba($black_bertha, 0.12);
+            box-shadow: none;
+        }
+    }
+
+    .bertha-select__value-container {
+        padding: 3px 12px;
+        gap: 4px;
+    }
+
+    .bertha-select__single-value {
+        color: $black_bertha;
+    }
+
+    .bertha-select__placeholder {
+        color: $dkgray_bertha;
+    }
+
+    .bertha-select__input-container {
+        margin: 0;
+        padding: 2px 0;
+        color: $black_bertha;
+    }
+
+    .bertha-select__indicator-separator {
+        display: none;
+    }
+
+    .bertha-select__indicator {
+        padding: 8px;
+        color: $dkgray_bertha;
+
+        &:hover {
+            color: $purple_bertha;
+        }
+    }
+
+    .bertha-select__control--is-disabled {
+        .bertha-select__single-value,
+        .bertha-select__placeholder,
+        .bertha-select__indicator {
+            color: $dkgray_bertha;
+        }
+    }
+
+    .bertha-select__menu {
+        margin-top: 6px;
+        border: 1px solid rgba($purple_bertha, 0.12);
+        border-radius: 8px;
+        background: $white_bertha;
+        box-shadow: 0 6px 20px rgba($black_bertha, 0.12);
+        overflow: hidden;
+        z-index: 10;
+    }
+
+    .bertha-select__menu-list {
+        padding: 4px;
+    }
+
+    .bertha-select__option {
+        padding: 9px 12px;
+        border-radius: 5px;
+        background: $white_bertha;
+        color: $black_bertha;
+        cursor: pointer;
+        overflow-wrap: anywhere;
+
+        &--is-focused {
+            background: $selected_purple_bertha;
+            color: $purple_bertha;
+        }
+
+        &--is-selected {
+            background: $purple_bertha;
+            color: $white_bertha;
+        }
+
+        &:active {
+            background: $purple_hover_bertha;
+            color: $white_bertha;
+        }
+
+        &--is-disabled {
+            background: $white_bertha;
+            color: $gray_bertha2;
+            cursor: default;
+        }
+    }
+
+    // Etiquetas de los selects múltiples.
+    .bertha-select__multi-value {
+        max-width: 100%;
+        margin: 0;
+        border-radius: 4px;
+        background: $selected_purple_bertha;
+    }
+
+    .bertha-select__multi-value__label {
+        padding: 4px 7px;
+        color: $purple_bertha;
+        font-size: 12px;
+    }
+
+    .bertha-select__multi-value__remove {
+        border-radius: 0 4px 4px 0;
+        color: $purple_bertha;
+        cursor: pointer;
+
+        &:hover {
+            background: $purple_bertha;
+            color: $white_bertha;
+        }
+    }
+
+    .bertha-select__control--is-disabled {
+        .bertha-select__multi-value__remove {
+            cursor: default;
+
+            &:hover {
+                background: transparent;
+                color: $purple_bertha;
+            }
+        }
+    }
+
+    .bertha-select__menu-notice {
+        color: $dkgray_bertha;
+        font-size: 13px;
+    }
+}

@@ -560,6 +560,7 @@ export default class PostulantesIndex extends Component {
                                 <div className="d-flex flex-wrap">
                                     {postulantes.map((p) => (
                                         <CardPostulante
+                                            variant="listado"
                                             url={url}
                                             access={access}
                                             data={p}

@@ -101,6 +101,8 @@ export default function DatosBasico({data, handleChange}){
                     <label className="col-sm-2 col-form-label">Actividad</label>
                     <div className="col-sm-6 col-md-4 col-lg-4 col-xl-4">
                         <Select
+                            className="bertha-select"
+                            classNamePrefix="bertha-select"
                             value={data.actividad}
                             isDisabled={Boolean(data.show)}
                             isMulti

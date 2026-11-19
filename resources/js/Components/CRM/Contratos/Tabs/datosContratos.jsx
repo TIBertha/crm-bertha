@@ -41,6 +41,8 @@ export default function DatosContratos({view, data,handleChange}) {
                     <label className="col-12 col-md-3 col-form-label align-self-center">Empleador</label>
                     <div className="col-md-9 align-self-center">
                         <Select
+                            className="bertha-select"
+                            classNamePrefix="bertha-select"
                             value={data.empleador}
                             isMulti={false}
                             isDisabled={enableInput}
@@ -138,6 +140,8 @@ export default function DatosContratos({view, data,handleChange}) {
                             <label className="col-12 col-md-3 col-form-label align-self-center">Días de asistencia</label>
                             <div className="col-md-9 align-self-center">
                                 <Select
+                                    className="bertha-select"
+                                    classNamePrefix="bertha-select"
                                     value={data.diaslaborablesfrecuencia}
                                     isMulti={true}
                                     onChange={(e) => handleChange(e, 'time', 'diasfrecuencia')}
@@ -179,6 +183,8 @@ export default function DatosContratos({view, data,handleChange}) {
                     <label className="col-12 col-md-3 col-form-label align-self-center">Postulante</label>
                     <div className="col-md-9 align-self-center">
                         <Select
+                            className="bertha-select"
+                            classNamePrefix="bertha-select"
                             value={data.postulante}
                             isMulti={true}
                             isDisabled={enableInput}
@@ -205,6 +211,8 @@ export default function DatosContratos({view, data,handleChange}) {
                         <label className="col-12 col-md-3 col-form-label align-self-center">Días que ya labora</label>
                         <div className="col-md-9 align-self-center">
                             <Select
+                                className="bertha-select"
+                                classNamePrefix="bertha-select"
                                 value={data.diaslaborpostulante}
                                 isMulti={true}
                                 onChange={(e) => handleChange(e, 'time', 'diaslaborpostulante')}
@@ -424,6 +432,8 @@ export default function DatosContratos({view, data,handleChange}) {
                     <label className="col-12 col-md-3 col-form-label align-self-center">Reemplazo (B)</label>
                     <div className="col-md-9 align-self-center">
                         <Select
+                            className="bertha-select"
+                            classNamePrefix="bertha-select"
                             value={data.postulanteB}
                             isMulti={false}
                             //isDisabled={enableInput}
@@ -476,6 +486,8 @@ export default function DatosContratos({view, data,handleChange}) {
                     <label className="col-12 col-md-3 col-form-label align-self-center">Reemplazo (C)</label>
                     <div className="col-md-9 align-self-center">
                         <Select
+                            className="bertha-select"
+                            classNamePrefix="bertha-select"
                             value={data.postulanteC}
                             isMulti={false}
                             //isDisabled={enableInput}

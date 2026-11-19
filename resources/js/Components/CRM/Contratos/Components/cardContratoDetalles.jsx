@@ -1,13 +1,79 @@
 import React from 'react';
 
-export default function CardContratoDetalles({data, actual}) {
+export default function CardContratoDetalles({ data, actual }) {
     return (
-        <div className="card-contrato-historial">
-            <div className={'card shadow-lg rounded ' + (actual ? 'border-purple-card-select' : '')}>
-                <div className="card-body">
-                    <a target="_blank" href={'/contratos/impresion/' + data.id}>{data.id}</a> - {data.fecha} - <a target="_blank" href={'/postulantes/ficha-postulante/' + data.trabajadorid} >{data.trabajador}</a> - <a href={'tel:'+data.trabajadortelefono}>{data.trabajadortelefono}</a> -  {data.tipocontrato} - {data.codigo_iso_divisa} {(data.sueldo)}
+        <article
+            className={`historial-card${actual ? ' es-actual' : ''}`}
+        >
+            <header className="historial-card-header">
+                <div className="historial-identificador">
+                    <a
+                    >
+                        #{data.id}
+                    </a>
+
+                    {actual && (
+                        <span className="historial-actual">
+                            Actual
+                        </span>
+                    )}
                 </div>
+
+                <span className="historial-fecha">
+                    {data.fecha || '—'}
+                </span>
+            </header>
+
+            <div className="historial-card-body">
+                <span className="historial-label">
+                    Trabajadora
+                </span>
+
+                <a
+                    className="historial-trabajador"
+                    href={`/postulantes/ficha-postulante/${data.trabajadorid}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    {data.trabajador || 'Sin nombre'}
+                </a>
+
+                {data.trabajadortelefono && (
+                    <a
+                        className="historial-telefono"
+                        href={`tel:${data.trabajadortelefono}`}
+                    >
+                        <i
+                            className="fas fa-phone-alt"
+                            aria-hidden="true"
+                        />
+                        {data.trabajadortelefono}
+                    </a>
+                )}
             </div>
-        </div>
+
+            <footer className="historial-card-footer">
+                <div>
+                    <span className="historial-label">
+                        Tipo de contrato
+                    </span>
+
+                    <span className="historial-tipo">
+                        {data.tipocontrato || '—'}
+                    </span>
+                </div>
+
+                <div className="historial-sueldo">
+                    <span className="historial-label">
+                        Sueldo
+                    </span>
+
+                    <strong>
+                        {data.codigo_iso_divisa}{' '}
+                        {data.sueldo ?? '—'}
+                    </strong>
+                </div>
+            </footer>
+        </article>
     );
 }

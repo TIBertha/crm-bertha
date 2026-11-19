@@ -101,6 +101,8 @@ export default function EliminarEmpleador({idEmpleador, nombreEmpleador, handleR
 
                     <div className={'mt-2'}>
                         <Select
+                            className="bertha-select"
+                            classNamePrefix="bertha-select"
                             value={empSelected}
                             isMulti={false}
                             isSearchable

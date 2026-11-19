@@ -131,10 +131,15 @@ export default function NotificacionesRequerimientos({ url }) {
                     <div className="notificaciones-header">
                         <div>
                             <h6>Requerimientos web</h6>
+                            {/*
                             <span>
                                 {total} {total === 1
                                 ? 'por completar'
                                 : 'por completar'}
+                            </span>
+                            */}
+                            <span>
+                                Lista de requerimientos realizados en la web de holabertha.com
                             </span>
                         </div>
 

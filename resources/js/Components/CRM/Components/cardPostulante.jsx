@@ -1,5 +1,4 @@
 import React from "react";
-import { parse, format } from "date-fns";
 import { isResponsive } from "../../Functions/General";
 import ModalHistorialContactoCardPostulante from "./modalHistorialContactoCardPostulante";
 import {
@@ -31,35 +30,43 @@ export default function CardPostulante({
     ascenderPostulante,
     selectWp,
     removePostulante,
+    variant = "actual",
 }) {
+    const responsive = isResponsive();
+    const esListado =
+        (variant === "listado" && modelCard === 1) ||
+        (variant === "postulaciones" && modelCard === 3);
 
-    let responsive = isResponsive();
-    /*let fechaPostulacion = data.fecha_postulacion
-        ? format(
-            parse(data.fecha_postulacion, "yyyy-MM-dd HH:mm:ss", new Date()),
-            "dd/MM/yyyy h:mm aa"
-        )
-        : null;*/
+    const fechaPostulacion = data.fecha_postulacion ?? null;
+    const foto = data.foto || fotoExample;
+    const nombrePostulante = data.contact_name;
 
-    let fechaPostulacion = data.fecha_postulacion ?? null;
-
-    let foto = data.foto ? data.foto : fotoExample;
-    let nombrePostulante =
-        modelCard === 1 ? data.contact_name : data.contact_name;
-
-    let estatus =
+    const estatus =
         data.por_horas === 1 &&
         data.cama_adentro === 0 &&
         data.cama_afuera === 0 &&
         data.estadoid === 1
             ? "DISPONIBLE"
             : modelCard === 1
-              ? data.estado
-              : data.estatus_postulante;
-    //let badgeEstado = '';
-    let historialContacto = data.historialContacto
-        ? JSON.parse(data.historialContacto)
-        : null;
+                ? data.estado
+                : data.estatus_postulante;
+
+    const historialContacto = (() => {
+        if (Array.isArray(data.historialContacto)) {
+            return data.historialContacto;
+        }
+
+        if (!data.historialContacto) {
+            return [];
+        }
+
+        try {
+            const historial = JSON.parse(data.historialContacto);
+            return Array.isArray(historial) ? historial : [];
+        } catch {
+            return [];
+        }
+    })();
 
     const badgeMap = {
         1: "badge-por-colocar",
@@ -71,25 +78,26 @@ export default function CardPostulante({
         7: "badge-porcompletar",
         8: "badge-porverificar",
     };
+
     const estado = data.estadoid || data.estatus_postulante_id;
     const badgeEstado = badgeMap[estado] || "";
 
-    function shieldStyle($veri, $eje, $call) {
+    function shieldStyle(verificado, ejecutivo, llamar) {
         return {
             fontSize: "0.9rem",
             color:
-                $veri === "si"
+                verificado === "si"
                     ? "#4dabf7"
-                    : $call === true
-                      ? "#f83f37"
-                      : $eje
-                        ? "#ffc107"
-                        : "#6c757d",
+                    : llamar === true
+                        ? "#f83f37"
+                        : ejecutivo
+                            ? "#ffc107"
+                            : "#6c757d",
         };
     }
 
-    function rowNombreVideoAntecedentes(d) {
-        let documento = {
+    function rowNombreVideoAntecedentes(d, soloIndicadores = false) {
+        const documento = {
             iconColor: "text-secondary",
             msj: "No ha subido la foto de sus documento de identidad",
         };
@@ -97,14 +105,20 @@ export default function CardPostulante({
         if (d.foto_documento_delantera) {
             if (parseInt(d.documento_vigente) === 0) {
                 documento.iconColor = "text-danger";
-                documento.msj = "Su documento de identidad NO está vigente";
+                documento.msj =
+                    "Su documento de identidad NO está vigente";
             } else if (parseInt(d.documento_vigente) === 1) {
                 documento.iconColor = "text-purple-bertha";
-                documento.msj = "Su documento de identidad SI está vigente";
+                documento.msj =
+                    "Su documento de identidad SI está vigente";
             }
         }
 
-        let antecedentesprops = { iconColor: "", tooltip: "", modalMsj: "" };
+        const antecedentesprops = {
+            iconColor: "",
+            tooltip: "",
+            modalMsj: "",
+        };
 
         if (d.antecedentes_pdf) {
             if (
@@ -138,94 +152,115 @@ export default function CardPostulante({
                         "Vigencia restante certificado único laboral : " +
                         (90 - d.diaspasadoscertificadoantecedente) +
                         " dia(s)";
-                } else if (d.diaspasadoscertificadoantecedente >= 90) {
+                } else if (
+                    d.diaspasadoscertificadoantecedente >= 90
+                ) {
                     antecedentesprops.iconColor = "#ff0000";
                     antecedentesprops.iconColorOnCopy = "#b60404";
                     antecedentesprops.message =
                         "Certificado único laboral VIGENCIA VENCIDA";
                 }
             }
+        } else if (d.tiene_cuenta !== 0) {
+            antecedentesprops.iconColor = "text-warning";
+            antecedentesprops.tooltip =
+                "Tiene una cuenta registrada. Solicitar su certificado único laboral";
         } else {
-            if (d.tiene_cuenta !== 0) {
-                antecedentesprops.iconColor = "text-warning";
-                antecedentesprops.tooltip =
-                    "Tiene una cuenta registrada. Solicitar su certificado único laboral";
-            } else {
-                antecedentesprops.iconColor = "text-secondary";
-                antecedentesprops.tooltip =
-                    "No cuenta con certificado único laboral";
-            }
+            antecedentesprops.iconColor = "text-secondary";
+            antecedentesprops.tooltip =
+                "No cuenta con certificado único laboral";
         }
 
         return (
             <>
-                <>
-                    {d.nombres ? (
-                        <>
-                            {modelCard === 1
-                                ? str_limit(d.nombres, 30)
-                                : d.trabajador}
-                        </>
-                    ) : (
-                        <span className="badge text-bg-info d-inline">
-                            SIN NOMRBRE
-                        </span>
-                    )}
-                </>
+                {!soloIndicadores && (
+                    <>
+                        {d.nombres ? (
+                            <>
+                                {modelCard === 1
+                                    ? str_limit(d.nombres, 30)
+                                    : d.trabajador}
+                            </>
+                        ) : (
+                            <span className="badge text-bg-info d-inline">
+                                SIN NOMBRE
+                            </span>
+                        )}
+                    </>
+                )}
+
                 <i
-                    className={"fas fa-id-card-alt ms-1 " + documento.iconColor}
+                    className={
+                        "fas fa-id-card-alt ms-1 " +
+                        documento.iconColor
+                    }
                     data-toggle="tooltip"
                     data-placement="bottom"
                     title={documento.msj}
                 ></i>
+
                 <NewCopyIcon
-                    icon={"fas fa-user-tag"}
-                    additonalClass={"icon-action-sm px-0 ms-1"}
-                    copyText={modelCard === 1 ? d.nombres : d.trabajador}
-                    tooltipText={"Copiar nombre postulante"}
-                    successMsj={"Nombre(s) copiado"}
+                    icon="fas fa-user-tag"
+                    additonalClass="icon-action-sm px-0 ms-1"
+                    copyText={
+                        modelCard === 1 ? d.nombres : d.trabajador
+                    }
+                    tooltipText="Copiar nombre postulante"
+                    successMsj="Nombre(s) copiado"
                 />
 
                 <NewCopyIcon
-                    icon={"far fa-file"}
-                    additonalClass={"icon-action-sm px-0 ms-1"}
-                    copyText={"PO " + nombrePostulante  + ( d.telefono ?(" " + d.telefono) : '') + " " + d.flag_emoji}
-                    tooltipText={"Copiar nombre en Google"}
-                    successMsj={"Nombre(s) para Google copiado"}
+                    icon="far fa-file"
+                    additonalClass="icon-action-sm px-0 ms-1"
+                    copyText={
+                        "PO " +
+                        nombrePostulante +
+                        (d.telefono ? " " + d.telefono : "") +
+                        " " +
+                        d.flag_emoji
+                    }
+                    tooltipText="Copiar nombre en Google"
+                    successMsj="Nombre(s) para Google copiado"
                 />
 
-                {d.videointroduccion && !d.video_introduccion_youtube && (
-                    <i className="fas fa-video ms-1"></i>
-                )}
+                {d.videointroduccion &&
+                    !d.video_introduccion_youtube && (
+                        <i className="fas fa-video ms-1"></i>
+                    )}
 
                 {d.video_introduccion_youtube && (
-                    <i className="fab fa-youtube ms-1" style={{ color: "red" }}></i>
+                    <i
+                        className="fab fa-youtube ms-1"
+                        style={{ color: "red" }}
+                    ></i>
                 )}
 
                 {d.antecedentes_pdf ? (
                     <>
                         {d.numeroDocumento ? (
                             <NewCopyIcon
-                                icon={"fas fa-portrait"}
-                                additonalClass={
-                                    "icon-action-sm align-self-center"
-                                }
+                                icon="fas fa-portrait"
+                                additonalClass="icon-action-sm align-self-center"
                                 copyText={GetSpeechCerti(
                                     d.antecedentes_pdf,
                                     d.numeroDocumento,
                                 )}
-                                tooltipText={antecedentesprops.message}
-                                successMsj={"Certificado copiado"}
-                                colorNeutro={antecedentesprops.iconColor}
-                                colorOnCopy={antecedentesprops.iconColorOnCopy}
+                                tooltipText={
+                                    antecedentesprops.message
+                                }
+                                successMsj="Certificado copiado"
+                                colorNeutro={
+                                    antecedentesprops.iconColor
+                                }
+                                colorOnCopy={
+                                    antecedentesprops.iconColorOnCopy
+                                }
                             />
                         ) : (
                             <i
                                 data-toggle="tooltip"
                                 data-placement="top"
-                                title={
-                                    "No cuenta con certificado único laboral"
-                                }
+                                title="No cuenta con certificado único laboral"
                                 className="fas fa-portrait text-secondary ms-1"
                             ></i>
                         )}
@@ -244,22 +279,22 @@ export default function CardPostulante({
                             ></i>
                         ) : (
                             <>
-                                {[2].includes(d.certificado_antecedente) ? (
+                                {[2].includes(
+                                    d.certificado_antecedente,
+                                ) ? (
                                     <i
                                         data-toggle="tooltip"
                                         data-placement="top"
-                                        title={"Tiene reporte Mak Consulting"}
+                                        title="Tiene reporte Mak Consulting"
                                         className="fas fa-file-user text-success ms-1"
                                     ></i>
                                 ) : (
-                                    <>
-                                        <i
-                                            data-toggle="tooltip"
-                                            data-placement="top"
-                                            title={"No cuenta con antecedentes"}
-                                            className="fas fa-portrait text-secondary ms-1"
-                                        ></i>
-                                    </>
+                                    <i
+                                        data-toggle="tooltip"
+                                        data-placement="top"
+                                        title="No cuenta con antecedentes"
+                                        className="fas fa-portrait text-secondary ms-1"
+                                    ></i>
                                 )}
                             </>
                         )}
@@ -274,82 +309,82 @@ export default function CardPostulante({
             return (
                 <span className="row mx-0">
                     <NewCopyIcon
-                        icon={"fas fa-phone"}
-                        additonalClass={
-                            "col-auto px-1 my-auto icon-action-sm align-self-center"
-                        }
+                        icon="fas fa-phone"
+                        additonalClass="col-auto px-1 my-auto icon-action-sm align-self-center"
                         copyText={d.telefono}
-                        tooltipText={"Copiar teléfono"}
-                        successMsj={"Teléfono copiado"}
+                        tooltipText="Copiar teléfono"
+                        successMsj="Teléfono copiado"
                     />
+
                     <NewCopyIcon
-                        icon={"fab fa-whatsapp"}
-                        additonalClass={
-                            "col-auto px-1 my-auto icon-action-sm align-self-center font-weight-bold"
-                        }
+                        icon="fab fa-whatsapp"
+                        additonalClass="col-auto px-1 my-auto icon-action-sm align-self-center font-weight-bold"
                         copyText={d.telefono}
-                        tooltipText={"Copiar WhatsApp"}
-                        successMsj={"WhatsApp copiado"}
+                        tooltipText="Copiar WhatsApp"
+                        successMsj="WhatsApp copiado"
                     />
-                    <a className="col-auto px-1" href={"tel:" + d.telefono}>
-                        {" "}
+
+                    <a
+                        className="col-auto px-1"
+                        href={"tel:" + d.telefono}
+                    >
                         <TelefonoInternacional
                             numero={d.telefono_tarjeta}
                             cardPostulante={true}
-                        />{" "}
+                        />
                     </a>
                 </span>
             );
-        } else {
-            return (
-                <>
+        }
+
+        return (
+            <>
+                <div className="row mx-0">
+                    <NewCopyIcon
+                        icon="fas fa-phone"
+                        additonalClass="col-auto px-1 my-auto icon-action-sm align-self-center"
+                        copyText={d.telefono}
+                        tooltipText="Copiar teléfono"
+                        successMsj="Teléfono copiado"
+                    />
+
+                    <a
+                        className="col-auto px-1"
+                        href={"tel:" + d.telefono}
+                    >
+                        <TelefonoInternacional
+                            numero={d.telefono_tarjeta}
+                            cardPostulante={true}
+                        />
+                    </a>
+                </div>
+
+                {d.telefono_whatsapp && (
                     <div className="row mx-0">
                         <NewCopyIcon
-                            icon={"fas fa-phone"}
-                            additonalClass={
-                                "col-auto px-1 my-auto icon-action-sm align-self-center"
-                            }
-                            copyText={d.telefono}
-                            tooltipText={"Copiar teléfono"}
-                            successMsj={"Teléfono copiado"}
+                            icon="fab fa-whatsapp"
+                            additonalClass="col-auto px-1 my-auto icon-action-sm align-self-center font-weight-bold"
+                            copyText={d.telefono_whatsapp}
+                            tooltipText="Copiar WhatsApp"
+                            successMsj="WhatsApp copiado"
                         />
-                        <a className="col-auto px-1" href={"tel:" + d.telefono}>
-                            {" "}
+
+                        <a
+                            className="col-auto px-1"
+                            href={
+                                "https://api.whatsapp.com/send?phone=" +
+                                d.telefono_whatsapp
+                            }
+                        >
                             <TelefonoInternacional
-                                numero={d.telefono_tarjeta}
+                                numero={d.telefono_tarjeta_whatsapp}
                                 cardPostulante={true}
-                            />{" "}
+                            />
                         </a>
                     </div>
-                    {d.telefono_whatsapp && (
-                        <div className="row mx-0">
-                            <NewCopyIcon
-                                icon={"fab fa-whatsapp"}
-                                additonalClass={
-                                    "col-auto px-1 my-auto icon-action-sm align-self-center font-weight-bold"
-                                }
-                                copyText={d.telefono_whatsapp}
-                                tooltipText={"Copiar WhatsApp"}
-                                successMsj={"WhatsApp copiado"}
-                            />
-                            <a
-                                className="col-auto px-1"
-                                href={
-                                    "https://api.whatsapp.com/send?phone=" +
-                                    d.telefono_whatsapp
-                                }
-                            >
-                                {" "}
-                                <TelefonoInternacional
-                                    numero={d.telefono_tarjeta_whatsapp}
-                                    cardPostulante={true}
-                                />{" "}
-                            </a>
-                        </div>
-                    )}
-                </>
-            );
-        }
+                )}
+            </>
+        );
     }
 
     function rowVerif(d) {
@@ -357,43 +392,40 @@ export default function CardPostulante({
             <>
                 {d.verificaciones_laborales ? (
                     <>
-                        {d.verificaciones_laborales.map((verif, index) => {
-                            let iconVerifTitle = "No tiene verificación";
+                        {d.verificaciones_laborales.map(
+                            (verif, index) => {
+                                let iconVerifTitle =
+                                    "No tiene verificación";
 
-                            if (verif.adjunto === "si") {
-                                iconVerifTitle = "Tiene verificación";
-                            } else {
-                                if (verif.llamar === true) {
+                                if (verif.adjunto === "si") {
+                                    iconVerifTitle =
+                                        "Tiene verificación";
+                                } else if (verif.llamar === true) {
                                     iconVerifTitle =
                                         "Llamar, no cuenta con WhatsApp";
-                                } else {
-                                    if (verif.ejecutivo) {
-                                        iconVerifTitle =
-                                            "Verificación pendiente, " +
-                                            verif.ejecutivo +
-                                            " lo acaba de solicitar";
-                                    } else {
-                                        iconVerifTitle =
-                                            "No tiene verificación";
-                                    }
+                                } else if (verif.ejecutivo) {
+                                    iconVerifTitle =
+                                        "Verificación pendiente, " +
+                                        verif.ejecutivo +
+                                        " lo acaba de solicitar";
                                 }
-                            }
 
-                            return (
-                                <i
-                                    data-toggle="tooltip"
-                                    key={index}
-                                    data-placement="top"
-                                    title={iconVerifTitle}
-                                    style={shieldStyle(
-                                        verif.adjunto,
-                                        verif.ejecutivo,
-                                        verif.llamar,
-                                    )}
-                                    className="fas fa-shield-alt mx-1"
-                                ></i>
-                            );
-                        })}
+                                return (
+                                    <i
+                                        key={index}
+                                        data-toggle="tooltip"
+                                        data-placement="top"
+                                        title={iconVerifTitle}
+                                        style={shieldStyle(
+                                            verif.adjunto,
+                                            verif.ejecutivo,
+                                            verif.llamar,
+                                        )}
+                                        className="fas fa-shield-alt mx-1"
+                                    ></i>
+                                );
+                            },
+                        )}
                     </>
                 ) : (
                     <>Sin Recomendaciones</>
@@ -405,37 +437,39 @@ export default function CardPostulante({
     function rowBajas(d) {
         return (
             <>
-                {d.vecesBajas && (
-                    <>
-                        {d.vecesBajas.map((vb) => {
-                            let titleBaja =
-                                "SANCION: " +
-                                vb.bajanombre +
+                {d.vecesBajas &&
+                    d.vecesBajas.map((vb, index) => {
+                        const titleBaja =
+                            "SANCION: " +
+                            vb.bajanombre +
+                            "\r\n" +
+                            "ESTADO: " +
+                            (vb.pagado === true
+                                ? "PAGADO (S/. " +
+                                vb.monto_pagado +
+                                ")" +
                                 "\r\n" +
-                                "ESTADO: " +
-                                (vb.pagado === true
-                                    ? "PAGADO (S/. " +
-                                      vb.monto_pagado +
-                                      ")" +
-                                      "\r\n" +
-                                      "FECHA PAGO: " +
-                                      vb.fecha_pago_monto
-                                    : "NO PAGADO");
-                            let colorIcon = "text-danger";
-                            if (vb.pagado === true) {
-                                colorIcon = "text-success";
-                            }
-                            return (
-                                <i
-                                    className={"fas fa-skull mx-1 " + colorIcon}
-                                    data-toggle="tooltip"
-                                    data-placement="top"
-                                    title={titleBaja}
-                                ></i>
-                            );
-                        })}
-                    </>
-                )}
+                                "FECHA PAGO: " +
+                                vb.fecha_pago_monto
+                                : "NO PAGADO");
+
+                        const colorIcon =
+                            vb.pagado === true
+                                ? "text-success"
+                                : "text-danger";
+
+                        return (
+                            <i
+                                key={index}
+                                className={
+                                    "fas fa-skull mx-1 " + colorIcon
+                                }
+                                data-toggle="tooltip"
+                                data-placement="top"
+                                title={titleBaja}
+                            ></i>
+                        );
+                    })}
             </>
         );
     }
@@ -443,25 +477,21 @@ export default function CardPostulante({
     function rowEducacion(d) {
         return (
             <>
-                {d.educacion && (
-                    <>
-                        {d.educacion.map((ed) => {
-                            return (
-                                <i
-                                    className={
-                                        "fas fa-pen mx-1 text-" +
-                                        (ed.hasAdj === true
-                                            ? "dblue"
-                                            : "secondary")
-                                    }
-                                    data-toggle="tooltip"
-                                    data-placement="top"
-                                    title={ed.title + " (" + ed.time + ")"}
-                                ></i>
-                            );
-                        })}
-                    </>
-                )}
+                {d.educacion &&
+                    d.educacion.map((ed, index) => (
+                        <i
+                            key={index}
+                            className={
+                                "fas fa-pen mx-1 text-" +
+                                (ed.hasAdj === true
+                                    ? "dblue"
+                                    : "secondary")
+                            }
+                            data-toggle="tooltip"
+                            data-placement="top"
+                            title={ed.title + " (" + ed.time + ")"}
+                        ></i>
+                    ))}
             </>
         );
     }
@@ -482,7 +512,10 @@ export default function CardPostulante({
                     <>
                         <a
                             target="_blank"
-                            href={"/postulantes/ficha-postulante/" + d.id}
+                            rel="noopener noreferrer"
+                            href={
+                                "/postulantes/ficha-postulante/" + d.id
+                            }
                         >
                             <i
                                 data-toggle="tooltip"
@@ -491,10 +524,16 @@ export default function CardPostulante({
                                 className="fas fa-file-download icon-action"
                             ></i>
                         </a>
+
                         {!d.tiene_antecedentes && (
                             <a
                                 target="_blank"
-                                href={url + "/postulantes/ficha-antecedente/" + d.id}
+                                rel="noopener noreferrer"
+                                href={
+                                    url +
+                                    "/postulantes/ficha-antecedente/" +
+                                    d.id
+                                }
                             >
                                 <i
                                     data-toggle="tooltip"
@@ -529,7 +568,7 @@ export default function CardPostulante({
                     </a>
                 )}
 
-                {(modelCard === 1 && access && d.estadoid !== 1) && (
+                {modelCard === 1 && access && d.estadoid !== 1 && (
                     <a onClick={(e) => handlePorColocar(e, d.id)}>
                         <i
                             data-toggle="tooltip"
@@ -544,7 +583,11 @@ export default function CardPostulante({
                     <>
                         {parseInt(d.estatus_anterior) === 1 &&
                         access === false ? (
-                            <a onClick={(e) => handlePorColocar(e, d.id)}>
+                            <a
+                                onClick={(e) =>
+                                    handlePorColocar(e, d.id)
+                                }
+                            >
                                 <i
                                     data-toggle="tooltip"
                                     data-placement="top"
@@ -554,10 +597,13 @@ export default function CardPostulante({
                             </a>
                         ) : (
                             <>
-                                {data.estatus_anterior ? (
+                                {d.estatus_anterior ? (
                                     <a
                                         onClick={(e) =>
-                                            handlePorVerificar(e, d.id)
+                                            handlePorVerificar(
+                                                e,
+                                                d.id,
+                                            )
                                         }
                                     >
                                         <i
@@ -570,7 +616,10 @@ export default function CardPostulante({
                                 ) : (
                                     <a
                                         onClick={(e) =>
-                                            handlePorCompletar(e, d.id)
+                                            handlePorCompletar(
+                                                e,
+                                                d.id,
+                                            )
                                         }
                                     >
                                         <i
@@ -588,23 +637,23 @@ export default function CardPostulante({
 
                 {d.link_form && d.estadoid === 7 && (
                     <NewCopyIcon
-                        icon={"far fa-clipboard"}
-                        additonalClass={"icon-action-sm align-self-center"}
+                        icon="far fa-clipboard"
+                        additonalClass="icon-action-sm align-self-center"
                         copyText={d.link_form}
-                        tooltipText={"Enviar formulario a postulante"}
-                        successMsj={"Link de formulario copiado"}
+                        tooltipText="Enviar formulario a postulante"
+                        successMsj="Link de formulario copiado"
                     />
                 )}
 
                 {d.token && [1, 2].includes(d.estadoid) && (
                     <NewCopyIcon
-                        icon={"fas fa-file-import"}
-                        additonalClass={"icon-action-sm align-self-center"}
+                        icon="fas fa-file-import"
+                        additonalClass="icon-action-sm align-self-center"
                         copyText={d.token_privado}
-                        tooltipText={"Enviar link privado de postulante"}
-                        successMsj={"Link copiado"}
-                        colorNeutro={"#ffbf36"}
-                        colorOnCopy={"#da9500"}
+                        tooltipText="Enviar link privado de postulante"
+                        successMsj="Link copiado"
+                        colorNeutro="#ffbf36"
+                        colorOnCopy="#da9500"
                     />
                 )}
 
@@ -615,21 +664,15 @@ export default function CardPostulante({
                     estadoPostulante={d.estadoid}
                 />
 
-                {!d.tipodocumento && (
-                    <>
-                        {(access = true) && (
-                            <>
-                                {d.estadoid === 7 &&
-                                    <DataRestantePostulante
-                                        url={url}
-                                        idPostulante={d.id}
-                                        nombrePostulante={d.nombres}
-                                    />
-                                }
-                            </>
-                        )}
-                    </>
-                )}
+                {!d.tipodocumento &&
+                    access === true &&
+                    d.estadoid === 7 && (
+                        <DataRestantePostulante
+                            url={url}
+                            idPostulante={d.id}
+                            nombrePostulante={d.nombres}
+                        />
+                    )}
 
                 <EliminarPostulante
                     idPostulante={d.id}
@@ -644,13 +687,16 @@ export default function CardPostulante({
     function optionsModalPostulados(d) {
         return (
             <NewCopyIcon
-                icon={"fas fa-file-import"}
-                additonalClass={"icon-action-sm align-self-center"}
-                copyText={"https://holabertha.com/ficha-postulante/" + d.token}
-                tooltipText={"Enviar link privado de postulante"}
-                successMsj={"Link copiado"}
-                colorNeutro={"#ffbf36"}
-                colorOnCopy={"#da9500"}
+                icon="fas fa-file-import"
+                additonalClass="icon-action-sm align-self-center"
+                copyText={
+                    "https://holabertha.com/ficha-postulante/" +
+                    d.token
+                }
+                tooltipText="Enviar link privado de postulante"
+                successMsj="Link copiado"
+                colorNeutro="#ffbf36"
+                colorOnCopy="#da9500"
             />
         );
     }
@@ -660,7 +706,11 @@ export default function CardPostulante({
             <>
                 <a
                     target="_blank"
-                    href={"/postulantes/ficha-postulante/" + d.trabajador_id}
+                    rel="noopener noreferrer"
+                    href={
+                        "/postulantes/ficha-postulante/" +
+                        d.trabajador_id
+                    }
                 >
                     <i
                         data-toggle="tooltip"
@@ -671,15 +721,16 @@ export default function CardPostulante({
                 </a>
 
                 <NewCopyIcon
-                    icon={"fas fa-file-import"}
-                    additonalClass={"icon-action-sm align-self-center mx-1"}
+                    icon="fas fa-file-import"
+                    additonalClass="icon-action-sm align-self-center mx-1"
                     copyText={
-                        "https://holabertha.com/ficha-postulante/" + d.token
+                        "https://holabertha.com/ficha-postulante/" +
+                        d.token
                     }
-                    tooltipText={"Enviar link privado de postulante"}
-                    successMsj={"Link copiado"}
-                    colorNeutro={"#ffbf36"}
-                    colorOnCopy={"#da9500"}
+                    tooltipText="Enviar link privado de postulante"
+                    successMsj="Link copiado"
+                    colorNeutro="#ffbf36"
+                    colorOnCopy="#da9500"
                 />
 
                 {filtro === "1" && (
@@ -687,6 +738,7 @@ export default function CardPostulante({
                         <a onClick={() => ascenderPostulante(d.id)}>
                             <i className="fas fa-check icon-action-postulaciones text-success icon-action-sm mx-1"></i>
                         </a>
+
                         <a onClick={() => removePostulante(d.id)}>
                             <i className="fas fa-times icon-action-postulaciones text-danger icon-action-sm mx-1"></i>
                         </a>
@@ -707,6 +759,268 @@ export default function CardPostulante({
         );
     }
 
+    function renderHistorialContacto(nombre) {
+        return (
+            <ul>
+                {historialContacto.length > 0 ? (
+                    <ModalHistorialContactoCardPostulante
+                        historial={historialContacto}
+                        trabajador={nombre}
+                    />
+                ) : (
+                    <li
+                        className="Uncontacted"
+                        data-toggle="tooltip"
+                        data-placement="bottom"
+                        title="La trabajadora aún no es contactada"
+                    >
+                        <i className="fas fa-phone-alt"></i>
+                    </li>
+                )}
+            </ul>
+        );
+    }
+
+    /*
+     * Diseño nuevo:
+     * se activa únicamente con variant="listado"
+     * y modelCard={1}.
+     */
+    if (esListado) {
+        return (
+            <div className={
+                modelCard === 3
+                    ? "col-12 col-lg-6 col-xl-4 d-flex px-2 mb-3"
+                    : "col-12 col-lg-6 col-xxl-4 d-flex px-2 mb-3"
+            }>
+                <article
+                    className={
+                        "postulantes-card" +
+                        (data.select_emp === 1
+                            ? " postulantes-card--seleccionada"
+                            : "")
+                    }
+                >
+                    <div className="postulantes-card__contenido">
+                        <div className="postulantes-card__perfil">
+                            <img
+                                src={foto}
+                                alt={
+                                    data.nombres
+                                        ? `Foto de ${data.nombres}`
+                                        : "Foto de postulante"
+                                }
+                                className="postulantes-card__foto"
+                            />
+
+                            <div className="postulantes-card__contacto">
+                                <div className="historialContacto cardPostulante">
+                                    {renderHistorialContacto(
+                                        data.nombres || "Postulante",
+                                    )}
+                                </div>
+                            </div>
+
+                            {modelCard === 3 && (
+                                <div className="postulantes-card__etiquetas">
+                                    {data.select_emp === 1 && (
+                                        <span className="badge bg-warning text-dark">
+                                            <i className="fas fa-crown me-1"></i>
+                                            Cliente Web
+                                        </span>
+                                    )}
+
+                                    {data.select_wp === 1 && (
+                                        <span className="badge bg-success">
+                                            <i className="fas fa-crown me-1"></i>
+                                            Cliente WhatsApp
+                                        </span>
+                                    )}
+
+                                    {data.fue_tra === 1 && (
+                                        <span className="badge bg-secondary">
+                                            <i className="fas fa-user-times me-1"></i>
+                                            Fue Trabajadora
+                                        </span>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="postulantes-card__datos">
+                            <header className="postulantes-card__cabecera">
+                                <h3 className="postulantes-card__nombre">
+                                    {(modelCard === 1 ? data.nombres : data.trabajador) ||
+                                        data.nombres ||
+                                        "SIN NOMBRE"}
+                                </h3>
+
+                                <div className="postulantes-card__procedencia">
+                                    {[
+                                        data.nacionalidad,
+                                        data.lugarnacimiento,
+                                        data.edad
+                                            ? `${data.edad} AÑOS`
+                                            : null,
+                                    ]
+                                        .filter(Boolean)
+                                        .join(" · ")}
+                                </div>
+
+                                <div
+                                    className="postulantes-card__indicadores"
+                                    aria-label="Documentos e indicadores"
+                                >
+                                    {rowNombreVideoAntecedentes(
+                                        data,
+                                        true,
+                                    )}
+                                </div>
+                            </header>
+
+                            <div className="postulantes-card__campo">
+                                <span className="postulantes-card__etiqueta">
+                                    Actividades
+                                </span>
+
+                                <div className="postulantes-card__valor">
+                                    {data.actividades ? (
+                                        data.actividades
+                                    ) : (
+                                        <span className="badge text-bg-danger">
+                                            SIN ACTIVIDADES
+                                        </span>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="postulantes-card__campo">
+                                <span className="postulantes-card__etiqueta">
+                                    Modalidades
+                                </span>
+
+                                <div className="postulantes-card__valor">
+                                    {data.modalidades ? (
+                                        <>
+                                            {data.modalidades}
+
+                                            {data.estatus_por_dias ===
+                                                1 && (
+                                                    <TooltipPorDias
+                                                        estilo="tooltip-gray"
+                                                        placement="bottom"
+                                                        text={
+                                                            "COLOCADO: " +
+                                                            data.dias_contratados_por_dias
+                                                        }
+                                                    />
+                                                )}
+                                        </>
+                                    ) : (
+                                        <span className="badge text-bg-warning">
+                                            SIN MODALIDADES
+                                        </span>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="postulantes-card__telefonos">
+                                {rowTelefonos(data)}
+                            </div>
+
+                            <div className="postulantes-card__campo">
+                                <span className="postulantes-card__etiqueta">
+                                    Vive en
+                                </span>
+
+                                <div className="postulantes-card__valor">
+                                    {data.distrito ? (
+                                        data.distrito
+                                    ) : (
+                                        <span className="badge text-bg-dark">
+                                            SIN DISTRITO
+                                        </span>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="postulantes-card__identidad">
+                                <div className="postulantes-card__campo">
+                                    <span className="postulantes-card__etiqueta">
+                                        Identidad
+                                    </span>
+
+                                    <div className="postulantes-card__valor">
+                                        {data.tipodocumento || "—"}
+                                    </div>
+                                </div>
+
+                                <div className="postulantes-card__campo">
+                                    <span className="postulantes-card__etiqueta">
+                                        Nació en
+                                    </span>
+
+                                    <div className="postulantes-card__valor">
+                                        {data.departamentoNacimiento ||
+                                            "—"}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="postulantes-card__estado">
+                                <span
+                                    className={
+                                        "badge badge-dt " +
+                                        badgeEstado
+                                    }
+                                >
+                                    {estatus}
+                                </span>
+                            </div>
+
+                            <div className="postulantes-card__verificaciones">
+                                {rowVerif(data)}
+                            </div>
+
+                            {data.vecesBajas?.length > 0 && (
+                                <div className="postulantes-card__bajas">
+                                    {rowBajas(data)}
+                                </div>
+                            )}
+
+                            {data.educacion?.length > 0 && (
+                                <div className="postulantes-card__educacion">
+                                    {rowEducacion(data)}
+                                </div>
+                            )}
+
+                            {modelCard === 3 && fechaPostulacion && (
+                                <div className="postulantes-card__fecha">
+                                    <span className="postulantes-card__etiqueta">
+                                        Postulación
+                                    </span>
+                                    <span>{fechaPostulacion}</span>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    <footer
+                        className="postulantes-card__acciones"
+                        aria-label="Acciones de la postulante"
+                    >
+                        {modelCard === 1 && optionsPostulante(data)}
+
+                        {modelCard === 3 && optionsPostulacionesReq(data)}
+                    </footer>
+                </article>
+            </div>
+        );
+    }
+
+    /*
+     * Estructura actual para los demás usos del componente.
+     */
     let cardStyle = "";
 
     if (modelCard === 1) {
@@ -714,37 +1028,44 @@ export default function CardPostulante({
     } else if (modelCard === 2) {
         cardStyle = "px-3 list-group list-unstyled";
     } else if (modelCard === 3) {
-        cardStyle = "col-sm-6 col-md-4 px-3 list-group list-unstyled";
+        cardStyle =
+            "col-sm-6 col-md-4 px-3 list-group list-unstyled";
     }
 
     let etiquetaSelectEmp = <br className="pt-2" />;
+
     if (data.select_emp === 1) {
         etiquetaSelectEmp = (
             <div className="pt-2 text-center">
                 <span className="badge font-badge bg-warning white-text">
-                    <i className="fas fa-crown me-2"></i>Cliente Web
+                    <i className="fas fa-crown me-2"></i>
+                    Cliente Web
                 </span>
             </div>
         );
     }
 
     let etiquetaFueTra = <br className="pt-2" />;
+
     if (data.fue_tra === 1) {
         etiquetaFueTra = (
             <div className="pt-2 text-center">
                 <span className="badge font-badge bg-secondary white-text">
-                    <i className="fas fa-user-times me-2"></i>Fue Trabajadora
+                    <i className="fas fa-user-times me-2"></i>
+                    Fue Trabajadora
                 </span>
             </div>
         );
     }
 
     let etiquetaSelectWp = <br className="pt-2" />;
+
     if (data.select_wp === 1) {
         etiquetaSelectWp = (
             <div className="pt-2 text-center">
                 <span className="badge font-badge bg-success white-text">
-                    <i className="fas fa-crown me-2"></i>Cliente WhatsApp
+                    <i className="fas fa-crown me-2"></i>
+                    Cliente WhatsApp
                 </span>
             </div>
         );
@@ -755,49 +1076,26 @@ export default function CardPostulante({
             <div
                 className={
                     "card m-0 shadow-lg rounded" +
-                    (data.select_emp === 1 ? " purple-border-postulado" : "")
+                    (data.select_emp === 1
+                        ? " purple-border-postulado"
+                        : "")
                 }
             >
-                <div className={"row m-0"}>
+                <div className="row m-0">
                     {responsive === false && (
-                        <div className={"col-md-3 align-self-center px-0"}>
+                        <div className="col-md-3 align-self-center px-0">
                             <img
                                 src={foto}
-                                alt={'bertha'}
+                                alt="bertha"
                                 className="card-img img-thumbnail rounded-circle"
                             />
 
-                            <div
-                                className={
-                                    "historialContacto cardPostulante pt-4"
-                                }
-                            >
-                                <ul>
-                                    {historialContacto.length > 0 ? (
-                                        <ModalHistorialContactoCardPostulante
-                                            historial={historialContacto}
-                                            trabajador={
-                                                modelCard === 1
-                                                    ? str_limit(
-                                                          data.nombres,
-                                                          30,
-                                                      )
-                                                    : data.trabajador
-                                            }
-                                        />
-                                    ) : (
-                                        <li
-                                            className={"Uncontacted"}
-                                            data-toggle="tooltip"
-                                            data-placement="bottom"
-                                            title={
-                                                "La trabajadora aún no es contactada"
-                                            }
-                                        >
-                                            <i className="fas fa-phone-alt"></i>
-                                        </li>
-                                    )}
-                                </ul>
+                            <div className="historialContacto cardPostulante pt-4">
+                                {renderHistorialContacto(
+                                    (modelCard === 1 ? data.nombres : data.trabajador) ||
+                                    data.nombres ||
+                                    "Postulante",
+                                )}
                             </div>
 
                             {[2, 3].includes(modelCard) && (
@@ -810,34 +1108,22 @@ export default function CardPostulante({
                         </div>
                     )}
 
-                    <div className={"col-md-9 col-12"}>
-                        <div className={"card-body"}>
-                            <div
-                                className={
-                                    "rowNombreVideoAntecedentes card-title h5"
-                                }
-                            >
+                    <div className="col-md-9 col-12">
+                        <div className="card-body">
+                            <div className="rowNombreVideoAntecedentes card-title h5">
                                 {rowNombreVideoAntecedentes(data)}
                             </div>
 
-                            <div
-                                className={
-                                    "rowProcedenciaEdad card-text ficha-text"
-                                }
-                            >
-                                <>
-                                    {data.nacionalidad ? data.nacionalidad : ""}
-                                </>
-                                <>
-                                    {data.lugarnacimiento
-                                        ? " - " + data.lugarnacimiento
-                                        : ""}
-                                </>
-                                <>
-                                    {data.edad
-                                        ? " - " + data.edad + " AÑOS"
-                                        : ""}
-                                </>
+                            <div className="rowProcedenciaEdad card-text ficha-text">
+                                {data.nacionalidad || ""}
+
+                                {data.lugarnacimiento
+                                    ? " - " + data.lugarnacimiento
+                                    : ""}
+
+                                {data.edad
+                                    ? " - " + data.edad + " AÑOS"
+                                    : ""}
                             </div>
 
                             <div
@@ -849,11 +1135,7 @@ export default function CardPostulante({
                                 {data.actividades ? (
                                     <>{data.actividades}</>
                                 ) : (
-                                    <span
-                                        className={
-                                            "badge badgetext-bg-danger d-inline"
-                                        }
-                                    >
+                                    <span className="badge badgetext-bg-danger d-inline">
                                         SIN ACTIVIDADES
                                     </span>
                                 )}
@@ -867,133 +1149,112 @@ export default function CardPostulante({
                             >
                                 {data.modalidades ? (
                                     <>
-                                        <>{data.modalidades}</>
-                                        <>
-                                            {data.estatus_por_dias === 1 && (
+                                        {data.modalidades}
+
+                                        {data.estatus_por_dias ===
+                                            1 && (
                                                 <TooltipPorDias
-                                                    estilo={"tooltip-gray"}
-                                                    placement={"bottom"}
+                                                    estilo="tooltip-gray"
+                                                    placement="bottom"
                                                     text={
                                                         "COLOCADO: " +
                                                         data.dias_contratados_por_dias
                                                     }
                                                 />
                                             )}
-                                        </>
                                     </>
                                 ) : (
-                                    <span
-                                        className={
-                                            "badge text-bg-warning d-inline"
-                                        }
-                                    >
+                                    <span className="badge text-bg-warning d-inline">
                                         SIN MODALIDADES
                                     </span>
                                 )}
                             </div>
 
-                            <div
-                                className={"rowTelefonos card-text ficha-text"}
-                            >
+                            <div className="rowTelefonos card-text ficha-text">
                                 {rowTelefonos(data)}
                             </div>
 
-                            <div className={"rowDistrito card-text ficha-text"}>
-                                <>Vive en:</>
+                            <div className="rowDistrito card-text ficha-text">
+                                Vive en:
+
                                 {data.distrito ? (
-                                    <strong className={"text-dark ms-1"}>
+                                    <strong className="text-dark ms-1">
                                         {data.distrito}
                                     </strong>
                                 ) : (
-                                    <span
-                                        className={"badge text-bg-dark d-inline"}
-                                    >
+                                    <span className="badge text-bg-dark d-inline">
                                         SIN DISTRITO
                                     </span>
                                 )}
                             </div>
 
-                            <div className={"rowCovid card-text ficha-text"}>
-                                <>
-                                    <>Identidad:</>
-                                    {data.tipodocumento ? (
-                                        <span className={"font-weight-bold ms-1 text-black"}>
-                                            {data.tipodocumento}
-                                        </span>
-                                    ) : (
-                                        <span className={"ms-1"}>-</span>
-                                    )}
-                                </>
+                            <div className="rowCovid card-text ficha-text">
+                                Identidad:
+
+                                {data.tipodocumento ? (
+                                    <span className="font-weight-bold ms-1 text-black">
+                                        {data.tipodocumento}
+                                    </span>
+                                ) : (
+                                    <span className="ms-1">-</span>
+                                )}
 
                                 <span className="mx-1">|</span>
 
-                                <>
-                                    <>Nació en:</>
-                                    {data.departamentoNacimiento ? (
-                                        <span className={"font-weight-bold ms-1 text-black"}>
-                                            {data.departamentoNacimiento}
-                                        </span>
-                                    ) : (
-                                        <span className={"ms-1"}>-</span>
-                                    )}
-                                </>
+                                Nació en:
+
+                                {data.departamentoNacimiento ? (
+                                    <span className="font-weight-bold ms-1 text-black">
+                                        {data.departamentoNacimiento}
+                                    </span>
+                                ) : (
+                                    <span className="ms-1">-</span>
+                                )}
                             </div>
 
-                            <div
-                                className={
-                                    "rowEstado card-text ficha-text my-1"
-                                }
-                            >
+                            <div className="rowEstado card-text ficha-text my-1">
                                 <span
                                     className={
-                                        "badge badge-dt d-inline " + badgeEstado
+                                        "badge badge-dt d-inline " +
+                                        badgeEstado
                                     }
                                 >
                                     {estatus}
                                 </span>
                             </div>
 
-                            <div
-                                className={
-                                    "rowVerificaciones card-text ficha-text"
-                                }
-                            >
+                            <div className="rowVerificaciones card-text ficha-text">
                                 {rowVerif(data)}
                             </div>
 
-                            <div className={"rowBajas card-text ficha-text"}>
+                            <div className="rowBajas card-text ficha-text">
                                 {rowBajas(data)}
                             </div>
 
-                            <div
-                                className={"rowEducacion card-text ficha-text"}
-                            >
+                            <div className="rowEducacion card-text ficha-text">
                                 {rowEducacion(data)}
                             </div>
 
                             {[2, 3].includes(modelCard) && (
-                                <div
-                                    className={
-                                        "rowFechaPostulacion card-text ficha-text"
-                                    }
-                                >
-                                    <>{fechaPostulacion}</>
+                                <div className="rowFechaPostulacion card-text ficha-text">
+                                    {fechaPostulacion}
                                 </div>
                             )}
                         </div>
                     </div>
 
-                    <div className={"col-md-12 col-12 px-1"}>
-                        <hr className={"my-1"} />
+                    <div className="col-md-12 col-12 px-1">
+                        <hr className="my-1" />
 
-                        <div className={"d-flex mx-2 mb-1"}>
-                            {/*modelCard => ['1'-> PostulantesView || '2'-> ModalPostulaciones || '3'-> FormularioRequerimiento ]*/}
+                        <div className="d-flex mx-2 mb-1">
+                            {modelCard === 1 &&
+                                optionsPostulante(data)}
 
-                            {modelCard === 1 && optionsPostulante(data)}
+                            {modelCard === 2 &&
+                                optionsModalPostulados(data)}
 
-                            {modelCard === 2 && optionsModalPostulados(data)}
-
-                            {modelCard === 3 && optionsPostulacionesReq(data)}
+                            {modelCard === 3 &&
+                                optionsPostulacionesReq(data)}
                         </div>
                     </div>
                 </div>
