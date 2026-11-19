@@ -1,0 +1,139 @@
+.beneficio-registro {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    height: 100%;
+    padding: 16px;
+    border: 1px solid rgba($purple_bertha, 0.25);
+    border-radius: 10px;
+    background: $white_bertha;
+    color: $black_bertha;
+    text-align: left;
+
+    &__cabecera {
+        margin-bottom: 12px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid $selected_purple_bertha;
+    }
+
+    &__etiqueta {
+        display: block;
+        margin-bottom: 4px;
+        color: $dkgray_bertha;
+        font-size: 12px;
+        line-height: 1.4;
+    }
+
+    &__periodo {
+        margin: 0;
+        color: $purple_bertha;
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 1.4;
+        overflow-wrap: anywhere;
+    }
+
+    &__datos {
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+        margin: 0 0 16px;
+    }
+
+    &__fila {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        align-items: baseline;
+        gap: 12px;
+        font-size: 13px;
+        line-height: 1.5;
+
+        dt,
+        dd {
+            margin: 0;
+            color: $black_bertha;
+            font-weight: 600;
+            overflow-wrap: anywhere;
+        }
+
+        dd {
+            font-variant-numeric: tabular-nums;
+        }
+    }
+
+    &__acciones {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        margin-top: auto;
+    }
+
+    &__boton {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 0;
+        min-height: 40px;
+        padding: 8px 10px;
+        border: 1px solid $purple_bertha;
+        border-radius: 7px;
+        font-family: inherit;
+        font-size: 13px;
+        font-weight: 600;
+        line-height: 1.4;
+        cursor: pointer;
+        transition:
+            background-color 0.15s ease,
+            border-color 0.15s ease,
+            color 0.15s ease;
+
+        i {
+            flex-shrink: 0;
+            font-size: 15px;
+        }
+
+        &:focus-visible {
+            outline: 2px solid $purple_bertha;
+            outline-offset: 3px;
+        }
+
+        &--principal {
+            background: $purple_bertha;
+            color: $white_bertha;
+
+            &:hover {
+                background: $purple_hover_bertha;
+                border-color: $purple_hover_bertha;
+            }
+        }
+
+        &--secundario {
+            background: $white_bertha;
+            color: $purple_bertha;
+
+            &:hover {
+                background: $selected_purple_bertha;
+                border-color: $purple_hover_bertha;
+            }
+        }
+    }
+
+    @media (max-width: 575.98px) {
+        padding: 14px;
+
+        &__periodo {
+            font-size: 15px;
+        }
+
+        &__acciones {
+            gap: 8px;
+        }
+
+        &__boton {
+            min-height: 44px;
+            padding: 8px;
+            font-size: 12px;
+        }
+    }
+}
