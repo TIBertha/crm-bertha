@@ -14,7 +14,15 @@ export default function ModalPostulados({
     idReq,
     empleador,
     postuladosCantidad,
+    paisPedido,
 }) {
+    const paisCode = String(
+        paisPedido?.country_code || paisPedido?.code || ""
+    ).toLowerCase();
+
+    const paisNombre = paisPedido?.nombre || paisPedido?.name || "";
+    const cantidad = Number(postuladosCantidad) || 0;
+
     const [show, setShow] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [postulados, setPostulados] = useState([]);
@@ -56,46 +64,29 @@ export default function ModalPostulados({
 
     return (
         <>
-            <a
-                className="notificacionPostulante-button"
-                role="button"
-                tabIndex={0}
+            <button
+                type="button"
+                className="postulados-pais"
                 onClick={openModal}
-                onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                        e.preventDefault();
-                        openModal();
-                    }
-                }}
-                aria-label={`Ver ${postuladosCantidad} postulantes de ${empleador}`}
+                title={`Ver postulantes${paisNombre ? ` · ${paisNombre}` : ""}`}
+                aria-label={`Ver ${cantidad} postulantes de ${empleador}${
+                    paisNombre ? `, pedido de ${paisNombre}` : ""
+                }`}
                 aria-haspopup="dialog"
             >
-                {responsive ? (
-                    <>
-                        <span className="badge badge-light notificacionPostulante-mobileBadge me-1">
-                            {postuladosCantidad}
-                        </span>
-
-                        Postulados
-
-                        <i
-                            className="fa-solid fa-user ms-1"
-                            aria-hidden="true"
-                        ></i>
-                    </>
+                {paisCode ? (
+                    <span
+                        className={`flag-icon flag-icon-${paisCode} postulados-pais__bandera`}
+                        aria-hidden="true"
+                    />
                 ) : (
-                    <div className="notificacionPostulanciones">
-                        <span className="npBadge">
-                            {postuladosCantidad}
-                        </span>
-
-                        <i
-                            className="fa-solid fa-user notificacionPostulante"
-                            aria-hidden="true"
-                        ></i>
-                    </div>
+                    <i className="fa-solid fa-earth-americas" aria-hidden="true" />
                 )}
-            </a>
+
+                <span className="postulados-pais__contador" aria-hidden="true">
+                    {cantidad}
+                </span>
+            </button>
 
             <Modal
                 size="lg"

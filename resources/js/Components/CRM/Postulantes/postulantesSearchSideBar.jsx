@@ -26,9 +26,12 @@ export default function PostulantesSearchSideBar({ data, sideBar, handleChange, 
 
                                 <div className="layout-form-search-side">
                                     <div className="col-12 form-group">
-                                        <select 
-                                            className="bertha-select form-control-sm"
-                                            classNamePrefix="bertha-select" name="paispostulacion" value={data.paispostulacion} onChange={(e) => handleChange(e)} >
+                                        <select
+                                            className="form-control form-control-sm"
+                                            name="paispostulacion"
+                                            value={data.paispostulacion}
+                                            onChange={(e) => handleChange(e)}
+                                        >
                                             <option key="0" value="">
                                                 Seleccione País postulación
                                             </option>
@@ -76,8 +79,7 @@ export default function PostulantesSearchSideBar({ data, sideBar, handleChange, 
 
                                     <div className="col-12 form-group">
                                         <select
-                                            className="bertha-select form-control-sm"
-                                            classNamePrefix="bertha-select"
+                                            className="form-control form-control-sm"
                                             name="nacionalidad"
                                             value={data.nacionalidad}
                                             onChange={(e) => handleChange(e)}
@@ -160,8 +162,7 @@ export default function PostulantesSearchSideBar({ data, sideBar, handleChange, 
 
                                     <div className="col-12 form-group">
                                         <select
-                                            className="bertha-select"
-                                            classNamePrefix="bertha-select form-control-sm"
+                                            className="form-control form-control-sm"
                                             name="modalidad"
                                             value={data.modalidad}
                                             onChange={(e) => handleChange(e)}
@@ -215,8 +216,7 @@ export default function PostulantesSearchSideBar({ data, sideBar, handleChange, 
 
                                     <div className="col-12 form-group">
                                         <select
-                                            className="bertha-select form-control-sm"
-                                            classNamePrefix="bertha-select"
+                                            className="form-control form-control-sm"
                                             name="estado"
                                             value={data.estado}
                                             onChange={(e) => handleChange(e)}

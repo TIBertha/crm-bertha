@@ -622,23 +622,38 @@ class RequerimientosNew extends Component {
             }, () => {
                 this.changeModalidad(modalidad);
             });
-        }else if (tipo === 'paispedido'){
+        }else if (tipo === "paispedido") {
+            const value = Number(e.target.value);
 
-            let value = parseInt(e.target.value);
+            this.setState(
+                (prevState) => ({
+                    paispedido: value,
 
-            if (value === 49){
-                this.setState({
-                    tipoComision: 3,
-                    montoComision: getMontoComision(e.target.value, null, null, this.state),
-                })
-            }
+                    alimentos: prevState.alimentos.map((alimento) =>
+                        alimento.id === 2
+                            ? {
+                                ...alimento,
+                                value: value === 54 ? "Almuerzo" : "Comida",
+                            }
+                            : alimento
+                    ),
 
-            this.setState({
-                paispedido: value,
-            }, () => {
-                this.setDivisaPais(value)
-            });
-
+                    ...(value === 49
+                        ? {
+                            tipoComision: 3,
+                            montoComision: getMontoComision(
+                                value,
+                                null,
+                                null,
+                                prevState
+                            ),
+                        }
+                        : {}),
+                }),
+                () => {
+                    this.setDivisaPais(value);
+                }
+            );
         }else if(tipo === 'seguimiento'){
 
             const newSeguimiento = this.state.seguimientos.map((seguimiento, sidx) => {

@@ -199,20 +199,38 @@
     }
 
     &__telefonos {
-        margin: 9px 0;
-        font-size: 13px;
-
-        .row {
-            align-items: center;
-            row-gap: 4px;
+        // Permite que el enlace ocupe el espacio restante.
+        .row > a {
+            flex: 1 1 220px;
+            min-width: 0;
+            max-width: 100%;
         }
 
-        a {
-            color: $pink_bertha;
-            overflow-wrap: anywhere;
+        .campo-telefono {
+            width: 100% !important;
+            min-width: 0;
+            max-width: 100%;
 
-            &:hover {
-                color: $pink_hover_bertha;
+            input.form-control {
+                box-sizing: border-box;
+                width: 100% !important;
+                min-width: 0 !important;
+                max-width: none !important;
+                padding-left: 38px !important;
+                padding-right: 0 !important;
+                border: 0;
+                background: transparent;
+                color: $pink_bertha;
+                font-family: inherit;
+                font-size: inherit;
+                text-decoration: underline;
+                box-shadow: none;
+            }
+
+            .flag-dropdown,
+            .selected-flag {
+                border: 0;
+                background: transparent;
             }
         }
     }
@@ -321,6 +339,117 @@
         font-size: 12px;
         line-height: 1.5;
         overflow-wrap: anywhere;
+    }
+
+    &__accion-contacto {
+        display: inline-flex;
+        align-items: center;
+
+        ul {
+            display: flex;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        li {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .contacto-historial-trigger__boton {
+            width: 32px;
+            height: 34px;
+            min-width: 32px;
+            padding: 0;
+            border: 0;
+            border-radius: 5px;
+            background: transparent;
+            color: $purple_bertha;
+            font-size: 15px;
+
+            &.es-fresh {
+                background: $green_bertha;
+                color: $white_bertha;
+            }
+
+            &.es-mid {
+                background: $yellow_bertha;
+                color: $white_bertha;
+            }
+
+            &.es-raw {
+                background: $dkgray_bertha;
+                color: $white_bertha;
+            }
+
+            &:hover {
+                background: $selected_purple_bertha;
+            }
+        }
+
+        .Uncontacted {
+            box-sizing: border-box;
+            width: 32px;
+            height: 34px;
+            border: 0;
+            background: transparent;
+            color: $purple_bertha;
+            cursor: default;
+
+            i {
+                color: inherit;
+                font-size: 15px;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .contacto-historial-trigger__boton,
+            .Uncontacted {
+                width: 36px;
+                height: 44px;
+            }
+        }
+    }
+
+    &__pais {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+        width: 100%;
+    }
+
+    &__pais-label {
+        color: $dkgray_bertha;
+        font-size: 11px;
+        line-height: 1.4;
+    }
+
+    &__pais-badge {
+        display: inline-flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        max-width: 100%;
+        padding: 5px 8px;
+        border-radius: 6px;
+        background: $selected_purple_bertha;
+        color: $purple_bertha;
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 1.4;
+        text-align: center;
+
+        .flag-icon {
+            flex-shrink: 0;
+        }
     }
 
     @media (max-width: 575.98px) {

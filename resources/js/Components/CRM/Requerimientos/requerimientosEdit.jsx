@@ -498,23 +498,38 @@ class RequerimientosEdit extends Component{
                 this.setState({tipoBeneficio: 4});
             }
 
-        }else if (tipo === 'paispedido'){
+        }else if (tipo === "paispedido") {
+            const value = Number(e.target.value);
 
-            let value = parseInt(e.target.value);
+            this.setState(
+                (prevState) => ({
+                    paispedido: value,
 
-            if (value === 49){
-                this.setState({
-                    tipoComision: 3,
-                    montoComision: getMontoComision(e.target.value, null, null, this.state),
-                })
-            }
+                    alimentos: prevState.alimentos.map((alimento) =>
+                        alimento.id === 2
+                            ? {
+                                ...alimento,
+                                value: value === 54 ? "Almuerzo" : "Comida",
+                            }
+                            : alimento
+                    ),
 
-            this.setState({
-                paispedido: value,
-            }, () => {
-                this.setDivisaPais(value)
-            });
-
+                    ...(value === 49
+                        ? {
+                            tipoComision: 3,
+                            montoComision: getMontoComision(
+                                value,
+                                null,
+                                null,
+                                prevState
+                            ),
+                        }
+                        : {}),
+                }),
+                () => {
+                    this.setDivisaPais(value);
+                }
+            );
         }else if(tipo === 'frecuencia'){
 
             this.setState({
@@ -857,9 +872,11 @@ class RequerimientosEdit extends Component{
                 const hasModalidad = !!r.data.modalidadhorario_id;
 
                 this.setState({
+
+
                     alimentos: [
                         {id: 1, value: "Desayuno", isChecked: Boolean(r.data.desayuno)},
-                        {id: 2, value: "Almuerzo", isChecked: Boolean(r.data.almuerzo)},
+                        {id: 2, value: (r.data.paispedido_id === 49 ? "Comida" : "Almuerzo"), isChecked: Boolean(r.data.almuerzo)},
                         {id: 3, value: "Cena", isChecked: Boolean(r.data.cena)}
                     ],
                     datoadultomayor: r.datoadultomayor,

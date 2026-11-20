@@ -709,7 +709,7 @@
             box-shadow 0.15s ease;
 
         &:hover {
-            border-color: $dkgray_bertha;
+            border-color: rgba($black_bertha, 0.15);
         }
 
         &--is-focused {
@@ -851,5 +851,198 @@
     .bertha-select__menu-notice {
         color: $dkgray_bertha;
         font-size: 13px;
+    }
+}
+
+.anuncio-canvas {
+    width: 100%;
+    min-width: 0;
+
+    &__instruccion {
+        margin: 0 0 18px;
+        color: $dkgray_bertha;
+        font-size: 14px;
+        line-height: 1.5;
+        text-align: center;
+    }
+
+    &__imagen {
+        display: block;
+        width: 100%;
+        max-width: 600px;
+        height: auto;
+        margin: 0 auto;
+        background: $white_bertha;
+        border: solid 3.75px $purple_bertha;
+        border-radius: 0.625rem;
+
+        &[hidden] {
+            display: none;
+        }
+    }
+
+    &__mensaje {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        min-height: 160px;
+        padding: 24px;
+        color: $purple_bertha;
+        font-size: 14px;
+        text-align: center;
+
+        i {
+            font-size: 28px;
+        }
+    }
+
+    &__acciones {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    &__descargar {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-height: 44px;
+        padding: 10px 20px;
+        border: 1px solid $purple_bertha;
+        border-radius: 7px;
+        background: $purple_bertha;
+        color: $white_bertha;
+        font-family: inherit;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+
+        &:hover:not(:disabled) {
+            background: $purple_hover_bertha;
+            border-color: $purple_hover_bertha;
+        }
+
+        &:focus-visible {
+            outline: 2px solid $purple_bertha;
+            outline-offset: 3px;
+        }
+
+        &:disabled {
+            opacity: 0.65;
+            cursor: wait;
+        }
+    }
+
+    &__botones {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    &__copiar {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-height: 44px;
+        padding: 10px 20px;
+        border: 1px solid $pink_bertha;
+        border-radius: 7px;
+        background: $pink_bertha;
+        color: $white_bertha;
+        font-family: inherit;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+
+        &:hover:not(:disabled) {
+            background: $pink_hover_bertha;
+        }
+
+        &:focus-visible {
+            outline: 2px solid $pink_bertha;
+            outline-offset: 3px;
+        }
+
+        &:disabled {
+            opacity: 0.65;
+            cursor: wait;
+        }
+    }
+
+    &__mensaje-copia {
+        margin: 0;
+        color: $pink_bertha;
+        font-size: 13px;
+        text-align: center;
+    }
+
+    &__error {
+        margin: 0;
+        color: $red_hover_bertha;
+        font-size: 13px;
+        text-align: center;
+    }
+}
+
+.postulados-pais {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 38px;
+    padding: 0;
+    margin: 6px;
+    border: 1px solid rgba($dkgray_bertha, 0.15);
+    border-radius: 10px;
+    background-color: $gray_bertha;
+    color: $purple_bertha;
+    cursor: pointer;
+    vertical-align: middle;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+        background-color: $white_hover_bertha;
+    }
+
+    &:focus-visible {
+        outline: 2px solid $purple_bertha;
+        outline-offset: 3px;
+    }
+
+    &__bandera {
+        width: 24px;
+        height: 18px;
+        line-height: 18px;
+        border-radius: 2px;
+        background-size: cover;
+    }
+
+    &__contador {
+        position: absolute;
+        top: -7px;
+        right: -7px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 21px;
+        height: 21px;
+        padding: 0 5px;
+        border: 2px solid $white_bertha;
+        border-radius: 999px;
+        background-color: $pink_bertha;
+        color: $white_bertha;
+        font-size: 11px;
+        font-weight: 700;
+        line-height: 1;
+        white-space: nowrap;
+        pointer-events: none;
     }
 }

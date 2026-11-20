@@ -219,7 +219,13 @@ function getConstDetallesEmpleador($d){
     $t8 = 'd. *No* compre *uniforme* o hágalo hasta después del período de prueba, ya que el uniforme no es descontable y si usted la despide o ella renuncia, la nueva trabajadora no querrá vestir un uniforme usado. ' . "\r\n" ;
     $t9 = 'e. Toda la comunicación de *Bertha* será con el titular del contrato (*no terceros*) y *a través del Canal Chat*, así generamos un historial escrito de los acuerdos. El canal telefónico y/o de videollamadas se usan solo para entrevistas.' . "\r\n" ;
     $t10 = 'f. El *tiempo de respuesta para una consulta es por orden de llegada*, *hasta 24 horas* luego de recibido el mensaje y dentro del horario laboral de lunes a viernes de 8 am a 6 pm y sábados de 8 am a 1 pm.' . "\r\n" ;
-    $t11 = 'g. *Por ley, el sueldo es pagado por el empleador*, si se incumple, la trabajadora podrá realizar una denuncia llamando al Ministerio del Trabajo, 01 630 6000, opción "trabajadora del hogar" o a través del siguiente link: https://aplicativosweb2.sunafil.gob.pe/si.denunciasVirtuales/inicio' . "\r\n" ;
+
+    if ($d->paispedido_id === 54){
+        $t11 = 'g. *Por ley, el sueldo es pagado por el empleador*, si se incumple, la trabajadora podrá realizar una denuncia llamando al Ministerio del Trabajo, 01 630 6000, opción "trabajadora del hogar" o a través del siguiente link: https://aplicativosweb2.sunafil.gob.pe/si.denunciasVirtuales/inicio' . "\r\n" ;
+    }else if ($d->paispedido_id === 49){
+        $t11 = 'g. *Por ley, el sueldo es pagado por el empleador*, si se incumple, la trabajadora podrá realizar una denuncia a través del siguiente enlace: https://www.trabajo.cdmx.gob.mx/procuraduria-de-la-defensa-del-trabajo-de-la-cdmx' . "\r\n" ;
+    }
+
     $t12 = 'h. *El uso de nuestros servicios implica que el empleador aceptó nuestra cotización, términos y condiciones*. Por lo tanto, no procede ningún tipo de devolución.' . "\r\n" . "\r\n" ;
     $t13 = 'El día de inicio de labores, le escribiremos a usted para que nos confirme cuando la trabajadora haya llegado a su domicilio. Muchas gracias y buen día.' . "\r\n" ;
 
@@ -273,7 +279,7 @@ function getConstDetalles($d, $newTerms1711){
         $fechaIngreso = '*Inicio de labores*: ' . mb_convert_case(($fecha . $hora), MB_CASE_UPPER, "UTF-8") . "\r\n";
     }
 
-    $t1 = '*El empleador te ha contratado.* La EMPRESA BERTHA con Registro N° 12-2016-DRTELM/DPECL - SDRAFPCL del Ministerio del Trabajo y Promoción del Empleo certifica este contrato:' . "\r\n";
+    $t1 = '*El empleador te ha contratado.* ' . "\r\n";
     $tituloColocacion = '*DETALLES DE LA COLOCACIÓN:*' . "\r\n";
     $tituloRequerimiento = '*DETALLES DEL REQUERIMIENTO:*' . "\r\n";
 

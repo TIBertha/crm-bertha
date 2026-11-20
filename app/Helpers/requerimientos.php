@@ -756,7 +756,15 @@ function processDataPostulaciones($data){
                 ->subHours(4)
                 ->format('d/m/Y h:i a');
 
+            $paisData = $tra->postulando_pais_id ? Pais::findOrFail($tra->postulando_pais_id) : null;
+
+            $countryCode = strtoupper($paisData?->country_code ?? '');
+
             $result[]=[
+                'paisPostulacion'               => $paisData?->nombre,
+
+                'paisPostulacionCode'           => $countryCode !== '' ? strtolower($countryCode) : null,
+
                 'departamentoNacimiento'        => $tra->usuario->departamentonacimiento_id ? ($depNac->nombre . ' - ' . $depNac->pais->nombre) : null,
                 'diaspasadoscertificadoantecedente' => $daysPast,
                 'contact_name'                  => mb_convert_case(($n[0] . ' ' . $tra->apellidos), MB_CASE_UPPER, "UTF-8"),
@@ -990,6 +998,8 @@ function processDataRequerimiento($data){
             $dist = \App\Models\Views\DistritoView::find($d->distrito_domicilioid);
 
             $dataAnuncio = [
+                'id'                    => $d->id,
+
                 'paispedido'            => $d->paispedido_id,
                 'actividad'             => ($d->actividad),
                 'modalidad'             => ($newModalidad),

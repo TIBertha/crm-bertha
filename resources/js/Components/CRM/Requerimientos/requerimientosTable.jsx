@@ -163,7 +163,12 @@ export default function RequerimientosTable({url, requerimientos, total, page, c
                                 <Td className={'notificacionPostulante-badge vertical-align-middle text-center' + (responsive ? '' : ' p-0 my-auto')}>
 
                                     {parseInt(postulados) > 0 ?
-                                        <ModalPostulados idReq={data.id} empleador={data.empleador} postuladosCantidad={postulados}/>
+                                        <ModalPostulados
+                                            idReq={data.id}
+                                            empleador={data.empleador}
+                                            postuladosCantidad={postulados}
+                                            paisPedido={data.pais_pedido}
+                                        />
                                         :
                                         <>
                                             {responsive ?

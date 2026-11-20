@@ -1,21 +1,36 @@
-import React, { useEffect, useState } from "react";
-import ReactDOM from "react-dom";
-import axios from "axios";
+import React from "react";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import esp from "react-phone-input-2/lang/es.json";
 
-export default function TelefonoInternacional({ numero, paddingLeft = false, cardPostulante = false }) {
+export default function TelefonoInternacional({
+    numero,
+    paddingLeft = false,
+    cardPostulante = false,
+}) {
     return (
         <PhoneInput
             localization={esp}
-            country={"pe"}
+            country="pe"
             value={numero}
             disableDropdown={true}
-            inputClass={'custom-phone-code no-box-shadow' + (cardPostulante ? ' cardPost' : '')}
+            inputClass={
+                "custom-phone-code no-box-shadow" +
+                (cardPostulante ? " cardPost" : "")
+            }
             containerClass={
                 (paddingLeft ? "no-padding " : "") +
-                "custom-phone-input no-box-shadow"
+                "custom-phone-input no-box-shadow" +
+                (cardPostulante ? " campo-telefono" : "")
+            }
+            inputProps={
+                cardPostulante
+                    ? {
+                        readOnly: true,
+                        tabIndex: -1,
+                        "aria-label": "Número de teléfono",
+                    }
+                    : {}
             }
             enableLongNumbers={true}
         />

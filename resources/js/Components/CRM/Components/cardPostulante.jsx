@@ -813,12 +813,24 @@ export default function CardPostulante({
                                 className="postulantes-card__foto"
                             />
 
-                            <div className="postulantes-card__contacto">
-                                <div className="historialContacto cardPostulante">
-                                    {renderHistorialContacto(
-                                        data.nombres || "Postulante",
+                            <div className="postulantes-card__pais">
+                                <span className="postulantes-card__pais-label">
+                                    Postula en:
+                                </span>
+
+                                <span className="postulantes-card__pais-badge">
+                                    {data.paisPostulacion}
+
+                                    {data.paisPostulacionCode && (
+                                        <span
+                                            className={
+                                                "flag-icon flag-icon-" +
+                                                data.paisPostulacionCode.toLowerCase()
+                                            }
+                                            aria-hidden="true"
+                                        ></span>
                                     )}
-                                </div>
+                                </span>
                             </div>
 
                             {modelCard === 3 && (
@@ -1009,6 +1021,14 @@ export default function CardPostulante({
                         className="postulantes-card__acciones"
                         aria-label="Acciones de la postulante"
                     >
+                        <div className="postulantes-card__accion-contacto">
+                            {renderHistorialContacto(
+                                (modelCard === 1 ? data.nombres : data.trabajador) ||
+                                data.nombres ||
+                                "Postulante",
+                            )}
+                        </div>
+
                         {modelCard === 1 && optionsPostulante(data)}
 
                         {modelCard === 3 && optionsPostulacionesReq(data)}
@@ -1089,14 +1109,6 @@ export default function CardPostulante({
                                 alt="bertha"
                                 className="card-img img-thumbnail rounded-circle"
                             />
-
-                            <div className="historialContacto cardPostulante pt-4">
-                                {renderHistorialContacto(
-                                    (modelCard === 1 ? data.nombres : data.trabajador) ||
-                                    data.nombres ||
-                                    "Postulante",
-                                )}
-                            </div>
 
                             {[2, 3].includes(modelCard) && (
                                 <>
@@ -1243,18 +1255,23 @@ export default function CardPostulante({
                         </div>
                     </div>
 
-                    <div className="col-md-12 col-12 px-1">
-                        <hr className="my-1" />
+                    <div className="col-12 px-1">
+                        <div className="postulantes-card__acciones">
+                            <div className="postulantes-card__accion-contacto">
+                                {renderHistorialContacto(
+                                    (modelCard === 1
+                                        ? data.nombres
+                                        : data.trabajador) ||
+                                    data.nombres ||
+                                    "Postulante",
+                                )}
+                            </div>
 
-                        <div className="d-flex mx-2 mb-1">
-                            {modelCard === 1 &&
-                                optionsPostulante(data)}
+                            {modelCard === 1 && optionsPostulante(data)}
 
-                            {modelCard === 2 &&
-                                optionsModalPostulados(data)}
+                            {modelCard === 2 && optionsModalPostulados(data)}
 
-                            {modelCard === 3 &&
-                                optionsPostulacionesReq(data)}
+                            {modelCard === 3 && optionsPostulacionesReq(data)}
                         </div>
                     </div>
                 </div>

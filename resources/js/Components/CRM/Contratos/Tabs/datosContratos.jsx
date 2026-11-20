@@ -307,7 +307,7 @@ export default function DatosContratos({view, data,handleChange}) {
                             name="fechafingarantia"
                             placeholderText="dd/mm/aaaa"
                             autoComplete="off"
-                            disabled={true}
+                            //disabled={true}
                         />
                     </div>
                 </div>
