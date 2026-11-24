@@ -98,7 +98,7 @@ class RequerimientosNew extends Component {
             tiposdescansos: [],
             diasalida: 6,
             diaretorno: 1,
-            horasalida: setHours(setMinutes(new Date(), 0), 13),
+            horasalida: setHours(setMinutes(new Date(), 0), 12),
             horaretorno: setHours(setMinutes(new Date(), 0), 7),
             diassemana: [],
             horarios: armarHorarioRequerimiento(1),

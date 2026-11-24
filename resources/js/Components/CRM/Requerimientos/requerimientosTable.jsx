@@ -158,6 +158,12 @@ export default function RequerimientosTable({url, requerimientos, total, page, c
                         let m = 25 + 'px';
                         let paisData = data.pais_pedido;
 
+                        const paisCode = String(
+                            data.pais_pedido?.country_code || data.pais_pedido?.code || ""
+                        ).toLowerCase();
+
+                        const paisNombre = data.pais_pedido?.nombre || data.pais_pedido?.name || "";
+
                         return(
                             <Tr className={'table-filas hover-column'}>
                                 <Td className={'notificacionPostulante-badge vertical-align-middle text-center' + (responsive ? '' : ' p-0 my-auto')}>
@@ -171,13 +177,19 @@ export default function RequerimientosTable({url, requerimientos, total, page, c
                                         />
                                         :
                                         <>
-                                            {responsive ?
+                                            {/*responsive ?
                                                 <div className='notificacionPostulante-button-cero'>
                                                     <span className='badge badge-light notificacionPostulante-mobileBadge me-1'>0</span> Postulados <i className='fas fa-user ms-1'></i>
                                                 </div>
                                                 :
                                                 <i className="fas fa-user-slash notificacionPostulante-cero"></i>
-                                            }
+                                            */}
+
+                                            {paisCode ? (
+                                                <span className={`flag-icon flag-icon-${paisCode} zero_postulantes__bandera`} aria-hidden="true" title={'No hay postulantes'} />
+                                            ) : (
+                                                <i className="fa-solid fa-earth-americas" aria-hidden="true" />
+                                            )}
                                         </>
                                     }
 

@@ -41,7 +41,7 @@ export function armarHorarioRequerimiento(modalidad) {
     if (modalidad == 5){
         timeSalida = moment(setHours(setMinutes(new Date(), 0), 14)).format();
     } else{
-        timeSalida = moment(setHours(setMinutes(new Date(), 0), 17)).format();
+        timeSalida = moment(setHours(setMinutes(new Date(), 30), 16)).format();
     }
     let timeSalidaSab = moment(setHours(setMinutes(new Date(), 0), 13)).format();
 

@@ -991,6 +991,32 @@
     }
 }
 
+.zero_postulantes{
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 38px;
+    padding: 0;
+    margin: 6px;
+    border: 1px solid rgba($dkgray_bertha, 0.15);
+    border-radius: 10px;
+    background-color: $gray_bertha;
+    color: $purple_bertha;
+    cursor: pointer;
+    vertical-align: middle;
+    transition: background-color 0.2s ease;
+
+    &__bandera {
+        width: 24px;
+        height: 18px;
+        line-height: 18px;
+        border-radius: 2px;
+        background-size: cover;
+    }
+}
+
 .postulados-pais {
     position: relative;
     display: inline-flex;
