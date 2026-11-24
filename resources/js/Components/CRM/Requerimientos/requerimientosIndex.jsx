@@ -21,6 +21,8 @@ import {setEstadosRequerimientoName} from "../../Helpers/bd.js";
 import global from "../../Helpers/constantes.js";
 import CotizadorPeru from "./Components/CotizadorPeru.jsx";
 import CotizadorMexico from "./Components/CotizadorMexico.jsx";
+import CopiarEntrevistasHoy from "./Components/copiarEntrevistasHoy.jsx";
+
 
 export function withRouter(Component) {
     return props => {
@@ -424,6 +426,10 @@ class RequerimientosIndex extends Component{
 
                     <div className="col-12 col-md-auto px-1 my-2 my-md-0">
                         <CotizadorMexico />
+                    </div>
+
+                    <div className="col-12 col-md-auto px-1 my-2 my-md-0">
+                        <CopiarEntrevistasHoy />
                     </div>
 
                     <div className={'col-12 col-md-auto px-1 my-2 my-md-0'}>

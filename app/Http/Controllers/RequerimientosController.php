@@ -815,6 +815,89 @@ class RequerimientosController extends Controller
         ]);
     }
 
+    public function ajaxGetEntrevistasRequerimientoHoy(Request $request)
+    {
+        $fecha = Carbon::parse($request->input('fecha'))
+            ->format('Y-m-d');
+
+        $entrevistas = RequerimientoView::where('estatusrequerimientoid', 1)
+            ->whereDate('fechaentrevista', $fecha)
+            ->orderBy('horaentrevista', 'asc')
+            ->get();
+
+        $postulaciones = RequerimientoPostulacion::with('trabajador.usuario')
+            ->whereIn('requerimiento_id', $entrevistas->pluck('id'))
+            ->where('activo', 1)
+            ->orderBy('select_emp', 'desc')
+            ->orderBy('fecha_postulacion', 'desc')
+            ->get();
+
+        $distritos = DistritoView::whereIn(
+            'id',
+            $postulaciones->pluck('trabajador.distrito_id')
+                ->filter()
+                ->unique()
+        )->get()->keyBy('id');
+
+        $seleccionadas = $postulaciones
+            ->groupBy('requerimiento_id');
+
+        $result = collect(processDataRequerimiento($entrevistas))
+            ->map(function ($d) use ($seleccionadas, $distritos) {
+
+                $d['postulantesSeleccionadas'] = $seleccionadas
+                    ->get($d['id'], collect())
+                    ->unique('trabajador_id')
+                    ->filter(fn ($p) => $p->trabajador?->usuario)
+                    ->map(function ($p) use ($distritos) {
+
+                        $tra = $p->trabajador;
+                        $usuario = $tra->usuario;
+
+                        $nombres = preg_split(
+                            '/\s+/',
+                            trim($usuario->nombres ?? '')
+                        );
+
+                        $apellidos = preg_split(
+                            '/\s+/',
+                            trim($usuario->apellidos ?? '')
+                        );
+
+                        $nombreCorto = trim(
+                            ($nombres[0] ?? '') . ' ' .
+                            (!empty($apellidos[0])
+                                ? mb_substr($apellidos[0], 0, 1, 'UTF-8') . '.'
+                                : '')
+                        );
+
+                        $distrito = $distritos->get($tra->distrito_id);
+
+                        return [
+                            'nombre' => mb_strtoupper($nombreCorto, 'UTF-8'),
+                            'edad' => $usuario->fecha_nacimiento
+                                ? Carbon::parse($usuario->fecha_nacimiento)->age
+                                : null,
+                            'distrito' => $distrito
+                                ? explode(' - ', $distrito->distritostres)[0]
+                                : 'SIN DISTRITO',
+                            'seleccionadaWeb' => (int) $p->select_emp === 1,
+                        ];
+                    })
+                    ->values()
+                    ->all();
+
+                return $d;
+            });
+
+        return response()->json([
+            'code' => 200,
+            'entrevistas' => $result,
+            'totalEntrevistas' => $entrevistas->count(),
+            'fechaSeleccionada' => $fecha,
+        ]);
+    }
+
     public function ajaxCambiarFechasEntrevista(Request $request){
         $fecha = $request->input('fecha');
         $fechaManana =convertToDateManana($fecha);

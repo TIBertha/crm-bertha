@@ -102,6 +102,14 @@ export function ajaxGetEntrevistasRequerimiento(fecha) {
         });
 }
 
+export function ajaxGetEntrevistasRequerimientoHoy(fecha) {
+    return axios.post('/ajax-get-entrevistas-requerimiento-hoy', {fecha} )
+        .then(res => {
+            let r = res.data;
+            return r;
+        });
+}
+
 export function cambiarFechasEntrevista(fecha) {
     return axios.post('/ajax-cambiar-fechas-entrevista', {fecha} )
         .then(res => {
