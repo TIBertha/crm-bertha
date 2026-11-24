@@ -882,6 +882,7 @@ class RequerimientosController extends Controller
                                 ? explode(' - ', $distrito->distritostres)[0]
                                 : 'SIN DISTRITO',
                             'seleccionadaWeb' => (int) $p->select_emp === 1,
+                            'seleccionadaWp' => (int) $p->select_wp === 1,
                         ];
                     })
                     ->values()

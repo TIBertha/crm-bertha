@@ -66,7 +66,7 @@ export default function CopiarMonitoreoHoy({ revision = 0 }) {
             {isLoading ? (
                 <button
                     type="button"
-                    className="btn font-weight-bold font text-white btn-sm bertha-purple-button"
+                    className="btn font-weight-bold font text-white btn-sm bertha-orange-button"
                     disabled
                 >
                     <i className="fas fa-sync fa-spin"></i>
@@ -74,7 +74,7 @@ export default function CopiarMonitoreoHoy({ revision = 0 }) {
             ) : copyText ? (
                 <NewCopyButton
                     icon="fa-solid fa-clipboard-list"
-                    btnColor="purple"
+                    btnColor="orange"
                     btnSize="sm"
                     //additionalClass="copiar-monitoreo__button"
                     tooltipText="Copiar monitoreo de hoy"

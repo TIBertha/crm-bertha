@@ -38,7 +38,7 @@ export default function CopiarEntrevistasHoy() {
                     : partesNombre[0];
 
                 const postulantes = seleccionadas.map((p, i) =>
-                    `${i + 1}: ${p.nombre}${p.edad != null ? ` - ${p.edad}` : ""} (${p.distrito})${p.seleccionadaWeb ? " 👑" : ""}`
+                    `${i + 1}: ${p.nombre}${p.edad != null ? ` - ${p.edad}` : ""} (${p.distrito})${p.seleccionadaWeb ? " 🫅" : p.seleccionadaWp ? " 👑" : ""}`
                 );
 
                 return [
@@ -75,7 +75,7 @@ export default function CopiarEntrevistasHoy() {
         return (
             <button
                 type="button"
-                className="btn font-weight-bold font text-white btn-sm bertha-purple-button"
+                className="btn font-weight-bold font text-white btn-sm bertha-orange-button"
                 disabled
             >
                 <i className="fas fa-sync fa-spin"></i>
@@ -87,7 +87,7 @@ export default function CopiarEntrevistasHoy() {
         copyText ? (
             <NewCopyButton
                 icon="fa-solid fa-calendar-day"
-                btnColor="purple"
+                btnColor="orange"
                 tooltipText="Copiar pedidos de hoy"
                 copyText={copyText}
                 btnSize={'sm'}
