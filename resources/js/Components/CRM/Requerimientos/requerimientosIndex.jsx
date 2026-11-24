@@ -21,8 +21,7 @@ import {setEstadosRequerimientoName} from "../../Helpers/bd.js";
 import global from "../../Helpers/constantes.js";
 import CotizadorPeru from "./Components/CotizadorPeru.jsx";
 import CotizadorMexico from "./Components/CotizadorMexico.jsx";
-import CopiarEntrevistasHoy from "./Components/copiarEntrevistasHoy.jsx";
-
+import CopiarEntrevistasHoy from "./Components/CopiarEntrevistasHoy.jsx";
 
 export function withRouter(Component) {
     return props => {
