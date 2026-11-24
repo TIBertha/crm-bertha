@@ -877,35 +877,39 @@ class ContratosController extends Controller
         }
     }
 
-    public function ajaxSetVerificacionIngresoContrato(Request $request){
+    public function ajaxSetVerificacionIngresoContrato(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|integer|exists:contratos,id',
+            'condition' => 'required|integer|in:0,1,2',
+        ]);
+
         DB::beginTransaction();
 
         try {
-            $contrato_id = $request->input('id');
-            $condition = $request->input('condition');
+            $contrato = Contrato::findOrFail($request->input('id'));
 
-            if ($contrato_id){
-                $contrato = Contrato::find($contrato_id);
+            $condition = (int) $request->input('condition');
 
-                if ($contrato){
-                    $newData = [
-                        'verificador_ingreso' => $condition
-                    ];
-
-                    $contrato->update($newData);
-                }
-            }
+            $contrato->update([
+                'verificador_ingreso' => $condition,
+            ]);
 
             DB::commit();
 
-            return response()->json(['code' => 200, 'msj' => 'Asistencia de trabajadora editada exitosamente']);
+            return response()->json([
+                'code' => 200,
+                'msj' => 'Estado de ingreso actualizado exitosamente',
+            ]);
 
         } catch (\Exception $e) {
 
-            DB::rollback();
+            DB::rollBack();
 
-            return response()->json(['code' => 500, 'msj' => 'Ocurrio un problema al editar la asistencia del trabajador. Consulte al administrador' ]);
-
+            return response()->json([
+                'code' => 500,
+                'msj' => 'Ocurrió un problema al actualizar el estado de ingreso. Consulte al administrador.',
+            ]);
         }
     }
 

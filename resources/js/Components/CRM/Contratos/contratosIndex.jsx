@@ -185,7 +185,7 @@ class ContratosIndex extends Component {
     setVerifIngreso(e,id,condition){
         ajaxSetVerifIngresoContrato(id, condition).then(r => {
             if(r.code === 200){
-                showAlert('exito', r.msj);
+                //showAlert('exito', r.msj);
             }else if(r.code === 500){
                 showAlert('error', r.msj);
             }

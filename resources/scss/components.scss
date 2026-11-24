@@ -1072,3 +1072,69 @@
         pointer-events: none;
     }
 }
+
+.verificador-ingreso {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    padding: 3px;
+    border: 1px solid $selected_purple_bertha;
+    border-radius: 8px;
+    background-color: $gray_bertha;
+    white-space: nowrap;
+
+    &__opcion {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 30px;
+        padding: 5px 9px;
+        border: 0;
+        border-radius: 5px;
+        background-color: transparent;
+        color: $dkgray_bertha;
+        font-size: 11px;
+        font-weight: 600;
+        line-height: 1.2;
+        cursor: pointer;
+        transition: background-color .15s ease, color .15s ease;
+
+        &:hover {
+            background-color: $selected_purple_bertha;
+            color: $purple_bertha;
+        }
+
+        &.selected-green {
+            background-color: $green_bertha;
+            color: $white_bertha;
+        }
+
+        &.selected-yellow {
+            background-color: $yellow_bertha;
+            color: $black_bertha;
+        }
+
+        &.selected-purple {
+            background-color: $purple_bertha;
+            color: $white_bertha;
+        }
+
+        &.selected-black {
+            background-color: $black_bertha;
+            color: $white_bertha;
+        }
+
+        &:focus-visible {
+            outline: 2px solid $purple_bertha;
+            outline-offset: 2px;
+        }
+    }
+
+    @media (max-width: 1199.98px) {
+        &__opcion {
+            min-height: 36px;
+            padding: 8px 12px;
+        }
+    }
+}
+
