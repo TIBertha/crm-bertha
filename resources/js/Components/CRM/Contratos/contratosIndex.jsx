@@ -20,6 +20,7 @@ import ContratosSearchSideBar from "./contratosSearchSideBar.jsx";
 import ContratosTable from "./contratosTable.jsx";
 import ModalDownloadDocs from "./Components/modalDownloadDocs.jsx";
 import {useNavigate, useParams} from "react-router-dom";
+import CopiarMonitoreoHoy from "./Components/copiarMonitoreoHoy.jsx";
 
 export function withRouter(Component) {
     return props => {
@@ -84,6 +85,7 @@ class ContratosIndex extends Component {
         this.reenviarMailTrabajador = this.reenviarMailTrabajador.bind(this);
         this.changePagination = this.changePagination.bind(this);
         this.paginationSearch = this.paginationSearch.bind(this);
+        this.setVerifIngreso = this.setVerifIngreso.bind(this);
     }
 
     openSideBar(e, condition) {
@@ -120,6 +122,7 @@ class ContratosIndex extends Component {
             usuariointerno: '',
             tipopago: '',
             montototal: '',
+            revisionMonitoreo: 0,
         });
         this.setBusqueda(false);
 
@@ -184,10 +187,12 @@ class ContratosIndex extends Component {
 
     setVerifIngreso(e,id,condition){
         ajaxSetVerifIngresoContrato(id, condition).then(r => {
-            if(r.code === 200){
-                //showAlert('exito', r.msj);
-            }else if(r.code === 500){
-                showAlert('error', r.msj);
+            if (r.code === 200) {
+                this.setState((prevState) => ({
+                    revisionMonitoreo: prevState.revisionMonitoreo + 1,
+                }));
+
+                showAlert("exito", r.msj);
             }
         })
 
@@ -413,7 +418,7 @@ class ContratosIndex extends Component {
     }
 
     render() {
-        let {url, sideBar, busqueda, access, contratos, textoresultados, totalcontratos, page, isLoading, comprobanteExterno, isUploadingComprobanteExterno, showModalComprobanteExterno} = this.state;
+        let {url, sideBar, revisionMonitoreo, busqueda, access, contratos, textoresultados, totalcontratos, page, isLoading, comprobanteExterno, isUploadingComprobanteExterno, showModalComprobanteExterno} = this.state;
 
         if(isLoading) return <LoadingScreen load={isLoading} classStyle={'bg-purple-bertha'}/>;
 
@@ -439,6 +444,12 @@ class ContratosIndex extends Component {
                         type={"create"}
                         route={"/contratos/new"}
                     />
+
+                    <div className="col-12 col-md-auto px-1 my-2 my-md-0">
+                        <CopiarMonitoreoHoy
+                            revision={revisionMonitoreo}
+                        />
+                    </div>
 
                     <div className="col-12 col-md-auto px-1 my-2 my-md-0">
                         <ModalDownloadDocs url={url}/>

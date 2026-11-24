@@ -239,6 +239,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/ajax-get-contratos-requerimientos-domicilios', [ContratosController::class, 'ajaxGetRequerimientosDomicilios']);
     Route::post('/ajax-get-verificacion-por-dias', [ContratosController::class, 'ajaxGetVerificacionPorDias']);
     Route::post('/ajax-set-verif-ingreso-contrato', [ContratosController::class, 'ajaxSetVerificacionIngresoContrato']);
+    Route::post('/ajax-get-monitoreo-hoy', [ContratosController::class, 'ajaxGetMonitoreoHoy']);
 
     //ruta masters
     Route::post('/ajax-search-distrito', [MasterController::class, 'ajaxSearchDistrito']);

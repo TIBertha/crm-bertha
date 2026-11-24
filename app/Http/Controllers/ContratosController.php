@@ -977,4 +977,61 @@ class ContratosController extends Controller
         }
 
     }
+
+    public function ajaxGetMonitoreoHoy(Request $request)
+    {
+        $fecha = Carbon::parse($request->input('fecha'))
+            ->format('Y-m-d');
+
+        $contratos = Contrato::with([
+            'empleador.usuario',
+            'trabajador.usuario',
+        ])
+            ->borrado(false)
+            ->where('anulado', 0)
+            ->where('culminado', 0)
+            ->whereDate('fechainiciolabores', $fecha)
+            ->orderBy('horainiciolabores', 'asc')
+            ->get();
+
+        $nombreCorto = function ($usuario) {
+            if (!$usuario) {
+                return '';
+            }
+
+            $nombres = preg_split(
+                '/\s+/',
+                trim($usuario->nombres ?? '')
+            );
+
+            $apellidos = preg_split(
+                '/\s+/',
+                trim($usuario->apellidos ?? '')
+            );
+
+            $nombre = trim(
+                ($nombres[0] ?? '') . ' ' .
+                (!empty($apellidos[0])
+                    ? mb_substr($apellidos[0], 0, 1, 'UTF-8') . '.'
+                    : '')
+            );
+
+            return mb_strtoupper($nombre, 'UTF-8');
+        };
+
+        $result = $contratos->map(function ($d) use ($nombreCorto) {
+            return [
+                'id' => $d->id,
+                'empleador' => $nombreCorto($d->empleador?->usuario),
+                'trabajador' => $nombreCorto($d->trabajador?->usuario),
+                'verif_ingreso' => (int) $d->verificador_ingreso,
+            ];
+        })->values();
+
+        return response()->json([
+            'code' => 200,
+            'contratos' => $result,
+            'fechaSeleccionada' => $fecha,
+        ]);
+    }
 }

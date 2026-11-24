@@ -17,6 +17,11 @@ export function ajaxContratosGet(id) {
         });
 }
 
+export function ajaxGetMonitoreoHoy(fecha) {
+    return axios.post('/ajax-get-monitoreo-hoy', { fecha })
+        .then(res => res.data);
+}
+
 export function ajaxContratosGetDataInicial() {
 
     return axios.post('/ajax-contratos-get-data-inicial', {} )
