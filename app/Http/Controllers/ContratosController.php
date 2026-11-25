@@ -991,7 +991,9 @@ class ContratosController extends Controller
             ->where('anulado', 0)
             ->where('culminado', 0)
             ->whereDate('fechainiciolabores', $fecha)
-            ->orderBy('horainiciolabores', 'asc')
+            ->orderByRaw('TIME(horainiciolabores) IS NULL ASC')
+            ->orderByRaw('TIME(horainiciolabores) ASC')
+            ->orderBy('id', 'asc')
             ->get();
 
         $nombreCorto = function ($usuario) {
@@ -1025,6 +1027,9 @@ class ContratosController extends Controller
                 'empleador' => $nombreCorto($d->empleador?->usuario),
                 'trabajador' => $nombreCorto($d->trabajador?->usuario),
                 'verif_ingreso' => (int) $d->verificador_ingreso,
+                'hora_ingreso' => $d->horainiciolabores
+                    ? Carbon::parse($d->horainiciolabores)->format('H:i')
+                    : null,
             ];
         })->values();
 

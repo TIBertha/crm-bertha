@@ -66,7 +66,7 @@ class PostulantesEdit extends Component {
             estatuspostulante: '',
             nombres: '',
             apellidos: '',
-            genero: '',
+            genero: 2,
             generos: [],
             telefono: '',
             telefonowhatsapp: '',
@@ -118,6 +118,7 @@ class PostulantesEdit extends Component {
             firma: '',
             tests:{pregunta1: '', pregunta2: '', pregunta3: '', pregunta4: '', pregunta5: '', pregunta6: '', pregunta7: '', pregunta8: '', pregunta9: '', pregunta10: '', pregunta11: '', pregunta12: '', pregunta13: '', pregunta14: ''},
             videointroduccionyoutube: '',
+            ubigeo: '',
             existyoutubevideo: false,
             distritosall: [],
             changeSignature: false,
@@ -931,6 +932,12 @@ class PostulantesEdit extends Component {
                 videointroduccionyoutube: e.target.value
             });
 
+        }else if(tipo === 'ubigeo') {
+
+            this.setState({
+                ubigeo: e.target.value
+            });
+
         }else if(tipo === 'numerocelular') {
 
             this.setState({
@@ -1377,7 +1384,8 @@ class PostulantesEdit extends Component {
                     nombres: r.data.usuario.nombres,
                     passwordCERTI: r.data.password_certi,
                     apellidos: r.data.usuario.apellidos,
-                    genero: r.data.usuario.genero_id ? r.data.usuario.genero_id : 2,
+                    //genero: r.data.usuario.genero_id ? r.data.usuario.genero_id : 2,
+                    genero: 2,
                     telefono: r.data.usuario.telefono ? r.data.usuario.telefono : null,
                     telefonowhatsapp: r.data.usuario.telefono_whatsapp ? r.data.usuario.telefono_whatsapp : (r.data.usuario.telefono ? r.data.usuario.telefono : null),
                     tipodocumento: r.data.usuario.tipodocumento_id,
@@ -1400,6 +1408,7 @@ class PostulantesEdit extends Component {
                     estatuspostulante: r.data.estatuspostulante_id,
                     distrito: r.distrito,
                     videointroduccionyoutube: r.data.video_introduccion_youtube,
+                    ubigeo: r.data.ubigeo,
                     direccion: r.data.direccion,
                     idioma: r.idioma ? r.idioma : [{value: 4, label: 'ESPAÑOL', is_fixed: true}] ,
                     actividad: r.actividad,
@@ -1531,6 +1540,14 @@ class PostulantesEdit extends Component {
                                     removeContacto={this.removeContacto}
                                     saveState={this.saveState}
                                     cleanModal={this.cleanModal}
+
+                                    addEducacion={this.addEducacion}
+                                    removeEducacion={this.removeEducacion}
+                                    handleUpload={this.handleUpload}
+                                    handleDeleteAdjunto={this.handleDeleteAdjunto}
+                                    handleRenameAdjunto={this.handleRenameAdjunto}
+                                    contactname={contactname}
+                                    flagemoji={flagemoji}
                                 />
                             </Tab>
 
@@ -1570,20 +1587,6 @@ class PostulantesEdit extends Component {
                                     handleChange={this.handleChange}
                                     addVerificacion={this.addVerificacion}
                                     removeVerificacion={this.removeVerificacion}
-                                    handleUpload={this.handleUpload}
-                                    handleDeleteAdjunto={this.handleDeleteAdjunto}
-                                    handleRenameAdjunto={this.handleRenameAdjunto}
-                                    contactname={contactname}
-                                    flagemoji={flagemoji}
-                                /> <hr/>
-                            </Tab>
-
-                            <Tab eventKey="tab5" title={<span>Estudios <BadgeTab content={adjuntoeducacion.length} color={'#ff0080'}/></span>}>
-                                <Educacion
-                                    data={this.state}
-                                    handleChange={this.handleChange}
-                                    addEducacion={this.addEducacion}
-                                    removeEducacion={this.removeEducacion}
                                     handleUpload={this.handleUpload}
                                     handleDeleteAdjunto={this.handleDeleteAdjunto}
                                     handleRenameAdjunto={this.handleRenameAdjunto}

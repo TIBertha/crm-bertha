@@ -145,6 +145,7 @@ class PostulantesController extends Controller
                 'apellidos'                 => $apellidosTrabajador,
                 'genero_id'                 => $data['genero'],
                 'tipodocumento_id'          => $tipodocumento,
+                'ubigeo'                    => $data['ubigeo'],
                 'numero_documento'          => $data['numerodocumento'],
                 'fecha_nacimiento'          => $data['fechanacimiento'] ? Carbon::parse($data['fechanacimiento']) : null,
                 'paisnacimiento_id'         => $data['paisprocedencia'],

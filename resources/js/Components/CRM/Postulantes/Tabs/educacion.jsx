@@ -7,9 +7,6 @@ import NewCopyIcon from "../../Components/newCopyIcon.jsx";
 export default function Educacion({
     data,
     handleChange,
-    handleUpload,
-    handleRenameAdjunto,
-    handleDeleteAdjunto,
     addEducacion,
     removeEducacion,
 }) {

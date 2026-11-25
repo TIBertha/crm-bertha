@@ -109,6 +109,7 @@ class PostulantesNew extends Component {
             firma: '',
             tests: {pregunta1: 'Has mentido alguna vez en tu vida.', pregunta2: 'Si es bueno sonreir.', pregunta3: 'Si le ayudaría.', pregunta4: 'Te molesta pero tratas de mejorar.', pregunta5: 'Si pero de una manera adecuada.', pregunta6: 'Llegas 10 minutos antes.', pregunta7: 'Tratas de entender a tu jefe.', pregunta8: 'Aceptas consejos con respeto.', pregunta9: 'Te incomoda pero no tanto.', pregunta10: 'Saludo Primero.', pregunta11: 'Te incomoda pero no mucho.', pregunta12: 'Esperas un momento para hablar.', pregunta13: 'Casi siempre llego temprano.', pregunta14: 'Te acercas a ayudarle.'},
             videointroduccionyoutube: '',
+            ubigeo: '',
             existyoutubevideo: false,
             search: '',
             usuarioid: '',
@@ -780,6 +781,12 @@ class PostulantesNew extends Component {
                 videointroduccionyoutube: e.target.value
             });
 
+        }else if(tipo === 'ubigeo') {
+
+            this.setState({
+                ubigeo: e.target.value
+            });
+
         }else if(tipo === 'numerocelular') {
 
             this.setState({
@@ -1070,6 +1077,7 @@ class PostulantesNew extends Component {
             isLoading: false,
             idioma: [{value: 4, label: 'ESPAÑOL', is_fixed: true}],
             videointroduccionyoutube: '',
+            ubigeo: '',
             existyoutubevideo: false,
             adjuntoeducacion: [],
             videointroduccion: [],
@@ -1357,6 +1365,14 @@ class PostulantesNew extends Component {
                                         addContacto={this.addContacto}
                                         removeContacto={this.removeContacto}
                                         cleanModal={this.cleanModal}
+
+
+
+                                        addEducacion={this.addEducacion}
+                                        removeEducacion={this.removeEducacion}
+                                        handleUpload={this.handleUpload}
+                                        handleDeleteAdjunto={this.handleDeleteAdjunto}
+                                        handleRenameAdjunto={this.handleRenameAdjunto}
                                     />
                                 </Tab>
 
@@ -1380,18 +1396,6 @@ class PostulantesNew extends Component {
                                         handleChange={this.handleChange}
                                         addVerificacion={this.addVerificacion}
                                         removeVerificacion={this.removeVerificacion}
-                                        handleUpload={this.handleUpload}
-                                        handleDeleteAdjunto={this.handleDeleteAdjunto}
-                                        handleRenameAdjunto={this.handleRenameAdjunto}
-                                    /> <hr/>
-                                </Tab>
-
-                                <Tab eventKey="tab4" title={<span>Estudios <CopyRequisitosViewPostulantes icon={'fas fa-copy'} copyText={GetListAddEstudios()} tooltipText={'Copiar requisitos - Estudios'} /></span>}>
-                                    <Educacion
-                                        data={this.state}
-                                        handleChange={this.handleChange}
-                                        addEducacion={this.addEducacion}
-                                        removeEducacion={this.removeEducacion}
                                         handleUpload={this.handleUpload}
                                         handleDeleteAdjunto={this.handleDeleteAdjunto}
                                         handleRenameAdjunto={this.handleRenameAdjunto}

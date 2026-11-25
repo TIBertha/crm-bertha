@@ -1,7 +1,7 @@
 import React from "react";
 import PhoneInput from "react-phone-input-2";
 import Tooltips from "../../Components/tooltips.jsx";
-import { mayorEdadFormated } from "../../../Helpers/strings.js";
+import {mayorEdadFormated} from "../../../Helpers/strings.js";
 import AsyncSelect from "react-select/async";
 import Select from "react-select";
 import es from "react-phone-input-2/lang/es.json";
@@ -14,6 +14,8 @@ export default function Datos({
     handleChange,
     removeContacto,
     cleanModal,
+    addEducacion,
+    removeEducacion,
 }) {
     let vacunasCovid = [
         { id: 0, nombre: "NO" },
@@ -72,39 +74,18 @@ export default function Datos({
         tiposDocumentos = isLocal ? config.local : config.ext;
     }
 
-    /*if (pais == 54){
-        if (pais == 54){
-            tiposDocumentos = tdPeru
-        }else{
-            tiposDocumentos = tdPeruExt
-        }
-    }else if(pais == 11){
-        countryPhone = 'cl';
-        if (pais == 11){
-            tiposDocumentos = tdChile
-        }else{
-            tiposDocumentos = tdChileExt
-        }
-    }else if(pais == 49){
-        countryPhone = 'mx';
-        if (pais == 49){
-            tiposDocumentos = tdMexico
-        }else{
-            tiposDocumentos = tdMexicoExt
-        }
-    }else{
-        tiposDocumentos = tdChileExt
-    }*/
+    let nivelesEducativos = data.niveleseducativos;
+
+    if (parseInt(data.paispostulando) === 49) {
+        nivelesEducativos = data.niveleseducativos_mx;
+    }
 
     return (
-        <div className="row">
+        <div className="row mt-5">
             <div className="col-sm">
-                <div className="alert alert-secondary mt-45 mb-40" role="alert">
-                    Para postular a una entrevista se debe llamar al postulante
-                    y repasar los datos actuales.
-                </div>
 
                 <div className="row">
+
                     <div className={"col-12"}>
                         <div className="form-group row">
                             <label className="col-12 col-lg-4 col-form-label font-weight-bold">
@@ -170,6 +151,7 @@ export default function Datos({
                             </div>
                         </div>
 
+                        {/*
                         <div className="form-group row">
                             <label className="col-12 col-lg-4 col-form-label">
                                 Genero
@@ -192,6 +174,7 @@ export default function Datos({
                                 </select>
                             </div>
                         </div>
+                        */}
 
                         <div className="form-group row">
                             <label className="col-12 col-lg-4 col-form-label">
@@ -504,6 +487,32 @@ export default function Datos({
                             </div>
                         </div>
 
+                        <div className="form-group row">
+                            <label className="col-12 col-lg-4 col-form-label">
+                                País de Nacimiento
+                            </label>
+                            <div className="col-12 col-lg-7">
+                                <select
+                                    className="form-control"
+                                    name="paisprocedencia"
+                                    value={data.paisprocedencia}
+                                    onChange={(e) => handleChange(e, "pais")}
+                                    disabled={Boolean(data.show)}
+                                >
+                                    <option key="0" value="">
+                                        Seleccione
+                                    </option>
+                                    {data.paises.map((p, index) => {
+                                        return (
+                                            <option key={index} value={p.id}>
+                                                {p.nombre}
+                                            </option>
+                                        );
+                                    })}
+                                </select>
+                            </div>
+                        </div>
+
                         {/*
                         <div className="form-group row">
                             <label className="col-12 col-lg-4 col-form-label">
@@ -611,32 +620,6 @@ export default function Datos({
                             </div>
                         )}
                         */}
-
-                        <div className="form-group row">
-                            <label className="col-12 col-lg-4 col-form-label">
-                                País de Nacimiento
-                            </label>
-                            <div className="col-12 col-lg-7">
-                                <select
-                                    className="form-control"
-                                    name="paisprocedencia"
-                                    value={data.paisprocedencia}
-                                    onChange={(e) => handleChange(e, "pais")}
-                                    disabled={Boolean(data.show)}
-                                >
-                                    <option key="0" value="">
-                                        Seleccione
-                                    </option>
-                                    {data.paises.map((p, index) => {
-                                        return (
-                                            <option key={index} value={p.id}>
-                                                {p.nombre}
-                                            </option>
-                                        );
-                                    })}
-                                </select>
-                            </div>
-                        </div>
 
                         <div className="form-group row">
                             <label className="col-12 col-lg-4 col-form-label">
@@ -847,6 +830,139 @@ export default function Datos({
                 </div>
 
                 <hr />
+
+                <div className="mt-45">
+
+                    <div className="row">
+                        <div className="col-12 col-lg-6">
+                            <div className="form-group row">
+                                <label className="col-12 col-lg-4 col-form-label">
+                                    Nivel Educativo
+                                </label>
+                                <div className="col-12 col-lg-7">
+                                    <select
+                                        className="form-control"
+                                        name="niveleducativo"
+                                        value={data.niveleducativo}
+                                        onChange={handleChange}
+                                    >
+                                        <option key="0" value="">
+                                            Seleccione
+                                        </option>
+                                        {nivelesEducativos.map((nivEd, index) => {
+                                            return (
+                                                <option key={index} value={nivEd.id}>
+                                                    {parseInt(data.paispostulando) ===
+                                                    49
+                                                        ? nivEd.nombre_mx
+                                                        : nivEd.nombre}
+                                                </option>
+                                            );
+                                        })}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    {data.adjuntoeducacion.map((educ, key) => (
+                        <div key={key} className="row mx-0 row-multiple">
+                            <div className="col-12 col-lg-6">
+                                <div className="form-group row">
+                                    <label className="col-12 col-md-4 col-form-label label-adjunto ">
+                                        Tipo de Certificado
+                                    </label>
+                                    <div className="col-sm-8 col-md-7">
+                                        <select
+                                            className="form-control"
+                                            name="tipocertificado"
+                                            value={educ.tipocertificado}
+                                            onChange={(e) =>
+                                                handleChange(e, "educacion", key)
+                                            }
+                                        >
+                                            <option value="">Seleccione</option>
+                                            {data.tiposcertificados.map(
+                                                (tipCert, key) => (
+                                                    <option value={tipCert.id}>
+                                                        {tipCert.nombre}
+                                                    </option>
+                                                ),
+                                            )}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div className="form-group row">
+                                    <label className="col-12 col-md-4 col-form-label label-adjunto ">
+                                        Centro de Estudios
+                                    </label>
+                                    <div className="col-sm-8 col-md-7">
+                                        <input
+                                            className="form-control"
+                                            name="centro"
+                                            placeholder="Ingrese el centro de estudio"
+                                            value={educ.centro}
+                                            onChange={(e) =>
+                                                handleChange(e, "educacion", key)
+                                            }
+                                            type="text"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="form-group row">
+                                    <label className="col-12 col-md-4 col-form-label label-adjunto ">
+                                        Título
+                                    </label>
+                                    <div className="col-sm-8 col-md-7">
+                                        <input
+                                            className="form-control"
+                                            name="titulo"
+                                            placeholder="Ingrese el título"
+                                            value={educ.titulo}
+                                            onChange={(e) =>
+                                                handleChange(e, "educacion", key)
+                                            }
+                                            type="text"
+                                        />
+                                    </div>
+                                </div>
+
+                                {data.show === false && (
+                                    <div className="form-group row">
+                                        <div className={'text-end'}>
+                                            <i
+                                                className="fas fa-trash-alt icon-remove-adjunto"
+                                                data-toggle="tooltip"
+                                                data-placement="top"
+                                                title="Eliminar"
+                                                onClick={(e) => removeEducacion(key)}
+                                            ></i>
+                                        </div>
+                                    </div>
+                                )}
+
+                            </div>
+
+                        </div>
+                    ))}
+
+                    {data.show === false && (
+                        <div className="form-group row mx-0">
+                            <div className="col-12 col-lg-6">
+                                <div className="mb-4">
+                                    <div className="add-item" onClick={addEducacion}>
+                                        <i className="fas fa-plus"></i> Adicionar nuevo
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+
             </div>
         </div>
     );

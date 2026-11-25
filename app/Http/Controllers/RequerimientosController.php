@@ -822,7 +822,9 @@ class RequerimientosController extends Controller
 
         $entrevistas = RequerimientoView::where('estatusrequerimientoid', 1)
             ->whereDate('fechaentrevista', $fecha)
-            ->orderBy('horaentrevista', 'asc')
+            ->orderByRaw('TIME(horaentrevista) IS NULL ASC')
+            ->orderByRaw('TIME(horaentrevista) ASC')
+            ->orderBy('id', 'asc')
             ->get();
 
         $postulaciones = RequerimientoPostulacion::with('trabajador.usuario')

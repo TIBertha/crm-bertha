@@ -33,9 +33,14 @@ export default function CopiarMonitoreoHoy({ revision = 0 }) {
             }
 
             const lista = contratos.map((d, index) => {
-                const estado = estadosIngreso[d.verif_ingreso] || "";
+                const estado = estadosIngreso[d.verif_ingreso] ?? "";
+                const hora = moment(d.hora_ingreso, "HH:mm", true);
 
-                return `${index + 1}. CL ${d.empleador} CON PO ${d.trabajador}: *${estado}*`;
+                const horaTexto = hora.isValid()
+                    ? ` - ${hora.format("h:mm")} ${hora.hour() < 12 ? "AM" : "PM"}`
+                    : "";
+
+                return `${index + 1}. CL ${d.empleador} CON PO ${d.trabajador}${horaTexto}: *${estado}*`;
             });
 
             const diaHoy = new Intl.DateTimeFormat("es-PE", {
@@ -43,7 +48,7 @@ export default function CopiarMonitoreoHoy({ revision = 0 }) {
             }).format(moment(fecha, "YYYY-MM-DD").toDate()).toUpperCase();
 
             const texto = [
-                `*INGRESOS ${diaHoy} ${moment(fecha).format("D")}:*`,
+                `*MONITOREO ${diaHoy} ${moment(fecha).format("D")}:*`,
                 ...lista,
             ].join("\n\n");
 

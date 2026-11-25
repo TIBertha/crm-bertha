@@ -1183,3 +1183,57 @@
     }
 }
 
+.adjunto-card {
+
+    h3{
+        color: #324148;
+        font-size: .9rem;
+        font-weight: 700;
+    }
+
+    .input-area.active:not(.loading) {
+        border: 0;
+    }
+
+    .watch-file > .row {
+        justify-content: center;
+        gap: 0.5rem;
+
+        > div {
+            flex: 0 0 auto;
+            width: auto;
+            padding: 0 !important;
+        }
+    }
+
+    .watch-file .copy-button,
+    .watch-file .delete-button {
+        width: auto;
+        padding: 0.375rem 0.75rem;
+        font-size: 0.875rem;
+    }
+}
+
+.switch-side-area{
+    border: solid 2px $pink_bertha;
+    border-radius: 0.625rem;
+    background-color: white;
+    color: $pink_bertha;
+    width: fit-content;
+    font-size: 12px;
+    .checked{
+        color: white;
+        background-color: $pink_bertha;
+    }
+    .checked-green{
+        color: white;
+        background-color: #4ad504;
+        border-radius: 0.5rem;
+    }
+    .checked-red{
+        color: white;
+        background-color: #ff0000;
+        border-radius: 0.5rem;
+    }
+}
+

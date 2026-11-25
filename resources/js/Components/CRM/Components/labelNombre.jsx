@@ -9,13 +9,14 @@ export default function LabelNombre({
     children,
     contactname,
     flagemoji,
+    topRight
 }) {
     let nombreCompleto = nombres + " " + apellidos;
     return (
         <>
             {nombres && apellidos && (
                 <div
-                    className="alert alert-secondary label-nombre-alert mt-35 mb-40"
+                    className="alert alert-secondary label-nombre-alert mt-35 mb-40 d-flex align-items-center gap-3"
                     role="alert"
                 >
                     <p className={"m-0"}>
@@ -36,6 +37,8 @@ export default function LabelNombre({
                             {children ? children : ""}
                         </strong>
                     </p>
+
+                    {topRight && topRight}
                 </div>
             )}
         </>

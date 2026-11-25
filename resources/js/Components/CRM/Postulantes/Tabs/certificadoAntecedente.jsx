@@ -12,8 +12,6 @@ export default function CertificadoAntecedente({
     handleSingularDelete,
     changeEstatusCUL,
 }) {
-
-    console.log(data.paispostulando);
     return (
         <div className="mt-45">
             <LabelNombre
@@ -165,20 +163,13 @@ export default function CertificadoAntecedente({
 
                 {data.certificadoantecedentepdf && (
                     <div className="col-12 col-lg-6 mb-3">
-                        <div
-                            className="alert alert-success reporte-beneficios-alert mb-0"
-                            role="alert"
+                        <a
+                            className="btn font-weight-bold font text-white btn-block bertha-orange-button"
+                            target="_blank"
+                            href={data.certificadoantecedentepdf}
                         >
-                            Puedes descargar el certificado de antecedente en el
-                            siguiente enlace:
-                            <a
-                                className="link-green ms-2"
-                                target="_blank"
-                                href={data.certificadoantecedentepdf}
-                            >
-                                Descargar Certificado
-                            </a>
-                        </div>
+                            Descargar Certificado
+                        </a>
                     </div>
                 )}
             </div>

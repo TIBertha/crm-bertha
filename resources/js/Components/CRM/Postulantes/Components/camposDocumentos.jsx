@@ -42,7 +42,7 @@ export default function CamposDocumentos({
     return (
         <div className={"camposdocumento text-dark"}>
             <div className="form-group row mx-0 mb-0 py-3 px-1">
-                <label className="col-12 col-md-7 col-form-label text-center align-self-center">
+                <label className="col-12 col-md-6 col-form-label text-center align-self-center">
                     {data.numerodocumento && (
                         <>
                             <div className="font-weight-bold">
@@ -59,7 +59,24 @@ export default function CamposDocumentos({
                                     successMsj={"Número documento copiado"}
                                 />
                             </div>
-                            {type == "covid" && (
+
+                            {data.ubigeo && (
+                                <div className="font-weight-bold">
+                                    Ubigeo
+                                    <NewCopyIcon
+                                        colorNeutro={"#ff007d"}
+                                        colorOnCopy={"#513675"}
+                                        icon={"fas fa-copy"}
+                                        additonalClass={
+                                            "icon-action align-self-center ms-2"
+                                        }
+                                        copyText={data.ubigeo}
+                                        tooltipText={"Copiar ubigeo"}
+                                        successMsj={"Ubigeo copiado"}
+                                    />
+                                </div>
+                            )}
+                            {type === "covid" && (
                                 <>
                                     {data.fechanacimiento && (
                                         <div className="font-weight-bold">
@@ -90,7 +107,7 @@ export default function CamposDocumentos({
                 </label>
 
                 {data.fotodnidelantera && (
-                    <div className="col-12 col-md-5 col-form-label text-center align-self-center">
+                    <div className="col-12 col-md-6 col-form-label text-center align-self-center">
                         <a
                             className="link-purple font-weight-700 finger-action"
                             onClick={(e) => openLink(e, data.fotodnidelantera)}
