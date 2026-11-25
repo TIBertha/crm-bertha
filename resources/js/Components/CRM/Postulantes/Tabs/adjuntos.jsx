@@ -106,7 +106,7 @@ export default function Adjuntos ({data, handleChange, handleSingularUpload, han
                     <div className={'row'}>
                         <label className="col-12 col-md-3 col-form-label label-adjunto align-self-center text-center">Ubigeo</label>
                         <div className="col-10 col-md-5 align-self-center my-auto">
-                            <input type="text" className="form-control" id="ubigeo" name="ubigeo" value={data.Ubigeo} onChange={(e) => handleChange(e, 'ubigeo')} placeholder="Ingrese el ubigeo" />
+                            <input type="text" className="form-control" id="ubigeo" name="ubigeo" value={data.ubigeo} onChange={(e) => handleChange(e, 'ubigeo')} placeholder="Ingrese el ubigeo" />
                         </div>
                     </div>
                 </div>

@@ -282,6 +282,7 @@ class PostulantesController extends Controller
                 'genero_id' => $data['genero'],
                 'tipodocumento_id' => $tipodocumento,
                 'numero_documento' => $data['numerodocumento'],
+                'ubigeo' => $data['ubigeo'],
                 'fecha_nacimiento' => $data['fechanacimiento'] ? Carbon::parse($data['fechanacimiento']) : null,
                 'paisnacimiento_id' => $data['paisprocedencia'],
                 'nacionalidad_id' => $data['nacionalidad'],
