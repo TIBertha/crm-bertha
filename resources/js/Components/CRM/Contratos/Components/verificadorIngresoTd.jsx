@@ -4,7 +4,7 @@ import { Td } from "react-super-responsive-table";
 export default function VerificadorIngresoTd({ data, setVerifIngreso }) {
 
     const [verificadorIngreso, setVerificadorIngreso] = useState(
-        Number(data.verif_ingreso ?? 0)
+        data.verif_ingreso ? Number(data.verif_ingreso ?? 0) : null
     );
 
     const opciones = [
@@ -14,7 +14,7 @@ export default function VerificadorIngresoTd({ data, setVerifIngreso }) {
     ];
 
     useEffect(() => {
-        setVerificadorIngreso(Number(data.verif_ingreso ?? 0));
+        setVerificadorIngreso(data.verif_ingreso ? Number(data.verif_ingreso ?? 0) : null);
     }, [data.id, data.verif_ingreso]);
 
     function changeEstatusAsistencia(e, condition) {

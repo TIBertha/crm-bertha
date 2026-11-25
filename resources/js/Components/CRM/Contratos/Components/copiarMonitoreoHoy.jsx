@@ -40,7 +40,9 @@ export default function CopiarMonitoreoHoy({ revision = 0 }) {
                     ? ` - ${hora.format("h:mm")} ${hora.hour() < 12 ? "AM" : "PM"}`
                     : "";
 
-                return `${index + 1}. CL ${d.empleador} CON PO ${d.trabajador}${horaTexto}: *${estado}*`;
+                const estadoTexto = estado ? `: *${estado}*` : "";
+
+                return `${index + 1}. CL ${d.empleador} CON PO ${d.trabajador}${horaTexto}${estadoTexto}`;
             });
 
             const diaHoy = new Intl.DateTimeFormat("es-PE", {

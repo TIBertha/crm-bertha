@@ -1026,7 +1026,7 @@ class ContratosController extends Controller
                 'id' => $d->id,
                 'empleador' => $nombreCorto($d->empleador?->usuario),
                 'trabajador' => $nombreCorto($d->trabajador?->usuario),
-                'verif_ingreso' => (int) $d->verificador_ingreso,
+                'verif_ingreso' => $d->verificador_ingreso ? (int) $d->verificador_ingreso : null,
                 'hora_ingreso' => $d->horainiciolabores
                     ? Carbon::parse($d->horainiciolabores)->format('H:i')
                     : null,
