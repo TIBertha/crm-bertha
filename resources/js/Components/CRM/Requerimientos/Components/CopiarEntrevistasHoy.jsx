@@ -45,8 +45,21 @@ export default function CopiarEntrevistasHoy() {
                     ? `C${d.tipocomision}`
                     : "";
 
+                const tieneMonto = (monto) => {
+                    const valor = Number(monto);
+                    return Number.isFinite(valor) && valor !== 0;
+                };
+
+                const adr = [
+                    d.monto_adelanto,
+                    d.monto_descuento,
+                    d.monto_restante,
+                ].every(tieneMonto)
+                    ? ` / A: ${d.monto_adelanto} / Dscto: ${d.monto_descuento} / R: ${d.monto_restante}`
+                    : "";
+
                 return [
-                    `*${index + 1}. ${empleador}* (${d.tipocontrato}/${comision}) - ${d.horaentrevista || "Por definir hora"}`,
+                    `*${index + 1}. ${empleador}* (${d.tipocontrato} / ${comision}${adr}) - ${d.horaentrevista || "Por definir hora"}`,
                     [d.modalidad_abreviado, d.distrito].filter(Boolean).join(" | "),
                     ...postulantes,
                 ].filter(Boolean).join("\n");
