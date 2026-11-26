@@ -50,16 +50,20 @@ export default function CopiarEntrevistasHoy() {
                     return Number.isFinite(valor) && valor !== 0;
                 };
 
+                const a = d.monto_adelanto !== 0 ? ` | A: ${d.monto_adelanto ? d.monto_adelanto : 0}` :  "";
+
                 const adr = [
-                    d.monto_adelanto,
                     d.monto_descuento,
-                    d.monto_restante,
                 ].every(tieneMonto)
-                    ? ` | A: ${d.monto_adelanto} / Dscto: ${d.monto_descuento} / R: ${d.monto_restante}`
+                    ? ` / Dscto: ${d.monto_descuento}`
                     : "";
 
+                const res = d.monto_restante !== null ? ` / R: ${d.monto_restante ? d.monto_restante : 0}` :  "";
+
+                const adrNew = d.tipocontratoid === 1 ? `${a}${adr}${res}` : ''
+
                 return [
-                    `*${index + 1}. ${empleador}* (${d.tipocontrato} | ${comision}${adr}) - ${d.horaentrevista || "Por definir hora"}`,
+                    `*${index + 1}. ${empleador}* (${d.tipocontrato} | ${comision}${adrNew}) - ${d.horaentrevista || "Por definir hora"}`,
                     [d.modalidad_abreviado, d.distrito].filter(Boolean).join(" | "),
                     ...postulantes,
                 ].filter(Boolean).join("\n");
