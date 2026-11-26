@@ -55,11 +55,11 @@ export default function CopiarEntrevistasHoy() {
                     d.monto_descuento,
                     d.monto_restante,
                 ].every(tieneMonto)
-                    ? ` / A: ${d.monto_adelanto} / Dscto: ${d.monto_descuento} / R: ${d.monto_restante}`
+                    ? ` | A: ${d.monto_adelanto} / Dscto: ${d.monto_descuento} / R: ${d.monto_restante}`
                     : "";
 
                 return [
-                    `*${index + 1}. ${empleador}* (${d.tipocontrato} / ${comision}${adr}) - ${d.horaentrevista || "Por definir hora"}`,
+                    `*${index + 1}. ${empleador}* (${d.tipocontrato} | ${comision}${adr}) - ${d.horaentrevista || "Por definir hora"}`,
                     [d.modalidad_abreviado, d.distrito].filter(Boolean).join(" | "),
                     ...postulantes,
                 ].filter(Boolean).join("\n");

@@ -96,8 +96,8 @@ function getCopyDetallesFinalizacionEntrevista($data, $tipoContrato){
     $t2 = 'Agradecemos dar respuesta en máximo 30 minutos, ya que las trabajadoras postulan a varios empleos y empresas para conseguir un empleo por necesidad. Luego de esa hora, si la trabajadora ya no se encuentra disponible, se considerará como ofrecido el servicio.' . "\r\n"   . "\r\n" ;
 
     $t3 = 'Para enviarle el contrato, comprobante y datos completos de postulante debe abonar '
-        . $divisa . number_format($abono, 0, '.', ',')
-        . ($data->frecuenciaservicio_id == 1
+        . $divisa .
+        (($data->monto_restante && $data->monto_restante >= 0) ? $data->monto_restante : number_format($abono, 0, '.', ',')) . ($data->frecuenciaservicio_id == 1
             ? '.'
             : '. Recuerde que usted tendrá un ahorro de '
             . $divisa . number_format($ahorro, 0, '.', ',')
