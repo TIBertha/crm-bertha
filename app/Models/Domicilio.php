@@ -21,4 +21,8 @@ class Domicilio extends Model
         return $query->where('activo', $flag);
     }
 
+    public function distrito()
+    {
+        return $this->belongsTo(Distrito::class, 'distrito_id');
+    }
 }

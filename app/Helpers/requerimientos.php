@@ -1093,6 +1093,7 @@ function processDataRequerimiento($data){
             'actividad' => $d->actividad,
             'modalidadhorario'  => $d->modalidadhorario_id ? ($d->semimodalidad . ' ' .$d->modalidadhorario. ' S/ ' .$d->modalidadhorario_sueldo) : null,
             'modalidad' => $d->modalidad,
+            'modalidad_abreviado' => $d->modalidad_abreviado,
             'nacionalidad' => $d->nacionalidad,
             'distrito' => $d->distrito,
             'tipobeneficio' => $d->tipobeneficio ?: ' - ',

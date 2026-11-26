@@ -205,7 +205,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/ajax-action-add-postulante', [RequerimientosController::class, 'ajaxActionAddPostulante']);
     Route::post('/ajax-load-entrevistas-requerimiento', [RequerimientosController::class, 'ajaxLoadEntrevistasRequerimiento']);
     Route::post('/ajax-get-entrevistas-requerimiento', [RequerimientosController::class, 'ajaxGetEntrevistasRequerimiento']);
-    Route::post('/ajax-get-entrevistas-requerimiento-hoy', [RequerimientosController::class, 'ajaxGetEntrevistasRequerimientoHoy']);
     Route::post('/ajax-cambiar-fechas-entrevista', [RequerimientosController::class, 'ajaxCambiarFechasEntrevista']);
     Route::post('/ajax-get-correo-empleador', [RequerimientosController::class, 'ajaxGetCorreoEmpleador']);
     Route::post('/ajax-requerimientos-get-modalidad', [RequerimientosController::class, 'ajaxGetModalidad']);
@@ -215,6 +214,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/ajax-cambiar-estado-requerimientos', [RequerimientosController::class, 'ajaxCambiarEstadoReq']);
     Route::post('/ajax-entrevista-switch', [RequerimientosController::class, 'ajaxEntrevistaSwitch']);
     Route::post('/ajax-requerimientos-delete', [RequerimientosController::class, 'ajaxDelete']);
+    Route::post('/ajax-get-entrevistas-requerimiento-hoy', [RequerimientosController::class, 'ajaxGetEntrevistasRequerimientoHoy']);
 
     //ruta contratos
     Route::get('/contratos', [ContratosController::class, 'index'])->name('contratos');

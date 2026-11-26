@@ -41,9 +41,13 @@ export default function CopiarEntrevistasHoy() {
                     `${i + 1}: ${p.nombre}${p.edad != null ? ` - ${p.edad}` : ""} (${p.distrito})${p.seleccionadaWeb ? " 🫅" : p.seleccionadaWp ? " 👑" : ""}`
                 );
 
+                const comision = Number(d.tipocomision) > 0
+                    ? `C${d.tipocomision}`
+                    : "";
+
                 return [
-                    `*${index + 1}. ${empleador}* (${d.tipocontrato}) - ${d.horaentrevista || "Por definir hora"}`,
-                    [d.modalidad, d.distrito].filter(Boolean).join(" | "),
+                    `*${index + 1}. ${empleador}* (${d.tipocontrato}/${comision}) - ${d.horaentrevista || "Por definir hora"}`,
+                    [d.modalidad_abreviado, d.distrito].filter(Boolean).join(" | "),
                     ...postulantes,
                 ].filter(Boolean).join("\n");
             });

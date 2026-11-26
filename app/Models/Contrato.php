@@ -68,4 +68,9 @@ class Contrato extends Model
         return $this->belongsTo(TipoContrato::class, 'tipocontrato_id');
     }
 
+    public function domicilio()
+    {
+        return $this->belongsTo(Domicilio::class, 'domicilio_id');
+    }
+
 }

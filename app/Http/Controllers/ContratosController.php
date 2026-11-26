@@ -986,6 +986,9 @@ class ContratosController extends Controller
         $contratos = Contrato::with([
             'empleador.usuario',
             'trabajador.usuario',
+            'requerimiento.modalidad',
+            'tipoContrato',
+            'domicilio.distrito'
         ])
             ->borrado(false)
             ->where('anulado', 0)
@@ -995,6 +998,7 @@ class ContratosController extends Controller
             ->orderByRaw('TIME(horainiciolabores) ASC')
             ->orderBy('id', 'asc')
             ->get();
+
 
         $nombreCorto = function ($usuario) {
             if (!$usuario) {
@@ -1022,11 +1026,16 @@ class ContratosController extends Controller
         };
 
         $result = $contratos->map(function ($d) use ($nombreCorto) {
+
             return [
                 'id' => $d->id,
                 'empleador' => $nombreCorto($d->empleador?->usuario),
                 'trabajador' => $nombreCorto($d->trabajador?->usuario),
                 'verif_ingreso' => $d->verificador_ingreso ? (int) $d->verificador_ingreso : null,
+                'comision'  => 'C'.$d->requerimiento->tipocomision,
+                'tipo_contrato' => $d->tipoContrato->nombre,
+                'modalidad' => $d->requerimiento->modalidad->abreviado,
+                'distrito' => $d->domicilio?->distrito?->nombre,
                 'hora_ingreso' => $d->horainiciolabores
                     ? Carbon::parse($d->horainiciolabores)->format('H:i')
                     : null,
