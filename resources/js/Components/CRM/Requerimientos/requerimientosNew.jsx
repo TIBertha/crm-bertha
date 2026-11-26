@@ -129,6 +129,8 @@ class RequerimientosNew extends Component {
             adjuntoAdelanto: '',
             tipoComision: 1,
             montoComision: 700,
+            montoRestante: 700,
+            montoDescuento: 0,
             isUploadingAdjuntoAdelanto: false,
             paises: [],
 
@@ -560,7 +562,8 @@ class RequerimientosNew extends Component {
 
                 this.setState({
                     [campo]: value,
-                    montoComision: getMontoComision(null, value, null, this.state),
+                    montoComision: getMontoComision(null, value, null, null,false, null, this.state),
+                    montoRestante: getMontoComision(null, value, null, null, true, null, this.state),
                     sueldoPrimerMes: getSueldoPrimerMes(e, this.state.paispedido),
                 });
             }else if(campo === 'valordiafrecuencia'){
@@ -580,6 +583,15 @@ class RequerimientosNew extends Component {
                 this.setState({
                     [campo]: value,
                     fechaPagoAdelanto: new Date(),
+                    montoRestante: getMontoComision(null, null, null, value, true, null, this.state),
+                });
+            }else if (campo === 'montoDescuento'){
+                let {value} = e;
+
+                this.setState({
+                    [campo]: value,
+                    montoComision: getMontoComision(null, null, null, null, false, value, this.state),
+                    montoRestante: getMontoComision(null, null, null, null, true, value, this.state),
                 });
             }
 
@@ -591,7 +603,8 @@ class RequerimientosNew extends Component {
 
             this.setState({
                 tipoComision: e.target.value,
-                montoComision: getMontoComision(e.target.value, null, null, this.state),
+                montoComision: getMontoComision(e.target.value, null, null, null, false, null, this.state),
+                montoRestante: getMontoComision(e.target.value, null, null, null, true, null, this.state),
             });
 
         }else if(tipo === 'empleador'){
@@ -618,7 +631,8 @@ class RequerimientosNew extends Component {
 
             this.setState({
                 modalidad: e.target.value,
-                montoComision: getMontoComision(null, null, e.target.value, this.state),
+                montoComision: getMontoComision(null, null, e.target.value, null, false, null, this.state),
+                montoRestante: getMontoComision(null, null, e.target.value, null, true, null, this.state),
             }, () => {
                 this.changeModalidad(modalidad);
             });
@@ -644,6 +658,18 @@ class RequerimientosNew extends Component {
                             montoComision: getMontoComision(
                                 value,
                                 null,
+                                null,
+                                null,
+                                false,
+                                null,
+                                prevState
+                            ),
+                            montoRestante: getMontoComision(
+                                value,
+                                null,
+                                null,
+                                null,
+                                true,
                                 null,
                                 prevState
                             ),
@@ -889,7 +915,7 @@ class RequerimientosNew extends Component {
 
         this.setState({
             sueldo: isValid ? sueldo : '',
-            montoComision: isValid ? getMontoComision(null, sueldo, null, this.state) : '',
+            montoComision: isValid ? getMontoComision(null, sueldo, null, null ,this.state) : '',
             sueldomensual: isValid ? 4 * frecuencia * costodia : '',
             sueldoPrimerMes: isValid ? (costodia - (parseInt(paispedido) === 49 ? 100 : 20)) * frecuencia * 4 : '',
         });

@@ -1080,6 +1080,10 @@ function processDataRequerimiento($data){
             'pais_pedido' => $paises[$d->paispedido_id] ?? null,
             'comprobanteadelanto' => $comprobantes[$d->id] ?? null,
 
+            'monto_adelanto' =>$d->monto_adelanto,
+            'monto_descuento' =>$d->monto_descuento,
+            'monto_restante' =>$d->monto_restante,
+
 
             'edades' => $d->rangoedadid ? armarRangoEdad($d->rangoedadid) : ' - ',
             'fechaentrevista' => $d->fechaentrevista ? getFormatFechaEntrevista($d->fechaentrevista) : '',

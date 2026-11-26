@@ -124,6 +124,8 @@ class RequerimientosEdit extends Component{
             adjuntoAdelanto: '',
             tipoComision: '',
             montoComision: '',
+            montoRestante: '',
+            montoDescuento: 0,
             isUploadingAdjuntoAdelanto: false,
             comprobanteAdelantoID: '',
             comprobanteAdelantoPDF: '',
@@ -397,7 +399,8 @@ class RequerimientosEdit extends Component{
 
             this.setState({
                 tipoComision: e.target.value,
-                montoComision: getMontoComision(e.target.value, null, null, this.state),
+                montoComision: getMontoComision(e.target.value, null, null, null, false, null, this.state),
+                montoRestante: getMontoComision(e.target.value, null, null, null, true,  null, this.state),
             });
 
         }else if(tipo === 'empleador'){
@@ -474,6 +477,15 @@ class RequerimientosEdit extends Component{
                 this.setState({
                     [campo]: value,
                     fechaPagoAdelanto: new Date(),
+                    montoRestante: getMontoComision(null, null, null, value, true, null, this.state),
+                });
+            }else if (campo === 'montoDescuento'){
+                let {value} = e;
+
+                this.setState({
+                    [campo]: value,
+                    montoComision: getMontoComision(null, null, null, null,false, value, this.state),
+                    montoRestante: getMontoComision(null, null, null, null, true, value, this.state),
                 });
             }
         }else if(tipo === 'seguimiento'){
@@ -489,7 +501,8 @@ class RequerimientosEdit extends Component{
 
             this.setState({
                 modalidad: e.target.value,
-                montoComision: getMontoComision(null, null, e.target.value, this.state),
+                montoComision: getMontoComision(null, null, e.target.value, null, false, null, this.state),
+                montoRestante: getMontoComision(null, null, e.target.value, null, true, null, this.state),
             }, () => {
                 this.changeModalidad(e.target.value)
             } );
@@ -520,6 +533,18 @@ class RequerimientosEdit extends Component{
                             montoComision: getMontoComision(
                                 value,
                                 null,
+                                null,
+                                null,
+                                false,
+                                null,
+                                prevState
+                            ),
+                            montoRestante: getMontoComision(
+                                value,
+                                null,
+                                null,
+                                null,
+                                true,
                                 null,
                                 prevState
                             ),
@@ -752,7 +777,7 @@ class RequerimientosEdit extends Component{
 
         if (handle === true){
             this.setState({
-                montoComision: isValid ? getMontoComision(null, sueldo, null, this.state) : '',
+                montoComision: isValid ? getMontoComision(null, sueldo, null,  null, this.state) : '',
             });
         }
 
@@ -953,6 +978,8 @@ class RequerimientosEdit extends Component{
                     comprobanteAdelantoPDF: r.comprobanteadelanto ? r.comprobanteadelanto.comprobanteAdelantoPDF : '',
                     access: r.accessCom,
                     montoAdelanto: r.data.monto_adelanto,
+                    montoDescuento: r.data.monto_descuento,
+                    montoRestante: r.data.monto_restante,
                     fechaPagoAdelanto:r.data.fecha_pago_adelanto ? moment(r.data.fecha_pago_adelanto,"YYYY-MM-DD").toDate() : '',
                     existModalidadHorario: hasModalidad,
                     modalidadHorario: hasModalidad ? r.data.modalidadhorario : '',
@@ -962,7 +989,8 @@ class RequerimientosEdit extends Component{
                     if(r.data.modalidad_id !== 3){
 
                         this.setState({
-                            montoComision: getMontoComision(null, r.data.sueldo, null, this.state),
+                            montoComision: getMontoComision(null, r.data.sueldo, null, null, false, null, this.state),
+                            montoRestante: getMontoComision(null, r.data.sueldo, null, null, true, null, this.state),
                             sueldoPrimerMes: getSueldoPrimerMes(r.data.sueldo, r.data.paispedido_id, false),
                         });
                     }else{

@@ -973,6 +973,38 @@ export default function DatosRequerimientos({url, view, data, show, handleChange
                 </div>
             </div>
 
+            <div className={'form-group col-12 col-md-7'}>
+                <div className={'row'}>
+                    <label className="col-12 col-md-3 col-form-label align-self-center" >{'Descuento (' + data.divisa.valor + ')'}</label>
+                    <div className="col-md-9 align-self-center">
+                        <InputFloat
+                            value={data.montoDescuento}
+                            placeholder="Ingrese el monto de descuento"
+                            onchange={handleChange}
+                            name="montoDescuento"
+                            tipo="calculo"
+                            disable={false}
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <div className={'form-group col-12 col-md-7'}>
+                <div className={'row'}>
+                    <label className="col-12 col-md-3 col-form-label align-self-center">{'Restante por pagar (' + data.divisa.valor + ')'}</label>
+                    <div className="col-md-9 align-self-center">
+                        <InputFloat
+                            value={data.montoRestante}
+                            placeholder="Monto restante"
+                            name="montoRestante"
+                            tipo="float"
+                            disable={true}
+                        />
+
+                    </div>
+                </div>
+            </div>
+
             <div className={'form-group col-12 my-1'}>
                 <hr className={'mt-3 mb-4'}/>
             </div>

@@ -17,7 +17,7 @@ export default function RequerimientosTable({url, requerimientos, total, page, c
     let cantidadPaginas = Math.ceil( (total ? total : 0) / (responsive ? 15 : 15) );
 
     function columnTipoContrato(data) {
-        const { tipocontratoid, tipocontrato, comprobanteadelanto, confirmacion_adelanto } = data;
+        const { divisa, tipocontratoid, tipocontrato, comprobanteadelanto, confirmacion_adelanto, monto_adelanto, monto_descuento, monto_restante } = data;
 
         // Mapa de colores por tipo de contrato
         const contratoColors = {
@@ -46,16 +46,21 @@ export default function RequerimientosTable({url, requerimientos, total, page, c
 
             return (
                 <>
-                <span className={`font-weight-bold ${contratoColors[1]}`}>
-                    {tipocontrato}
-                </span>
+                    <span className={`font-weight-bold ${contratoColors[1]}`}>
+                        {tipocontrato}
+                    </span>
 
+                    {/*
                     <i
                         className={'ms-1 fas fa-coins ' +colorCoinIcon}
                         data-toggle="tooltip"
                         data-placement="top"
                         title={tooltipCoinIcon}
                     />
+                    */}
+                    {monto_adelanto ? <p>{'A: ' + divisa + ' ' + monto_adelanto}</p> : ''}
+                    {monto_descuento ? <p>{'Dcto: ' + divisa + ' ' + monto_descuento}</p> : ''}
+                    {monto_restante ? <p>{'R: ' + divisa + ' ' + monto_restante}</p> : ''}
                 </>
             );
         }
@@ -64,7 +69,7 @@ export default function RequerimientosTable({url, requerimientos, total, page, c
         return (
             <span className={`font-weight-bold ${contratoColors[tipocontratoid]}`}>
             {tipocontrato}
-        </span>
+            </span>
         );
     }
 
@@ -87,7 +92,7 @@ export default function RequerimientosTable({url, requerimientos, total, page, c
                 </span>
 
                 {(data.estadoid === 4 && data.pedido_web === true) &&
-                <p className={'badge text-bg-warning badge-dt'}>PEDIDO WEB</p>
+                    <p className={'badge text-bg-warning badge-dt'}>PEDIDO WEB</p>
                 }
             </>
         );
@@ -224,7 +229,7 @@ export default function RequerimientosTable({url, requerimientos, total, page, c
 
                                 </Td>
                                 <Td className={'vertical-align-middle'}><span>{data.tipobeneficio + ' / '}</span><span className={'font-weight-bold'}>{'COMISION ' + (data.tipocomision ? (data.tipocomision + ' (' + data.divisa + ' ' + data.monto_comision + ')') : 'NO TIENE')}</span></Td>
-                                <Td className={'vertical-align-middle'}> <span data-toggle="tooltip" data-placement="bottom" title={data.tooltip_divisa}>{ data.divisa + ' ' + data.sueldo}</span> {data.newTerms1711 === true ? <i data-toggle="tooltip" data-placement="top" title="Nuevo requerimiento con los TC" className="fas fa-star text-warning"></i> : null} </Td>
+                                <Td className={'vertical-align-middle'}> <span data-toggle="tooltip" data-placement="bottom" title={data.tooltip_divisa}>{ data.divisa + ' ' + data.sueldo}</span></Td>
                                 <Td className={'vertical-align-middle'}>{columnTipoContrato(data)}</Td>
                                 <Td className={'vertical-align-middle'}>{columnEstatus(data)}</Td>
                                 <Td className={'vertical-align-middle'}>{columnAcciones(data, changeEstadoRequerimiento, habilitarEntrevista)}</Td>

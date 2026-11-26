@@ -195,6 +195,9 @@ class RequerimientosController extends Controller
                 'dia_salida' => $modalidad == 1 ? ($data['diasalida'] ? $data['diasalida'] : null) : null,
                 'hora_salida' => $modalidad == 1 ? ($horaSalida ? Carbon::parse($horaSalida) : null) : null,
 
+                'monto_descuento'  => $data['montoDescuento'],
+                'monto_restante'  => $data['montoRestante'],
+
                 'estatusrequerimiento_id'  => 1,
                 'domicilio_id' => $data['domicilio'],
                 'monto_adelanto' => $data['montoAdelanto'],
@@ -284,6 +287,8 @@ class RequerimientosController extends Controller
 
                 'domicilio_id' => $data['domicilio'],
                 'monto_adelanto' => $data['montoAdelanto'],
+                'monto_descuento' => $data['montoDescuento'],
+                'monto_restante' => $data['montoRestante'],
                 'fecha_pago_adelanto' => $data['fechaPagoAdelanto'] ? Carbon::parse($data['fechaPagoAdelanto']) : null,
 
                 'dia_ingreso' => $modalidad == 1 ? ($data['diaretorno'] ? $data['diaretorno' ] : null) : null,

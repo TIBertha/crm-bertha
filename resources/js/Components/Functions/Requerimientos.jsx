@@ -399,12 +399,14 @@ export function getSueldoPrimerMes(value, paisPedido, isFloat = true){
     return result;
 }
 
-export function getMontoComision(inputComision, inputSueldo, inputModalidad, dataReq){
-    let {sueldo, modalidad, tipoComision, paispedido} = dataReq;
+export function getMontoComision(inputComision, inputSueldo, inputModalidad, inputAdelanto, aplyDiscount, inputDescuento, dataReq){
+    let {sueldo, modalidad, tipoComision, paispedido, montoDescuento, montoAdelanto} = dataReq;
 
     let newComision = (inputComision ? inputComision : tipoComision);
     let newSueldo = parseInt(inputSueldo ? inputSueldo : sueldo);
     let newModalidad = (inputModalidad ? inputModalidad : modalidad);
+    let newDescuento = inputDescuento ? inputDescuento : montoDescuento;
+    let newAdelanto = inputAdelanto ? inputAdelanto : montoAdelanto;
     let com = 0;
 
     if (parseInt(newComision) === 1){
@@ -454,5 +456,7 @@ export function getMontoComision(inputComision, inputSueldo, inputModalidad, dat
         }
     }
 
-    return com;
+    console.log(com, parseInt(newDescuento), parseInt(newAdelanto));
+
+    return com - (aplyDiscount === true ? (parseInt(newDescuento) + parseInt(newAdelanto)) : false);
 }
