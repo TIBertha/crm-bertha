@@ -777,7 +777,8 @@ class RequerimientosEdit extends Component{
 
         if (handle === true){
             this.setState({
-                montoComision: isValid ? getMontoComision(null, sueldo, null,  null, this.state) : '',
+                montoComision: isValid ? getMontoComision(null, sueldo, null,  null, false, null, this.state) : '',
+                montoRestante: isValid ? getMontoComision(null, sueldo, null,  null, true, null, this.state) : '',
             });
         }
 

@@ -915,7 +915,8 @@ class RequerimientosNew extends Component {
 
         this.setState({
             sueldo: isValid ? sueldo : '',
-            montoComision: isValid ? getMontoComision(null, sueldo, null, null ,this.state) : '',
+            montoComision: isValid ? getMontoComision(null, sueldo, null, null , false, null, this.state) : '',
+            montoRestante: isValid ? getMontoComision(null, sueldo, null,  null, true, null, this.state) : '',
             sueldomensual: isValid ? 4 * frecuencia * costodia : '',
             sueldoPrimerMes: isValid ? (costodia - (parseInt(paispedido) === 49 ? 100 : 20)) * frecuencia * 4 : '',
         });
