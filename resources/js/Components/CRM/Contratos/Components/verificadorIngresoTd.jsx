@@ -1,52 +1,53 @@
 import React, { useEffect, useState } from "react";
 import { Td } from "react-super-responsive-table";
 
+const opciones = [
+    { value: 1, label: "LLEGÓ", color: "green" },
+    { value: 2, label: "YENDO", color: "yellow" },
+    { value: 0, label: "PLANTÓ", color: "black" },
+];
+
 export default function VerificadorIngresoTd({ data, setVerifIngreso }) {
+    const estadoGuardado = data.verif_ingreso == null
+        ? null
+        : Number(data.verif_ingreso);
 
-    const [verificadorIngreso, setVerificadorIngreso] = useState(
-        data.verif_ingreso ? Number(data.verif_ingreso ?? 0) : null
-    );
-
-    const opciones = [
-        { value: 1, label: "LLEGÓ", color: "green" },
-        { value: 2, label: "YENDO", color: "yellow" },
-        { value: 0, label: "PLANTÓ", color: "black" },
-    ];
+    const [verificadorIngreso, setVerificadorIngreso] = useState(estadoGuardado);
 
     useEffect(() => {
-        setVerificadorIngreso(data.verif_ingreso ? Number(data.verif_ingreso ?? 0) : null);
-    }, [data.id, data.verif_ingreso]);
+        setVerificadorIngreso(estadoGuardado);
+    }, [data.id, estadoGuardado]);
 
-    function changeEstatusAsistencia(e, condition) {
+    function changeEstatusAsistencia(event, condition) {
         if (verificadorIngreso === condition) return;
 
         setVerificadorIngreso(condition);
-        setVerifIngreso(e, data.id, condition);
+        setVerifIngreso(event, data.id, condition);
     }
 
     return (
         <Td className="vertical-align-middle align-switch">
             <div className="verificador-ingreso">
+                {opciones.map((opcion) => {
+                    const seleccionada = verificadorIngreso === opcion.value;
 
-                {opciones.map((opcion) => (
-                    <button
-                        key={opcion.value}
-                        type="button"
-                        aria-pressed={verificadorIngreso === opcion.value}
-                        className={
-                            "verificador-ingreso__opcion" +
-                            (verificadorIngreso === opcion.value
-                                ? ` selected-${opcion.color}`
-                                : "")
-                        }
-                        onClick={(e) =>
-                            changeEstatusAsistencia(e, opcion.value)
-                        }
-                    >
-                        {opcion.label}
-                    </button>
-                ))}
-
+                    return (
+                        <button
+                            key={opcion.value}
+                            type="button"
+                            aria-pressed={seleccionada}
+                            className={
+                                "verificador-ingreso__opcion" +
+                                (seleccionada ? ` selected-${opcion.color}` : "")
+                            }
+                            onClick={(event) =>
+                                changeEstatusAsistencia(event, opcion.value)
+                            }
+                        >
+                            {opcion.label}
+                        </button>
+                    );
+                })}
             </div>
         </Td>
     );
