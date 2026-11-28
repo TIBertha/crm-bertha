@@ -88,6 +88,7 @@ class ContratosNew extends Component{
             actividad: '',
             actividades: [],
             montototalcontrato: 0,
+            montoDescuento: 0,
             modalidad: '',
             frecuencia: '',
             frecuencias: [],
@@ -475,7 +476,7 @@ class ContratosNew extends Component{
 
     calculoDiferencia(campo, valor){
 
-        let {totalpago, descuentoejecutivo, tipocontrato} = this.state;
+        let {totalpago, descuentoejecutivo, tipocontrato, totalfinal, montoDescuento} = this.state;
 
         let tot = totalpago;
         let med = totalpago;
@@ -514,7 +515,7 @@ class ContratosNew extends Component{
 
         this.setState({
             montodescontado: formatFloat(dif),
-            montototalcontrato: desc,
+            montototalcontrato: totalfinal - montoDescuento,
             formapago: 1}, this.setMontoTotal);
     }
 
@@ -554,6 +555,7 @@ class ContratosNew extends Component{
                         horainiciolabores: r.hora_inicio ? moment(r.hora_inicio,"YYYY-MM-DD HH:mm:ss").toDate() : '',
                         tieneComision: r.tiene_comision,
                         montoComision: r.monto_comision,
+                        montoDescuento: r.monto_descuento,
                         divisa: r.divisa,
                         paispedido: r.paispedido,
                         tiposcontratos: r.tiposcontratos,
@@ -602,7 +604,7 @@ class ContratosNew extends Component{
                         descuentoejecutivo: (r.garantia === 0 ? 0 : (r.tiene_comision === true ? r.totalpago : total)),
                         formapago: 1,
                         //montototalcontrato: (r.garantia === 0 ? 0 : (r.tiene_comision === true ? r.monto_comision : (total ? formatFloat(total) : 0))),
-                        montototalcontrato: (r.garantia === 0 ? 0 : (r.tiene_comision === true ? r.monto_comision + r.monto_adelanto  : (total ? formatFloat(total) : 0))),
+                        montototalcontrato: (r.garantia === 0 ? 0 : (r.tiene_comision === true ? (r.monto_comision - r.monto_descuento)  : (total ? formatFloat(total) : 0))),
                     });
                     this.setMontoTotal(1);
                 }else if(r.code === 500){

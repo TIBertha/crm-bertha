@@ -803,7 +803,8 @@ class ContratosController extends Controller
                 'tiene_comision' => $req->tipocontrato_id === 1 ? ($req->tipocomision ? true : false) : false,
 
                 'monto_comision' => ($validateContrato['tipocontratodefault'] == 3) ? 0 : intval($req->tipocontrato_id == 1 ? $req->monto_comision : null),
-                'monto_adelanto' => ($validateContrato['tipocontratodefault'] == 3) ? 0 : intval($req->tipocontrato_id == 1 ? ($req->monto_comision + $req->monto_adelanto) : null),
+                'monto_adelanto' => ($validateContrato['tipocontratodefault'] == 3) ? 0 : intval($req->monto_adelanto),
+                'monto_descuento' => ($validateContrato['tipocontratodefault'] == 3) ? 0 : intval($req->monto_descuento),
 
                 'totalpago' => ($validateContrato['tipocontratodefault'] == 3) ? 0 : intval($req->tipocontrato_id == 1 ? ($req->monto_comision - ($req->monto_adelanto + $req->monto_descuento)) : $req->sueldo),
                 'totalfinal' => ($validateContrato['tipocontratodefault'] == 3) ? 0 : intval($req->tipocontrato_id == 1 ? $req->monto_comision : $req->sueldo),
