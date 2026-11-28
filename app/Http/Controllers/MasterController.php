@@ -10,6 +10,7 @@ use App\Models\Distrito;
 use App\Models\Domicilio;
 use App\Models\Empleador;
 use App\Models\Provincia;
+use App\Models\Requerimiento;
 use App\Models\Trabajador;
 use App\Models\TipoBeneficio;
 use App\Models\Usuario;
@@ -372,7 +373,7 @@ class MasterController extends Controller
         $actualizados = Contrato::where('total_pago', '>', 0)
             ->toBase()
             ->update([
-                'total_final' => \Illuminate\Support\Facades\DB::raw('total_pago'),
+                'total_final' => DB::raw('total_pago'),
             ]);
 
         dd('Listo: total_pago copiado a total_final', [

@@ -78,6 +78,7 @@ class IndicadoresController extends Controller
             ->keyBy(fn($i) => $i->y.'-'.$i->m);
 
         $adelantos = Requerimiento::borrado(false)
+            ->where('paispedido_id', 54)
             ->where('total_contratos', 0)
             ->whereBetween('fecha_pago_adelanto', [$fechaInicio, $fechaFin])
             ->selectRaw('YEAR(fecha_pago_adelanto) as y, MONTH(fecha_pago_adelanto) as m, SUM(monto_adelanto) as total')
@@ -85,9 +86,25 @@ class IndicadoresController extends Controller
             ->get()
             ->keyBy(fn($i) => $i->y.'-'.$i->m);
 
+        /*$adelantos = Requerimiento::borrado(false)
+            ->where('paispedido_id', 54)
+            ->whereBetween('fecha_pago_adelanto', [$fechaInicio, $fechaFin])
+            ->selectRaw('
+            YEAR(fecha_pago_adelanto) AS y,
+            MONTH(fecha_pago_adelanto) AS m,
+            COALESCE(SUM(monto_adelanto), 0) AS total
+        ')
+            ->groupBy('y', 'm')
+            ->get()
+            ->keyBy(fn ($i) => $i->y . '-' . $i->m);*/
+
         $tiempoCompleto = Contrato::borrado(false)
             ->whereBetween('creado', [$fechaInicio, $fechaFin])
+            ->whereHas('requerimiento', function ($query) {
+                $query->where('paispedido_id', 54);
+            })
             ->selectRaw('YEAR(creado) as y, MONTH(creado) as m, SUM(monto_total_contrato) as total')
+            //->selectRaw('YEAR(creado) as y, MONTH(creado) as m, SUM(total_final) as total')
             ->groupBy('y','m')
             ->get()
             ->keyBy(fn($i) => $i->y.'-'.$i->m);
