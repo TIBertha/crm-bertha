@@ -601,7 +601,8 @@ class ContratosNew extends Component{
                         //descuentoejecutivo: (r.garantia === 0 ? 0 : (r.tiene_comision === true ? r.monto_comision : total)),
                         descuentoejecutivo: (r.garantia === 0 ? 0 : (r.tiene_comision === true ? r.totalpago : total)),
                         formapago: 1,
-                        montototalcontrato: (r.garantia === 0 ? 0 : (r.tiene_comision === true ? r.monto_comision : (total ? formatFloat(total) : 0))),
+                        //montototalcontrato: (r.garantia === 0 ? 0 : (r.tiene_comision === true ? r.monto_comision : (total ? formatFloat(total) : 0))),
+                        montototalcontrato: (r.garantia === 0 ? 0 : (r.tiene_comision === true ? r.monto_comision + r.monto_adelanto  : (total ? formatFloat(total) : 0))),
                     });
                     this.setMontoTotal(1);
                 }else if(r.code === 500){

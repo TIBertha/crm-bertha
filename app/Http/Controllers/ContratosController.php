@@ -421,7 +421,11 @@ class ContratosController extends Controller
                 'tipocontrato_id'    => $request->input('tipocontrato'),
                 'tipocomision_id'    => $request->input('tipocomision'),
                 'total_pago'         => $request->input('totalpago'),
+
                 'total_final'         => $request->input('totalfinal'),
+
+                'monto_total_contrato' => $monto_total_contrato,
+
                 'formapago_id'       => $request->input('formapago'),
                 'pago1'              => $formapago == 1 ? $request->input('pago1') : null,
                 'pago2'              => $formapago == 1 ? $request->input('pago2') : null,
@@ -443,7 +447,6 @@ class ContratosController extends Controller
                 'sueldoprimermes'    => $modalidad == 3 ?  ($frecuencia < 4 ? ( ($valordiafrecuencia * 4 * $frecuencia) * 0.7 ) : ( ($valordiafrecuencia * 16) * 0.7 )) : $request->input('sueldo') * 0.7,
                 'sueldo_por_dias'    => $modalidad == 3 ? ($frecuencia * $valordiafrecuencia * 4) : null,
                 'descuentoejecutivo' => $request->input('descuentoejecutivo'),
-                'monto_total_contrato' => $monto_total_contrato,
                 'montodiferencia'    => $request->input('montodescontado'),
                 'garantia'           => $request->input('garantia'),
                 'fecha_inicio_garantia' => $request->input('fechainiciogarantia') ? Carbon::parse($request->input('fechainiciogarantia')) : null,
@@ -800,6 +803,7 @@ class ContratosController extends Controller
                 'tiene_comision' => $req->tipocontrato_id === 1 ? ($req->tipocomision ? true : false) : false,
 
                 'monto_comision' => ($validateContrato['tipocontratodefault'] == 3) ? 0 : intval($req->tipocontrato_id == 1 ? $req->monto_comision : null),
+                'monto_adelanto' => ($validateContrato['tipocontratodefault'] == 3) ? 0 : intval($req->tipocontrato_id == 1 ? ($req->monto_comision + $req->monto_adelanto) : null),
 
                 'totalpago' => ($validateContrato['tipocontratodefault'] == 3) ? 0 : intval($req->tipocontrato_id == 1 ? ($req->monto_comision - ($req->monto_adelanto + $req->monto_descuento)) : $req->sueldo),
                 'totalfinal' => ($validateContrato['tipocontratodefault'] == 3) ? 0 : intval($req->tipocontrato_id == 1 ? $req->monto_comision : $req->sueldo),
