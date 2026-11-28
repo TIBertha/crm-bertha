@@ -51,6 +51,7 @@ class ContratosNew extends Component{
             trabajadorasB: [],
             tipocontrato: '',
             totalpago: 0,
+            totalfinal: 0,
             sueldo: 0,
             descuento: 0,
             formapago: 1,
@@ -529,6 +530,7 @@ class ContratosNew extends Component{
 
         this.setState({
             totalpago: (gan === 0 ? 0 : (tieneComision === true ? montoComision : (total ? formatFloat(total) : 0)) ),
+            totalfinal: (gan === 0 ? 0 : (tieneComision === true ? montoComision : (total ? formatFloat(total) : 0)) ),
             descuentoejecutivo: (gan === 0 ? 0 : (tieneComision === true ? montoComision : total)),
             formapago: 1,
             montototalcontrato: (gan === 0 ? 0 : (tieneComision === true ? montoComision : (total ? formatFloat(total) : 0))),
@@ -557,6 +559,7 @@ class ContratosNew extends Component{
                         tiposcontratos: r.tiposcontratos,
                         sueldo: r.sueldo,
                         totalpago: r.totalpago,
+                        totalfinal: r.totalfinal,
                         descuentoejecutivo: r.totalpago,
                         tipocomision: r.tipocomision,
                         fechainiciolabores: r.fechainiciolabores ? moment(r.fechainiciolabores,"YYYY-MM-DD").toDate() : new Date(),
@@ -592,8 +595,11 @@ class ContratosNew extends Component{
                     });
 
                     this.setState({
-                        totalpago: (r.garantia === 0 ? 0 : (r.tiene_comision === true ? r.monto_comision : (total ? formatFloat(total) : 0)) ),
-                        descuentoejecutivo: (r.garantia === 0 ? 0 : (r.tiene_comision === true ? r.monto_comision : total)),
+                        //totalpago: (r.garantia === 0 ? 0 : (r.tiene_comision === true ? r.monto_comision : (total ? formatFloat(total) : 0)) ),
+                        totalpago: (r.garantia === 0 ? 0 : (r.tiene_comision === true ? r.totalpago : (total ? formatFloat(total) : 0)) ),
+                        totalfinal: (r.garantia === 0 ? 0 : (r.tiene_comision === true ? r.monto_comision : (total ? formatFloat(total) : 0)) ),
+                        //descuentoejecutivo: (r.garantia === 0 ? 0 : (r.tiene_comision === true ? r.monto_comision : total)),
+                        descuentoejecutivo: (r.garantia === 0 ? 0 : (r.tiene_comision === true ? r.totalpago : total)),
                         formapago: 1,
                         montototalcontrato: (r.garantia === 0 ? 0 : (r.tiene_comision === true ? r.monto_comision : (total ? formatFloat(total) : 0))),
                     });
@@ -608,6 +614,7 @@ class ContratosNew extends Component{
                 postulante: '',
                 tipocontrato: '',
                 totalpago: 0,
+                totalfinal: 0,
                 descuentoejecutivo: 0,
                 descuento: '',
                 sueldo: 0,
@@ -706,6 +713,7 @@ class ContratosNew extends Component{
                     requerimiento: '',
                     tipocontrato: '',
                     totalpago: 0,
+                    final: 0,
                     descuento: '',
                     sueldo: '',
                     fechainiciogarantia: new Date(),

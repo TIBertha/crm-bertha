@@ -794,9 +794,14 @@ class ContratosController extends Controller
                 'hora_inicio' => getHoraInicio($req, $req->modalidad_id),
                 'divisa'  => $divisa,
                 'paispedido' => $req->paispedido_id,
-                'tiene_comision' => $req->tipocontrato_id == 1 ? ($req->tipocomision ? true : false) : false,
+
+                'tiene_comision' => $req->tipocontrato_id === 1 ? ($req->tipocomision ? true : false) : false,
+
                 'monto_comision' => ($validateContrato['tipocontratodefault'] == 3) ? 0 : intval($req->tipocontrato_id == 1 ? $req->monto_comision : null),
-                'totalpago' => ($validateContrato['tipocontratodefault'] == 3) ? 0 : intval($req->tipocontrato_id == 1 ? $req->monto_comision : $req->sueldo),
+
+                'totalpago' => ($validateContrato['tipocontratodefault'] == 3) ? 0 : intval($req->tipocontrato_id == 1 ? ($req->monto_comision - ($req->monto_adelanto + $req->monto_descuento)) : $req->sueldo),
+                'totalfinal' => ($validateContrato['tipocontratodefault'] == 3) ? 0 : intval($req->tipocontrato_id == 1 ? $req->monto_comision : $req->sueldo),
+
                 'sueldo' => $req->sueldo,
                 'postulante' => convertToFormatMultiselectPostulantes($req->trabajadores_id),
                 'tiposcontratos' => $validateContrato['tiposcontratos'],

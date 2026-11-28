@@ -58,6 +58,7 @@ class ContratosEdit extends Component {
             trabajadorasB: [],
             tipocontrato: '',
             totalpago: 0,
+            totalfinal: 0,
             sueldo: 0,
             descuento: 0,
             formapago: '',
@@ -656,6 +657,7 @@ class ContratosEdit extends Component {
 
         this.setState({
             totalpago: (gan === 0 ? 0 : (tieneComision === true ? montoComision : (total ? formatFloat(total) : 0)) ),
+            totalfinal: (gan === 0 ? 0 : (tieneComision === true ? montoComision : (total ? formatFloat(total) : 0)) ),
             descuentoejecutivo: (gan === 0 ? 0 : (tieneComision === true ? montoComision : total)),
             formapago: 1,
             montototalcontrato: (gan === 0 ? 0 : (tieneComision === true ? montoComision : (total ? formatFloat(total) : 0))),
@@ -673,6 +675,7 @@ class ContratosEdit extends Component {
                     this.setState({
                         sueldo: r.totalpago,
                         totalpago: r.totalpago,
+                        totalfinal: r.totalpago,
                         postulante: r.postulante,
                         tipocontrato: r.tipocontrato,
                     });
@@ -687,6 +690,7 @@ class ContratosEdit extends Component {
                 postulante: '',
                 tipocontrato: '',
                 totalpago: 0,
+                totalfinal: 0,
                 descuento: '',
                 sueldo: '',
                 pago1: '',
@@ -768,9 +772,13 @@ class ContratosEdit extends Component {
                     //correo: r.correo,
                     postulante: r.trabajador_id,
                     tipocontrato: r.contrato.tipocontrato_id,
+
                     totalpago: r.contrato.total_pago,
+                    totalfinal: r.contrato.total_pago,
+
                     descuentoejecutivo: r.contrato.descuentoejecutivo,
                     montodescontado: r.contrato.montodiferencia,
+
                     sueldo: r.contrato.sueldopactado,
                     formapago: r.contrato.formapago_id,
                     pago1: r.contrato.pago1,
