@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import moment from "moment";
 import toast from "react-hot-toast";
 import { ajaxGetMonitoreoHoy } from "../../../Functions/Contratos.jsx";
-import NewCopyButton from "../../Components/newCopyButton.jsx";
 
-export default function CopiarMonitoreoHoy({ revision = 0 }) {
-    const [copyText, setCopyText] = useState("");
-    const [isLoading, setIsLoading] = useState(true);
+const estadosIngreso = {
+    0: "PLANTÓ",
+    1: "LLEGÓ",
+    2: "YENDO",
+};
 
-    const estadosIngreso = {
-        0: "PLANTÓ",
-        1: "LLEGÓ",
-        2: "YENDO",
-    };
+export default function CopiarMonitoreoHoy() {
+    const [isLoading, setIsLoading] = useState(false);
 
-    async function prepararCopy() {
+    async function copiarMonitoreo() {
+        if (isLoading) return;
+
         setIsLoading(true);
 
         try {
@@ -28,7 +28,7 @@ export default function CopiarMonitoreoHoy({ revision = 0 }) {
             const contratos = r.contratos || [];
 
             if (!contratos.length) {
-                setCopyText("");
+                toast("No hay contratos para monitorear hoy");
                 return;
             }
 
@@ -47,48 +47,45 @@ export default function CopiarMonitoreoHoy({ revision = 0 }) {
 
             const diaHoy = new Intl.DateTimeFormat("es-PE", {
                 weekday: "long",
-            }).format(moment(fecha, "YYYY-MM-DD").toDate()).toUpperCase();
+            })
+                .format(moment(fecha, "YYYY-MM-DD").toDate())
+                .toUpperCase();
 
             const texto = [
                 `*MONITOREO ${diaHoy} ${moment(fecha).format("D")}:*`,
                 ...lista,
             ].join("\n\n");
 
-            setCopyText(texto);
-
+            await navigator.clipboard.writeText(texto);
+            toast.success("Monitoreo copiado");
         } catch (error) {
-            setCopyText("");
-            toast.error("No se pudo cargar el monitoreo");
+            console.error("Error al copiar el monitoreo", error);
+            toast.error("No se pudo copiar el monitoreo");
         } finally {
             setIsLoading(false);
         }
     }
 
-    useEffect(() => {
-        prepararCopy();
-    }, [revision]);
-
     return (
         <div className="copiar-monitoreo">
-            {isLoading ? (
-                <button
-                    type="button"
-                    className="btn font-weight-bold font text-white btn-sm bertha-orange-button"
-                    disabled
-                >
-                    <i className="fas fa-sync fa-spin"></i>
-                </button>
-            ) : copyText ? (
-                <NewCopyButton
-                    icon="fa-solid fa-clipboard-list"
-                    btnColor="orange"
-                    btnSize="sm"
-                    //additionalClass="copiar-monitoreo__button"
-                    tooltipText="Copiar monitoreo de hoy"
-                    copyText={copyText}
-                    successMsj="Monitoreo copiado"
+            <button
+                type="button"
+                className="btn font-weight-bold font text-white btn-sm bertha-orange-button"
+                onClick={copiarMonitoreo}
+                disabled={isLoading}
+                aria-busy={isLoading}
+                aria-label="Copiar monitoreo de hoy"
+                title="Copiar monitoreo de hoy"
+            >
+                <i
+                    className={
+                        isLoading
+                            ? "fas fa-sync fa-spin"
+                            : "fa-solid fa-clipboard-list"
+                    }
+                    aria-hidden="true"
                 />
-            ) : null}
+            </button>
         </div>
     );
 }
