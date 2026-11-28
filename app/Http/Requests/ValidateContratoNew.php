@@ -50,33 +50,30 @@ class ValidateContratoNew extends FormRequest
         $fechaDebeRule      = 'nullable';
 
         // Forma de pago 1
-        if ($formapago === 1) {
-            $pago1Rule      = 'required';
-            $modopago1Rule  = 'required';
-            $fechapagoRule  = 'required';
+        /*if ($formapago === 1) {
 
+        }*/
+
+        // Forma de pago 2
+        /*if ($formapago === 2) {
             $adelantoRule       = 'nullable';
             $debeRule           = 'nullable';
             $modopagoAdRule     = 'nullable';
             $modopagoDebeRule   = 'nullable';
             $fechaAdRule        = 'nullable';
             $fechaDebeRule      = 'nullable';
+        }*/
 
-            if ($pago1 < $total) {
-                $pago2Rule     = 'required';
-                $modopago2Rule = 'required';
-            }
+        if ($this->monto_total_contrato >= 0){
+
+            $adelantoRule       = 'nullable';
+            $debeRule           = 'nullable';
+            $modopagoAdRule     = 'nullable';
+            $modopagoDebeRule   = 'nullable';
+            $fechaAdRule        = 'nullable';
         }
 
-        // Forma de pago 2
-        if ($formapago === 2) {
-            $adelantoRule       = 'required';
-            $debeRule           = 'required';
-            $modopagoAdRule     = 'required';
-            $modopagoDebeRule   = 'required';
-            $fechaAdRule        = 'required';
-            $fechaDebeRule      = 'required';
-        }
+
 
         return [
             'empleador'             => ['required'],
