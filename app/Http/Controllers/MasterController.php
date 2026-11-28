@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ValidateSearchUser;
 use App\Models\Actividad;
+use App\Models\Contrato;
 use App\Models\Departamento;
 use App\Models\Distrito;
 use App\Models\Domicilio;
@@ -363,6 +364,19 @@ class MasterController extends Controller
         return response()->json([
             'code'  => 200,
             'data'  => $domicilio,
+        ]);
+    }
+
+    public function ajaxCopiarTotalPagoATotalFinal()
+    {
+        $actualizados = Contrato::where('total_pago', '>', 0)
+            ->toBase()
+            ->update([
+                'total_final' => \Illuminate\Support\Facades\DB::raw('total_pago'),
+            ]);
+
+        dd('Listo: total_pago copiado a total_final', [
+            'filas_actualizadas' => $actualizados,
         ]);
     }
 }

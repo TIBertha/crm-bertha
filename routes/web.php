@@ -122,6 +122,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/ajax-search-trabajadores', [MasterController::class, 'ajaxSearchTrabajadores']);
     Route::post('/ajax-search-trabajadores-por-colocar', [MasterController::class, 'ajaxSearchTrabajadoresPorColocar']);
 
+    Route::post(
+        '/ajax-contratos-copiar-total-pago',
+        [MasterController::class, 'ajaxCopiarTotalPagoATotalFinal']
+    );
+
     //ruta de usuarios
     Route::post('/ajax-verificar-numero', [UsuarioController::class, 'ajaxVerificarNumero']);
     Route::post('/ajax-verificar-numero-documento', [UsuarioController::class, 'ajaxVerificarNumeroDocumento']);

@@ -774,7 +774,7 @@ class ContratosEdit extends Component {
                     tipocontrato: r.contrato.tipocontrato_id,
 
                     totalpago: r.contrato.total_pago,
-                    totalfinal: r.contrato.total_pago,
+                    totalfinal: r.contrato.total_final,
 
                     descuentoejecutivo: r.contrato.descuentoejecutivo,
                     montodescontado: r.contrato.montodiferencia,
